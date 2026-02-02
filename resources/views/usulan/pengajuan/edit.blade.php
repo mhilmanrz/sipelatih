@@ -1,0 +1,1 @@
+<form action="{{ route('pengajuan-diklat.update', $pengajuan->id) }}" method="POST">

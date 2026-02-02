@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KegiatanController;
+
+Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +24,7 @@ Route::get('/pengajuan-diklat', function () {
 Route::get('/pengajuan-diklat/create', function () {
     return view('usulan/pengajuan/create');
 });
+
 
 Route::get('/pengajuan-diklat/edit', function () {
     return view('usulan/pengajuan/edit');
