@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="{{ asset('assets/css/layout.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/LayoutPengusul.css') }}">
 </head>
 <body>
 <div class="wrapper">
@@ -35,6 +35,10 @@
 
       <a href="#" onclick="showPage('MonitoringJPL',this);return false;">
         <i class="fa fa-chart-line"></i> Monitoring JPL
+      </a>
+
+       <a href="#" onclick="showPage('ManagementPegawai',this);return false;">
+        <i class="fa-solid fa-id-card"></i>Management Pegawai
       </a>
 
        <a href="#" onclick="showPage('ManagementSasaranProfesi',this);return false;">
@@ -76,6 +80,6 @@
     © 2026 — Saskya • Nina • Sandra • Hilman
 </footer>
 
- <script src="{{ asset('assets/js/layout.js') }}"></script>
+ <script src="{{ asset('assets/js/LayoutPengusul.js') }}"></script>
  </body>
 </html>

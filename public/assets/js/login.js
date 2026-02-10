@@ -28,4 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> main

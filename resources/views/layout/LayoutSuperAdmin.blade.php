@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="{{ asset('assets/css/layout.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
 </head>
 <body>
 <div class="wrapper">
@@ -30,39 +30,39 @@
       </a>
 
       <a href="#" onclick="showPage('UsulanDiklat',this);return false;">
-        <i class="fa fa-folder"></i> Usulan Diklat
-      </a>
+        <i class="fa fa-folder"></i> Usulan Diklat</a>
 
+        <a href="#" onclick="showPage('ManagementPegawai',this);return false;">
+        <i class="fa-solid fa-id-card"></i>Manajemen Pegawai</a>
+        
       <a href="#" onclick="showPage('MonitoringJPL',this);return false;">
-        <i class="fa fa-chart-line"></i> Monitoring JPL
+      <i class="fa fa-chart-line"></i> Monitoring JPL</a>
+      <a href="#" onclick="showPage('MonitoringJPL',this);return false;">
+        <i class="fa fa-chart-line"></i> Pagu
       </a>
-
+      <a href="#" onclick="showPage('MonitoringJPL',this);return false;">
+        <i class="fa fa-chart-line"></i> Input Nilai
+      </a>
+      <a href="#" onclick="showPage('MonitoringJPL',this);return false;">
+        <i class="fa fa-chart-line"></i> Laporan Kegiatan
+      </a>
+      <a href="#" onclick="showPage('MonitoringJPL',this);return false;">
+        <i class="fa fa-chart-line"></i> Evaluasi I
+      </a>
+        <a href="#" onclick="showPage('MonitoringJPL',this);return false;">
+            <i class="fa fa-chart-line"></i> Evaluasi II
+        </a>
+        <a href="#" onclick="showPage('MonitoringJPL',this);return false;">
+        <i class="fa fa-chart-line"></i> Evaluasi III
+      </a>
        <a href="#" onclick="showPage('ManagementSasaranProfesi',this);return false;">
-        <i class="fa-solid fa-briefcase"></i>Management Sasaran profesi
+        <i class="fa-solid fa-briefcase"></i>Bank Data
       </a>
     </div>
   </div>
 
   <!-- MAIN -->
   <div class="main">
-
-    <!-- TOPBAR -->
-    <div class="topbar" id="topbar">
-      <i class="fa fa-bars" onclick="toggleSidebar()"></i>
-
-      <div class="profile-area">
-        <i class="fa fa-bell"></i>
-
-        <span class="user-badge" onclick="toggleProfileMenu()">
-          <i class="fa fa-user"></i> Diklat
-        </span>
-
-        <div class="profile-menu" id="profileMenu">
-          <a href="#" onclick="showPage('password');return false;">🔑 Ubah Password</a>
-          <a href="#" onclick="logout();return false;">🚪 Log Out</a>
-        </div>
-      </div>
-    </div>
 
     <!-- CONTENT -->
     <div class="content" id="pageArea">
@@ -76,6 +76,7 @@
     © 2026 — Saskya • Nina • Sandra • Hilman
 </footer>
 
- <script src="{{ asset('assets/js/layout.js') }}"></script>
+ <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
  </body>
 </html>
+
