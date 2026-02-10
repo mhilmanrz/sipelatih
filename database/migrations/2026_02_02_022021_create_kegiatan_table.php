@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('unit_pengusul');
             $table->string('pic');
             $table->integer('wa_pic');
+            $table->string('no_registrasi')->unique();
+            $table->integer('jpl');
             $table->timestamps();
         });
     }

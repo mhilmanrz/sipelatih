@@ -10,9 +10,9 @@
         <table class="min-w-full border border-gray-200">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="px-4 py-3 text-center text-sm font-semibold text-gray-600">
+                    {{-- <th class="px-4 py-3 text-center text-sm font-semibold text-gray-600">
                         Aksi
-                    </th>
+                    </th> --}}
                     <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
                         Judul Kegiatan
                     </th>
@@ -26,7 +26,10 @@
                         Jenis Kegiatan
                     </th>
                     <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-                        Waktu Pelaksanaan
+                        Mulai
+                    </th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
+                        Selesai
                     </th>
                     <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
                         Jenis Materi
@@ -47,13 +50,25 @@
                             {{ $kegiatan['nama'] }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['pengusul'] }}
+                            {{ $kegiatan['unit_pengusul'] }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-700">
                             {{ $kegiatan['jpl'] }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['cakupan'] }}
+                            {{ $kegiatan['jenis'] }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                            {{ $kegiatan['tgl_mulai'] }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                            {{ $kegiatan['tgl_selesai'] }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                            {{ $kegiatan['materi'] }}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                            {{ $kegiatan['no_registrasi'] }}
                         </td>
                         {{-- <td class="px-4 py-3 text-sm">
                             @php

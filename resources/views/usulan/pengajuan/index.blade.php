@@ -38,13 +38,13 @@
                             {{ $kegiatan['nama'] }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['jenis'] }}
+                            {{ $kegiatan['jenis_kegiatan'] }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-700">
                             {{ $kegiatan['cakupan'] }}
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['cakupan'] }}
+                            {{ $kegiatan['jenis_materi'] }}
                         </td>
                         {{-- <td class="px-4 py-3 text-sm">
                             @php
