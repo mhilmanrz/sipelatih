@@ -1,29 +1,29 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const searchNip = document.getElementById("searchNip");
-  const searchNama = document.getElementById("searchNama");
-  const tableBody = document.getElementById("tableBody");
+const searchNip = document.getElementById("searchNip");
+const searchNama = document.getElementById("searchNama");
+const tableBody = document.getElementById("tableBody");
 
-  function filterTable() {
+function filterTable() {
     const nipValue = searchNip.value.toLowerCase();
     const namaValue = searchNama.value.toLowerCase();
+    const rows = tableBody.getElementsByTagName("tr");
 
-    tableBody.querySelectorAll("tr").forEach(row => {
-      const nip = row.cells[1].textContent.toLowerCase();
-      const nama = row.cells[2].textContent.toLowerCase();
+    for (let row of rows) {
+        const nip = row.cells[1].innerText.toLowerCase();
+        const nama = row.cells[2].innerText.toLowerCase();
 
-      row.style.display =
-        nip.includes(nipValue) && nama.includes(namaValue)
-          ? ""
-          : "none";
-    });
-  }
+        if (nip.includes(nipValue) && nama.includes(namaValue)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    }
+}
 
-  searchNip.addEventListener("input", filterTable);
-  searchNama.addEventListener("input", filterTable);
+searchNip.addEventListener("keyup", filterTable);
+searchNama.addEventListener("keyup", filterTable);
 
-  window.resetSearch = () => {
+function resetSearch() {
     searchNip.value = "";
     searchNama.value = "";
     filterTable();
-  };
-});
+}
