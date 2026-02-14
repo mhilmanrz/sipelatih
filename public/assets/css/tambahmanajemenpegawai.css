@@ -1,0 +1,122 @@
+/* ================= TAMBAH PESERTA ================= */
+
+.content h1 {
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+/* PANELS */
+.content .panel-wrapper {
+  display: flex;
+  gap: 22px;
+  margin-top: 10px;
+}
+
+.content .panel {
+  background: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  flex: 1;
+  border: 2px solid #bfe4e6;
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+}
+
+/* HEADER */
+.content .panel-header {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #0aa3ad;
+}
+
+/* SEARCH */
+.content .search {
+  width: 100%;
+  padding: 8px 36px 8px 14px;
+  border-radius: 20px;
+  border: 2px solid #0aa3ad;
+  outline: none;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+/* LIST */
+.content .list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 230px;
+  overflow-y: auto;
+}
+
+.content .list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 2px solid #0aa3ad;
+  border-radius: 14px;
+  margin-bottom: 10px;
+  background: #ffffff;
+  font-size: 13px;
+}
+
+.content .list li span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+/* CHECKBOX */
+.content .list input[type="checkbox"] {
+  accent-color: #0aa3ad;
+}
+
+/* REMOVE BTN */
+.content .btn-remove {
+  background: transparent;
+  border: none;
+  color: red;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ACTION */
+.content .action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* BUTTONS */
+.content .btn-save {
+  background: #007A7F;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,.2);
+}
+
+.content .btn-reset {
+  background: #828282;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,.2);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .content .panel-wrapper {
+    flex-direction: column;
+  }
+
+  .content .action-buttons {
+    justify-content: center;
+  }
+}
