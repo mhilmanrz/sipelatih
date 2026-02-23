@@ -18,7 +18,7 @@
       <h3>TEMPLATE</h3>
       <div class="template-row">
         <div style="color:#2B6B71;font-weight:700;font-size:12px;opacity:.8">
-          Unduh template CSV, isi datanya, lalu unggah di bawah.
+          Unduh template Excel, isi datanya, lalu unggah di bawah.
         </div>
         <button class="btn" id="btnDownload">
           <span aria-hidden="true">⬇️</span>

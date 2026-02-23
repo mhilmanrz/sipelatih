@@ -1,0 +1,276 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom, #27b2b8, #1fa3a8);
+}
+
+.layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    flex: 1;
+    padding: 40px;
+}
+
+.card {
+    background: #f3f3f3;
+    border-radius: 25px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 200px auto;
+    row-gap: 10px;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.tabs {
+    margin-bottom: 20px;
+}
+
+.tabs button {
+    background: none;
+    border: none;
+    margin-right: 15px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.tabs .active {
+    background: #66c3b8;
+    color: white;
+    border-radius: 20px;
+}
+
+.btn-primary {
+    background: #0f7b7c;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.table-wrapper {
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #0f7b7c;
+    color: white;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+td:nth-child(2) {
+    text-align: left;
+}
+
+tbody tr {
+    background: #e5e5e5;
+}
+
+tbody tr + tr {
+    border-top: 1px solid #ccc;
+}
+
+.btn-delete {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    color: white;
+    padding: 15px;
+    font-size: 12px;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #f3f3f3;
+    width: 400px;
+    padding: 30px;
+    border-radius: 25px;
+    position: relative;
+    animation: scaleIn 0.2s ease-out;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+select {
+    width: 100%;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 2px solid #0f7b7c;
+}
+
+.modal-buttons {
+    text-align: center;
+}
+
+.btn-save {
+    background: #3a9c8f;
+    color: yellow;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    background: #999;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 1024px) {
+    .main {
+        padding: 25px;
+    }
+
+    .grid {
+        grid-template-columns: 160px auto;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .main {
+        padding: 20px;
+    }
+
+    .card {
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    /* INFO GRID JADI 1 KOLOM */
+    .grid {
+        grid-template-columns: 1fr;
+        row-gap: 6px;
+    }
+
+    .label {
+        margin-top: 10px;
+    }
+
+    /* TABS BISA SCROLL */
+    .tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 10px;
+    }
+
+    .tabs button {
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+
+    /* TABLE SCROLL */
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 500px;
+    }
+
+    /* MODAL RESPONSIVE */
+    .modal-content {
+        width: 90%;
+        max-width: 400px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        text-align: center;
+    }
+
+    .modal-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-save,
+    .btn-cancel {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}

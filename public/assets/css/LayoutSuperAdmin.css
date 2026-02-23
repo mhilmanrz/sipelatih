@@ -88,68 +88,6 @@ body{
     max-width:1200px;
     margin:0 auto;
 }
-/* ===== MENU ITEM (SUBMENU) ===== */
-.menu-item {
-    display: flex;
-    flex-direction: column;
-}
-
-.menu-link {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 20px;
-    color: #fff;
-    text-decoration: none;
-    cursor: pointer;
-    transition: .2s;
-}
-
-.menu-link span {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.menu-link:hover {
-    background: #1fd1d1;
-    color: #000;
-}
-
-/* arrow */
-.menu-link .arrow {
-    transition: transform .3s ease;
-}
-
-/* submenu default */
-.menu-item .submenu {
-    display: none;
-    flex-direction: column;
-    background: #055555;
-}
-
-/* submenu item */
-.menu-item .submenu a {
-    padding: 12px 40px;
-    color: #fff;
-    text-decoration: none;
-    font-size: 15px;
-    transition: .2s;
-}
-
-.menu-item .submenu a:hover {
-    background: #1fd1d1;
-    color: #000;
-}
-
-/* OPEN STATE */
-.menu-item.open .submenu {
-    display: flex;
-}
-
-.menu-item.open .arrow {
-    transform: rotate(90deg);
-}
 
 /* Perhalus padding content */
 .content{

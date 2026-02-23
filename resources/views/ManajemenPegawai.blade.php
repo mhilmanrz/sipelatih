@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="{{ asset('assets/css/layout.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
 </head>
 <body>
 <div class="wrapper">
@@ -77,6 +77,7 @@
 </footer>
 
  <script src="{{ asset('assets/js/layout.js') }}"></script>
- </body>
+@include('layout.LayoutSuperAdmin') 
+</body>
 </html>
 
