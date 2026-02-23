@@ -32,8 +32,11 @@
       <a href="#" onclick="showPage('UsulanDiklat',this);return false;">
         <i class="fa fa-folder"></i> Usulan Diklat</a>
 
-        <a href="#" onclick="showPage('ManagementPegawai',this);return false;">
+        <a href="#" onclick="showPage('ManajemenPegawai',this);return false;">
         <i class="fa-solid fa-id-card"></i>Manajemen Pegawai</a>
+        
+         <a href="#" onclick="showPage('ManajemenSasaranprofesi',this);return false;">
+        <i class="fa-solid fa-user-gear"></i>Manajemen Sasaran Profesi</a>
         
       <a href="#" onclick="showPage('MonitoringJPL',this);return false;">
       <i class="fa fa-chart-line"></i> Monitoring JPL</a>
@@ -55,7 +58,7 @@
         <a href="#" onclick="showPage('MonitoringJPL',this);return false;">
         <i class="fa fa-chart-line"></i> Evaluasi III
       </a>
-       <a href="#" onclick="showPage('ManagementSasaranProfesi',this);return false;">
+       <a href="#" onclick="showPage('BankData',this);return false;">
         <i class="fa-solid fa-briefcase"></i>Bank Data
       </a>
     </div>
