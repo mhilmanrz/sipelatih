@@ -1,0 +1,98 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* halaman evaluasi */
+.evaluasi-page {
+    background: #14B8C5;
+    padding: 30px 35px;
+    min-height: calc(100vh - 60px);
+}
+
+/* judul */
+.evaluasi-page h1 {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+/* card */
+.evaluasi-page .card-evaluasi {
+    background: #fff;
+    border-radius: 22px;
+    padding: 26px;
+    margin-bottom: 30px;
+}
+
+/* tombol */
+.evaluasi-page .btn-download {
+    background: #006D73;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+}
+
+/* table wrapper */
+.evaluasi-page .table-wrapper {
+    background: #007C82;
+    border-radius: 18px;
+    overflow-x: auto;
+}
+
+/* table */
+.evaluasi-page table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.evaluasi-page thead {
+    background: #007C82;
+    color: #fff;
+}
+
+.evaluasi-page th,
+.evaluasi-page td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+/* footer table */
+.evaluasi-page .table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    color: #fff;
+}
+
+/* pagination */
+.evaluasi-page .pagination {
+    display: flex;
+    gap: 8px;
+}
+
+.evaluasi-page .pagination button,
+.evaluasi-page .pagination span {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: none;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+    .evaluasi-page {
+        padding: 18px;
+    }
+
+    .evaluasi-page table {
+        min-width: 700px;
+    }
+}
