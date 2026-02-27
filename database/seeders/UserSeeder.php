@@ -2,7 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\User\User;
+use App\Models\User\WorkUnit;
+use App\Models\User\Positions;
+use App\Models\User\EmploymentType;
+use App\Models\User\Profession;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -10,107 +14,71 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::insert([
+        $workUnits = WorkUnit::all();
+        $positions = Positions::all();
+        $employmentTypes = EmploymentType::all();
+        $professions = Profession::all();
+
+        $users = [
             [
-                'role' => 'admin',
-                'nip' => 123456,
                 'name' => 'Admin Sistem',
                 'email' => 'admin@mail.com',
                 'password' => Hash::make('password'),
-                'nik' => 320111,
-                'status' => 'aktif',
-                'department' => 'IT',
-                'no_hp' => 812345678,
-                'profession' => 'Programmer',
-                'office' => 'Pusat',
-                'grade' => 'A',
-                'position' => 'Administrator',
-                'jabfung' => null,
-                'npwp' => 123456789,
-                'norek' => 987654321,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'work_unit_id' => $workUnits->where('code', 'TI')->first()->id ?? null,
+                'position_id' => $positions->first()->id ?? null,
+                'employment_type_id' => $employmentTypes->where('code', 'ASN')->first()->id ?? null,
+                'profession_id' => $professions->where('code', 'PRO')->first()->id ?? null,
+                'employee_id' => 'EMP001',
+                'phone_number' => '081234567890',
             ],
             [
-                'role' => 'user',
-                'nip' => 123457,
                 'name' => 'Budi Santoso',
                 'email' => 'budi@mail.com',
-                'password' => null,
-                'nik' => 320112,
-                'status' => 'aktif',
-                'department' => 'Keuangan',
-                'no_hp' => 812345679,
-                'profession' => 'Staff',
-                'office' => 'Cabang A',
-                'grade' => 'B',
-                'position' => 'Staff',
-                'jabfung' => null,
-                'npwp' => 223456789,
-                'norek' => 887654321,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'password' => Hash::make('password'),
+                'work_unit_id' => $workUnits->where('code', 'KEU')->first()->id ?? null,
+                'position_id' => $positions->skip(1)->first()->id ?? null,
+                'employment_type_id' => $employmentTypes->where('code', 'ASN')->first()->id ?? null,
+                'profession_id' => $professions->where('code', 'ACT')->first()->id ?? null,
+                'employee_id' => 'EMP002',
+                'phone_number' => '081234567891',
             ],
             [
-                'role' => 'user',
-                'nip' => 123458,
                 'name' => 'Siti Aminah',
-                'email' => null,
-                'password' => null,
-                'nik' => 320113,
-                'status' => 'aktif',
-                'department' => 'SDM',
-                'no_hp' => 812345680,
-                'profession' => 'HR',
-                'office' => 'Pusat',
-                'grade' => 'B',
-                'position' => 'Staff',
-                'jabfung' => null,
-                'npwp' => null,
-                'norek' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'email' => 'siti@mail.com',
+                'password' => Hash::make('password'),
+                'work_unit_id' => $workUnits->where('code', 'SDM')->first()->id ?? null,
+                'position_id' => $positions->skip(2)->first()->id ?? null,
+                'employment_type_id' => $employmentTypes->where('code', 'NON_ASN')->first()->id ?? null,
+                'profession_id' => $professions->where('code', 'NUR')->first()->id ?? null,
+                'employee_id' => 'EMP003',
+                'phone_number' => '081234567892',
             ],
             [
-                'role' => 'user',
-                'nip' => 123459,
                 'name' => 'Ahmad Fauzi',
                 'email' => 'ahmad@mail.com',
-                'password' => null,
-                'nik' => 320114,
-                'status' => 'nonaktif',
-                'department' => 'Operasional',
-                'no_hp' => 812345681,
-                'profession' => 'Supervisor',
-                'office' => 'Cabang B',
-                'grade' => 'C',
-                'position' => 'Supervisor',
-                'jabfung' => null,
-                'npwp' => 323456789,
-                'norek' => 777654321,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'password' => Hash::make('password'),
+                'work_unit_id' => $workUnits->where('code', 'UMUM')->first()->id ?? null,
+                'position_id' => $positions->skip(3)->first()->id ?? null,
+                'employment_type_id' => $employmentTypes->where('code', 'MITRA')->first()->id ?? null,
+                'profession_id' => $professions->where('code', 'DOC')->first()->id ?? null,
+                'employee_id' => 'EMP004',
+                'phone_number' => '081234567893',
             ],
             [
-                'role' => null,
-                'nip' => null,
-                'name' => 'Pegawai Belum Login',
-                'email' => null,
-                'password' => null,
-                'nik' => 320115,
-                'status' => 'aktif',
-                'department' => 'Umum',
-                'no_hp' => null,
-                'profession' => null,
-                'office' => 'Pusat',
-                'grade' => null,
-                'position' => null,
-                'jabfung' => null,
-                'npwp' => null,
-                'norek' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'name' => 'Dewi Lestari',
+                'email' => 'dewi@mail.com',
+                'password' => Hash::make('password'),
+                'work_unit_id' => $workUnits->where('code', 'DIKLAT')->first()->id ?? null,
+                'position_id' => $positions->skip(4)->first()->id ?? null,
+                'employment_type_id' => $employmentTypes->where('code', 'ASN')->first()->id ?? null,
+                'profession_id' => $professions->where('code', 'BID')->first()->id ?? null,
+                'employee_id' => 'EMP005',
+                'phone_number' => '081234567894',
             ],
-        ]);
+        ];
+
+        foreach ($users as $user) {
+            User::create($user);
+        }
     }
 }

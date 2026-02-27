@@ -10,22 +10,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('role')->nullable();
-            $table->string('nip')->nullable();
             $table->string('name');
-            $table->string('email')->nullable();
-            $table->string('password')->nullable();
-            $table->string('nik')->nullable();
-            $table->string('status')->nullable();
-            $table->string('department')->nullable();  //unit kerja
-            $table->string('no_hp')->nullable();
-            $table->string('profession')->nullable();
-            $table->string('office')->nullable();
-            $table->string('grade')->nullable();
-            $table->string('position')->nullable();
-            $table->string('jabfung')->nullable();
-            $table->string('npwp')->nullable();
-            $table->string('norek')->nullable();
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->unsignedBigInteger('work_unit_id')->nullable();
+            $table->unsignedBigInteger('position_id')->nullable();
+            $table->unsignedBigInteger('employment_type_id')->nullable();
+            $table->unsignedBigInteger('profession_id')->nullable();
+            $table->string('employee_id')->nullable();
+            $table->string('phone_number')->nullable();
             $table->timestamps();
         });
     }

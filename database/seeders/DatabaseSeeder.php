@@ -8,18 +8,34 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            BatchSeeder::class,
+            ActivityFormatSeeder::class,
+            ActivityTypeSeeder::class,
+            ActivityScopeSeeder::class,
+            MaterialTypeSeeder::class,
+            WorkUnitSeeder::class,
+            PositionSeeder::class,
+            TargetParticipantSeeder::class,
+            ProfessionSeeder::class,
+            EmploymentTypeSeeder::class,
+            BudgetCategorySeeder::class,
+            BudgetSeeder::class,
+            ActivitySeeder::class,
+            ActivityProfessionSeeder::class,
+            ActivityKakFileSeeder::class,
+            ActivityMaterialSeeder::class,
+            UserSeeder::class,
+            ActivitySpeakerSeeder::class,
+            ActivityModeratorSeeder::class,
+            ActivityParticipantSeeder::class,
+            ActivityStatusSeeder::class,
+            ActivityScoreSeeder::class,
         ]);
     }
 }
