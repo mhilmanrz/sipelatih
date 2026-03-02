@@ -3,16 +3,17 @@
 namespace App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 use App\Models\Act\Activity;
 use App\Models\User\WorkUnit;
 use App\Models\User\Profession;
 use App\Models\User\EmploymentType;
 use App\Models\User\Positions;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasRoles;
 
     protected $table = 'users';
 

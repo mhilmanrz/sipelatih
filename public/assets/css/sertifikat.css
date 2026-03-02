@@ -1,0 +1,196 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    background: #12b8c6;
+}
+
+
+/* CONTAINER */
+.container {
+    display: flex;
+    min-height: calc(100vh - 55px);
+}
+
+
+/* MAIN CONTENT */
+.content {
+    flex: 1;
+    padding: 40px;
+}
+
+/* CARD */
+.card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    overflow: hidden;
+}
+
+/* TABS */
+.tabs {
+    background: #0a6f6f;
+    display: flex;
+    padding: 15px;
+    gap: 15px;
+}
+
+.tabs span {
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tabs span.active {
+    background: #63c6a8;
+    padding: 6px 14px;
+    border-radius: 15px;
+}
+
+/* CARD BODY */
+.card-body {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.text {
+    font-size: 18px;
+    color: #0a6f6f;
+    margin-bottom: 30px;
+}
+
+/* BUTTON */
+.btn-sertifikat {
+    background: #0a6f6f;
+    color: #ffeb3b;
+    border: none;
+    padding: 18px 60px;
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.btn-sertifikat:hover {
+    background: #095e5e;
+}
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+/* TABLET */
+@media (max-width: 1024px) {
+
+    .content {
+        padding: 25px;
+    }
+
+    .card-body {
+        padding: 60px 20px;
+    }
+
+    .text {
+        font-size: 17px;
+    }
+
+    .btn-sertifikat {
+        font-size: 20px;
+        padding: 16px 50px;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .container {
+        flex-direction: column;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    /* TAB RESPONSIVE */
+    .tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        gap: 10px;
+        padding: 12px;
+        scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tabs span {
+        white-space: nowrap;
+        font-size: 13px;
+    }
+
+    .card-body {
+        padding: 50px 15px;
+    }
+
+    .text {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .btn-sertifikat {
+        width: 100%;
+        max-width: 280px;
+        font-size: 18px;
+        padding: 14px 20px;
+    }
+}
+
+/* EXTRA SMALL (HP kecil) */
+@media (max-width: 480px) {
+
+    .content {
+        padding: 10px;
+    }
+
+    .card-body {
+        padding: 40px 10px;
+    }
+
+    .text {
+        font-size: 15px;
+    }
+
+    .btn-sertifikat {
+        font-size: 16px;
+        padding: 12px 18px;
+        border-radius: 25px;
+    }
+}
+
+/* Tablet dan di atasnya (min-width) */ 
+@media  only screen and ( min-width : 768px ) { 
+  .container { 
+    display : flex; 
+    justify-content : space-between; 
+  } 
+} 
+
+/* Desktop dan di atasnya */ 
+@media  only screen and ( min-width : 1024px ) { 
+  .container { 
+    padding : 40px ; 
+  } 
+}
+

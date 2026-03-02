@@ -14,8 +14,17 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        $activities = Activity::paginate(10);
-        return response()->json($activities);
+        // For Usulan Pengajuan Index
+        $dataKegiatan = Activity::paginate(10);
+        return view('usulan.pengajuan.index', compact('dataKegiatan'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('usulan.pengajuan.create');
     }
 
     /**
@@ -23,9 +32,8 @@ class ActivityController extends Controller
      */
     public function store(StoreActivityRequest $request)
     {
-        $activity = Activity::create($request->validated());
-
-        return response()->json($activity, 201);
+        Activity::create($request->validated());
+        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil diajukan.');
     }
 
     /**
@@ -33,13 +41,18 @@ class ActivityController extends Controller
      */
     public function show($id)
     {
-        $activity = Activity::find($id);
+        $kegiatan = Activity::findOrFail($id);
+        // Assuming there is a detail view
+        return view('usulan.monitoring.index', compact('kegiatan'));
+    }
 
-        if (!$activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
-
-        return response()->json($activity);
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $kegiatan = Activity::findOrFail($id);
+        return view('usulan.pengajuan.edit', compact('kegiatan'));
     }
 
     /**
@@ -47,14 +60,10 @@ class ActivityController extends Controller
      */
     public function update(UpdateActivityRequest $request, $id)
     {
-        $activity = Activity::find($id);
-
-        if (!$activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
+        $activity = Activity::findOrFail($id);
         $activity->update($request->validated());
 
-        return response()->json($activity);
+        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil diperbarui.');
     }
 
     /**
@@ -62,13 +71,9 @@ class ActivityController extends Controller
      */
     public function destroy($id)
     {
-        $activity = Activity::find($id);
-
-        if (!$activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
+        $activity = Activity::findOrFail($id);
         $activity->delete();
 
-        return response()->json(null, 204);
+        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil dihapus.');
     }
 }

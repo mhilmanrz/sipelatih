@@ -1,171 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layout.LayoutSuperAdmin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Pegawai</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome untuk ikon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .action-buttons {
-            white-space: nowrap;
-        }
+@section('title', 'Manajemen Pegawai')
 
-        .action-buttons a {
-            color: #000;
-            text-decoration: none;
-        }
+@push('styles')
+<link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/manajemenPegawai.css') }}">
+@endpush
 
-        .table-responsive {
-            margin-top: 20px;
-        }
+@section('content')
+  <div class="page-wrap">
 
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-        }
-    </style>
-</head>
+    <!-- TOP BAR -->
+    <div class="table-top" style="display:flex; justify-content:space-between; margin-bottom:15px;">
+      <div class="left">
+        Show
+        <select style="padding:5px;">
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+        entries
+      </div>
 
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center">Daftar Pegawai</h1>
-
-        <!-- Tabel Data Peserta -->
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>NIP</th>
-                        <th>NIK</th>
-                        <th>STPEG</th>
-                        <th>Divisi</th>
-                        <th>No HP</th>
-                        <th>Grade</th>
-                        <th>Posisi</th>
-                        <th>Group 4 Besar</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Data Peserta 1 -->
-                    <tr>
-                        <td>1</td>
-                        <td>Saski</td>
-                        <td>22113344</td>
-                        <td>02132184128421</td>
-                        <td>Divisi Sumber Daya Manusia</td>
-                        <td>08123456789</td>
-                        <td>Grade 1</td>
-                        <td>Posisi 1</td>
-                        <td>Kemkes</td>
-                        <td class="action-buttons">
-                            <button class="btn btn-sm btn-warning">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash-alt"></i> Hapus
-                            </button>
-                        </td>
-                    </tr>
-
-                    <!-- Data Peserta 2 -->
-                    <tr>
-                        <td>2</td>
-                        <td>Sandra</td>
-                        <td>22113344</td>
-                        <td>02132184128421</td>
-                        <td>Divisi Sumber Daya Manusia</td>
-                        <td>08123456789</td>
-                        <td>Grade 2</td>
-                        <td>Posisi 2</td>
-                        <td>Non Kemkes</td>
-                        <td class="action-buttons">
-                            <button class="btn btn-sm btn-warning">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash-alt"></i> Hapus
-                            </button>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Form Tambah Data (opsional) -->
-        <div class="mt-4 p-3 bg-light rounded">
-            <h3>Tambah Pegawai Baru</h3>
-            <form action="" method="post">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nama</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="text" class="form-control" id="password" name="password" required>
-                </div>
-                <div class="mb-3">
-                    <label for="role" class="form-label">Role</label>
-                    <input type="text" class="form-control" id="role" name="role" required>
-                </div>
-                <div class="mb-3">
-                    <label for="status" class="form-label">Status</label>
-                    <input type="text" class="form-control" id="status" name="status" required>
-                </div>
-                <div class="mb-3">
-                    <label for="nip" class="form-label">NIP</label>
-                    <input type="text" class="form-control" id="nip" name="nip" required>
-                </div>
-                <div class="mb-3">
-                    <label for="nik" class="form-label">NIK</label>
-                    <input type="text" class="form-control" id="nik" name="nik" required>
-                </div>
-                <div class="mb-3">
-                    <label for="department" class="form-label">Department</label>
-                    <input type="text" class="form-control" id="department" name="department" required>
-                </div>
-                <div class="mb-3">
-                    <label for="no_hp" class="form-label">No HP</label>
-                    <input type="text" class="form-control" id="no_hp" name="no_hp" required>
-                </div>
-                <div class="mb-3">
-                    <label for="profession" class="form-label">Profesi</label>
-                    <input type="text" class="form-control" id="profession" name="profession" required>
-                </div>
-                <div class="mb-3">
-                    <label for="divisi" class="form-label">Divisi</label>
-                    <input type="text" class="form-control" id="divisi" name="divisi" required>
-                </div>
-                <div class="mb-3">
-                    <label for="grade" class="form-label">Grade</label>
-                    <input type="text" class="form-control" id="grade" name="grade" required>
-                </div>
-                <div class="mb-3">
-                    <label for="position" class="form-label">Posisi</label>
-                    <input type="text" class="form-control" id="position" name="position" required>
-                </div>
-                <div class="mb-3">
-                    <label for="group_4_besar" class="form-label">Group 4 Besar</label>
-                    <input type="text" class="form-control" id="group_4_besar" name="group_4_besar" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </form>
-        </div>
+      <div class="right">
+        <a href="#" class="btn gray" style="background:#ccc; padding:8px 15px; border-radius:5px; text-decoration:none; color:black; margin-right:5px;">⬇ Import Peserta</a>
+        <a href="{{ url('users/create') }}" class="btn green" style="background:#00B8A5; padding:8px 15px; border-radius:5px; text-decoration:none; color:white;">＋ Tambah</a>
+      </div>
     </div>
 
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <!-- CARD -->
+    <div class="card-table" style="background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);">
+      <div class="filter-bar" style="display:flex; gap:10px; margin-bottom:15px;">
+        <div class="search">
+          <input type="text" placeholder="Cari NIP Pegawai" style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+        </div>
 
-</html>
+        <div class="search">
+          <input type="text" placeholder="Cari Nama Pegawai" style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+        </div>
+
+        <button class="btn reset" style="padding:8px 15px; background:#f4f4f4; border:1px solid #ccc; border-radius:5px; cursor:pointer;">⟳ Reset</button>
+      </div>
+
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr style="background:#007A7F; color:white; text-align:left;">
+            <th style="padding:10px;">NO.</th>
+            <th style="padding:10px;">NIP/NPS</th>
+            <th style="padding:10px;">Nama Pegawai</th>
+            <th style="padding:10px;">Unit Kerja</th>
+            <th style="padding:10px;">Tenaga</th>
+            <th style="padding:10px;">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($users as $index => $u)
+          <tr style="border-bottom:1px solid #ddd;">
+            <td style="padding:10px;">{{ $users->firstItem() + $index }}</td>
+            <td style="padding:10px;">{{ $u->employee_id ?? '-' }}</td>
+            <td style="padding:10px;"><a href="{{ route('users.edit', $u->id) }}" style="text-decoration:none; color:#007A7F; font-weight:bold;">{{ $u->name }}</a></td>
+            <td style="padding:10px;">{{ $u->workUnit->name ?? '-' }}</td>
+            <td style="padding:10px;">{{ $u->profession->name ?? '-' }}</td>
+            <td style="padding:10px;">
+                <form action="{{ route('users.destroy', $u->id) }}" method="POST" class="d-inline" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" style="background:red; border:none; color:white; padding:5px 10px; border-radius:5px; cursor:pointer;" onclick="return confirm('Hapus pegawai ini?')">
+                        Hapus
+                    </button>
+                </form>
+            </td>
+          </tr>
+          @empty
+          <tr>
+            <td colspan="6" style="text-align:center; padding:20px;">Belum ada data pegawai.</td>
+          </tr>
+          @endforelse
+        </tbody>
+      </table>
+
+      <div class="table-footer" style="display:flex; justify-content:space-between; margin-top:20px; align-items:center;">
+        <span>Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} entries</span>
+        <div class="pagination">
+          {{ $users->links('pagination::bootstrap-4') }} <!-- Keeping standard pagination links -->
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection
+
+@push('scripts')
+<script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
+<script src="{{ asset('assets/js/manajemenPegawai.js') }}"></script>
+@endpush

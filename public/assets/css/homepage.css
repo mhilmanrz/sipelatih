@@ -1,0 +1,251 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ================= HEADER ================= */
+.header {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 20px;
+    flex-shrink: 0;
+    background: #ffffff;
+}
+
+.btn-login {
+    background: #ccff00;
+    color: #006b6f;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ================= BANNER ================= */
+.banner {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        url("../images/background-pattern.png") repeat,
+        linear-gradient(135deg,#c9f1f0,#e8fbfa);
+    background-size: 200px 200px, cover;
+    overflow: hidden;
+}
+
+/* ===== ELEMEN KANAN ===== */
+.elemen-kanan {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+.elemen-kanan img {
+    height: 100%;
+    object-fit: cover;
+}
+
+/* LOGO */
+.logo-kemenkes {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    z-index: 2;
+}
+.logo-sipelatih {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+/* ILUSTRASI DOKTER */
+.illustration-left,
+.illustration-right {
+     transform: scale(1.8);
+   position: absolute;
+    bottom: 0;
+    z-index: 2;
+    max-height: 90%;
+}
+
+.illustration-left {
+    left: 10%;
+}
+
+.illustration-right {
+    right: 10%;
+}
+
+.illustration-left img,
+.illustration-right img {
+    max-height: 100%;
+    width: auto;
+}
+
+/* CONTENT */
+.banner-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #006b6f;
+    z-index: 3;
+    padding: 0 20px;
+}
+
+.banner-content h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.banner-content p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+/* LINK */
+.link-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #007f82;
+    color: #fff;
+    padding: 12px 30px;
+    border-radius: 40px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.link-pill span {
+    background: #ffd600;
+    color: #007f82;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+    flex-shrink: 0;
+    background: #0b5c5f;
+    color: #fff;
+    padding: 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.footer-logo img {
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.social {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.social a {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #ccff00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-weight: bold;
+    color: #006b6f;
+}
+
+.footer h3 {
+    color: #ccff00;
+    margin-bottom: 5px;
+}
+
+.footer-bottom {
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.tentang-text {
+    text-align: justify;
+    max-width: 400px;
+    line-height: 1.5;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 992px) {
+    .illustration-left,
+    .illustration-right,
+    .elemen-kanan {
+        display: none;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .banner-content h1 {
+        font-size: 2rem;
+    }
+
+    .banner-content p {
+        font-size: 1rem;
+    }
+
+    .link-pill {
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .banner-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .banner-content p {
+        font-size: 0.9rem;
+    }
+
+    .link-pill {
+        font-size: 0.8rem;
+        padding: 8px 15px;
+    }
+}

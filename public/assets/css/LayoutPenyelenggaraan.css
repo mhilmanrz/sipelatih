@@ -1,0 +1,258 @@
+*{
+    box-sizing:border-box;
+    margin:0;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#14b9c8;
+    overflow-x:hidden;
+}
+.app{
+    max-width:1400px;
+    margin:0 auto;
+}
+
+/* ===== WRAPPER ===== */
+.wrapper{
+    position:relative;
+     width:100%;
+    min-height:100vh;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #064c4c;
+    color: #fff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: .3s;
+    overflow-y: auto;
+    z-index: 1000;
+}
+.sidebar.hidden {
+    left: -240px;
+}
+
+.logo {
+    padding: 15px;
+    text-align: center;
+    background: #053b3b;
+}
+.logo img {
+    max-width: 100%;
+}
+.logo small {
+    font-size: 14px;
+    display: block;
+    color: #cfcfcf;
+    margin-top: 5px;
+}
+
+/* ===== MENU ===== */
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: .2s;
+}
+.menu a i{
+    width:20px;
+    text-align:center;
+}
+
+.menu a:hover,
+.menu a.active {
+    background: #1fd1d1;
+    color: #000;
+}
+
+/* ===== SUBMENU ===== */
+.submenu {
+    display: none;
+    background: #055555;
+}
+.submenu a {
+    padding-left: 40px;
+    font-size: 14px;
+}
+.container{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+}
+
+/* Perhalus padding content */
+.content{
+    margin-left:240px;
+    margin-top:60px;
+    padding:20px 24px;
+    transition:.3s ease;
+    min-height:calc(100vh - 60px);
+}
+/* ===== TOPBAR ===== */
+.topbar {
+    height: 60px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    position: fixed;
+    top: 0;
+    left: 240px;
+    right: 0;
+    transition: .3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 9000;
+}
+.topbar.full {
+    left: 0;
+}
+.topbar i{
+    cursor: pointer;
+}
+
+.profile-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    position:relative;
+}
+
+.profile-menu{
+    position:absolute;
+    right:0;
+    top:45px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,.2);
+    display:none;
+    min-width:150px;
+    overflow:hidden;
+    z-index:99;
+}
+
+.profile-menu a{
+    display:block;
+    padding:10px 14px;
+    text-decoration:none;
+    color:#333;
+    cursor:pointer;
+    background:#d3d3d3; /* abu-abu muda */
+    transition: .2s;
+}
+
+.profile-menu a:hover{
+    background:#bfbfbf; /* abu-abu sedikit lebih gelap saat hover */
+    color:#000; }
+
+/* Tombol Diklat abu-abu muda */
+.user-badge {
+  display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 20px;           /* lebih panjang horizontalnya untuk efek lonjong */
+    background-color: #d3d3d3;   /* abu-abu muda */
+    color: #000;                 /* teks hitam */
+    border-radius: 25px;         /* membuat tombol lonjong */
+    cursor: pointer;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.user-badge:hover {
+    background-color: #bfbfbf; /* abu-abu sedikit lebih gelap saat hover */
+}
+
+/* ===== CONTENT ===== */
+.content{
+    margin-left:240px;
+    margin-top:60px;
+    padding:25px;
+    transition:.3s ease;
+    min-height:calc(100vh - 60px);
+}
+.content.full{
+    margin-left:0;
+}
+
+
+.password-page{
+    background:#fff;
+    width:380px;
+    margin:30px auto;
+    padding:30px;
+    border-radius:16px;
+    text-align:center;
+}
+
+.password-page label{
+    display:block;
+    text-align:left;
+    margin-top:14px;
+    font-weight:600;
+    color:#00B8A5;
+}
+
+.password-page input{
+    width:100%;
+    padding:10px;
+    border:none;
+    background:#eee;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.password-page button{
+    margin-top:20px;
+    background:#00B8A5;
+    border:none;
+    padding:10px 26px;
+    color:rgb(188, 187, 187);
+    border-radius:20px;
+    cursor:pointer;
+}
+
+/* ===== RESPONSIVE ===== 
+@media(max-width:768px){
+    .sidebar{
+        left:-240px;
+    }
+    .sidebar.show{
+        left:0;
+    }
+    .topbar{
+        left:0;
+    }
+    .content{
+        margin-left:0;
+    }
+}
+*/
+/* Layar besar */
+.footer{
+    margin-left:240px;
+    text-align:center;
+    padding:10px;
+    font-size:13px;
+    color:#ffffffcc;
+}
+@media(min-width:1400px){
+    .container{
+        max-width:1300px;
+    }
+}
+
+/* Tablet */
+@media(max-width:992px){
+    .container{
+        max-width:100%;
+    }}

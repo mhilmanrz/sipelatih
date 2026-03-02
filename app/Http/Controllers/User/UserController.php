@@ -4,6 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User\User;
+use App\Models\User\WorkUnit;
+use App\Models\User\Profession;
+use App\Models\User\Positions;
+use App\Models\User\EmploymentType;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -14,21 +18,43 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with(['workUnit', 'position', 'employmentType', 'profession'])->paginate(10);
-        return response()->json($users);
+        return view('user.index', compact('users'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        $workUnits = WorkUnit::all();
+        $professions = Profession::all();
+        $positions = Positions::all();
+        $employmentTypes = EmploymentType::all();
+        return view('user.tambah', compact('workUnits', 'professions', 'positions', 'employmentTypes'));
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $user = User::create($request->all());
-        return response()->json($user->load(['workUnit', 'position', 'employmentType', 'profession']), 201);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'employee_id' => 'nullable|string',
+            'phone_number' => 'nullable|string',
+            'work_unit_id' => 'nullable|exists:work_units,id',
+            'profession_id' => 'nullable|exists:professions,id',
+            'position_id' => 'nullable|exists:positions,id',
+            'employment_type_id' => 'nullable|exists:employment_types,id',
+        ]);
+
+        $data = $request->all();
+        $data['password'] = bcrypt($data['password']);
+
+        User::create($data);
+        return redirect('/users')->with('success', 'User berhasil ditambahkan.');
     }
 
     /**
@@ -36,33 +62,50 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::with(['workUnit', 'position', 'employmentType', 'profession'])->find($id);
-
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        return response()->json($user);
+        // Currently not used in views, redirect to index
+        return redirect('/users');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit() {}
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        $workUnits = WorkUnit::all();
+        $professions = Profession::all();
+        $positions = Positions::all();
+        $employmentTypes = EmploymentType::all();
+        return view('user.edit', compact('user', 'workUnits', 'professions', 'positions', 'employmentTypes'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
 
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'employee_id' => 'nullable|string',
+            'phone_number' => 'nullable|string',
+            'work_unit_id' => 'nullable|exists:work_units,id',
+            'profession_id' => 'nullable|exists:professions,id',
+            'position_id' => 'nullable|exists:positions,id',
+            'employment_type_id' => 'nullable|exists:employment_types,id',
+        ]);
+
+        $data = $request->all();
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            unset($data['password']);
         }
 
-        $user->update($request->all());
-        return response()->json($user->load(['workUnit', 'position', 'employmentType', 'profession']));
+        $user->update($data);
+        return redirect('/users')->with('success', 'User berhasil diperbarui.');
     }
 
     /**
@@ -70,13 +113,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
+        $user = User::findOrFail($id);
         $user->delete();
-        return response()->json(['message' => 'User deleted successfully'], 200);
+
+        return redirect('/users')->with('success', 'User berhasil dihapus.');
     }
 }

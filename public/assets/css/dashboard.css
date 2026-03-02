@@ -1,0 +1,273 @@
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:#0d8f8f;
+}
+/* SUBMENU */
+.submenu{
+    display:none;
+    background:#0a6a6a;
+}
+.submenu a{
+    padding-left:35px;
+    font-size:15px;
+}
+/* ===== CARD ===== */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(5,2fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+.card{
+    background:#fff;
+    border-radius:12px;
+    padding:18px;
+    text-align:center;
+    box-shadow:0 2px 6px rgba(0,0,0,.12);
+}
+.card i{
+    font-size:26px;
+    margin-bottom:6px;
+    display:block;
+    color:#00B8A5;
+}
+
+
+/* ===== GRID ===== */
+.grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+     align-items:stretch;
+     gap: 20px;
+    
+}
+
+.card-box{
+    background:#fff;
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+    min-height:320px;
+    overflow:auto;
+}
+
+#calendar{
+    width:100%;
+    height: 100%;
+    min-height:320px;
+}
+.fc{
+    height:100% !important;
+}
+
+.fc-view-harness{
+    min-height:260px;
+}
+
+.fc-scrollgrid{
+    border-radius:10px;
+}
+.fc .fc-toolbar-title{
+    font-size: 22px !important;
+    font-weight: 800;
+}
+.fc .fc-button{
+    font-size: 16px !important;
+    padding: 3px 6px !important;
+}
+.event-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.event-list li{
+    background:#f4f4f4;
+    padding:10px 12px;
+    border-radius:10px;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+}
+
+.event-list li span{
+    color:#666;
+    font-size:13px;
+}
+
+.profile-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    position:relative;
+}
+
+.profile-menu{
+    position:absolute;
+    right:0;
+    top:45px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,.2);
+    display:none;
+    min-width:150px;
+    overflow:hidden;
+    z-index:99;
+}
+
+.profile-menu a{
+    display:block;
+    padding:10px 14px;
+    text-decoration:none;
+    color:#333;
+    cursor:pointer;
+}
+
+.profile-menu a:hover{
+    background:#00B8A5;
+    color:#fff;
+}
+
+/* ===== MODAL ===== */
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
+}
+
+.modal-box{
+    background:#fff;
+    padding:30px;
+    width:360px;
+    border-radius:16px;
+    text-align:center;
+}
+
+.modal-box label{
+    display:block;
+    text-align:left;
+    margin-top:12px;
+    font-weight:600;
+    color:#00B8A5;
+}
+
+.modal-box input{
+    width:100%;
+    padding:10px;
+    border:none;
+    background:#eee;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.modal-box button{
+    margin-top:18px;
+    background:#00B8A5;
+    border:none;
+    padding:10px 25px;
+    color:white;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+.close{
+    position:absolute;
+    margin-left:150px;
+    margin-top:-15px;
+    cursor:pointer;
+}
+.password-page{
+    background:#fff;
+    width:380px;
+    margin:30px auto;
+    padding:30px;
+    border-radius:16px;
+    text-align:center;
+}
+
+.password-page label{
+    display:block;
+    text-align:left;
+    margin-top:14px;
+    font-weight:600;
+    color:#00B8A5;
+}
+
+.password-page input{
+    width:100%;
+    padding:10px;
+    border:none;
+    background:#eee;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.password-page button{
+    margin-top:20px;
+    background:#00B8A5;
+    border:none;
+    padding:10px 26px;
+    color:white;
+    border-radius:20px;
+    cursor:pointer;
+}
+.password-page{
+    background:#fff;
+    width:380px;
+    margin:30px auto;
+    padding:30px;
+    border-radius:16px;
+    text-align:center;
+}
+
+.password-page label{
+    display:block;
+    text-align:left;
+    margin-top:14px;
+    font-weight:600;
+    color:#00B8A5;
+}
+
+.password-page input{
+    width:100%;
+    padding:10px;
+    border:none;
+    background:#eee;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.password-page button{
+    margin-top:20px;
+    background:#00B8A5;
+    border:none;
+    padding:10px 26px;
+    color:white;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+@media(max-width:600px){
+    .cards{
+        grid-template-columns:1fr;
+    }
+}
