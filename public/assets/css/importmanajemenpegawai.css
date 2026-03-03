@@ -226,3 +226,129 @@
       display:none;
       max-width: 420px;
     }
+    /* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 992px){
+
+  .wrap{
+    padding:16px;
+  }
+
+  .page-title{
+    font-size:20px;
+  }
+
+  .card{
+    padding:14px;
+  }
+
+  .template-row{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .import-footer{
+    flex-wrap:wrap;
+    justify-content:flex-start;
+  }
+
+  .file-wrap .name{
+    max-width:220px;
+  }
+}
+
+
+/* Mobile */
+@media (max-width: 768px){
+
+  .wrap{
+    padding:14px;
+  }
+
+  .page-title{
+    font-size:18px;
+  }
+
+  .card{
+    border-radius:12px;
+    padding:12px;
+  }
+
+  .dropzone{
+    height:130px;
+  }
+
+  .btn{
+    width:100%;
+    justify-content:center;
+  }
+
+  .import-footer{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .file-wrap{
+    width:100%;
+    justify-content:space-between;
+  }
+
+  .file-wrap .name{
+    min-width:0;
+    max-width:150px;
+  }
+
+  .preview{
+    overflow-x:auto;
+  }
+
+  .preview table{
+    min-width:600px;
+  }
+
+  th, td{
+    padding:8px 10px;
+    font-size:11px;
+  }
+
+  .note{
+    font-size:11px;
+  }
+
+  .toast{
+    right:12px;
+    left:12px;
+    bottom:12px;
+    max-width:unset;
+    text-align:center;
+  }
+}
+
+
+/* Extra small phone */
+@media (max-width: 480px){
+
+  .page-title{
+    font-size:16px;
+  }
+
+  .dropzone{
+    height:110px;
+  }
+
+  .cloud{
+    width:36px;
+    height:36px;
+  }
+
+  .file-wrap .fake{
+    padding:6px 10px;
+    font-size:12px;
+  }
+
+  .btn{
+    font-size:12px;
+    padding:8px 12px;
+  }
+}

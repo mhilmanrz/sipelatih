@@ -1,39 +1,49 @@
 /* ================= CONTENT ================= */
 
 .content{
-    padding:40px 30px 60px;
+    padding:50px 30px 70px;
 }
 
-/* Judul */
+/* ================= TITLE ================= */
+
 .title{
-    font-size:24px;
-    margin-bottom:30px;
-    color:#000;
+    color:#fff;
+    font-size:26px;
+    font-weight:600;
+    margin-bottom:25px;
 }
 
 /* ================= FORM CARD ================= */
 
 .form-card{
     background:#fff;
-    padding:25px;
-    border-radius:18px;
-    max-width:750px;          /* lebih kecil */
-    margin:40px auto;         /* kasih jarak atas */
-    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    padding:30px;
+    border-radius:20px;
+    max-width:800px;
+    margin:40px auto;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* ================= FORM ROW ================= */
+/* ================= FORM GRID ================= */
 
 .form-row{
     display:grid;
-    grid-template-columns:200px 1fr; /* sedikit lebih kecil */
-    gap:15px;
-    margin-bottom:16px;
+    grid-template-columns:220px 1fr;
+    gap:18px;
+    margin-bottom:18px;
     align-items:center;
 }
 
 .form-row.two{
-    grid-template-columns:200px 1fr 1fr;
+    grid-template-columns:220px 1fr 1fr;
+}
+
+/* ================= LABEL ================= */
+
+.form-row label{
+    font-weight:600;
+    color:#007a7f;
+    font-size:14px;
 }
 
 /* ================= INPUT ================= */
@@ -41,36 +51,39 @@
 .form-row input,
 .form-row select{
     width:100%;
-    padding:9px 12px;         /* lebih compact */
+    padding:10px 14px;
     border:2px solid #00B8A5;
-    border-radius:12px;
+    border-radius:14px;
     font-size:14px;
     background:#f9f9f9;
-    box-sizing:border-box;
+    transition:.2s ease;
 }
 
 .form-row input:focus,
 .form-row select:focus{
     border-color:#007a7f;
-    box-shadow:0 0 0 3px rgba(0,184,165,.15);
+    box-shadow:0 0 0 4px rgba(0,184,165,.15);
     background:#fff;
+    outline:none;
 }
 
-/* ================= BUTTON ================= */
+/* ================= BUTTON AREA ================= */
 
 .form-action{
     display:flex;
     justify-content:center;
-    gap:15px;
-    margin-top:30px;
+    gap:18px;
+    margin-top:35px;
 }
 
 .btn-save,
 .btn-cancel{
-    padding:9px 22px;
-    border-radius:20px;
+    padding:10px 26px;
+    border-radius:25px;
     border:none;
     cursor:pointer;
+    transition:.2s ease;
+    font-size:14px;
 }
 
 .btn-save{
@@ -80,6 +93,7 @@
 
 .btn-save:hover{
     background:#005f63;
+    transform:translateY(-2px);
 }
 
 .btn-cancel{
@@ -89,15 +103,45 @@
 
 .btn-cancel:hover{
     background:#777;
+    transform:translateY(-2px);
 }
 
 /* ================= RESPONSIVE ================= */
 
-@media(max-width:768px){
+/* Tablet */
+@media(max-width:992px){
 
     .form-card{
-        margin:20px auto;
+        max-width:95%;
+        padding:25px;
+    }
+
+    .form-row{
+        grid-template-columns:180px 1fr;
+    }
+
+    .form-row.two{
+        grid-template-columns:180px 1fr 1fr;
+    }
+
+}
+
+/* Mobile */
+@media(max-width:768px){
+
+    .content{
+        padding:30px 20px 50px;
+    }
+
+    .title{
+        text-align:center;
+        font-size:22px;
+    }
+
+    .form-card{
+        margin:25px auto;
         padding:20px;
+        border-radius:16px;
     }
 
     .form-row,
@@ -106,18 +150,37 @@
         gap:8px;
     }
 
+    .form-row label{
+        font-size:13px;
+    }
+
     .form-action{
         flex-direction:column;
+        gap:12px;
     }
 
     .btn-save,
     .btn-cancel{
         width:100%;
     }
+
 }
-.title{
-    color:#fff;
-    font-size:26px;
-    font-weight:600;
-    margin-bottom:20px;
+
+/* Extra Small */
+@media(max-width:480px){
+
+    .form-card{
+        padding:18px;
+    }
+
+    .title{
+        font-size:20px;
+    }
+
+    .form-row input,
+    .form-row select{
+        font-size:13px;
+        padding:9px 12px;
+    }
+
 }

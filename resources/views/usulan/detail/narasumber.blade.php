@@ -1,4 +1,5 @@
 @extends('layout.LayoutPengusul')
+@extends('layout.LayoutSuperAdmin')
 
 @section('title', 'Narasumber')
 
@@ -32,7 +33,7 @@
         <button onclick="window.location='{{ route('usulan.sasaran') }}'">Sasaran Profesi</button>
         <button onclick="window.location='{{ route('usulan.kak') }}'">KAK</button>
         <button onclick="window.location='{{ route('usulan.materi') }}'">Materi</button>
-        <button onclick="window.location='{{ route('usulan.narasumber') }}'" class="active">Narasumber</button>
+        <button onclick="window.location='{{ route('usulan.narasumber') }}'"class="active">Narasumber</button>
         <button onclick="window.location='{{ route('usulan.peserta') }}'">Peserta</button>
         <button onclick="window.location='{{ route('usulan.pengiriman') }}'">Pengiriman</button>
         <button onclick="window.location='{{ route('usulan.penilaian') }}'">Penilaian</button>
@@ -43,7 +44,7 @@
     <div class="card">
 
         <div class="card-header">
-            Narasumber / Pembicara
+        Narasumber/Pembicara
         </div>
 
         <!-- FORM -->

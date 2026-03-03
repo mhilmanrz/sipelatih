@@ -1,35 +1,48 @@
+/* ================= RESET ================= */
 *{
     box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
 body{
-    margin:0;
     font-family:'Poppins',sans-serif;
     background:#0d8f8f;
+    overflow-x:hidden;
 }
-/* SUBMENU */
+
+/* ================= SUBMENU ================= */
 .submenu{
     display:none;
     background:#0a6a6a;
 }
+
 .submenu a{
     padding-left:35px;
     font-size:15px;
 }
-/* ===== CARD ===== */
+
+/* ================= CARDS ================= */
 .cards{
     display:grid;
-    grid-template-columns:repeat(5,2fr);
+    grid-template-columns:repeat(5,1fr);
     gap:15px;
     margin-bottom:25px;
 }
+
 .card{
     background:#fff;
     border-radius:12px;
     padding:18px;
     text-align:center;
     box-shadow:0 2px 6px rgba(0,0,0,.12);
+    transition:.3s;
 }
+
+.card:hover{
+    transform:translateY(-3px);
+}
+
 .card i{
     font-size:26px;
     margin-bottom:6px;
@@ -37,14 +50,12 @@ body{
     color:#00B8A5;
 }
 
-
-/* ===== GRID ===== */
+/* ================= GRID ================= */
 .grid{
     display:grid;
     grid-template-columns:2fr 1fr;
-     align-items:stretch;
-     gap: 20px;
-    
+    gap:20px;
+    align-items:stretch;
 }
 
 .card-box{
@@ -56,11 +67,13 @@ body{
     overflow:auto;
 }
 
+/* ================= CALENDAR ================= */
 #calendar{
     width:100%;
-    height: 100%;
+    height:100%;
     min-height:320px;
 }
+
 .fc{
     height:100% !important;
 }
@@ -72,18 +85,20 @@ body{
 .fc-scrollgrid{
     border-radius:10px;
 }
+
 .fc .fc-toolbar-title{
-    font-size: 22px !important;
-    font-weight: 800;
+    font-size:20px !important;
+    font-weight:800;
 }
+
 .fc .fc-button{
-    font-size: 16px !important;
-    padding: 3px 6px !important;
+    font-size:14px !important;
+    padding:4px 8px !important;
 }
+
+/* ================= EVENT LIST ================= */
 .event-list{
     list-style:none;
-    padding:0;
-    margin:0;
 }
 
 .event-list li{
@@ -94,6 +109,8 @@ body{
     display:flex;
     justify-content:space-between;
     font-size:14px;
+    flex-wrap:wrap;
+    gap:5px;
 }
 
 .event-list li span{
@@ -101,6 +118,7 @@ body{
     font-size:13px;
 }
 
+/* ================= PROFILE ================= */
 .profile-area{
     display:flex;
     align-items:center;
@@ -127,6 +145,7 @@ body{
     text-decoration:none;
     color:#333;
     cursor:pointer;
+    transition:.2s;
 }
 
 .profile-menu a:hover{
@@ -134,7 +153,7 @@ body{
     color:#fff;
 }
 
-/* ===== MODAL ===== */
+/* ================= MODAL ================= */
 .modal{
     position:fixed;
     inset:0;
@@ -143,58 +162,29 @@ body{
     align-items:center;
     justify-content:center;
     z-index:999;
+    padding:15px;
 }
 
 .modal-box{
     background:#fff;
     padding:30px;
-    width:360px;
+    width:100%;
+    max-width:360px;
     border-radius:16px;
     text-align:center;
-}
-
-.modal-box label{
-    display:block;
-    text-align:left;
-    margin-top:12px;
-    font-weight:600;
-    color:#00B8A5;
-}
-
-.modal-box input{
-    width:100%;
-    padding:10px;
-    border:none;
-    background:#eee;
-    border-radius:8px;
-    margin-top:6px;
-}
-
-.modal-box button{
-    margin-top:18px;
-    background:#00B8A5;
-    border:none;
-    padding:10px 25px;
-    color:white;
-    border-radius:20px;
-    cursor:pointer;
+    position:relative;
 }
 
 .close{
     position:absolute;
-    margin-left:150px;
-    margin-top:-15px;
+    right:15px;
+    top:10px;
     cursor:pointer;
-}
-.password-page{
-    background:#fff;
-    width:380px;
-    margin:30px auto;
-    padding:30px;
-    border-radius:16px;
-    text-align:center;
+    font-size:18px;
 }
 
+/* ================= FORM ================= */
+.modal-box label,
 .password-page label{
     display:block;
     text-align:left;
@@ -203,6 +193,7 @@ body{
     color:#00B8A5;
 }
 
+.modal-box input,
 .password-page input{
     width:100%;
     padding:10px;
@@ -212,6 +203,7 @@ body{
     margin-top:6px;
 }
 
+.modal-box button,
 .password-page button{
     margin-top:20px;
     background:#00B8A5;
@@ -220,54 +212,61 @@ body{
     color:white;
     border-radius:20px;
     cursor:pointer;
+    transition:.3s;
 }
+
+.modal-box button:hover,
+.password-page button:hover{
+    opacity:.85;
+}
+
+/* ================= PASSWORD PAGE ================= */
 .password-page{
     background:#fff;
-    width:380px;
+    width:100%;
+    max-width:380px;
     margin:30px auto;
     padding:30px;
     border-radius:16px;
     text-align:center;
 }
 
-.password-page label{
-    display:block;
-    text-align:left;
-    margin-top:14px;
-    font-weight:600;
-    color:#00B8A5;
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media(max-width:992px){
+    .cards{
+        grid-template-columns:repeat(3,1fr);
+    }
 }
 
-.password-page input{
-    width:100%;
-    padding:10px;
-    border:none;
-    background:#eee;
-    border-radius:8px;
-    margin-top:6px;
-}
-
-.password-page button{
-    margin-top:20px;
-    background:#00B8A5;
-    border:none;
-    padding:10px 26px;
-    color:white;
-    border-radius:20px;
-    cursor:pointer;
-}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:900px){
+/* Small Tablet */
+@media(max-width:768px){
     .cards{
         grid-template-columns:repeat(2,1fr);
     }
+
     .grid{
         grid-template-columns:1fr;
     }
 }
-@media(max-width:600px){
+
+/* Mobile */
+@media(max-width:480px){
     .cards{
         grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:14px;
+    }
+
+    .fc .fc-toolbar-title{
+        font-size:16px !important;
+    }
+
+    .fc .fc-button{
+        font-size:12px !important;
+        padding:3px 6px !important;
     }
 }

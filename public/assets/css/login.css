@@ -144,3 +144,84 @@ button:hover{
 .toggle-password:hover{
     background:rgba(10,122,122,.1);
 }
+
+/* ================================
+   RESPONSIVE LOGIN
+================================ */
+
+/* Tablet */
+@media (max-width: 992px){
+    .login-card{
+        width: 90%;
+        max-width: 400px;
+        padding: 35px;
+    }
+
+    .logo{
+        width: 180px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px){
+
+    .slogan-bar{
+        font-size: 14px;
+        padding: 15px 0;
+    }
+
+    .page-wrapper{
+        padding: 20px;
+    }
+
+    .login-card{
+        width: 100%;
+        padding: 30px 25px;
+        border-radius: 15px;
+    }
+
+    .logo{
+        width: 150px;
+        margin-bottom: 25px;
+    }
+
+    input{
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    button{
+        width: 100%;
+        padding: 12px;
+        font-size: 15px;
+    }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 480px){
+
+    .login-card{
+        padding: 25px 20px;
+    }
+
+    .logo{
+        width: 130px;
+    }
+
+    label{
+        font-size: 13px;
+    }
+
+    input{
+        font-size: 12px;
+    }
+
+    button{
+        font-size: 14px;
+    }
+
+    .footer{
+        font-size: 12px;
+        padding: 15px;
+    }
+}

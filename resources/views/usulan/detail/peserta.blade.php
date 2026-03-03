@@ -1,4 +1,5 @@
-@extends('layout.LayoutPngusul')
+@extends('layout.LayoutPengusul')
+@extends('layout.LayoutSuperAdmin')
 
 @section('title', 'Manajemen Pegawai')
 

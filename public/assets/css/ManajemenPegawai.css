@@ -107,3 +107,89 @@ th, td {
     background: #007f7a;
     color: #fff;
 }
+/* =================================
+   RESPONSIVE TABLE
+================================= */
+
+/* Tablet */
+@media (max-width: 992px){
+
+    .table-top{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .right{
+        flex-wrap: wrap;
+    }
+
+    .filter-bar{
+        flex-wrap: wrap;
+    }
+
+    .search input{
+        width: 140px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px){
+
+    .page-wrap{
+        padding: 15px;
+    }
+
+    .btn{
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .search input{
+        width: 120px;
+    }
+
+    .card-table{
+        padding: 12px;
+        overflow-x: auto; /* penting */
+    }
+
+    table{
+        min-width: 700px; /* supaya tidak hancur */
+    }
+
+    th, td{
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .table-footer{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .pagination{
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+}
+
+/* Extra Small */
+@media (max-width: 480px){
+
+    .btn{
+        font-size: 13px;
+        padding: 5px 10px;
+    }
+
+    .search input{
+        width: 100px;
+        font-size: 13px;
+    }
+
+    th, td{
+        font-size: 12px;
+        padding: 6px;
+    }
+}

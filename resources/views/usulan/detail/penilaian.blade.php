@@ -1,4 +1,5 @@
 @extends('layout.LayoutPengusul')
+@extends('layout.LayoutSuperAdmin')
 
 @section('title', 'Penilaian Diklat')
 

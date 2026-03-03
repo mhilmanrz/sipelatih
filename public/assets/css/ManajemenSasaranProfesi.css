@@ -166,3 +166,111 @@ input, select {
 .content{
     flex:1;
 }
+/* =================================
+   RESPONSIVE DASHBOARD + MODAL
+================================= */
+
+/* Tablet */
+@media (max-width: 992px){
+
+    .main{
+        padding: 20px;
+    }
+
+    .btn-tambah{
+        position: static;
+        margin-bottom: 15px;
+        display: inline-block;
+    }
+
+    .table-section{
+        margin-top: 10px;
+    }
+
+    .modal-content{
+        width: 90%;
+        max-width: 450px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px){
+
+    .topbar{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .topbar .user span{
+        margin-left: 0;
+        display: block;
+    }
+
+    h1{
+        font-size: 20px;
+    }
+
+    .main{
+        padding: 15px;
+    }
+
+    /* Table scroll horizontal */
+    .table-section{
+        overflow-x: auto;
+    }
+
+    table{
+        min-width: 700px;
+    }
+
+    th, td{
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .hapus,
+    .update{
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    /* Modal */
+    .modal-content{
+        width: 95%;
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    .modal-buttons{
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .simpan,
+    .batal{
+        width: 100%;
+    }
+}
+
+/* Extra Small */
+@media (max-width: 480px){
+
+    h1{
+        font-size: 18px;
+    }
+
+    th, td{
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .btn-tambah{
+        width: 100%;
+        text-align: center;
+    }
+
+    input, select{
+        font-size: 13px;
+    }
+}

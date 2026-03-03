@@ -1,5 +1,5 @@
 @extends('layout.LayoutPengusul')
-
+@extends('layout.LayoutSuperAdmin')
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/kak.css') }}">
 @endpush
