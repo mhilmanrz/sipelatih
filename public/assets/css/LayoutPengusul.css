@@ -1,0 +1,351 @@
+/* =================================
+   RESET
+================================= */
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#14b9c8;
+    overflow-x:hidden;
+}
+
+.app{
+    max-width:1400px;
+    margin:0 auto;
+}
+
+
+/* =================================
+   WRAPPER
+================================= */
+.wrapper{
+    position:relative;
+    width:100%;
+    min-height:100vh;
+}
+
+
+/* =================================
+   SIDEBAR
+================================= */
+.sidebar{
+    width:240px;
+    height:100vh;
+    background:#064c4c;
+    color:#fff;
+    position:fixed;
+    left:0;
+    top:0;
+    transition:all .3s ease;
+    overflow-y:auto;
+    z-index:1000;
+}
+
+.sidebar.hidden{
+    left:-240px;
+}
+
+/* Logo */
+.logo{
+    padding:18px;
+    text-align:center;
+    background:#053b3b;
+}
+
+.logo img{
+    max-width:100%;
+}
+
+.logo small{
+    font-size:13px;
+    display:block;
+    color:#cfcfcf;
+    margin-top:6px;
+}
+
+
+/* =================================
+   MENU
+================================= */
+.menu a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 20px;
+    color:#fff;
+    text-decoration:none;
+    cursor:pointer;
+    transition:.2s;
+    font-size:14px;
+}
+
+.menu a i{
+    width:20px;
+    text-align:center;
+}
+
+.menu a:hover,
+.menu a.active{
+    background:#1fd1d1;
+    color:#000;
+}
+
+
+/* =================================
+   SUBMENU
+================================= */
+.submenu{
+    display:none;
+    background:#055555;
+}
+
+.submenu a{
+    padding-left:42px;
+    font-size:13px;
+}
+
+
+/* =================================
+   TOPBAR
+================================= */
+.topbar{
+    height:60px;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
+    position:fixed;
+    top:0;
+    left:240px;
+    right:0;
+    transition:all .3s ease;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+    z-index:900;
+}
+
+.topbar.full{
+    left:0;
+}
+
+.topbar i{
+    cursor:pointer;
+}
+
+
+/* =================================
+   PROFILE AREA
+================================= */
+.profile-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    position:relative;
+}
+
+.user-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 22px;
+    background:#d3d3d3;
+    color:#000;
+    border-radius:30px;
+    cursor:pointer;
+    transition:.2s;
+    user-select:none;
+    font-size:14px;
+}
+
+.user-badge:hover{
+    background:#bfbfbf;
+}
+
+.profile-menu{
+    position:absolute;
+    right:0;
+    top:45px;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 6px 15px rgba(0,0,0,.15);
+    display:none;
+    min-width:160px;
+    overflow:hidden;
+    z-index:99;
+}
+
+.profile-menu a{
+    display:block;
+    padding:10px 14px;
+    text-decoration:none;
+    color:#333;
+    background:#f0f0f0;
+    transition:.2s;
+    font-size:14px;
+}
+
+.profile-menu a:hover{
+    background:#dcdcdc;
+    color:#000;
+}
+
+
+/* =================================
+   CONTENT
+================================= */
+.content{
+    margin-left:240px;
+    margin-top:60px;
+    padding:25px;
+    transition:all .3s ease;
+    min-height:calc(100vh - 60px);
+}
+
+.content.full{
+    margin-left:0;
+}
+
+.container{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+}
+
+
+/* =================================
+   PASSWORD PAGE
+================================= */
+.password-page{
+    background:#fff;
+    width:380px;
+    margin:40px auto;
+    padding:30px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
+
+.password-page label{
+    display:block;
+    text-align:left;
+    margin-top:14px;
+    font-weight:600;
+    color:#00B8A5;
+    font-size:14px;
+}
+
+.password-page input{
+    width:100%;
+    padding:10px;
+    border:none;
+    background:#eee;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.password-page button{
+    margin-top:22px;
+    background:#00B8A5;
+    border:none;
+    padding:10px 28px;
+    color:#fff;
+    border-radius:25px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.password-page button:hover{
+    background:#019b8c;
+}
+
+
+/* =================================
+   FOOTER
+================================= */
+.footer{
+    margin-left:240px;
+    text-align:center;
+    padding:12px;
+    font-size:13px;
+    color:#ffffffcc;
+    transition:.3s;
+}
+
+.footer.full{
+    margin-left:0;
+}
+
+
+/* =================================
+   LARGE SCREEN
+================================= */
+@media(min-width:1400px){
+    .container{
+        max-width:1300px;
+    }
+}
+
+
+/* =================================
+   TABLET
+================================= */
+@media(max-width:992px){
+
+    .sidebar{
+        width:220px;
+    }
+
+    .topbar{
+        left:220px;
+    }
+
+    .content{
+        margin-left:220px;
+    }
+
+    .footer{
+        margin-left:220px;
+    }
+
+    .password-page{
+        width:90%;
+    }
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+@media(max-width:768px){
+
+    .sidebar{
+        left:-240px;
+    }
+
+    .sidebar.show{
+        left:0;
+    }
+
+    .topbar{
+        left:0;
+    }
+
+    .content{
+        margin-left:0;
+        padding:20px;
+    }
+
+    .footer{
+        margin-left:0;
+    }
+
+    .password-page{
+        width:95%;
+        padding:25px;
+    }
+
+}

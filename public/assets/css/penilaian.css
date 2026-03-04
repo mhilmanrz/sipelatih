@@ -1,0 +1,257 @@
+/* CONTENT */
+.main-content {
+    padding: 30px;
+}
+
+.page-title {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+/* INFO BOX */
+.info-box {
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.info-row {
+    display: flex;
+    margin: 6px 0;
+}
+
+.info-row span {
+    width: 220px;
+    color: #0a7f82;
+    font-weight: 600;
+}
+
+.info-row b {
+    color: #0a7f82;
+}
+
+/* TAB */
+.tab-menu {
+    background: #0a7f82;
+    padding: 12px 18px;
+    border-radius: 14px 14px 0 0;
+    display: flex;
+    gap: 16px;
+}
+
+.tab-menu button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 6px 14px;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.tab-menu .active {
+    background: #5dd6c4;
+    color: #0a7f82;
+}
+
+/* TABLE */
+.table-box {
+    background: #fff;
+    padding: 25px;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #0a7f82;
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+}
+
+td {
+    padding: 14px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+
+/* BADGE STATUS */
+.badge {
+    padding: 6px 16px;
+    border-radius: 25px;
+    color: #fff;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.reject {
+    background: #ff1e1e;
+}
+
+.revise {
+    background: #ffa500;
+}
+
+.approve {
+    background: #1db954;
+}
+
+.note {
+    color: #0a7f82;
+    font-style: italic;
+}
+/* =================================
+   SMOOTH UI EFFECT
+================================= */
+button{
+    transition:.2s ease;
+}
+
+button:hover{
+    opacity:.9;
+    transform:translateY(-2px);
+}
+
+/* =================================
+   INFO BOX IMPROVEMENT
+================================= */
+.info-row{
+    display:flex;
+    margin:8px 0;
+    align-items:flex-start;
+}
+
+.info-row span{
+    width:220px;
+    color:#0a7f82;
+    font-weight:600;
+}
+
+.info-row b{
+    color:#0a7f82;
+}
+
+/* =================================
+   TAB SCROLL + MODERN STYLE
+================================= */
+.tab-menu{
+    overflow-x:auto;
+    scrollbar-width:none;
+}
+
+.tab-menu::-webkit-scrollbar{
+    display:none;
+}
+
+.tab-menu button{
+    transition:.2s ease;
+}
+
+.tab-menu button:hover{
+    background:rgba(255,255,255,0.2);
+}
+
+/* =================================
+   TABLE IMPROVEMENT
+================================= */
+.table-box{
+    overflow-x:auto;
+}
+
+table{
+    min-width:650px;
+}
+
+tbody tr{
+    transition:.2s ease;
+}
+
+tbody tr:hover{
+    background:#f4fbfb;
+}
+
+/* =================================
+   BADGE MODERN STYLE
+================================= */
+.badge{
+    padding:6px 18px;
+    border-radius:30px;
+    font-size:13px;
+    letter-spacing:.5px;
+    box-shadow:0 3px 8px rgba(0,0,0,.1);
+}
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+/* Tablet */
+@media(max-width:992px){
+
+    .main-content{
+        padding:20px;
+    }
+
+    .info-row{
+        flex-direction:column;
+        gap:4px;
+    }
+
+    .info-row span{
+        width:100%;
+    }
+
+}
+
+/* Mobile */
+@media(max-width:768px){
+
+    .main-content{
+        padding:15px;
+    }
+
+    .page-title{
+        font-size:20px;
+        text-align:center;
+    }
+
+    .table-box{
+        padding:15px;
+    }
+
+    table{
+        min-width:550px;
+        font-size:13px;
+    }
+
+    th, td{
+        padding:10px;
+    }
+
+}
+
+/* Extra Small */
+@media(max-width:480px){
+
+    .page-title{
+        font-size:18px;
+    }
+
+    table{
+        min-width:500px;
+        font-size:12px;
+    }
+
+    .badge{
+        font-size:12px;
+        padding:5px 14px;
+    }
+
+}

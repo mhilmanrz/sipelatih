@@ -1,0 +1,178 @@
+/* RESET AMAN */
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* KHUSUS HALAMAN */
+.evaluasi-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* TITLE */
+.evaluasi-page .page-title {
+    padding: 20px 0;
+}
+
+.evaluasi-page h1 {
+    color: #fff;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* CARD */
+.evaluasi-page .card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 25px;
+    margin-bottom: 25px;
+}
+
+.evaluasi-page .card h2 {
+    color: #007a7a;
+    margin-bottom: 15px;
+}
+
+/* BUTTON */
+.evaluasi-page .btn-download {
+    display: inline-block;
+    background: #007a7a;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.evaluasi-page .btn-download:hover {
+    background: #006666;
+}
+
+/* TABLE */
+.evaluasi-page .table-wrapper {
+    background: #fff;
+    border-radius: 20px;
+    overflow-x: auto;
+}
+
+.evaluasi-page table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+.evaluasi-page thead {
+    background: #007a7a;
+    color: #fff;
+}
+
+.evaluasi-page th,
+.evaluasi-page td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+/* INFO */
+.evaluasi-page .info {
+    padding: 15px;
+    font-size: 14px;
+}
+
+/* ================= RESPONSIVE UPGRADE ================= */
+
+/* Tablet */
+@media (max-width: 992px) {
+
+    .evaluasi-page {
+        padding: 0 15px;
+    }
+
+    .evaluasi-page h1 {
+        font-size: 26px;
+    }
+
+    .evaluasi-page .card {
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .evaluasi-page th,
+    .evaluasi-page td {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .evaluasi-page {
+        padding: 0 12px;
+    }
+
+    .evaluasi-page .page-title {
+        padding: 15px 0;
+    }
+
+    .evaluasi-page h1 {
+        font-size: 20px;
+    }
+
+    .evaluasi-page .card {
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    .evaluasi-page .card h2 {
+        font-size: 16px;
+    }
+
+    .evaluasi-page .btn-download {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .evaluasi-page .table-wrapper {
+        border-radius: 15px;
+    }
+
+    .evaluasi-page table {
+        min-width: 600px; /* aman agar tidak pecah */
+    }
+
+    .evaluasi-page th,
+    .evaluasi-page td {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .evaluasi-page .info {
+        font-size: 13px;
+    }
+}
+
+
+/* Extra small (HP kecil banget) */
+@media (max-width: 480px) {
+
+    .evaluasi-page h1 {
+        font-size: 18px;
+    }
+
+    .evaluasi-page .card {
+        padding: 14px;
+    }
+
+    .evaluasi-page th,
+    .evaluasi-page td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}

@@ -1,0 +1,272 @@
+/* ================= RESET ================= */
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#0d8f8f;
+    overflow-x:hidden;
+}
+
+/* ================= SUBMENU ================= */
+.submenu{
+    display:none;
+    background:#0a6a6a;
+}
+
+.submenu a{
+    padding-left:35px;
+    font-size:15px;
+}
+
+/* ================= CARDS ================= */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:#fff;
+    border-radius:12px;
+    padding:18px;
+    text-align:center;
+    box-shadow:0 2px 6px rgba(0,0,0,.12);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+}
+
+.card i{
+    font-size:26px;
+    margin-bottom:6px;
+    display:block;
+    color:#00B8A5;
+}
+
+/* ================= GRID ================= */
+.grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+    align-items:stretch;
+}
+
+.card-box{
+    background:#fff;
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+    min-height:320px;
+    overflow:auto;
+}
+
+/* ================= CALENDAR ================= */
+#calendar{
+    width:100%;
+    height:100%;
+    min-height:320px;
+}
+
+.fc{
+    height:100% !important;
+}
+
+.fc-view-harness{
+    min-height:260px;
+}
+
+.fc-scrollgrid{
+    border-radius:10px;
+}
+
+.fc .fc-toolbar-title{
+    font-size:20px !important;
+    font-weight:800;
+}
+
+.fc .fc-button{
+    font-size:14px !important;
+    padding:4px 8px !important;
+}
+
+/* ================= EVENT LIST ================= */
+.event-list{
+    list-style:none;
+}
+
+.event-list li{
+    background:#f4f4f4;
+    padding:10px 12px;
+    border-radius:10px;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    flex-wrap:wrap;
+    gap:5px;
+}
+
+.event-list li span{
+    color:#666;
+    font-size:13px;
+}
+
+/* ================= PROFILE ================= */
+.profile-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    position:relative;
+}
+
+.profile-menu{
+    position:absolute;
+    right:0;
+    top:45px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,.2);
+    display:none;
+    min-width:150px;
+    overflow:hidden;
+    z-index:99;
+}
+
+.profile-menu a{
+    display:block;
+    padding:10px 14px;
+    text-decoration:none;
+    color:#333;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.profile-menu a:hover{
+    background:#00B8A5;
+    color:#fff;
+}
+
+/* ================= MODAL ================= */
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
+    padding:15px;
+}
+
+.modal-box{
+    background:#fff;
+    padding:30px;
+    width:100%;
+    max-width:360px;
+    border-radius:16px;
+    text-align:center;
+    position:relative;
+}
+
+.close{
+    position:absolute;
+    right:15px;
+    top:10px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+/* ================= FORM ================= */
+.modal-box label,
+.password-page label{
+    display:block;
+    text-align:left;
+    margin-top:14px;
+    font-weight:600;
+    color:#00B8A5;
+}
+
+.modal-box input,
+.password-page input{
+    width:100%;
+    padding:10px;
+    border:none;
+    background:#eee;
+    border-radius:8px;
+    margin-top:6px;
+}
+
+.modal-box button,
+.password-page button{
+    margin-top:20px;
+    background:#00B8A5;
+    border:none;
+    padding:10px 26px;
+    color:white;
+    border-radius:20px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.modal-box button:hover,
+.password-page button:hover{
+    opacity:.85;
+}
+
+/* ================= PASSWORD PAGE ================= */
+.password-page{
+    background:#fff;
+    width:100%;
+    max-width:380px;
+    margin:30px auto;
+    padding:30px;
+    border-radius:16px;
+    text-align:center;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media(max-width:992px){
+    .cards{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+/* Small Tablet */
+@media(max-width:768px){
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+
+/* Mobile */
+@media(max-width:480px){
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:14px;
+    }
+
+    .fc .fc-toolbar-title{
+        font-size:16px !important;
+    }
+
+    .fc .fc-button{
+        font-size:12px !important;
+        padding:3px 6px !important;
+    }
+}

@@ -1,0 +1,195 @@
+.page-wrap {
+    padding: 20px;
+    color: #fff;
+}
+
+.table-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.table-top select {
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: none;
+}
+
+.right {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn.gray {
+    background: #828282;
+    color: #fff;
+}
+
+.btn.green {
+    background: #007a7f;
+    color: #fff;
+}
+
+.card-table {
+    background: #fff;
+    padding: 16px;
+    border-radius: 14px;
+    color: #000;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 2px solid #0d9488;
+    border-radius: 20px;
+    padding: 4px 10px;
+}
+
+.search input {
+    border: none;
+    outline: none;
+    padding: 4px;
+    width: 160px;
+}
+
+.reset {
+    background: #9ca3af;
+    color: #fff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #007f7a;
+    color: #fff;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #828282;
+    text-align: center;
+}
+
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.pagination button {
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.pagination .active {
+    background: #007f7a;
+    color: #fff;
+}
+/* =================================
+   RESPONSIVE TABLE
+================================= */
+
+/* Tablet */
+@media (max-width: 992px){
+
+    .table-top{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .right{
+        flex-wrap: wrap;
+    }
+
+    .filter-bar{
+        flex-wrap: wrap;
+    }
+
+    .search input{
+        width: 140px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px){
+
+    .page-wrap{
+        padding: 15px;
+    }
+
+    .btn{
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .search input{
+        width: 120px;
+    }
+
+    .card-table{
+        padding: 12px;
+        overflow-x: auto; /* penting */
+    }
+
+    table{
+        min-width: 700px; /* supaya tidak hancur */
+    }
+
+    th, td{
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .table-footer{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .pagination{
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+}
+
+/* Extra Small */
+@media (max-width: 480px){
+
+    .btn{
+        font-size: 13px;
+        padding: 5px 10px;
+    }
+
+    .search input{
+        width: 100px;
+        font-size: 13px;
+    }
+
+    th, td{
+        font-size: 12px;
+        padding: 6px;
+    }
+}

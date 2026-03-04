@@ -1,0 +1,305 @@
+/* =============================
+   GLOBAL
+============================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", sans-serif;
+    background: #10b6c5;
+}
+
+/* WRAPPER */
+.layout {
+    width: 100%;
+}
+
+/* CONTAINER */
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    padding: 15px;
+}
+
+/* =============================
+   HEADER SECTION BARU
+============================= */
+
+.layout {
+    background: #1fb5bd;
+    padding: 40px 20px 60px 20px;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 25px;
+    color: white;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* INFO CARD PUTIH */
+.info-card {
+    background: #f2f2f2;
+    border-radius: 20px;
+    padding: 30px 40px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* GRID ISI */
+.info-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    row-gap: 14px;
+    column-gap: 10px;
+    font-size: 18px;
+    color: #006d73;
+}
+
+.info-grid span {
+    font-weight: 700;
+}
+
+
+.info-grid span {
+    font-weight: 600;
+}
+
+/* =============================
+   TABS
+============================= */
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    background: #007f86;
+    border-radius: 12px 12px 0 0;
+    padding: 5px;
+    gap: 5px;
+}
+
+.tab {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: 0.2s;
+}
+
+.tab:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.tab.active {
+    background: #36d3a8;
+}
+
+/* =============================
+   CARD
+============================= */
+.card {
+    background: #ececec;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    overflow: hidden;
+}
+
+/* HEADER TITLE */
+.card-header {
+    background: #6f6f6f;
+    color: white;
+    font-weight: 600;
+    padding: 12px 20px;
+    font-size: 15px;
+}
+
+/* =============================
+   FORM SECTION
+============================= */
+.form-section {
+    padding: 20px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    width: 150px;
+    font-weight: 600;
+    color: #0e8a96;
+    font-size: 14px;
+}
+
+/* SELECT STYLE */
+.form-group select {
+    flex: 1;
+    height: 38px;
+    padding: 0 15px;
+    border: 2px solid #0e8a96;
+    border-radius: 25px;
+    background: white;
+    font-size: 14px;
+    color: #555;
+    outline: none;
+}
+
+/* BUTTON SIMPAN */
+.btn-primary {
+    margin-top: 10px;
+    margin-left: auto;
+    display: block;
+    background: #25c08d;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    background: #1da679;
+}
+
+/* =============================
+   TABLE
+============================= */
+.table-wrapper {
+    padding: 0 20px 20px 20px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    min-width: 600px; /* agar tidak hancur */
+}
+
+thead {
+    background: #007f86;
+    color: white;
+}
+
+th {
+    padding: 12px;
+    font-size: 13px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    font-size: 13px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* BUTTON HAPUS */
+.btn-danger {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background: #e63b3b;
+}
+
+/* =============================
+   MODERATOR TITLE
+============================= */
+.moderator-title {
+    background: #6f6f6f;
+    color: white;
+    font-weight: 600;
+    padding: 12px 20px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* =============================
+   RESPONSIVE
+============================= */
+
+/* Tablet */
+@media (max-width: 992px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-group label {
+        width: 100%;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    .title {
+        font-size: 20px;
+    }
+
+    .tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    .tab {
+        white-space: nowrap;
+        font-size: 12px;
+    }
+
+    .card-header {
+        font-size: 14px;
+    }
+
+    th, td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+@media (max-width: 768px) {
+
+    .layout {
+        padding: 30px 15px 40px 15px;
+    }
+
+    .title {
+        font-size: 22px;
+    }
+
+    .info-card {
+        padding: 20px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        font-size: 14px;
+    }
+}

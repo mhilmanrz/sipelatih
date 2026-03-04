@@ -1,0 +1,238 @@
+.page-wrap {
+    padding: 20px;
+    color: #fff;
+}
+
+.table-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.table-top select {
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: none;
+}
+
+.right {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.btn.gray {
+    background: #9ca3af;
+    color: #fff;
+}
+
+.btn.green {
+    background: #22c55e;
+    color: #fff;
+}
+
+.card-table {
+    background: #fff;
+    padding: 16px;
+    border-radius: 14px;
+    color: #000;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 2px solid #0d9488;
+    border-radius: 20px;
+    padding: 4px 10px;
+}
+
+.search input {
+    border: none;
+    outline: none;
+    padding: 4px;
+    width: 160px;
+}
+
+.reset {
+    background: #9ca3af;
+    color: #fff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #007f7a;
+    color: #fff;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #aaa;
+    text-align: center;
+}
+
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.pagination button {
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.pagination .active {
+    background: #007f7a;
+    color: #fff;
+}
+/* =================================
+   SMOOTH BUTTON EFFECT
+================================= */
+.btn{
+    transition:.2s ease;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+    opacity:.9;
+}
+
+/* =================================
+   TABLE HOVER EFFECT
+================================= */
+tbody tr{
+    transition:.2s ease;
+}
+
+tbody tr:hover{
+    background:#f0fdfa;
+}
+
+/* =================================
+   CARD TABLE IMPROVEMENT
+================================= */
+.card-table{
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    overflow-x:auto;
+}
+
+table{
+    min-width:650px;
+}
+
+/* =================================
+   FILTER RESPONSIVE FLEX
+================================= */
+.filter-bar{
+    flex-wrap:wrap;
+}
+
+.right{
+    flex-wrap:wrap;
+}
+
+/* =================================
+   PAGINATION STYLE
+================================= */
+.pagination button{
+    transition:.2s ease;
+}
+
+.pagination button:hover{
+    background:#0d9488;
+    color:#fff;
+}
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+/* Tablet */
+@media(max-width:992px){
+
+    .table-top{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .page-wrap{
+        padding:15px;
+    }
+
+}
+
+/* Mobile */
+@media(max-width:768px){
+
+    .filter-bar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .search{
+        width:100%;
+    }
+
+    .search input{
+        width:100%;
+    }
+
+    .right{
+        width:100%;
+        justify-content:space-between;
+    }
+
+    table{
+        min-width:550px;
+        font-size:13px;
+    }
+
+    th, td{
+        padding:8px;
+    }
+
+    .table-footer{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:8px;
+    }
+
+}
+
+/* Extra Small */
+@media(max-width:480px){
+
+    table{
+        min-width:500px;
+        font-size:12px;
+    }
+
+    .btn{
+        font-size:12px;
+        padding:5px 10px;
+    }
+
+}
