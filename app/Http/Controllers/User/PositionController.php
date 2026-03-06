@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\Position;
+use App\Models\User\Position;
 use App\Http\Requests\StorePositionRequest;
 use App\Http\Requests\UpdatePositionRequest;
 use App\Http\Controllers\Controller;
@@ -12,9 +12,20 @@ class PositionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        //
+        $search = $request->input('search');
+
+        $query = Position::query();
+
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('code', 'like', '%' . $search . '%');
+        }
+
+        $positions = $query->paginate(10);
+
+        return view('user.position.index', compact('positions'));
     }
 
     /**
@@ -22,15 +33,22 @@ class PositionController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.position.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store($request)
+    public function store(\Illuminate\Http\Request $request)
     {
-        //
+        $validated = $request->validate([
+            'code' => 'required|string|max:255|unique:positions,code',
+            'name' => 'required|string|max:255',
+        ]);
+
+        Position::create($validated);
+
+        return redirect()->route('positions.index')->with('success', 'Data Jabatan berhasil ditambahkan.');
     }
 
     /**
@@ -38,7 +56,8 @@ class PositionController extends Controller
      */
     public function show(Position $position)
     {
-        //
+        // Typically not needed for simple dictionary tables like this
+        return redirect()->route('positions.index');
     }
 
     /**
@@ -46,15 +65,22 @@ class PositionController extends Controller
      */
     public function edit(Position $position)
     {
-        //
+        return view('user.position.edit', compact('position'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update($request, Position $position)
+    public function update(\Illuminate\Http\Request $request, Position $position)
     {
-        //
+        $validated = $request->validate([
+            'code' => 'required|string|max:255|unique:positions,code,' . $position->id,
+            'name' => 'required|string|max:255',
+        ]);
+
+        $position->update($validated);
+
+        return redirect()->route('positions.index')->with('success', 'Data Jabatan berhasil diperbarui.');
     }
 
     /**
@@ -62,6 +88,8 @@ class PositionController extends Controller
      */
     public function destroy(Position $position)
     {
-        //
+        $position->delete();
+
+        return redirect()->route('positions.index')->with('success', 'Data Jabatan berhasil dihapus.');
     }
 }

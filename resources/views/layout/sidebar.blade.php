@@ -1,4 +1,4 @@
-<div class="bg-dark border-end" id="sidebar-wrapper" style="width: 250px; min-height: calc(100vh - 56px);">
+    <div class="bg-dark border-end" id="sidebar-wrapper" style="width: 250px; min-height: calc(100vh - 56px);">
     <div class="list-group list-group-flush pt-3">
         <!-- COMMON MENUS FOR ALL USERS (PENGUSUL & ADMIN) -->
         <a href="{{ url('/') }}" class="list-group-item list-group-item-action bg-dark text-white border-bottom border-secondary">

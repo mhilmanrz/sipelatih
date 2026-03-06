@@ -70,7 +70,7 @@ class Activity extends Model
 
     public function targetParticipant()
     {
-        return $this->belongsTo(TargerParticipant::class, 'target_participant_id');
+        return $this->belongsTo(TargetParticipant::class, 'target_participant_id');
     }
 
     public function workUnit()
@@ -81,5 +81,15 @@ class Activity extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function statuses()
+    {
+        return $this->hasMany(ActivityStatus::class);
+    }
+
+    public function latestStatus()
+    {
+        return $this->hasOne(ActivityStatus::class)->latestOfMany();
     }
 }

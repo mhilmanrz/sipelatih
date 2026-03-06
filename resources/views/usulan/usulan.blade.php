@@ -1,105 +1,141 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>Usulan Diklat</title>
+@extends('layout.LayoutSuperAdmin')
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('assets/css/LayoutPengusul.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/usulan.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
+@section('title', 'Usulan Diklat')
 
-<body>
-<div class="content">
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/usulan.css') }}">
+@endpush
 
-    <div class="page-header">
-        <h2>Usulan Diklat</h2>
+@section('content')
+    <div class="bg-[#13b9c6] min-h-screen font-sans pb-8">
 
-        {{-- arahkan ke route / url laravel --}}
-        <a href="{{ url('../resources/views/usulan/tambahdata.html') }}" class="btn-add">➕ Tambah Data</a>
-    </div>
+        <!-- TITLE & BUTTON -->
+        <section class="px-8 py-6 flex flex-wrap justify-between items-center gap-4">
+            <h1 class="text-white text-3xl font-bold">Usulan Diklat</h1>
+            <a href="{{ route('kegiatan.create') }}"
+                class="inline-flex items-center gap-2 bg-white text-[#007a7a] px-5 py-2.5 rounded-full font-bold shadow hover:bg-gray-50 transition"
+                id="btnTambah">
+                ➕ Tambah Data
+            </a>
+        </section>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const btn = document.getElementById("btnTambah");
-    if(btn){
-        btn.addEventListener("click", () => {
-            window.location.href = "{{ url('../resources/views/usulan/tambahdata.html') }}";
-        });
-    }
-});
-</script>
+        <!-- AREA TABLE -->
+        <section class="mx-8 bg-white rounded-[20px] overflow-hidden shadow">
 
-    <!-- AREA FORM -->
-    <div id="pengajuanArea"></div>
+            <!-- Table Control -->
+            <form method="GET" action="{{ route('usulan-diklat') }}"
+                class="flex flex-wrap justify-between items-center p-6 border-b border-gray-200">
+                <div class="flex items-center gap-2 text-gray-700">
+                    <span>Show</span>
+                    <select name="entries" onchange="this.form.submit()"
+                        class="border rounded px-2 py-1 outline-none focus:ring-1 focus:ring-[#007a7a]">
+                        <option value="5" {{ request('entries') == 5 ? 'selected' : '' }}>5</option>
+                        <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                    </select>
+                    <span>entries</span>
+                </div>
 
-    <!-- AREA TABLE -->
-    <div class="card-box" id="tableArea">
+                <div class="flex items-center gap-2">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search..."
+                        class="border rounded-full px-4 py-1.5 outline-none focus:ring-1 focus:ring-[#007a7a]">
+                    <button type="submit"
+                        class="bg-[#007a7a] text-white px-4 py-1.5 rounded-full hover:bg-[#006bd6] transition">Search</button>
+                </div>
+            </form>
 
-        <div class="table-control">
-            <div>
-                Show 
-                <select id="entriesSelect">
-                    <option>5</option>
-                    <option selected>10</option>
-                    <option>25</option>
-                </select>
-                entries
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse" id="monitorTable">
+                    <thead class="bg-[#007a7a] text-white">
+                        <tr>
+                            <th class="border border-gray-400 py-3 px-4 font-semibold text-center w-16">No</th>
+                            <th class="border border-gray-400 py-3 px-4 font-semibold text-center">Aksi</th>
+                            <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Judul Kegiatan</th>
+                            <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Pengusul</th>
+                            <th class="border border-gray-400 py-3 px-4 font-semibold text-center">JPL</th>
+                            <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Jenis Kegiatan</th>
+                            <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Waktu</th>
+                            <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Materi</th>
+                            <th class="border border-gray-400 py-3 px-4 font-semibold text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($kegiatan as $key => $item)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="border border-gray-300 py-3 px-4 text-center">{{ $kegiatan->firstItem() + $key }}
+                                </td>
+                                <td class="border border-gray-300 py-3 px-4 text-center">
+                                    <div class="flex justify-center gap-2">
+                                        <!-- Detail Button -->
+                                        <a href="{{ route('kegiatan.show', $item->id) }}"
+                                            class="bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 text-sm font-medium transition"
+                                            title="Detail">
+                                            <i class="fas fa-eye"></i> Detail
+                                        </a>
+                                        <!-- Edit Button -->
+                                        <a href="{{ route('kegiatan.edit', $item->id) }}"
+                                            class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded hover:bg-yellow-200 text-sm font-medium transition"
+                                            title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <!-- Delete Button -->
+                                        <form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST"
+                                            class="inline"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 text-sm font-medium transition"
+                                                title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td class="border border-gray-300 py-3 px-4">{{ $item->name ?? '-' }}</td>
+                                <td class="border border-gray-300 py-3 px-4">{{ $item->workUnit->name ?? '-' }}</td>
+                                <td class="border border-gray-300 py-3 px-4 text-center">-</td>
+                                <td class="border border-gray-300 py-3 px-4">{{ $item->activityType->name ?? '-' }}</td>
+                                <td class="border border-gray-300 py-3 px-4">
+                                    {{ \Carbon\Carbon::parse($item->start_date)->format('d-m-Y') }} <br>s/d<br>
+                                    {{ \Carbon\Carbon::parse($item->end_date)->format('d-m-Y') }}
+                                </td>
+                                <td class="border border-gray-300 py-3 px-4">{{ $item->materialType->name ?? '-' }}</td>
+                                <td class="border border-gray-300 py-3 px-4 text-center">
+                                    @php
+                                        $status = $item->latestStatus->status ?? 'draft';
+                                        $bgClass = match ($status) {
+                                            'draft' => 'bg-gray-200 text-gray-700',
+                                            'submitted' => 'bg-blue-100 text-blue-700',
+                                            'revision' => 'bg-yellow-100 text-yellow-700',
+                                            'accepted' => 'bg-green-100 text-green-700',
+                                            default => 'bg-gray-200 text-gray-700',
+                                        };
+                                    @endphp
+                                    <span
+                                        class="{{ $bgClass }} px-3 py-1 rounded-full text-xs font-semibold">{{ ucfirst($status) }}</span>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="border border-gray-300 py-4 text-center text-gray-500">Tidak ada
+                                    data kegiatan.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
 
-            <input type="text" id="searchInput" placeholder="Search...">
-        </div>
-
-      <div class="table-wrapper">
-            <table id="monitorTable">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Aksi</th>
-                        <th>Judul Kegiatan</th>
-                        <th>Pengusul</th>
-                        <th>JPL</th>
-                        <th>Jenis Kegiatan</th>
-                        <th>Waktu</th>
-                        <th>Materi</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><button class="btn-detail">Detail</button></td>
-                        <td>Workshop ICU</td>
-                        <td>RSUPN Cipto</td>
-                        <td>2</td>
-                        <td>Teknis</td>
-                        <td>11-11-2025</td>
-                        <td>Kurikulum</td>
-                        <td><span class="badge draft">Draft</span></td>
-                    </tr>
-
-                    <tr>
-                        <td>2</td>
-                        <td><button class="btn-detail">Detail</button></td>
-                        <td>Workshop Manajerial</td>
-                        <td>RSUPN Cipto</td>
-                        <td>3</td>
-                        <td>Manajerial</td>
-                        <td>25-11-2025</td>
-                        <td>Teknis</td>
-                        <td><span class="badge ok">Disetujui</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- PAGINATION -->
+            <div class="mt-4 px-6 pb-6">
+                {{ $kegiatan->appends(request()->query())->links('pagination::tailwind') }}
+            </div>
+        </section>
 
     </div>
+@endsection
 
-</div>
-
-<script src="{{ asset('assets/js/usulan.js') }}"></script>
-<script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
-</body>
-</html>
+@push('scripts')
+    <!-- Additional scripts for Usulan Diklat if needed -->
+@endpush

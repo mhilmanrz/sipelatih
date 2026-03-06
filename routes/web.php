@@ -27,20 +27,22 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/', function () {
+        return redirect()->route('dashboard');
+    });
 
     // Menu Layout Placeholder Routes
-    Route::view('/dashboard', 'dashboard');
-    Route::view('/usulan-diklat', 'placeholder');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/usulan-diklat', [\App\Http\Controllers\UsulanDiklatController::class, 'index'])->name('usulan-diklat');
     Route::view('/manajemen-sasaran-profesi', 'ManajemenSasaranProfesi');
     Route::view('/monitoring-jpl', 'monitoringJpl');
-    Route::view('/pagu', 'placeholder');
-    Route::view('/input-nilai', 'placeholder');
-    Route::view('/laporan-kegiatan', 'placeholder');
+    Route::view('/pagu', 'pagu');
+    Route::view('/input-nilai', 'usulan/detail/penilaian');
+    Route::view('/laporan-kegiatan', 'laporanKegiatan');
     Route::view('/evaluasi1', 'evaluasi1');
     Route::view('/evaluasi2', 'evaluasi2');
     Route::view('/evaluasi3', 'evaluasi3');
-    Route::view('/bank-data', 'placeholder');
+    Route::view('/bank-data', 'bankData');
 
     Route::resource('users', UserController::class);
     Route::resource('kegiatan', ActivityController::class);
