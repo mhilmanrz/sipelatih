@@ -1,187 +1,213 @@
-@extends('layout.dashboard', ['title' => 'Tambah Data Kegiatan'])
+@extends('layout.LayoutSuperAdmin')
+
+@section('title', 'Tambah Data Kegiatan')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+@endpush
 
 @section('content')
-<div class="container-fluid" style="max-width: 900px;">
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center bg-white border-bottom-0 pt-4">
-            <h5 class="m-0 fw-bold text-teal" style="color: #007A7F;">Data Kegiatan</h5>
-        </div>
-        <div class="card-body px-5 pb-5">
-            <form method="POST" action="#">
-                @csrf
+    <div class="input-page" style="padding: 15px;">
+        <h3 class="title">Data Kegiatan</h3>
 
-                <!-- Tahun -->
-                <div class="row mb-3 align-items-center">
-                    <label for="tahun" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Tahun</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="tahun" class="form-control rounded-pill border-2" style="border-color: #007A7F;">
-                    </div>
-                </div>
+        <form method="POST" action="{{ route('kegiatan.store') }}">
+            @csrf
 
-                <!-- No Surat -->
-                <div class="row mb-3 align-items-center">
-                    <label for="no_registrasi" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">No. Surat</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="no_registrasi" class="form-control rounded-pill border-2" style="border-color: #007A7F;">
-                    </div>
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Oops! Ada kesalahan.</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>- {{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-                
-                <!-- Nama Kegiatan -->
-                <div class="row mb-3 align-items-center">
-                    <label for="nama" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Nama Kegiatan</label>
-                    <div class="col-sm-9">
-                        <select id="nama" class="form-select rounded-pill border-2" style="border-color: #007A7F;">
-                            <option>- PILIH -</option>
-                            <option>- Kegiatan 1 -</option>
-                            <option>- Kegiatan 2 -</option>
-                            <option>- Kegiatan 3 -</option>
-                        </select>
-                    </div>
+            @endif
+
+            <div class="form-card">
+                <div class="form-row">
+                    <label>Tanggal Usulan</label>
+                    <input type="date" name="date" value="{{ old('date') }}">
                 </div>
 
-                <!-- Jenis Kegiatan -->
-                <div class="row mb-3 align-items-center">
-                    <label for="jenis_kegiatan" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Jenis Kegiatan</label>
-                    <div class="col-sm-9">
-                        <select id="jenis_kegiatan" class="form-select rounded-pill border-2" style="border-color: #007A7F;">
-                            <option>- PILIH -</option>
-                            <option>- Pelatihan -</option>
-                            <option>- Workshop -</option>
-                            <option>- Webinar -</option>
-                            <option>- Seminar -</option>
-                        </select>
-                    </div>
+                <div class="form-row">
+                    <label>No. Surat</label>
+                    <input type="text" name="reference_number" value="{{ old('reference_number') }}">
                 </div>
 
-                <!-- Cakupan -->
-                <div class="row mb-3 align-items-center">
-                    <label for="cakupan" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Cakupan Kegiatan</label>
-                    <div class="col-sm-9">
-                        <select id="cakupan" class="form-select rounded-pill border-2" style="border-color: #007A7F;">
-                            <option>- PILIH -</option>
-                            <option>- Teknis -</option>
-                            <option>- Manajerial -</option>
-                            <option>- Sosiokultural -</option>
-                        </select>
-                    </div>
+                <div class="form-row">
+                    <label>Nama Kegiatan</label>
+                    <select name="activity_name_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_names as $actName)
+                            <option value="{{ $actName->id }}"
+                                {{ old('activity_name_id') == $actName->id ? 'selected' : '' }}>{{ $actName->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <!-- Jenis Materi -->
-                <div class="row mb-3 align-items-center">
-                    <label for="jenis_materi" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Jenis Materi</label>
-                    <div class="col-sm-9">
-                        <select id="jenis_materi" class="form-select rounded-pill border-2" style="border-color: #007A7F;">
-                            <option>- PILIH -</option>
-                            <option>- Kurikulum -</option>
-                            <option>- Non Kurikulum -</option>
-                        </select>
-                    </div>
+                <div class="form-row">
+                    <label>Jenis Kegiatan</label>
+                    <select name="activity_type_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_types as $type)
+                            <option value="{{ $type->id }}"
+                                {{ old('activity_type_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <!-- Metode -->
-                <div class="row mb-3 align-items-center">
-                    <label for="metode" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Metode</label>
-                    <div class="col-sm-9">
-                        <select id="metode" class="form-select rounded-pill border-2" style="border-color: #007A7F;">
-                            <option>- PILIH -</option>
-                            <option>- Blended -</option>
-                            <option>- Luring -</option>
-                            <option>- Daring -</option>
-                        </select>
-                    </div>
+                <div class="form-row">
+                    <label>Cakupan Kegiatan</label>
+                    <select name="activity_scope_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_scopes as $scope)
+                            <option value="{{ $scope->id }}"
+                                {{ old('activity_scope_id') == $scope->id ? 'selected' : '' }}>{{ $scope->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <!-- Angkatan -->
-                <div class="row mb-3 align-items-center">
-                    <label for="angkatan" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Angkatan</label>
-                    <div class="col-sm-9">
-                        <select id="angkatan" class="form-select rounded-pill border-2" style="border-color: #007A7F;">
-                            <option>- PILIH -</option>
-                        </select>
-                    </div>
+                <div class="form-row">
+                    <label>Jenis Materi</label>
+                    <select name="material_type_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($material_types as $mat)
+                            <option value="{{ $mat->id }}"
+                                {{ old('material_type_id') == $mat->id ? 'selected' : '' }}>{{ $mat->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <!-- Bentuk -->
-                <div class="row mb-3 align-items-center">
-                    <label for="bentuk" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Bentuk</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="bentuk" class="form-control rounded-pill border-2" style="border-color: #007A7F;">
-                    </div>
+                <div class="form-row">
+                    <label>Metode</label>
+                    <select name="activity_method_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_methods as $method)
+                            <option value="{{ $method->id }}"
+                                {{ old('activity_method_id') == $method->id ? 'selected' : '' }}>{{ $method->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <!-- Institusi Kerjasama -->
-                <div class="row mb-3 align-items-center">
-                    <label for="institusi_kerjasama" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Institusi Kerjasama</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="institusi_kerjasama" class="form-control rounded-pill border-2" style="border-color: #007A7F;">
-                    </div>
+                <div class="form-row">
+                    <label>Angkatan</label>
+                    <select id="angka" name="batch_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($batches as $batch)
+                            <option value="{{ $batch->id }}" {{ old('batch_id') == $batch->id ? 'selected' : '' }}>
+                                {{ $batch->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <!-- Target Peserta -->
-                <div class="row mb-3 align-items-center">
-                    <label for="peserta" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Target Peserta</label>
-                    <div class="col-sm-9">
-                        <input type="number" id="peserta" class="form-control rounded-pill border-2" style="border-color: #007A7F;">
-                    </div>
+                <div class="form-row">
+                    <label>Bentuk</label>
+                    <select name="activity_format_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_formats as $format)
+                            <option value="{{ $format->id }}"
+                                {{ old('activity_format_id') == $format->id ? 'selected' : '' }}>{{ $format->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <!-- Waktu Kegiatan -->
-                <div class="row mb-3 align-items-center">
-                    <label for="tgl_mulai" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Waktu Kegiatan</label>
-                    <div class="col-sm-9">
-                        <div class="d-flex align-items-center gap-3">
-                            <input type="date" id="tgl_mulai" class="form-control rounded-pill border-2" style="border-color: #007A7F;" placeholder="Mulai">
-                            <span class="fw-semibold">s/d</span>
-                            <input type="date" id="tgl_selesai" class="form-control rounded-pill border-2" style="border-color: #007A7F;" placeholder="Selesai">
-                        </div>
-                    </div>
+                <div class="form-row">
+                    <label>Institusi Kerjasama</label>
+                    <input type="text" name="collaboration_inst" value="{{ old('collaboration_inst') }}">
                 </div>
 
-                <!-- Anggaran -->
-                <div class="row mb-3 align-items-center">
-                    <label for="anggaran" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Anggaran</label>
-                    <div class="col-sm-9">
-                        <input type="number" id="anggaran" class="form-control rounded-pill border-2" style="border-color: #007A7F;">
-                    </div>
+                <div class="form-row">
+                    <label>Target Peserta</label>
+                    <select name="target_participant_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($target_participants as $target)
+                            <option value="{{ $target->id }}"
+                                {{ old('target_participant_id') == $target->id ? 'selected' : '' }}>{{ $target->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <!-- Unit Pengusul -->
-                <div class="row mb-3 align-items-center">
-                    <label for="unit_pengusul" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Unit Pengusul</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="unit_pengusul" class="form-control rounded-pill border-2" style="border-color: #007A7F;">
-                    </div>
+                <div class="form-row two">
+                    <label>Tgl Mulai / Selesai</label>
+                    <input type="date" name="start_date" value="{{ old('start_date') }}">
+                    <input type="date" name="end_date" value="{{ old('end_date') }}">
                 </div>
 
-                <!-- Nama PIC -->
-                <div class="row mb-3 align-items-center">
-                    <label for="pic" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">Nama PIC</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="pic" class="form-control rounded-pill border-2" style="border-color: #007A7F;">
-                    </div>
+                <div class="form-row">
+                    <label>Anggaran (Rp)</label>
+                    <input type="number" name="budget_amount" value="{{ old('budget_amount') }}">
                 </div>
 
-                <!-- WA PIC -->
-                <div class="row mb-3 align-items-center">
-                    <label for="wa_pic" class="col-sm-3 col-form-label fw-semibold" style="color: #007A7F;">WA PIC</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="wa_pic" class="form-control rounded-pill border-2" style="border-color: #007A7F;">
-                    </div>
+                <div class="form-row">
+                    <label>Unit Pengusul</label>
+                    <select name="work_unit_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($work_units as $unit)
+                            <option value="{{ $unit->id }}" {{ old('work_unit_id') == $unit->id ? 'selected' : '' }}>
+                                {{ $unit->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <!-- Action -->
-                <div class="row mt-5">
-                    <div class="col-12 d-flex justify-content-center gap-3">
-                        <button type="submit" class="btn btn-success rounded-pill px-5 fw-semibold shadow-sm" style="background-color: #22c55e; border-color: #22c55e;">
-                            SIMPAN
-                        </button>
-                        <a href="{{ url()->previous() }}" class="btn btn-secondary rounded-pill px-5 fw-semibold shadow-sm text-white">
-                            BATAL
-                        </a>
-                    </div>
+                <div class="form-row">
+                    <label>Nama PIC</label>
+                    <select name="pic_user_id" id="pic_user_id" required onchange="updateWaPic(this)">
+                        <option value="" data-phone="">-PILIH PEGAWAI (PIC)-</option>
+                        @foreach ($picCandidates as $pic)
+                            <option value="{{ $pic->id }}" data-phone="{{ $pic->phone_number ?? '-' }}"
+                                {{ old('pic_user_id') == $pic->id ? 'selected' : '' }}>
+                                {{ $pic->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
-            </form>
-        </div>
+
+                <div class="form-row">
+                    <label>WA PIC</label>
+                    <input type="text" id="wa_pic_temp" disabled placeholder="Pilih Nama PIC di atas untuk melihat WA"
+                        class="bg-gray-100 font-bold text-gray-700">
+                </div>
+
+                <div class="form-action">
+                    <button type="submit" id="btnSave" class="btn-save" style="cursor:pointer;">💾 SIMPAN</button>
+                    <a href="{{ route('kegiatan.index') }}" id="btnCancel" class="btn-cancel"
+                        style="cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">✖
+                        BATAL</a>
+                </div>
+
+            </div>
+        </form>
     </div>
-</div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
+    <script src="{{ asset('assets/js/tambahdata.js') }}"></script>
+    <script>
+        function updateWaPic(selectElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const phoneNumber = selectedOption.getAttribute('data-phone');
+            const waInput = document.getElementById('wa_pic_temp');
+
+            if (phoneNumber && phoneNumber !== '-') {
+                waInput.value = phoneNumber;
+            } else if (selectElement.value) {
+                waInput.value = "(Nomor WA tidak terdaftar)";
+            } else {
+                waInput.value = "";
+            }
+        }
+
+        // Run on load in case of old() input
+        document.addEventListener('DOMContentLoaded', function() {
+            updateWaPic(document.getElementById('pic_user_id'));
+        });
+    </script>
+@endpush

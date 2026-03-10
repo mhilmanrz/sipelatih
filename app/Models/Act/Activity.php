@@ -10,9 +10,10 @@ use App\Models\Act\MaterialType;
 use App\Models\Act\ActivityMethod;
 use App\Models\Act\Batch;
 use App\Models\Act\ActivityFormat;
-use App\Models\Act\TargerParticipant;
+use App\Models\Act\TargetParticipant;
 use App\Models\User\WorkUnit;
 use App\Models\User\User;
+use App\Models\Act\ActivityName;
 
 
 
@@ -22,7 +23,7 @@ class Activity extends Model
     protected $fillable = [
         'date',
         'reference_number',
-        'name',
+        'activity_name_id',
         'activity_type_id',
         'activity_scope_id',
         'material_type_id',
@@ -36,7 +37,18 @@ class Activity extends Model
         'budget_amount',
         'work_unit_id',
         'user_id',
+        'pic_user_id',
     ];
+
+    public function picUser()
+    {
+        return $this->belongsTo(User::class, 'pic_user_id');
+    }
+
+    public function activityName()
+    {
+        return $this->belongsTo(ActivityName::class);
+    }
 
     public function activityType()
     {

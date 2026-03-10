@@ -66,34 +66,35 @@
                                 <td class="border border-gray-300 py-3 px-4 text-center">{{ $kegiatan->firstItem() + $key }}
                                 </td>
                                 <td class="border border-gray-300 py-3 px-4 text-center">
-                                    <div class="flex justify-center gap-2">
+                                    <div class="flex justify-center gap-2 items-center">
                                         <!-- Detail Button -->
-                                        <a href="{{ route('kegiatan.show', $item->id) }}"
-                                            class="bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 text-sm font-medium transition"
+                                        <a href="{{ route('kegiatan.show', $item->id) }}" style="background-color: #3b82f6;"
+                                            class="text-white px-3 py-1.5 rounded hover:bg-[#2563eb] text-sm font-semibold transition"
                                             title="Detail">
-                                            <i class="fas fa-eye"></i> Detail
+                                            Detail
                                         </a>
                                         <!-- Edit Button -->
                                         <a href="{{ route('kegiatan.edit', $item->id) }}"
-                                            class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded hover:bg-yellow-200 text-sm font-medium transition"
+                                            style="background-color: #eab308;"
+                                            class="text-white px-3 py-1.5 rounded hover:bg-[#ca8a04] text-sm font-semibold transition"
                                             title="Edit">
-                                            <i class="fas fa-edit"></i>
+                                            Edit
                                         </a>
                                         <!-- Delete Button -->
                                         <form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST"
-                                            class="inline"
+                                            class="inline m-0"
                                             onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit"
-                                                class="bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 text-sm font-medium transition"
+                                            <button type="submit" style="background-color: #ef4444;"
+                                                class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition"
                                                 title="Hapus">
-                                                <i class="fas fa-trash"></i>
+                                                Hapus
                                             </button>
                                         </form>
                                     </div>
                                 </td>
-                                <td class="border border-gray-300 py-3 px-4">{{ $item->name ?? '-' }}</td>
+                                <td class="border border-gray-300 py-3 px-4">{{ $item->activityName->name ?? '-' }}</td>
                                 <td class="border border-gray-300 py-3 px-4">{{ $item->workUnit->name ?? '-' }}</td>
                                 <td class="border border-gray-300 py-3 px-4 text-center">-</td>
                                 <td class="border border-gray-300 py-3 px-4">{{ $item->activityType->name ?? '-' }}</td>

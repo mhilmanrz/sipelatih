@@ -17,6 +17,8 @@ use App\Http\Controllers\User\EmploymentTypeController;
 use App\Http\Controllers\Act\ActivityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController; // Added ProfileController
+use App\Http\Controllers\ActivityNameController;
 
 // Authentication Routes
 Route::get('/login', function () {
@@ -44,17 +46,21 @@ Route::middleware(['auth'])->group(function () {
     Route::view('/evaluasi3', 'evaluasi3');
     Route::view('/bank-data', 'bankData');
 
+    Route::get('users/import', [UserController::class, 'importView'])->name('users.import.view');
+    Route::post('users/import', [UserController::class, 'import'])->name('users.import');
     Route::resource('users', UserController::class);
     Route::resource('kegiatan', ActivityController::class);
     Route::resource('professions', ProfessionController::class);
     Route::resource('work-units', WorkUnitController::class);
     Route::resource('positions', PositionController::class);
-    Route::resource('activity-types', ActivityTypeController::class);
-    Route::resource('activity-scopes', ActivityScopeController::class);
-    Route::resource('activity-methods', ActivityMethodController::class);
-    Route::resource('material-types', MaterialTypeController::class);
-    Route::resource('batches', BatchController::class);
-    Route::resource('activity-formats', ActivityFormatController::class);
-    Route::resource('target-participants', TargetParticipantController::class);
+    // Kegiatan Master Data
+    Route::resource('dictionaries/activity-types', ActivityTypeController::class);
+    Route::resource('dictionaries/material-types', MaterialTypeController::class);
+    Route::resource('dictionaries/activity-scopes', ActivityScopeController::class);
+    Route::resource('dictionaries/activity-formats', ActivityFormatController::class);
+    Route::resource('dictionaries/target-participants', TargetParticipantController::class);
+    Route::resource('dictionaries/activity-methods', ActivityMethodController::class);
+    Route::resource('dictionaries/batches', BatchController::class);
+    Route::resource('dictionaries/activity-names', ActivityNameController::class);
     Route::resource('employment-types', EmploymentTypeController::class);
 });

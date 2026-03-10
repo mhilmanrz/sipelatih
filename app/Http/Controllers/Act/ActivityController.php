@@ -6,6 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Act\Activity;
 use App\Http\Requests\Act\StoreActivityRequest;
 use App\Http\Requests\Act\UpdateActivityRequest;
+use App\Models\Act\ActivityType;
+use App\Models\Act\ActivityScope;
+use App\Models\Act\MaterialType;
+use App\Models\Act\ActivityMethod;
+use App\Models\Act\Batch;
+use App\Models\Act\ActivityFormat;
+use App\Models\Act\TargetParticipant;
+use App\Models\User\WorkUnit;
+use App\Models\Act\ActivityName;
+use App\Models\User\User;
 
 class ActivityController extends Controller
 {
@@ -24,7 +34,29 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        return view('usulan.pengajuan.create');
+        $picCandidates = User::all();
+        $activity_names = ActivityName::all();
+        $activity_types = ActivityType::all();
+        $activity_scopes = ActivityScope::all();
+        $material_types = MaterialType::all();
+        $activity_methods = ActivityMethod::all();
+        $batches = Batch::all();
+        $activity_formats = ActivityFormat::all();
+        $target_participants = TargetParticipant::all();
+        $work_units = WorkUnit::all();
+
+        return view('usulan.pengajuan.create', compact(
+            'picCandidates',
+            'activity_names',
+            'activity_types',
+            'activity_scopes',
+            'material_types',
+            'activity_methods',
+            'batches',
+            'activity_formats',
+            'target_participants',
+            'work_units'
+        ));
     }
 
     /**
@@ -32,8 +64,11 @@ class ActivityController extends Controller
      */
     public function store(StoreActivityRequest $request)
     {
-        Activity::create($request->validated());
-        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil diajukan.');
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
+
+        Activity::create($data);
+        return redirect()->route('usulan-diklat')->with('success', 'Kegiatan berhasil diajukan.');
     }
 
     /**
@@ -41,9 +76,21 @@ class ActivityController extends Controller
      */
     public function show($id)
     {
-        $kegiatan = Activity::findOrFail($id);
-        // Assuming there is a detail view
-        return view('usulan.monitoring.index', compact('kegiatan'));
+        $kegiatan = Activity::with([
+            'activityName',
+            'activityType',
+            'activityScope',
+            'materialType',
+            'activityMethod',
+            'batch',
+            'activityFormat',
+            'targetParticipant',
+            'workUnit',
+            'picUser',
+            'latestStatus'
+        ])->findOrFail($id);
+
+        return view('usulan.detail.index', compact('kegiatan'));
     }
 
     /**
@@ -52,7 +99,31 @@ class ActivityController extends Controller
     public function edit($id)
     {
         $kegiatan = Activity::findOrFail($id);
-        return view('usulan.pengajuan.edit', compact('kegiatan'));
+
+        $picCandidates = User::all();
+        $activity_names = ActivityName::all();
+        $activity_types = ActivityType::all();
+        $activity_scopes = ActivityScope::all();
+        $material_types = MaterialType::all();
+        $activity_methods = ActivityMethod::all();
+        $batches = Batch::all();
+        $activity_formats = ActivityFormat::all();
+        $target_participants = TargetParticipant::all();
+        $work_units = WorkUnit::all();
+
+        return view('usulan.pengajuan.edit', compact(
+            'kegiatan',
+            'picCandidates',
+            'activity_names',
+            'activity_types',
+            'activity_scopes',
+            'material_types',
+            'activity_methods',
+            'batches',
+            'activity_formats',
+            'target_participants',
+            'work_units'
+        ));
     }
 
     /**
@@ -63,7 +134,7 @@ class ActivityController extends Controller
         $activity = Activity::findOrFail($id);
         $activity->update($request->validated());
 
-        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil diperbarui.');
+        return redirect()->route('usulan-diklat')->with('success', 'Kegiatan berhasil diperbarui.');
     }
 
     /**
@@ -74,6 +145,6 @@ class ActivityController extends Controller
         $activity = Activity::findOrFail($id);
         $activity->delete();
 
-        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil dihapus.');
+        return redirect()->route('usulan-diklat')->with('success', 'Kegiatan berhasil dihapus.');
     }
 }

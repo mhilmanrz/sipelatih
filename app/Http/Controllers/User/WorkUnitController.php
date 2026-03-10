@@ -14,21 +14,28 @@ class WorkUnitController extends Controller
     public function index()
     {
         $workUnits = WorkUnit::paginate(10);
-        return response()->json($workUnits);
+        return view('workunit.index', compact('workUnits'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        return view('workunit.create');
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $workUnit = WorkUnit::create($request->all());
-        return response()->json($workUnit, 201);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        WorkUnit::create($request->all());
+        return redirect()->route('work-units.index')->with('success', 'Unit Kerja berhasil ditambahkan.');
     }
 
     /**
@@ -36,33 +43,31 @@ class WorkUnitController extends Controller
      */
     public function show($id)
     {
-        $workUnit = WorkUnit::find($id);
-
-        if (!$workUnit) {
-            return response()->json(['message' => 'Work Unit not found'], 404);
-        }
-
-        return response()->json($workUnit);
+        return redirect()->route('work-units.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit() {}
+    public function edit($id)
+    {
+        $workUnit = WorkUnit::findOrFail($id);
+        return view('workunit.edit', compact('workUnit'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $workUnit = WorkUnit::find($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        if (!$workUnit) {
-            return response()->json(['message' => 'Work Unit not found'], 404);
-        }
-
+        $workUnit = WorkUnit::findOrFail($id);
         $workUnit->update($request->all());
-        return response()->json($workUnit);
+
+        return redirect()->route('work-units.index')->with('success', 'Unit Kerja berhasil diperbarui.');
     }
 
     /**
@@ -70,13 +75,9 @@ class WorkUnitController extends Controller
      */
     public function destroy($id)
     {
-        $workUnit = WorkUnit::find($id);
-
-        if (!$workUnit) {
-            return response()->json(['message' => 'Work Unit not found'], 404);
-        }
-
+        $workUnit = WorkUnit::findOrFail($id);
         $workUnit->delete();
-        return response()->json(['message' => 'Work Unit deleted successfully'], 200);
+
+        return redirect()->route('work-units.index')->with('success', 'Unit Kerja berhasil dihapus.');
     }
 }

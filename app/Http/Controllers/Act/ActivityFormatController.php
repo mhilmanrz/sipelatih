@@ -14,21 +14,28 @@ class ActivityFormatController extends Controller
     public function index()
     {
         $activityFormats = ActivityFormat::paginate(10);
-        return response()->json($activityFormats);
+        return view('activity_format.index', compact('activityFormats'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        return view('activity_format.create');
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $activityFormat = ActivityFormat::create($request->all());
-        return response()->json($activityFormat, 201);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        ActivityFormat::create($request->all());
+        return redirect()->route('activity-formats.index')->with('success', 'Bentuk Kegiatan berhasil ditambahkan.');
     }
 
     /**
@@ -36,33 +43,31 @@ class ActivityFormatController extends Controller
      */
     public function show($id)
     {
-        $activityFormat = ActivityFormat::find($id);
-
-        if (!$activityFormat) {
-            return response()->json(['message' => 'Activity Format not found'], 404);
-        }
-
-        return response()->json($activityFormat);
+        return redirect()->route('activity-formats.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit() {}
+    public function edit($id)
+    {
+        $activityFormat = ActivityFormat::findOrFail($id);
+        return view('activity_format.edit', compact('activityFormat'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $activityFormat = ActivityFormat::find($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        if (!$activityFormat) {
-            return response()->json(['message' => 'Activity Format not found'], 404);
-        }
-
+        $activityFormat = ActivityFormat::findOrFail($id);
         $activityFormat->update($request->all());
-        return response()->json($activityFormat);
+
+        return redirect()->route('activity-formats.index')->with('success', 'Bentuk Kegiatan berhasil diperbarui.');
     }
 
     /**
@@ -70,13 +75,9 @@ class ActivityFormatController extends Controller
      */
     public function destroy($id)
     {
-        $activityFormat = ActivityFormat::find($id);
-
-        if (!$activityFormat) {
-            return response()->json(['message' => 'Activity Format not found'], 404);
-        }
-
+        $activityFormat = ActivityFormat::findOrFail($id);
         $activityFormat->delete();
-        return response()->json(['message' => 'Activity Format deleted successfully'], 200);
+
+        return redirect()->route('activity-formats.index')->with('success', 'Bentuk Kegiatan berhasil dihapus.');
     }
 }

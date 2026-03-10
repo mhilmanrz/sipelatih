@@ -14,21 +14,28 @@ class ActivityTypeController extends Controller
     public function index()
     {
         $activityTypes = ActivityType::paginate(10);
-        return response()->json($activityTypes);
+        return view('activity_type.index', compact('activityTypes'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        return view('activity_type.create');
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $activityType = ActivityType::create($request->all());
-        return response()->json($activityType, 201);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        ActivityType::create($request->all());
+        return redirect()->route('activity-types.index')->with('success', 'Jenis Kegiatan berhasil ditambahkan.');
     }
 
     /**
@@ -36,33 +43,31 @@ class ActivityTypeController extends Controller
      */
     public function show($id)
     {
-        $activityType = ActivityType::find($id);
-
-        if (!$activityType) {
-            return response()->json(['message' => 'Activity Type not found'], 404);
-        }
-
-        return response()->json($activityType);
+        return redirect()->route('activity-types.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit() {}
+    public function edit($id)
+    {
+        $activityType = ActivityType::findOrFail($id);
+        return view('activity_type.edit', compact('activityType'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $activityType = ActivityType::find($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        if (!$activityType) {
-            return response()->json(['message' => 'Activity Type not found'], 404);
-        }
-
+        $activityType = ActivityType::findOrFail($id);
         $activityType->update($request->all());
-        return response()->json($activityType);
+
+        return redirect()->route('activity-types.index')->with('success', 'Jenis Kegiatan berhasil diperbarui.');
     }
 
     /**
@@ -70,13 +75,9 @@ class ActivityTypeController extends Controller
      */
     public function destroy($id)
     {
-        $activityType = ActivityType::find($id);
-
-        if (!$activityType) {
-            return response()->json(['message' => 'Activity Type not found'], 404);
-        }
-
+        $activityType = ActivityType::findOrFail($id);
         $activityType->delete();
-        return response()->json(['message' => 'Activity Type deleted successfully'], 200);
+
+        return redirect()->route('activity-types.index')->with('success', 'Jenis Kegiatan berhasil dihapus.');
     }
 }
