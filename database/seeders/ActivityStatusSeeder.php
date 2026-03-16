@@ -10,11 +10,9 @@ class ActivityStatusSeeder extends Seeder
     public function run(): void
     {
         $activityStatuses = [
-            ['activity_id' => 1, 'status' => 'draft', 'note' => 'Kegiatan baru dibuat'],
-            ['activity_id' => 1, 'status' => 'submitted', 'note' => 'Kegiatan telah diajukan'],
-            ['activity_id' => 1, 'status' => 'revision', 'note' => 'Perlu revisi pada anggaran'],
-            ['activity_id' => 1, 'status' => 'submitted', 'note' => 'Kegiatan diajukan kembali'],
-            ['activity_id' => 1, 'status' => 'accepted', 'note' => 'Kegiatan disetujui'],
+            ['activity_id' => 1, 'date' => '2025-12-29', 'status' => 'ditolak', 'note' => null],
+            ['activity_id' => 1, 'date' => '2026-01-01', 'status' => 'butuh_perbaikan', 'note' => 'Lengkapi RAB'],
+            ['activity_id' => 1, 'date' => '2026-01-05', 'status' => 'disetujui', 'note' => null],
         ];
 
         foreach ($activityStatuses as $activityStatus) {

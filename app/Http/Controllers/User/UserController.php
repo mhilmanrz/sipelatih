@@ -11,9 +11,19 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with(['workUnit', 'position', 'employmentType', 'profession'])->paginate(10);
+        $query = User::with(['workUnit', 'profession']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('employee_id', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $query->paginate(10);
         return response()->json($users);
     }
 

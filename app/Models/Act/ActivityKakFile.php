@@ -13,7 +13,8 @@ class ActivityKakFile extends Model
 
     protected $fillable = [
         'activity_id',
-        'url',
+        'file_path',
+        'original_name',
     ];
 
     public function activity()

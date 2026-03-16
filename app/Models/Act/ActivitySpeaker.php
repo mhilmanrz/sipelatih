@@ -17,6 +17,11 @@ class ActivitySpeaker extends Model
         'user_id',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function activityMaterial()
     {
         return $this->belongsTo(ActivityMaterial::class);

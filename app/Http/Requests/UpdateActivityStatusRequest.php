@@ -11,7 +11,7 @@ class UpdateActivityStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class UpdateActivityStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'status' => 'sometimes|required|in:ditolak,butuh_perbaikan,disetujui',
+            'note' => 'nullable|string|max:500',
         ];
     }
 }

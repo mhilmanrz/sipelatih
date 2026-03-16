@@ -5,10 +5,11 @@ namespace App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Act\Activity;
+use App\Models\Act\ActivityParticipant;
 use App\Models\User\WorkUnit;
 use App\Models\User\Profession;
 use App\Models\User\EmploymentType;
-use App\Models\User\Positions;
+use App\Models\User\Position;
 
 class User extends Model
 {
@@ -26,10 +27,13 @@ class User extends Model
         'profession_id',
         'employee_id',
         'phone_number',
+        'jpl_target',
     ];
 
     protected $hidden = [
         'password',
+        'created_at',
+        'updated_at',
     ];
 
     public function workUnit()
@@ -39,7 +43,7 @@ class User extends Model
 
     public function position()
     {
-        return $this->belongsTo(Positions::class);
+        return $this->belongsTo(Position::class);
     }
 
     public function employmentType()
@@ -55,5 +59,10 @@ class User extends Model
     public function activities()
     {
         return $this->hasMany(Activity::class);
+    }
+
+    public function activityParticipants()
+    {
+        return $this->hasMany(ActivityParticipant::class);
     }
 }

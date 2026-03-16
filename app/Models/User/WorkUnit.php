@@ -17,6 +17,11 @@ class WorkUnit extends Model
         'name',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function activities()
     {
         return $this->hasMany(Activity::class);

@@ -22,7 +22,7 @@ class StorePositionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string|max:255|unique:positions,code',
+            'code' => 'required|string|max:255|unique:Position,code',
             'name' => 'required|string|max:255',
         ];
     }

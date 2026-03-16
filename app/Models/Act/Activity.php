@@ -10,7 +10,7 @@ use App\Models\Act\MaterialType;
 use App\Models\Act\ActivityMethod;
 use App\Models\Act\Batch;
 use App\Models\Act\ActivityFormat;
-use App\Models\Act\TargerParticipant;
+use App\Models\Act\TargetParticipant;
 use App\Models\User\WorkUnit;
 use App\Models\User\User;
 
@@ -70,7 +70,7 @@ class Activity extends Model
 
     public function targetParticipant()
     {
-        return $this->belongsTo(TargerParticipant::class, 'target_participant_id');
+        return $this->belongsTo(TargetParticipant::class, 'target_participant_id');
     }
 
     public function workUnit()
@@ -81,5 +81,15 @@ class Activity extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function materials()
+    {
+        return $this->hasMany(ActivityMaterial::class);
+    }
+
+    public function participants()
+    {
+        return $this->hasMany(ActivityParticipant::class);
     }
 }

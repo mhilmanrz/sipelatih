@@ -14,7 +14,16 @@ class ActivityMaterial extends Model
     protected $fillable = [
         'activity_id',
         'name',
-        'value',
+        'jpl',
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $casts = [
+        'jpl' => 'decimal:1',
     ];
 
     public function activity()

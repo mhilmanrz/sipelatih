@@ -10,11 +10,26 @@ use App\Http\Requests\Act\UpdateActivityRequest;
 class ActivityController extends Controller
 {
     /**
+     * Relations to eager load for detail view.
+     */
+    protected $relations = [
+        'activityType',
+        'activityScope',
+        'materialType',
+        'activityMethod',
+        'batch',
+        'activityFormat',
+        'targetParticipant',
+        'workUnit',
+        'user',
+    ];
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $activities = Activity::paginate(10);
+        $activities = Activity::with($this->relations)->paginate(10);
         return response()->json($activities);
     }
 
@@ -24,6 +39,7 @@ class ActivityController extends Controller
     public function store(StoreActivityRequest $request)
     {
         $activity = Activity::create($request->validated());
+        $activity->load($this->relations);
 
         return response()->json($activity, 201);
     }
@@ -33,7 +49,7 @@ class ActivityController extends Controller
      */
     public function show($id)
     {
-        $activity = Activity::find($id);
+        $activity = Activity::with($this->relations)->find($id);
 
         if (!$activity) {
             return response()->json(['message' => 'Activity not found'], 404);
@@ -52,7 +68,9 @@ class ActivityController extends Controller
         if (!$activity) {
             return response()->json(['message' => 'Activity not found'], 404);
         }
+
         $activity->update($request->validated());
+        $activity->load($this->relations);
 
         return response()->json($activity);
     }
@@ -67,8 +85,8 @@ class ActivityController extends Controller
         if (!$activity) {
             return response()->json(['message' => 'Activity not found'], 404);
         }
-        $activity->delete();
 
+        $activity->delete();
         return response()->json(null, 204);
     }
 }

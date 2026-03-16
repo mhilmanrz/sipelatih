@@ -26,7 +26,7 @@ class UpdateUserRequest extends FormRequest
             'email' => 'required|email|max:255|unique:users,email,' . $this->route('id'),
             'password' => 'nullable|string|min:6',
             'work_unit_id' => 'nullable|integer|exists:work_units,id',
-            'position_id' => 'nullable|integer|exists:positions,id',
+            'position_id' => 'nullable|integer|exists:Position,id',
             'employment_type_id' => 'nullable|integer|exists:employment_types,id',
             'profession_id' => 'nullable|integer|exists:professions,id',
             'employee_id' => 'nullable|string|max:255',

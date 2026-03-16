@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activity_materials', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('activity_id')->constrained()->onDelete('cascade');
-            $table->string('name');
-            $table->decimal('jpl', 5, 1);
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('jpl_target')->default(24)->after('phone_number');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('activity_materials');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('jpl_target');
+        });
     }
 };

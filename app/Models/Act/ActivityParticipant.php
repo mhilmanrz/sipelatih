@@ -19,6 +19,11 @@ class ActivityParticipant extends Model
         'is_passed',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     protected $casts = [
         'is_passed' => 'boolean',
     ];

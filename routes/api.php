@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\ProfessionController;
 use App\Http\Controllers\User\WorkUnitController;
-use App\Http\Controllers\User\PositionsController;
+use App\Http\Controllers\User\PositionController;
 use App\Http\Controllers\Act\ActivityController;
 use App\Http\Controllers\Act\ActivityTypeController;
 use App\Http\Controllers\Act\ActivityScopeController;
@@ -24,6 +24,7 @@ use App\Http\Controllers\Act\ActivityModeratorController;
 use App\Http\Controllers\Act\ActivityParticipantController;
 use App\Http\Controllers\Act\ActivityStatusController;
 use App\Http\Controllers\Act\ActivityScoreController;
+use App\Http\Controllers\MonitoringJplController;
 
 Route::get('/users', [UserController::class, 'index']);
 Route::post('/users', [UserController::class, 'store']);
@@ -43,11 +44,11 @@ Route::get('/workunits/{id}', [WorkUnitController::class, 'show']);
 Route::put('/workunits/{id}', [WorkUnitController::class, 'update']);
 Route::delete('/workunits/{id}', [WorkUnitController::class, 'destroy']);
 
-Route::get('/positions', [PositionsController::class, 'index']);
-Route::post('/positions', [PositionsController::class, 'store']);
-Route::get('/positions/{id}', [PositionsController::class, 'show']);
-Route::put('/positions/{id}', [PositionsController::class, 'update']);
-Route::delete('/positions/{id}', [PositionsController::class, 'destroy']);
+Route::get('/Position', [PositionController::class, 'index']);
+Route::post('/Position', [PositionController::class, 'store']);
+Route::get('/Position/{id}', [PositionController::class, 'show']);
+Route::put('/Position/{id}', [PositionController::class, 'update']);
+Route::delete('/Position/{id}', [PositionController::class, 'destroy']);
 
 Route::get('/activities', [ActivityController::class, 'index']);
 Route::post('/activities', [ActivityController::class, 'store']);
@@ -115,42 +116,52 @@ Route::get('/budgets/{id}', [BudgetController::class, 'show']);
 Route::put('/budgets/{id}', [BudgetController::class, 'update']);
 Route::delete('/budgets/{id}', [BudgetController::class, 'destroy']);
 
+Route::get('/activities/{activityId}/professions', [ActivityProfessionController::class, 'getByActivity']);
 Route::get('/activity-professions', [ActivityProfessionController::class, 'index']);
 Route::post('/activity-professions', [ActivityProfessionController::class, 'store']);
 Route::get('/activity-professions/{id}', [ActivityProfessionController::class, 'show']);
 Route::put('/activity-professions/{id}', [ActivityProfessionController::class, 'update']);
 Route::delete('/activity-professions/{id}', [ActivityProfessionController::class, 'destroy']);
 
+Route::get('/activity-kak-files/download-template', [ActivityKakFileController::class, 'downloadTemplate']);
 Route::get('/activity-kak-files', [ActivityKakFileController::class, 'index']);
 Route::post('/activity-kak-files', [ActivityKakFileController::class, 'store']);
 Route::get('/activity-kak-files/{id}', [ActivityKakFileController::class, 'show']);
-Route::put('/activity-kak-files/{id}', [ActivityKakFileController::class, 'update']);
+Route::post('/activity-kak-files/{id}', [ActivityKakFileController::class, 'update']);
+Route::get('/activity-kak-files/{id}/download', [ActivityKakFileController::class, 'download']);
 Route::delete('/activity-kak-files/{id}', [ActivityKakFileController::class, 'destroy']);
 
+Route::get('/activities/{activityId}/materials', [ActivityMaterialController::class, 'getByActivity']);
 Route::get('/activity-materials', [ActivityMaterialController::class, 'index']);
 Route::post('/activity-materials', [ActivityMaterialController::class, 'store']);
 Route::get('/activity-materials/{id}', [ActivityMaterialController::class, 'show']);
 Route::put('/activity-materials/{id}', [ActivityMaterialController::class, 'update']);
 Route::delete('/activity-materials/{id}', [ActivityMaterialController::class, 'destroy']);
 
+Route::get('/activities/{activityId}/speakers', [ActivitySpeakerController::class, 'getByActivity']);
 Route::get('/activity-speakers', [ActivitySpeakerController::class, 'index']);
 Route::post('/activity-speakers', [ActivitySpeakerController::class, 'store']);
 Route::get('/activity-speakers/{id}', [ActivitySpeakerController::class, 'show']);
 Route::put('/activity-speakers/{id}', [ActivitySpeakerController::class, 'update']);
 Route::delete('/activity-speakers/{id}', [ActivitySpeakerController::class, 'destroy']);
 
+Route::get('/activities/{activityId}/moderators', [ActivityModeratorController::class, 'getByActivity']);
 Route::get('/activity-moderators', [ActivityModeratorController::class, 'index']);
 Route::post('/activity-moderators', [ActivityModeratorController::class, 'store']);
 Route::get('/activity-moderators/{id}', [ActivityModeratorController::class, 'show']);
 Route::put('/activity-moderators/{id}', [ActivityModeratorController::class, 'update']);
 Route::delete('/activity-moderators/{id}', [ActivityModeratorController::class, 'destroy']);
 
+Route::get('/activities/{activityId}/participants', [ActivityParticipantController::class, 'getByActivity']);
+Route::post('/activities/{activityId}/participants/import', [ActivityParticipantController::class, 'import']);
+Route::get('/activity-participants/template', [ActivityParticipantController::class, 'downloadTemplate']);
 Route::get('/activity-participants', [ActivityParticipantController::class, 'index']);
 Route::post('/activity-participants', [ActivityParticipantController::class, 'store']);
 Route::get('/activity-participants/{id}', [ActivityParticipantController::class, 'show']);
 Route::put('/activity-participants/{id}', [ActivityParticipantController::class, 'update']);
 Route::delete('/activity-participants/{id}', [ActivityParticipantController::class, 'destroy']);
 
+Route::get('/activities/{activityId}/statuses', [ActivityStatusController::class, 'getByActivity']);
 Route::get('/activity-statuses', [ActivityStatusController::class, 'index']);
 Route::post('/activity-statuses', [ActivityStatusController::class, 'store']);
 Route::get('/activity-statuses/{id}', [ActivityStatusController::class, 'show']);
@@ -162,3 +173,5 @@ Route::post('/activity-scores', [ActivityScoreController::class, 'store']);
 Route::get('/activity-scores/{id}', [ActivityScoreController::class, 'show']);
 Route::put('/activity-scores/{id}', [ActivityScoreController::class, 'update']);
 Route::delete('/activity-scores/{id}', [ActivityScoreController::class, 'destroy']);
+
+Route::get('/monitoring-jpl', [MonitoringJplController::class, 'index']);
