@@ -1,98 +1,52 @@
-@extends('layout.app')
+@extends('layout.dashboard', ['title' => 'Monitoring Kegiatan'])
 
 @section('content')
-<div class="max-w-6xl mx-auto px-6 py-8">
-    <h3 class="text-xl font-semibold mb-6 text-gray-800">
-        {{ $title }}
-    </h3>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="h3 mb-0 text-gray-800">{{ $title ?? 'Monitoring Kegiatan' }}</h3>
+    </div>
 
-    <div class="overflow-x-auto bg-white rounded-lg shadow">
-        <table class="min-w-full border border-gray-200">
-            <thead class="bg-gray-100">
-                <tr>
-                    {{-- <th class="px-4 py-3 text-center text-sm font-semibold text-gray-600">
-                        Aksi
-                    </th> --}}
-                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-                        Judul Kegiatan
-                    </th>
-                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-                        Pengusul
-                    </th>
-                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-                        JPL
-                    </th>
-                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-                        Jenis Kegiatan
-                    </th>
-                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-                        Mulai
-                    </th>
-                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-                        Selesai
-                    </th>
-                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-                        Jenis Materi
-                    </th>
-                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-                        No Registrasi
-                    </th>
-                </tr>
-            </thead>
-
-            <tbody class="divide-y divide-gray-200">
-                @forelse ($dataKegiatan as $index => $kegiatan)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-3 text-center text-sm text-gray-700">
-                            {{ $index + 1 }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['nama'] }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['unit_pengusul'] }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['jpl'] }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['jenis'] }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['tgl_mulai'] }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['tgl_selesai'] }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['materi'] }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ $kegiatan['no_registrasi'] }}
-                        </td>
-                        {{-- <td class="px-4 py-3 text-sm">
-                            @php
-                                $statusClass = match($kegiatan['status']) {
-                                    'Disetujui' => 'bg-green-100 text-green-700',
-                                    'Ditolak'   => 'bg-red-100 text-red-700',
-                                    default     => 'bg-yellow-100 text-yellow-700',
-                            @endphp
-
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $statusClass }}">
-                                {{ $kegiatan['status'] }}
-                            </span>
-                        </td>}; --}}
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="px-4 py-6 text-center text-sm text-gray-500">
-                            Data kegiatan belum tersedia
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle" width="100%" cellspacing="0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center" width="5%">No</th>
+                            <th>Judul Kegiatan</th>
+                            <th>Pengusul</th>
+                            <th>JPL</th>
+                            <th>Jenis Kegiatan</th>
+                            <th>Mulai</th>
+                            <th>Selesai</th>
+                            <th>Jenis Materi</th>
+                            <th>No Registrasi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($dataKegiatan as $index => $kegiatan)
+                            <tr>
+                                <td class="text-center">{{ $index + 1 }}</td>
+                                <td>{{ $kegiatan['nama'] }}</td>
+                                <td>{{ $kegiatan['unit_pengusul'] }}</td>
+                                <td>{{ $kegiatan['jpl'] }}</td>
+                                <td>{{ $kegiatan['jenis'] }}</td>
+                                <td>{{ $kegiatan['tgl_mulai'] }}</td>
+                                <td>{{ $kegiatan['tgl_selesai'] }}</td>
+                                <td>{{ $kegiatan['materi'] }}</td>
+                                <td>{{ $kegiatan['no_registrasi'] }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="text-center text-muted py-4">
+                                    Data kegiatan belum tersedia
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
-

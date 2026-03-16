@@ -15,7 +15,7 @@ class ActivityMethodController extends Controller
     public function index()
     {
         $activityMethods = ActivityMethod::paginate(10);
-        return response()->json($activityMethods);
+        return view('activity_method.index', compact('activityMethods'));
     }
 
     /**
@@ -23,7 +23,7 @@ class ActivityMethodController extends Controller
      */
     public function create()
     {
-        //
+        return view('activity_method.create');
     }
 
     /**
@@ -31,8 +31,12 @@ class ActivityMethodController extends Controller
      */
     public function store(Request $request)
     {
-        $activityMethod = ActivityMethod::create($request->all());
-        return response()->json($activityMethod, 201);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        ActivityMethod::create($request->all());
+        return redirect()->route('activity-methods.index')->with('success', 'Metode Kegiatan berhasil ditambahkan.');
     }
 
     /**
@@ -40,21 +44,16 @@ class ActivityMethodController extends Controller
      */
     public function show($id)
     {
-        $activityMethod = ActivityMethod::find($id);
-
-        if (!$activityMethod) {
-            return response()->json(['message' => 'Activity Method not found'], 404);
-        }
-
-        return response()->json($activityMethod);
+        return redirect()->route('activity-methods.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit()
+    public function edit($id)
     {
-        //
+        $activityMethod = ActivityMethod::findOrFail($id);
+        return view('activity_method.edit', compact('activityMethod'));
     }
 
     /**
@@ -62,14 +61,14 @@ class ActivityMethodController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $activityMethod = ActivityMethod::find($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        if (!$activityMethod) {
-            return response()->json(['message' => 'Activity Method not found'], 404);
-        }
-
+        $activityMethod = ActivityMethod::findOrFail($id);
         $activityMethod->update($request->all());
-        return response()->json($activityMethod);
+        
+        return redirect()->route('activity-methods.index')->with('success', 'Metode Kegiatan berhasil diperbarui.');
     }
 
     /**
@@ -77,13 +76,9 @@ class ActivityMethodController extends Controller
      */
     public function destroy(string $id)
     {
-        $activityMethod = ActivityMethod::find($id);
-
-        if (!$activityMethod) {
-            return response()->json(['message' => 'Activity Method not found'], 404);
-        }
-
+        $activityMethod = ActivityMethod::findOrFail($id);
         $activityMethod->delete();
-        return response()->json(['message' => 'Activity Method deleted successfully'], 200);
+        
+        return redirect()->route('activity-methods.index')->with('success', 'Metode Kegiatan berhasil dihapus.');
     }
 }

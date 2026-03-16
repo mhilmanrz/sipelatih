@@ -1,244 +1,222 @@
-@extends('layouts.app')
+@extends('layout.LayoutSuperAdmin')
+
+@section('title', 'Edit Data Kegiatan')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+@endpush
 
 @section('content')
-<div class="max-w-4xl mx-auto px-6 py-8">
-    <div class="bg-white border-2 border-teal-500 rounded-xl p-8">
-        <h2 class="text-center text-lg font-semibold text-[#405A5B] mb-8">
-            Edit Data Kegiatan
-        </h2>
+    <div class="input-page" style="padding: 15px;">
+        <h3 class="title">Edit Data Kegiatan</h3>
 
-        <form
-            method="POST"
-            action="{{ route('kegiatan.update', $kegiatan->id) }}"
-            class="space-y-4">
-
+        <form method="POST" action="{{ route('kegiatan.update', $kegiatan->id) }}">
             @csrf
             @method('PUT')
 
-            @php
-                $input = 'w-full rounded-full border-2 border-teal-500 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400';
-                $label = 'text-sm font-semibold text-[#007A7F]';
-            @endphp
-
-            <!-- Tanggal -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="tahun" class="{{ $label }} col-span-1">Tahun</label>
-                <input type="text" id="tahun" name="tahun" value="{{ old('tahun', $kegiatan->tahun ?? '') }}" class="{{ $input }} col-span-2">
-            </div>
-
-            <!-- No Surat -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="no_registrasi" class="{{ $label }}">No. Surat</label>
-                <input
-                    type="text"
-                    id="no_registrasi"
-                    name="no_registrasi"
-                    value="{{ old('no_registrasi', $kegiatan->no_registrasi ?? '') }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
-
-            <!-- Nama Kegiatan -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="nama" class="{{ $label }}">Nama Kegiatan</label>
-                <input
-                    type="text"
-                    id="nama"
-                    name="nama"
-                    value="{{ old('nama', $kegiatan->nama) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
-
-            <!-- Jenis Kegiatan -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="jenis_kegiatan" class="{{ $label }}">Jenis Kegiatan</label>
-                <input
-                    type="text"
-                    id="jenis_kegiatan"
-                    name="jenis_kegiatan"
-                    value="{{ old('jenis_kegiatan', $kegiatan->jenis_kegiatan) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
-
-            <!-- Cakupan -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="cakupan" class="{{ $label }}">Cakupan Kegiatan</label>
-                <input
-                    type="text"
-                    id="cakupan"
-                    name="cakupan"
-                    value="{{ old('cakupan', $kegiatan->cakupan) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
-
-            <!-- Jenis Materi -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="jenis_materi" class="{{ $label }}">Jenis Materi</label>
-                <input
-                    type="text"
-                    id="jenis_materi"
-                    name="jenis_materi"
-                    value="{{ old('jenis_materi', $kegiatan->jenis_materi) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
-
-            <!-- Metode -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="metode" class="{{ $label }}">Metode</label>
-                <input
-                    type="text"
-                    id="metode"
-                    name="metode"
-                    value="{{ old('metode', $kegiatan->metode) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
-
-            <!-- Angkatan -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="angkatan" class="{{ $label }}">Angkatan</label>
-                <input
-                    type="number"
-                    id="angkatan"
-                    name="angkatan"
-                    value="{{ old('angkatan', $kegiatan->angkatan) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
-
-            <!-- Bentuk -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="bentuk" class="{{ $label }}">Bentuk</label>
-                <input
-                    type="text"
-                    id="bentuk"
-                    name="bentuk"
-                    value="{{ old('bentuk', $kegiatan->bentuk) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
-
-            <!-- Institusi -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="institusi_kerjasama" class="{{ $label }}">Institusi Kerjasama</label>
-                <input
-                    type="text"
-                    id="institusi_kerjasama"
-                    name="institusi_kerjasama"
-                    value="{{ old('institusi_kerjasama', $kegiatan->institusi_kerjasama) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
-
-            <!-- Peserta -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="peserta" class="{{ $label }}">Jumlah Peserta</label>
-                <input
-                    type="number"
-                    id="peserta"
-                    name="peserta"
-                    value="{{ old('peserta', $kegiatan->peserta) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
-
-            <!-- Waktu -->
-                <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="tgl_mulai" class="{{ $label }}">Mulai</label>
-                <div class="col-span-2 flex gap-4">
-                <input type="date" id="tgl_mulai" name="tgl_mulai" class="{{ $input }}" value="{{ old('tgl_mulai', $kegiatan->tgl_mulai) }}">
-                <label for="tgl_selesai" class="{{ $label }}">Selesai</label>
-                <input type="date" id="tgl_selesai" class="{{ $input }}" placeholder="Selesai">
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Oops! Ada kesalahan.</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>- {{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-            </div>
+            @endif
 
-            {{-- <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="" class="{{ $label }}">Waktu Kegiatan</label>
-                <div class="col-span-2 flex gap-4">
-                    <input
-                        type="date"
-                        name="tgl_mulai"
-                        value="{{ old('tgl_mulai', $kegiatan->tgl_mulai) }}"
-                        class="{{ $input }}"
-                    >
-                    <input
-                        type="date"
-                        name="tgl_selesai"
-                        value="{{ old('tgl_selesai', $kegiatan->tgl_selesai) }}"
-                        class="{{ $input }}"
-                    >
+            <div class="form-card">
+                <div class="form-row">
+                    <label>Tanggal Usulan</label>
+                    <input type="date" name="date" value="{{ old('date', $kegiatan->date) }}">
                 </div>
-            </div> --}}
 
-            <!-- Anggaran -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="anggaran" class="{{ $label }}">Anggaran</label>
-                <input
-                    type="number"
-                    id="anggaran"
-                    name="anggaran"
-                    value="{{ old('anggaran', $kegiatan->anggaran) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
+                <div class="form-row">
+                    <label>No. Surat</label>
+                    <input type="text" name="reference_number"
+                        value="{{ old('reference_number', $kegiatan->reference_number) }}">
+                </div>
 
-            <!-- Unit -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="unit_pengusul" class="{{ $label }}">Unit Pengusul</label>
-                <input
-                    type="text"
-                    id="unit_pengusul"
-                    name="unit_pengusul"
-                    value="{{ old('unit_pengusul', $kegiatan->unit_pengusul) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
+                <div class="form-row">
+                    <label>Nama Kegiatan</label>
+                    <select name="activity_name_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_names as $actName)
+                            <option value="{{ $actName->id }}"
+                                {{ old('activity_name_id', $kegiatan->activity_name_id) == $actName->id ? 'selected' : '' }}>
+                                {{ $actName->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- PIC -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="pic" class="{{ $label }}">Nama PIC</label>
-                <input
-                    type="text"
-                    id="pic"
-                    name="pic"
-                    value="{{ old('pic', $kegiatan->pic) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
+                <div class="form-row">
+                    <label>Jenis Kegiatan</label>
+                    <select name="activity_type_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_types as $type)
+                            <option value="{{ $type->id }}"
+                                {{ old('activity_type_id', $kegiatan->activity_type_id) == $type->id ? 'selected' : '' }}>
+                                {{ $type->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- WA PIC -->
-            <div class="grid grid-cols-3 gap-4 items-center">
-                <label for="wa_pic" class="{{ $label }}">WA PIC</label>
-                <input
-                    type="text"
-                    id="wa_pic"
-                    name="wa_pic"
-                    value="{{ old('wa_pic', $kegiatan->wa_pic) }}"
-                    class="{{ $input }} col-span-2"
-                >
-            </div>
+                <div class="form-row">
+                    <label>Cakupan Kegiatan</label>
+                    <select name="activity_scope_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_scopes as $scope)
+                            <option value="{{ $scope->id }}"
+                                {{ old('activity_scope_id', $kegiatan->activity_scope_id) == $scope->id ? 'selected' : '' }}>
+                                {{ $scope->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- Action -->
-            <div class="flex justify-center gap-4 pt-6">
-                <button
-                    type="submit"
-                    class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600"
-                >
-                    SIMPAN
-                </button>
+                <div class="form-row">
+                    <label>Jenis Materi</label>
+                    <select name="material_type_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($material_types as $mat)
+                            <option value="{{ $mat->id }}"
+                                {{ old('material_type_id', $kegiatan->material_type_id) == $mat->id ? 'selected' : '' }}>
+                                {{ $mat->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-                <a
-                    href="{{ route('kegiatan.index') }}"
-                    class="bg-gray-400 text-white px-6 py-2 rounded-full hover:bg-gray-500"
-                >
-                    BATAL
-                </a>
+                <div class="form-row">
+                    <label>Metode</label>
+                    <select name="activity_method_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_methods as $method)
+                            <option value="{{ $method->id }}"
+                                {{ old('activity_method_id', $kegiatan->activity_method_id) == $method->id ? 'selected' : '' }}>
+                                {{ $method->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Angkatan</label>
+                    <select id="angka" name="batch_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($batches as $batch)
+                            <option value="{{ $batch->id }}"
+                                {{ old('batch_id', $kegiatan->batch_id) == $batch->id ? 'selected' : '' }}>
+                                {{ $batch->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Bentuk</label>
+                    <select name="activity_format_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_formats as $format)
+                            <option value="{{ $format->id }}"
+                                {{ old('activity_format_id', $kegiatan->activity_format_id) == $format->id ? 'selected' : '' }}>
+                                {{ $format->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Institusi Kerjasama</label>
+                    <input type="text" name="collaboration_inst"
+                        value="{{ old('collaboration_inst', $kegiatan->collaboration_inst) }}">
+                </div>
+
+                <div class="form-row">
+                    <label>Target Peserta</label>
+                    <select name="target_participant_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($target_participants as $target)
+                            <option value="{{ $target->id }}"
+                                {{ old('target_participant_id', $kegiatan->target_participant_id) == $target->id ? 'selected' : '' }}>
+                                {{ $target->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-row two">
+                    <label>Tgl Mulai / Selesai</label>
+                    <input type="date" name="start_date" value="{{ old('start_date', $kegiatan->start_date) }}">
+                    <input type="date" name="end_date" value="{{ old('end_date', $kegiatan->end_date) }}">
+                </div>
+
+                <div class="form-row">
+                    <label>Anggaran (Rp)</label>
+                    <input type="number" name="budget_amount"
+                        value="{{ old('budget_amount', $kegiatan->budget_amount ? floor($kegiatan->budget_amount) : '') }}">
+                </div>
+
+                <div class="form-row">
+                    <label>Unit Pengusul</label>
+                    <select name="work_unit_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($work_units as $unit)
+                            <option value="{{ $unit->id }}"
+                                {{ old('work_unit_id', $kegiatan->work_unit_id) == $unit->id ? 'selected' : '' }}>
+                                {{ $unit->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Nama PIC</label>
+                    <select name="pic_user_id" id="pic_user_id" required onchange="updateWaPic(this)">
+                        <option value="" data-phone="">-PILIH PEGAWAI (PIC)-</option>
+                        @foreach ($picCandidates as $pic)
+                            <option value="{{ $pic->id }}" data-phone="{{ $pic->phone_number ?? '-' }}"
+                                {{ old('pic_user_id', $kegiatan->pic_user_id) == $pic->id ? 'selected' : '' }}>
+                                {{ $pic->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>WA PIC</label>
+                    <input type="text" id="wa_pic_temp" disabled placeholder="Pilih Nama PIC di atas untuk melihat WA"
+                        class="bg-gray-100 font-bold text-gray-700">
+                </div>
+
+                <div class="form-action">
+                    <button type="submit" id="btnSave" class="btn-save" style="cursor:pointer;">💾 SIMPAN
+                        PERUBAHAN</button>
+                    <a href="{{ route('kegiatan.index') }}" id="btnCancel" class="btn-cancel"
+                        style="cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">✖
+                        BATAL</a>
+                </div>
+
             </div>
         </form>
     </div>
-</div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
+    <script src="{{ asset('assets/js/tambahdata.js') }}"></script>
+    <script>
+        function updateWaPic(selectElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const phoneNumber = selectedOption.getAttribute('data-phone');
+            const waInput = document.getElementById('wa_pic_temp');
+
+            if (phoneNumber && phoneNumber !== '-') {
+                waInput.value = phoneNumber;
+            } else if (selectElement.value) {
+                waInput.value = "(Nomor WA tidak terdaftar)";
+            } else {
+                waInput.value = "";
+            }
+        }
+
+        // Run on load to pre-fill the WA PIC based on the initially selected Kegiatan PIC
+        document.addEventListener('DOMContentLoaded', function() {
+            updateWaPic(document.getElementById('pic_user_id'));
+        });
+    </script>
+@endpush

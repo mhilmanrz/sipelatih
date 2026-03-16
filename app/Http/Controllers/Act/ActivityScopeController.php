@@ -14,21 +14,28 @@ class ActivityScopeController extends Controller
     public function index()
     {
         $activityScopes = ActivityScope::paginate(10);
-        return response()->json($activityScopes);
+        return view('activity_scope.index', compact('activityScopes'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        return view('activity_scope.create');
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $activityScope = ActivityScope::create($request->all());
-        return response()->json($activityScope, 201);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        ActivityScope::create($request->all());
+        return redirect()->route('activity-scopes.index')->with('success', 'Ruang Lingkup Kegiatan berhasil ditambahkan.');
     }
 
     /**
@@ -36,33 +43,31 @@ class ActivityScopeController extends Controller
      */
     public function show($id)
     {
-        $activityScope = ActivityScope::find($id);
-
-        if (!$activityScope) {
-            return response()->json(['message' => 'Activity Scope not found'], 404);
-        }
-
-        return response()->json($activityScope);
+        return redirect()->route('activity-scopes.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit() {}
+    public function edit($id)
+    {
+        $activityScope = ActivityScope::findOrFail($id);
+        return view('activity_scope.edit', compact('activityScope'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $activityScope = ActivityScope::find($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        if (!$activityScope) {
-            return response()->json(['message' => 'Activity Scope not found'], 404);
-        }
-
+        $activityScope = ActivityScope::findOrFail($id);
         $activityScope->update($request->all());
-        return response()->json($activityScope);
+
+        return redirect()->route('activity-scopes.index')->with('success', 'Ruang Lingkup Kegiatan berhasil diperbarui.');
     }
 
     /**
@@ -70,13 +75,9 @@ class ActivityScopeController extends Controller
      */
     public function destroy($id)
     {
-        $activityScope = ActivityScope::find($id);
-
-        if (!$activityScope) {
-            return response()->json(['message' => 'Activity Scope not found'], 404);
-        }
-
+        $activityScope = ActivityScope::findOrFail($id);
         $activityScope->delete();
-        return response()->json(['message' => 'Activity Scope deleted successfully'], 200);
+
+        return redirect()->route('activity-scopes.index')->with('success', 'Ruang Lingkup Kegiatan berhasil dihapus.');
     }
 }

@@ -14,21 +14,28 @@ class ProfessionController extends Controller
     public function index()
     {
         $professions = Profession::paginate(10);
-        return response()->json($professions);
+        return view('profession.index', compact('professions'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        return view('profession.create');
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $profession = Profession::create($request->all());
-        return response()->json($profession, 201);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        Profession::create($request->all());
+        return redirect()->route('professions.index')->with('success', 'Profesi berhasil ditambahkan.');
     }
 
     /**
@@ -36,33 +43,32 @@ class ProfessionController extends Controller
      */
     public function show($id)
     {
-        $profession = Profession::find($id);
-
-        if (!$profession) {
-            return response()->json(['message' => 'Profession not found'], 404);
-        }
-
-        return response()->json($profession);
+        // Not used in standard web CRUD usually, but leaving for now or redirecting
+        return redirect()->route('professions.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit() {}
+    public function edit($id)
+    {
+        $profession = Profession::findOrFail($id);
+        return view('profession.edit', compact('profession'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $profession = Profession::find($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        if (!$profession) {
-            return response()->json(['message' => 'Profession not found'], 404);
-        }
-
+        $profession = Profession::findOrFail($id);
         $profession->update($request->all());
-        return response()->json($profession);
+
+        return redirect()->route('professions.index')->with('success', 'Profesi berhasil diperbarui.');
     }
 
     /**
@@ -70,13 +76,9 @@ class ProfessionController extends Controller
      */
     public function destroy($id)
     {
-        $profession = Profession::find($id);
-
-        if (!$profession) {
-            return response()->json(['message' => 'Profession not found'], 404);
-        }
-
+        $profession = Profession::findOrFail($id);
         $profession->delete();
-        return response()->json(['message' => 'Profession deleted successfully'], 200);
+
+        return redirect()->route('professions.index')->with('success', 'Profesi berhasil dihapus.');
     }
 }

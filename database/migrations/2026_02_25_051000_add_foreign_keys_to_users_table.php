@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->foreign('work_unit_id')->references('id')->on('work_units')->onDelete('set null');
-            $table->foreign('position_id')->references('id')->on('Position')->onDelete('set null');
+            $table->foreign('position_id')->references('id')->on('positions')->onDelete('set null');
             $table->foreign('employment_type_id')->references('id')->on('employment_types')->onDelete('set null');
             $table->foreign('profession_id')->references('id')->on('professions')->onDelete('set null');
         });

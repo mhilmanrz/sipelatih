@@ -14,21 +14,28 @@ class MaterialTypeController extends Controller
     public function index()
     {
         $materialTypes = MaterialType::paginate(10);
-        return response()->json($materialTypes);
+        return view('material_type.index', compact('materialTypes'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        return view('material_type.create');
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $materialType = MaterialType::create($request->all());
-        return response()->json($materialType, 201);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        MaterialType::create($request->all());
+        return redirect()->route('material-types.index')->with('success', 'Jenis Materi berhasil ditambahkan.');
     }
 
     /**
@@ -36,33 +43,31 @@ class MaterialTypeController extends Controller
      */
     public function show($id)
     {
-        $materialType = MaterialType::find($id);
-
-        if (!$materialType) {
-            return response()->json(['message' => 'Material Type not found'], 404);
-        }
-
-        return response()->json($materialType);
+        return redirect()->route('material-types.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit() {}
+    public function edit($id)
+    {
+        $materialType = MaterialType::findOrFail($id);
+        return view('material_type.edit', compact('materialType'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $materialType = MaterialType::find($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        if (!$materialType) {
-            return response()->json(['message' => 'Material Type not found'], 404);
-        }
-
+        $materialType = MaterialType::findOrFail($id);
         $materialType->update($request->all());
-        return response()->json($materialType);
+
+        return redirect()->route('material-types.index')->with('success', 'Jenis Materi berhasil diperbarui.');
     }
 
     /**
@@ -70,13 +75,9 @@ class MaterialTypeController extends Controller
      */
     public function destroy($id)
     {
-        $materialType = MaterialType::find($id);
-
-        if (!$materialType) {
-            return response()->json(['message' => 'Material Type not found'], 404);
-        }
-
+        $materialType = MaterialType::findOrFail($id);
         $materialType->delete();
-        return response()->json(['message' => 'Material Type deleted successfully'], 200);
+
+        return redirect()->route('material-types.index')->with('success', 'Jenis Materi berhasil dihapus.');
     }
 }

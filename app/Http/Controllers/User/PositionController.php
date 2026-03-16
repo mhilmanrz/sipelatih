@@ -11,16 +11,21 @@ class PositionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $Position = Position::paginate(10);
-        return response()->json($Position);
-    }
+        $search = $request->input('search');
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create() {}
+        $query = Position::query();
+
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('code', 'like', '%' . $search . '%');
+        }
+
+        $positions = $query->paginate(10);
+
+        return response()->json($positions);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -44,11 +49,6 @@ class PositionController extends Controller
 
         return response()->json($position);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit() {}
 
     /**
      * Update the specified resource in storage.

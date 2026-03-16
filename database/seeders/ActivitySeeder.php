@@ -15,7 +15,7 @@ class ActivitySeeder extends Seeder
             [
                 'date' => Carbon::now()->toDateString(),
                 'reference_number' => 'ACT-' . Str::upper(Str::random(6)),
-                'name' => 'Pelatihan Laravel Dasar',
+                'activity_name_id' => 1,
                 'activity_type_id' => 1,
                 'activity_scope_id' => 1,
                 'material_type_id' => 1,
@@ -23,7 +23,7 @@ class ActivitySeeder extends Seeder
                 'batch_id' => 1,
                 'activity_format_id' => 1,
                 'collaboration_inst' => 'PT Teknologi Nusantara',
-                'target_participant_id' => 1, // ⚠️ pastikan tabel & ID valid
+                'target_participant_id' => 1,
                 'start_date' => Carbon::now()->toDateString(),
                 'end_date' => Carbon::now()->addDays(3)->toDateString(),
                 'budget_amount' => 15000000.00,
@@ -35,7 +35,7 @@ class ActivitySeeder extends Seeder
             [
                 'date' => Carbon::now()->subDays(10)->toDateString(),
                 'reference_number' => 'ACT-' . Str::upper(Str::random(6)),
-                'name' => 'Workshop Keamanan Aplikasi',
+                'activity_name_id' => 2,
                 'activity_type_id' => 2,
                 'activity_scope_id' => 2,
                 'material_type_id' => 2,

@@ -22,6 +22,7 @@ class ActivityController extends Controller
         'targetParticipant',
         'workUnit',
         'user',
+        'latestStatus',
     ];
 
     /**
@@ -40,7 +41,6 @@ class ActivityController extends Controller
     {
         $activity = Activity::create($request->validated());
         $activity->load($this->relations);
-
         return response()->json($activity, 201);
     }
 

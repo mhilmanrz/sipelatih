@@ -14,21 +14,28 @@ class BatchController extends Controller
     public function index()
     {
         $batches = Batch::paginate(10);
-        return response()->json($batches);
+        return view('batch.index', compact('batches'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        return view('batch.create');
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $batch = Batch::create($request->all());
-        return response()->json($batch, 201);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        Batch::create($request->all());
+        return redirect()->route('batches.index')->with('success', 'Batch berhasil ditambahkan.');
     }
 
     /**
@@ -36,33 +43,31 @@ class BatchController extends Controller
      */
     public function show($id)
     {
-        $batch = Batch::find($id);
-
-        if (!$batch) {
-            return response()->json(['message' => 'Batch not found'], 404);
-        }
-
-        return response()->json($batch);
+        return redirect()->route('batches.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit() {}
+    public function edit($id)
+    {
+        $batch = Batch::findOrFail($id);
+        return view('batch.edit', compact('batch'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $batch = Batch::find($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        if (!$batch) {
-            return response()->json(['message' => 'Batch not found'], 404);
-        }
-
+        $batch = Batch::findOrFail($id);
         $batch->update($request->all());
-        return response()->json($batch);
+
+        return redirect()->route('batches.index')->with('success', 'Batch berhasil diperbarui.');
     }
 
     /**
@@ -70,13 +75,9 @@ class BatchController extends Controller
      */
     public function destroy($id)
     {
-        $batch = Batch::find($id);
-
-        if (!$batch) {
-            return response()->json(['message' => 'Batch not found'], 404);
-        }
-
+        $batch = Batch::findOrFail($id);
         $batch->delete();
-        return response()->json(['message' => 'Batch deleted successfully'], 200);
+
+        return redirect()->route('batches.index')->with('success', 'Batch berhasil dihapus.');
     }
 }

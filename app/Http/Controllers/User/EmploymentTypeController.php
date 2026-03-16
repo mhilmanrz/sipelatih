@@ -14,21 +14,28 @@ class EmploymentTypeController extends Controller
     public function index()
     {
         $employmentTypes = EmploymentType::paginate(10);
-        return response()->json($employmentTypes);
+        return view('employment_type.index', compact('employmentTypes'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+        return view('employment_type.create');
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $employmentType = EmploymentType::create($request->all());
-        return response()->json($employmentType, 201);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        EmploymentType::create($request->all());
+        return redirect()->route('employment-types.index')->with('success', 'Jenis Kepegawaian berhasil ditambahkan.');
     }
 
     /**
@@ -36,33 +43,31 @@ class EmploymentTypeController extends Controller
      */
     public function show($id)
     {
-        $employmentType = EmploymentType::find($id);
-
-        if (!$employmentType) {
-            return response()->json(['message' => 'Employment Type not found'], 404);
-        }
-
-        return response()->json($employmentType);
+        return redirect()->route('employment-types.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit() {}
+    public function edit($id)
+    {
+        $employmentType = EmploymentType::findOrFail($id);
+        return view('employment_type.edit', compact('employmentType'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $employmentType = EmploymentType::find($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        if (!$employmentType) {
-            return response()->json(['message' => 'Employment Type not found'], 404);
-        }
-
+        $employmentType = EmploymentType::findOrFail($id);
         $employmentType->update($request->all());
-        return response()->json($employmentType);
+
+        return redirect()->route('employment-types.index')->with('success', 'Jenis Kepegawaian berhasil diperbarui.');
     }
 
     /**
@@ -70,13 +75,9 @@ class EmploymentTypeController extends Controller
      */
     public function destroy($id)
     {
-        $employmentType = EmploymentType::find($id);
-
-        if (!$employmentType) {
-            return response()->json(['message' => 'Employment Type not found'], 404);
-        }
-
+        $employmentType = EmploymentType::findOrFail($id);
         $employmentType->delete();
-        return response()->json(['message' => 'Employment Type deleted successfully'], 200);
+
+        return redirect()->route('employment-types.index')->with('success', 'Jenis Kepegawaian berhasil dihapus.');
     }
 }
