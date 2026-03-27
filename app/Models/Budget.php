@@ -19,6 +19,11 @@ class Budget extends Model
         'remaining_amount',
     ];
 
+    protected $casts = [
+        'total_amount' => 'float',
+        'remaining_amount' => 'float',
+    ];
+
     public function budgetCategory()
     {
         return $this->belongsTo(BudgetCategory::class);

@@ -43,6 +43,13 @@ class Activity extends Model
         'pic_user_id',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'budget_amount' => 'float',
+    ];
+
     public function picUser()
     {
         return $this->belongsTo(User::class, 'pic_user_id');
@@ -116,5 +123,15 @@ class Activity extends Model
     public function latestStatus()
     {
         return $this->hasOne(ActivityStatus::class)->latestOfMany();
+    }
+
+    public function activityProfessions()
+    {
+        return $this->hasMany(ActivityProfession::class);
+    }
+
+    public function kakFile()
+    {
+        return $this->hasOne(ActivityKakFile::class);
     }
 }

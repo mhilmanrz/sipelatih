@@ -31,6 +31,12 @@ class User extends Authenticatable
         'jpl_target',
     ];
 
+    protected $casts = [
+        'jpl_target' => 'integer',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
     protected $hidden = [
         'password',
         'created_at',

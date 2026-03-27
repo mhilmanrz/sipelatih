@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\user;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -16,21 +16,23 @@ class UpdateUserRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
+        // Support both API routes using parameter 'id' and Web routes using parameter 'user'
+        $userId = $this->route('user') ?? $this->route('id');
+
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $this->route('id'),
-            'password' => 'nullable|string|min:6',
-            'work_unit_id' => 'nullable|integer|exists:work_units,id',
-            'position_id' => 'nullable|integer|exists:Position,id',
-            'employment_type_id' => 'nullable|integer|exists:employment_types,id',
-            'profession_id' => 'nullable|integer|exists:professions,id',
-            'employee_id' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|max:255',
+            'name'               => 'sometimes|required|string|max:255',
+            'email'              => 'sometimes|required|string|email|max:255|unique:users,email,' . $userId,
+            'password'           => 'nullable|string|min:8',
+            'employee_id'        => 'nullable|string',
+            'phone_number'       => 'nullable|string',
+            'work_unit_id'       => 'nullable|exists:work_units,id',
+            'profession_id'      => 'nullable|exists:professions,id',
+            'position_id'        => 'nullable|exists:positions,id',
+            'employment_type_id' => 'nullable|exists:employment_types,id',
+            'jpl_target'         => 'nullable|integer',
         ];
     }
 }
