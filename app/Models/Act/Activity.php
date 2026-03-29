@@ -14,9 +14,6 @@ use App\Models\Act\TargetParticipant;
 use App\Models\User\WorkUnit;
 use App\Models\User\User;
 use App\Models\Act\ActivityName;
-use App\Models\Act\ActivityMaterial;
-use App\Models\Act\ActivityParticipant;
-use App\Models\Act\ActivityStatus;
 
 
 
@@ -41,13 +38,6 @@ class Activity extends Model
         'work_unit_id',
         'user_id',
         'pic_user_id',
-    ];
-
-    protected $casts = [
-        'date' => 'date',
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'budget_amount' => 'float',
     ];
 
     public function picUser()
@@ -105,16 +95,6 @@ class Activity extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function materials()
-    {
-        return $this->hasMany(ActivityMaterial::class);
-    }
-
-    public function participants()
-    {
-        return $this->hasMany(ActivityParticipant::class);
-    }
-
     public function statuses()
     {
         return $this->hasMany(ActivityStatus::class);
@@ -123,15 +103,5 @@ class Activity extends Model
     public function latestStatus()
     {
         return $this->hasOne(ActivityStatus::class)->latestOfMany();
-    }
-
-    public function activityProfessions()
-    {
-        return $this->hasMany(ActivityProfession::class);
-    }
-
-    public function kakFile()
-    {
-        return $this->hasOne(ActivityKakFile::class);
     }
 }

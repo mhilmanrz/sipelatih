@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('activity_statuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('activity_id')->constrained()->onDelete('cascade');
-            $table->date('date');
-            $table->enum('status', ['ditolak', 'butuh_perbaikan', 'disetujui']);
+            $table->enum('status', ['draft', 'submitted', 'revision', 'accepted'])->default('draft');
             $table->string('note')->nullable();
             $table->timestamps();
         });

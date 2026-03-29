@@ -29,14 +29,6 @@ class DashboardController extends Controller
             $query->where('status', 'accepted');
         })->count();
 
-        $processingCount = Activity::whereHas('latestStatus', function ($query) {
-            $query->where('status', 'processing');
-        })->count();
-
-        $rejectedCount = Activity::whereHas('latestStatus', function ($query) {
-            $query->where('status', 'rejected');
-        })->count();
-
         $chartData = Activity::with('workUnit')
             ->get()
             ->groupBy(function ($item) {
@@ -45,30 +37,14 @@ class DashboardController extends Controller
             ->map->count()
             ->toArray();
 
-        // Calendar events: all activities with a start_date
-        $calendarEvents = Activity::with('activityName')
-            ->whereNotNull('start_date')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'title' => $item->activityName->name ?? 'Kegiatan',
-                    'start' => $item->start_date,
-                    'end'   => $item->end_date,
-                ];
-            });
-
-        return \Inertia\Inertia::render('Dashboard', [
-            'totalActivities' => $totalActivities,
-            'totalUsers' => $totalUsers,
-            'draftCount' => $draftCount,
-            'submittedCount' => $submittedCount,
-            'revisionCount' => $revisionCount,
-            'acceptedCount' => $acceptedCount,
-            'processingCount' => $processingCount,
-            'rejectedCount' => $rejectedCount,
-            'chartLabels' => array_keys($chartData),
-            'chartData' => array_values($chartData),
-            'calendarEvents' => $calendarEvents,
-        ]);
+        return view('dashboard', compact(
+            'totalActivities',
+            'totalUsers',
+            'draftCount',
+            'submittedCount',
+            'revisionCount',
+            'acceptedCount',
+            'chartData'
+        ));
     }
 }

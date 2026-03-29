@@ -15,9 +15,4 @@ class Profession extends Model
         'code',
         'name',
     ];
-
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
 }

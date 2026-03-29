@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('activity_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('certificate_number')->nullable();
+            $table->string('certificate_number');
             $table->boolean('is_passed')->default(false);
-            $table->unique(['activity_id', 'user_id']);
             $table->timestamps();
         });
     }

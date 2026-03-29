@@ -2,47 +2,32 @@
 
 namespace App\Http\Controllers\Act;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreActivityModeratorRequest;
-use App\Http\Requests\UpdateActivityModeratorRequest;
 use App\Models\Act\ActivityModerator;
-use App\Models\Act\ActivityMaterial;
 
 class ActivityModeratorController extends Controller
 {
-    protected $relations = ['user.workUnit', 'activityMaterial'];
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $activityModerators = ActivityModerator::with($this->relations)->paginate(10);
+        $activityModerators = ActivityModerator::paginate(10);
         return response()->json($activityModerators);
     }
 
     /**
-     * Get all moderators for a specific activity.
+     * Show the form for creating a new resource.
      */
-    public function getByActivity($activityId)
-    {
-        $materialIds = ActivityMaterial::where('activity_id', $activityId)->pluck('id');
-
-        $moderators = ActivityModerator::with($this->relations)
-            ->whereIn('activity_material_id', $materialIds)
-            ->get();
-
-        return response()->json($moderators);
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreActivityModeratorRequest $request)
+    public function store(Request $request)
     {
-        $activityModerator = ActivityModerator::create($request->validated());
-        $activityModerator->load($this->relations);
-
+        $activityModerator = ActivityModerator::create($request->all());
         return response()->json($activityModerator, 201);
     }
 
@@ -51,7 +36,7 @@ class ActivityModeratorController extends Controller
      */
     public function show($id)
     {
-        $activityModerator = ActivityModerator::with($this->relations)->find($id);
+        $activityModerator = ActivityModerator::find($id);
 
         if (!$activityModerator) {
             return response()->json(['message' => 'Activity Moderator not found'], 404);
@@ -61,9 +46,14 @@ class ActivityModeratorController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit() {}
+
+    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateActivityModeratorRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         $activityModerator = ActivityModerator::find($id);
 
@@ -71,9 +61,7 @@ class ActivityModeratorController extends Controller
             return response()->json(['message' => 'Activity Moderator not found'], 404);
         }
 
-        $activityModerator->update($request->validated());
-        $activityModerator->load($this->relations);
-
+        $activityModerator->update($request->all());
         return response()->json($activityModerator);
     }
 

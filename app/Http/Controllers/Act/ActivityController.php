@@ -6,35 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Models\Act\Activity;
 use App\Http\Requests\Act\StoreActivityRequest;
 use App\Http\Requests\Act\UpdateActivityRequest;
-use App\Http\Resources\ActivityResource;
+use App\Models\Act\ActivityType;
+use App\Models\Act\ActivityScope;
+use App\Models\Act\MaterialType;
+use App\Models\Act\ActivityMethod;
+use App\Models\Act\Batch;
+use App\Models\Act\ActivityFormat;
+use App\Models\Act\TargetParticipant;
+use App\Models\User\WorkUnit;
+use App\Models\Act\ActivityName;
+use App\Models\User\User;
 
 class ActivityController extends Controller
 {
-    /**
-     * Relations to eager load for detail view.
-     */
-    protected $relations = [
-        'activityName',
-        'activityType',
-        'activityScope',
-        'materialType',
-        'activityMethod',
-        'batch',
-        'activityFormat',
-        'targetParticipant',
-        'workUnit',
-        'user',
-        'picUser',
-        'latestStatus',
-    ];
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $activities = Activity::with($this->relations)->paginate(10);
-        return ActivityResource::collection($activities);
+        // For Usulan Pengajuan Index
+        $dataKegiatan = Activity::paginate(10);
+        return view('usulan.pengajuan.index', compact('dataKegiatan'));
     }
 
     /**
@@ -42,26 +34,28 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        $activityNames = \App\Models\Act\ActivityName::all();
-        $activityTypes = \App\Models\Act\ActivityType::all();
-        $activityScopes = \App\Models\Act\ActivityScope::all();
-        $materialTypes = \App\Models\Act\MaterialType::all();
-        $activityMethods = \App\Models\Act\ActivityMethod::all();
-        $batches = \App\Models\Act\Batch::all();
-        $activityFormats = \App\Models\Act\ActivityFormat::all();
-        $targetParticipants = \App\Models\Act\TargetParticipant::all();
-        $workUnits = \App\Models\User\WorkUnit::all();
+        $picCandidates = User::all();
+        $activity_names = ActivityName::all();
+        $activity_types = ActivityType::all();
+        $activity_scopes = ActivityScope::all();
+        $material_types = MaterialType::all();
+        $activity_methods = ActivityMethod::all();
+        $batches = Batch::all();
+        $activity_formats = ActivityFormat::all();
+        $target_participants = TargetParticipant::all();
+        $work_units = WorkUnit::all();
 
-        return view('usulan.tambahdata', compact(
-            'activityNames',
-            'activityTypes',
-            'activityScopes',
-            'materialTypes',
-            'activityMethods',
+        return view('usulan.pengajuan.create', compact(
+            'picCandidates',
+            'activity_names',
+            'activity_types',
+            'activity_scopes',
+            'material_types',
+            'activity_methods',
             'batches',
-            'activityFormats',
-            'targetParticipants',
-            'workUnits'
+            'activity_formats',
+            'target_participants',
+            'work_units'
         ));
     }
 
@@ -70,30 +64,66 @@ class ActivityController extends Controller
      */
     public function store(StoreActivityRequest $request)
     {
-        $activity = Activity::create($request->validated());
-        $activity->load($this->relations);
-        return new ActivityResource($activity);
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
+
+        Activity::create($data);
+        return redirect()->route('usulan-diklat')->with('success', 'Kegiatan berhasil diajukan.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(\Illuminate\Http\Request $request, $id)
+    public function show($id)
     {
-        $activity = Activity::with($this->relations)->find($id);
+        $kegiatan = Activity::with([
+            'activityName',
+            'activityType',
+            'activityScope',
+            'materialType',
+            'activityMethod',
+            'batch',
+            'activityFormat',
+            'targetParticipant',
+            'workUnit',
+            'picUser',
+            'latestStatus'
+        ])->findOrFail($id);
 
-        if (!$activity) {
-            if ($request->expectsJson() || $request->is('api/*')) {
-                return response()->json(['message' => 'Activity not found'], 404);
-            }
-            abort(404);
-        }
+        return view('usulan.detail.index', compact('kegiatan'));
+    }
 
-        if ($request->expectsJson() || $request->is('api/*')) {
-            return new ActivityResource($activity);
-        }
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $kegiatan = Activity::findOrFail($id);
 
-        return view('usulan.detail.index', ['kegiatan' => $activity]);
+        $picCandidates = User::all();
+        $activity_names = ActivityName::all();
+        $activity_types = ActivityType::all();
+        $activity_scopes = ActivityScope::all();
+        $material_types = MaterialType::all();
+        $activity_methods = ActivityMethod::all();
+        $batches = Batch::all();
+        $activity_formats = ActivityFormat::all();
+        $target_participants = TargetParticipant::all();
+        $work_units = WorkUnit::all();
+
+        return view('usulan.pengajuan.edit', compact(
+            'kegiatan',
+            'picCandidates',
+            'activity_names',
+            'activity_types',
+            'activity_scopes',
+            'material_types',
+            'activity_methods',
+            'batches',
+            'activity_formats',
+            'target_participants',
+            'work_units'
+        ));
     }
 
     /**
@@ -101,16 +131,10 @@ class ActivityController extends Controller
      */
     public function update(UpdateActivityRequest $request, $id)
     {
-        $activity = Activity::find($id);
-
-        if (!$activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
-
+        $activity = Activity::findOrFail($id);
         $activity->update($request->validated());
-        $activity->load($this->relations);
 
-        return new ActivityResource($activity);
+        return redirect()->route('usulan-diklat')->with('success', 'Kegiatan berhasil diperbarui.');
     }
 
     /**
@@ -118,13 +142,9 @@ class ActivityController extends Controller
      */
     public function destroy($id)
     {
-        $activity = Activity::find($id);
-
-        if (!$activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
-
+        $activity = Activity::findOrFail($id);
         $activity->delete();
-        return response()->json(null, 204);
+
+        return redirect()->route('usulan-diklat')->with('success', 'Kegiatan berhasil dihapus.');
     }
 }

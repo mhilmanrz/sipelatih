@@ -10,9 +10,11 @@ class ActivityMaterialSeeder extends Seeder
     public function run(): void
     {
         $activityMaterials = [
-            ['activity_id' => 1, 'name' => 'Pelatihan Aseptic Dispensing', 'jpl' => 2],
-            ['activity_id' => 1, 'name' => 'Bantuan Hidup Dasar (BHD)', 'jpl' => 1],
-            ['activity_id' => 1, 'name' => 'Manajemen Fasilitas dan Keamanan (MFK)', 'jpl' => 0.3],
+            ['activity_id' => 1, 'name' => 'Modul Pelatihan', 'value' => 100],
+            ['activity_id' => 1, 'name' => 'Buku Panduan', 'value' => 50],
+            ['activity_id' => 1, 'name' => 'Slide Presentasi', 'value' => 75],
+            ['activity_id' => 1, 'name' => 'Video Tutorial', 'value' => 30],
+            ['activity_id' => 1, 'name' => 'Lembar Kerja', 'value' => 200],
         ];
 
         foreach ($activityMaterials as $activityMaterial) {

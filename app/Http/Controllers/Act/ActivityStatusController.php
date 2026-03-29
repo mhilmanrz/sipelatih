@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Act;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreActivityStatusRequest;
-use App\Http\Requests\UpdateActivityStatusRequest;
 use App\Models\Act\ActivityStatus;
-use Carbon\Carbon;
 
 class ActivityStatusController extends Controller
 {
@@ -20,30 +18,16 @@ class ActivityStatusController extends Controller
     }
 
     /**
-     * Get all statuses for a specific activity, ordered by date.
+     * Show the form for creating a new resource.
      */
-    public function getByActivity($activityId)
-    {
-        $activityStatuses = ActivityStatus::where('activity_id', $activityId)
-            ->orderBy('date', 'asc')
-            ->get();
-
-        return response()->json($activityStatuses);
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
-     * Date is auto-set to today.
      */
-    public function store(StoreActivityStatusRequest $request)
+    public function store(Request $request)
     {
-        $activityStatus = ActivityStatus::create([
-            'activity_id' => $request->activity_id,
-            'date' => Carbon::today(),
-            'status' => $request->status,
-            'note' => $request->note,
-        ]);
-
+        $activityStatus = ActivityStatus::create($request->all());
         return response()->json($activityStatus, 201);
     }
 
@@ -62,9 +46,14 @@ class ActivityStatusController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit() {}
+
+    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateActivityStatusRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         $activityStatus = ActivityStatus::find($id);
 
@@ -72,7 +61,7 @@ class ActivityStatusController extends Controller
             return response()->json(['message' => 'Activity Status not found'], 404);
         }
 
-        $activityStatus->update($request->validated());
+        $activityStatus->update($request->all());
         return response()->json($activityStatus);
     }
 

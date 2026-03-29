@@ -11,7 +11,7 @@ class StoreActivityStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,9 +22,7 @@ class StoreActivityStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'activity_id' => 'required|exists:activities,id',
-            'status' => 'required|in:ditolak,butuh_perbaikan,disetujui',
-            'note' => 'nullable|string|max:500',
+            //
         ];
     }
 }

@@ -2,49 +2,32 @@
 
 namespace App\Http\Controllers\Act;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreActivityParticipantRequest;
-use App\Http\Requests\UpdateActivityParticipantRequest;
-use App\Imports\ActivityParticipantsImport;
-use App\Models\Act\ActivityParticipant;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Http\Controllers\Controller;
+use App\Models\Act\ActivityParticipant;
 
 class ActivityParticipantController extends Controller
 {
-    protected $relations = ['user.workUnit', 'user.profession'];
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $activityParticipants = ActivityParticipant::with($this->relations)->paginate(10);
+        $activityParticipants = ActivityParticipant::paginate(10);
         return response()->json($activityParticipants);
     }
 
     /**
-     * Get all participants for a specific activity.
+     * Show the form for creating a new resource.
      */
-    public function getByActivity($activityId)
-    {
-        $participants = ActivityParticipant::with($this->relations)
-            ->where('activity_id', $activityId)
-            ->get();
-
-        return response()->json($participants);
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreActivityParticipantRequest $request)
+    public function store(Request $request)
     {
-        $activityParticipant = ActivityParticipant::create($request->validated());
-        $activityParticipant->load($this->relations);
-
+        $activityParticipant = ActivityParticipant::create($request->all());
         return response()->json($activityParticipant, 201);
     }
 
@@ -53,7 +36,7 @@ class ActivityParticipantController extends Controller
      */
     public function show($id)
     {
-        $activityParticipant = ActivityParticipant::with($this->relations)->find($id);
+        $activityParticipant = ActivityParticipant::find($id);
 
         if (!$activityParticipant) {
             return response()->json(['message' => 'Activity Participant not found'], 404);
@@ -63,9 +46,14 @@ class ActivityParticipantController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit() {}
+
+    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateActivityParticipantRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         $activityParticipant = ActivityParticipant::find($id);
 
@@ -73,9 +61,7 @@ class ActivityParticipantController extends Controller
             return response()->json(['message' => 'Activity Participant not found'], 404);
         }
 
-        $activityParticipant->update($request->validated());
-        $activityParticipant->load($this->relations);
-
+        $activityParticipant->update($request->all());
         return response()->json($activityParticipant);
     }
 
@@ -92,54 +78,5 @@ class ActivityParticipantController extends Controller
 
         $activityParticipant->delete();
         return response()->json(['message' => 'Activity Participant deleted successfully'], 200);
-    }
-
-    /**
-     * Import participants from Excel file.
-     */
-    public function import(Request $request, $activityId)
-    {
-        $request->validate([
-            'file' => 'required|file|mimes:xlsx,xls|max:2048',
-        ]);
-
-        $import = new ActivityParticipantsImport((int) $activityId);
-        Excel::import($import, $request->file('file'));
-
-        return response()->json([
-            'message' => 'Import selesai.',
-            'imported' => $import->getImported(),
-            'errors' => $import->getErrors(),
-        ]);
-    }
-
-    /**
-     * Download Excel template for participant import.
-     */
-    public function downloadTemplate()
-    {
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        // Header row
-        $sheet->setCellValue('A1', 'NIP');
-        $sheet->setCellValue('B1', 'Nama');
-
-        // Example rows
-        $sheet->setCellValue('A2', 'EMP001');
-        $sheet->setCellValue('B2', 'Contoh Nama Peserta');
-
-        $writer = new Xlsx($spreadsheet);
-
-        $filename = 'template_import_peserta.xlsx';
-        $tempPath = storage_path('app/temp/' . $filename);
-
-        if (!file_exists(storage_path('app/temp'))) {
-            mkdir(storage_path('app/temp'), 0755, true);
-        }
-
-        $writer->save($tempPath);
-
-        return response()->download($tempPath, $filename)->deleteFileAfterSend(true);
     }
 }

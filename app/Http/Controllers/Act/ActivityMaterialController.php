@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Act;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreActivityMaterialRequest;
-use App\Http\Requests\UpdateActivityMaterialRequest;
 use App\Models\Act\ActivityMaterial;
 
 class ActivityMaterialController extends Controller
@@ -19,26 +18,16 @@ class ActivityMaterialController extends Controller
     }
 
     /**
-     * Get all materials for a specific activity, with total JPL.
+     * Show the form for creating a new resource.
      */
-    public function getByActivity($activityId)
-    {
-        $materials = ActivityMaterial::where('activity_id', $activityId)->get();
-        $totalJpl = $materials->sum('jpl');
-
-        return response()->json([
-            'materials' => $materials,
-            'total_jpl' => round($totalJpl, 1),
-        ]);
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreActivityMaterialRequest $request)
+    public function store(Request $request)
     {
-        $activityMaterial = ActivityMaterial::create($request->validated());
-
+        $activityMaterial = ActivityMaterial::create($request->all());
         return response()->json($activityMaterial, 201);
     }
 
@@ -57,9 +46,14 @@ class ActivityMaterialController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit() {}
+
+    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateActivityMaterialRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         $activityMaterial = ActivityMaterial::find($id);
 
@@ -67,7 +61,7 @@ class ActivityMaterialController extends Controller
             return response()->json(['message' => 'Activity Material not found'], 404);
         }
 
-        $activityMaterial->update($request->validated());
+        $activityMaterial->update($request->all());
         return response()->json($activityMaterial);
     }
 

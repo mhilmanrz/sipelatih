@@ -15,11 +15,6 @@ class ActivityProfession extends Model
         'profession_id',
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
-
     public function activity()
     {
         return $this->belongsTo(Activity::class);

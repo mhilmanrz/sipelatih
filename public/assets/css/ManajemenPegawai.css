@@ -1,217 +1,99 @@
-/* ===========================
-   Manajemen Pegawai Styles
-   =========================== */
-
 .page-wrap {
     padding: 20px;
+    color: #fff;
 }
 
-/* -- Top Bar (Show entries + Buttons) -- */
 .table-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 14px;
 }
 
-.table-top .left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #555;
-    font-size: 14px;
+.table-top select {
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: none;
 }
 
-.table-top .left select {
-    padding: 6px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    outline: none;
-    background-color: white;
-    cursor: pointer;
-}
-
-.table-top .right {
+.right {
     display: flex;
     gap: 10px;
 }
 
-.btn-import {
-    background: #ccc;
-    padding: 8px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: black;
-    font-size: 14px;
+.btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-.btn-import:hover {
-    background: #bbb;
+.btn.gray {
+    background: #828282;
+    color: #fff;
 }
 
-.btn-tambah {
-    background: #00b8a5;
-    padding: 8px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: white;
-    font-size: 14px;
+.btn.green {
+    background: #007a7f;
+    color: #fff;
 }
 
-.btn-tambah:hover {
-    background: #009e8e;
-}
-
-/* -- Card Table -- */
 .card-table {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    padding: 16px;
+    border-radius: 14px;
+    color: #000;
 }
 
-/* -- Filter Bar -- */
 .filter-bar {
     display: flex;
     gap: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+}
+
+.search {
+    display: flex;
     align-items: center;
+    background: #fff;
+    border: 2px solid #0d9488;
+    border-radius: 20px;
+    padding: 4px 10px;
 }
 
-.filter-bar .search {
-    flex-grow: 1;
-    max-width: 400px;
-}
-
-.filter-bar .search input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
-}
-
-.btn-cari {
-    padding: 8px 15px;
-    background: #007a7f;
+.search input {
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    color: white;
-    font-size: 14px;
+    outline: none;
+    padding: 4px;
+    width: 160px;
 }
 
-.btn-cari:hover {
-    background: #006468;
+.reset {
+    background: #9ca3af;
+    color: #fff;
 }
 
-.btn-reset {
-    padding: 8px 15px;
-    background: #f4f4f4;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    color: black;
-    font-size: 14px;
-}
-
-.btn-reset:hover {
-    background: #e8e8e8;
-}
-
-/* -- Table -- */
-.card-table table {
+table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.card-table thead tr {
-    background: #007a7f;
-    color: white;
-    text-align: left;
+thead {
+    background: #007f7a;
+    color: #fff;
 }
 
-.card-table th,
-.card-table td {
+th, td {
     padding: 10px;
-}
-
-.card-table tbody tr {
-    border-bottom: 1px solid #ddd;
-}
-
-.card-table tbody tr:hover {
-    background: #f9f9f9;
-}
-
-/* -- Name Link -- */
-.nama-link {
-    text-decoration: none;
-    color: #007a7f;
-    font-weight: bold;
-}
-
-.nama-link:hover {
-    text-decoration: underline;
-}
-
-/* -- Action Buttons -- */
-.aksi-group {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-}
-
-.aksi-group form {
-    margin: 0;
-}
-
-.btn-edit {
-    background: #007a7f;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.btn-edit:hover {
-    background: #006468;
-}
-
-.btn-hapus {
-    background: #e74c3c;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.btn-hapus:hover {
-    background: #c0392b;
-}
-
-/* -- Empty State -- */
-.empty-state {
+    border: 1px solid #828282;
     text-align: center;
-    padding: 20px;
-    color: #999;
 }
 
-/* -- Table Footer -- */
 .table-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
-    font-size: 14px;
-    color: #555;
+    margin-top: 10px;
 }
 
 .pagination button {
@@ -222,6 +104,6 @@
 }
 
 .pagination .active {
-    background: #007a7f;
+    background: #007f7a;
     color: #fff;
 }
