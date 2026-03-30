@@ -118,7 +118,7 @@
                 </div>
 
                 <div class="form-row">
-                    <label>Institusi Kerjasama</label>
+                    <label>Institusi Kerjasama (Opsional)</label>
                     <input type="text" name="collaboration_inst" value="{{ old('collaboration_inst') }}">
                 </div>
 

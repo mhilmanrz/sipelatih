@@ -31,15 +31,27 @@
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Manajemen Nama Kegiatan</h1>
-            <a href="{{ route('activity-names.create') }}"
-                class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow">
-                + Tambah Nama Kegiatan
-            </a>
+            <div class="flex space-x-2">
+                <button type="button" onclick="toggleModal('importModal')"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
+                    Import Excel
+                </button>
+                <a href="{{ route('activity-names.create') }}"
+                    class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow">
+                    + Tambah Nama Kegiatan
+                </a>
+            </div>
         </div>
 
         @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline">{{ session('error') }}</span>
             </div>
         @endif
 
@@ -104,4 +116,58 @@
             @endif
         </div>
     </div>
+
+    <!-- Import Modal -->
+    <div id="importModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="toggleModal('importModal')"></div>
+
+            <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full z-50">
+                <form action="{{ route('activity-names.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                                    Import Nama Kegiatan
+                                </h3>
+                                <div class="mb-4">
+                                    <p class="text-sm text-gray-500 mb-2">
+                                        Unduh template Excel untuk format yang benar.
+                                    </p>
+                                    <a href="{{ route('activity-names.template') }}" class="text-teal-600 hover:text-teal-700 text-sm font-semibold underline">
+                                        Download Template Excel
+                                    </a>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Pilih File Excel (.xlsx, .xls, .csv)
+                                    </label>
+                                    <input type="file" name="file" required
+                                        class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="submit"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-teal-600 text-base font-medium text-white hover:bg-teal-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                            Upload
+                        </button>
+                        <button type="button" onclick="toggleModal('importModal')"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
+        }
+    </script>
 @endsection

@@ -87,6 +87,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('dictionaries/target-participants', TargetParticipantController::class);
     Route::resource('dictionaries/activity-methods', ActivityMethodController::class);
     Route::resource('dictionaries/batches', BatchController::class);
+    Route::get('dictionaries/activity-names/template', [ActivityNameController::class, 'downloadTemplate'])->name('activity-names.template');
+    Route::post('dictionaries/activity-names/import', [ActivityNameController::class, 'import'])->name('activity-names.import');
     Route::resource('dictionaries/activity-names', ActivityNameController::class);
     Route::resource('dictionaries/budget-categories', App\Http\Controllers\Act\BudgetCategoryController::class);
     Route::resource('employment-types', EmploymentTypeController::class);
