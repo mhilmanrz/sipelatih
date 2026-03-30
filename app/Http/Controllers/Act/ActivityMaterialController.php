@@ -2,81 +2,46 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Act\Activity;
 use App\Models\Act\ActivityMaterial;
 
 class ActivityMaterialController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Store a newly created materi in storage.
      */
-    public function index()
+    public function store(Request $request, $kegiatanId)
     {
-        $activityMaterials = ActivityMaterial::paginate(10);
-        return response()->json($activityMaterials);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'value' => 'required|numeric|min:0.1', // JPL
+        ]);
+
+        $activity = Activity::findOrFail($kegiatanId);
+
+        ActivityMaterial::create([
+            'activity_id' => $activity->id,
+            'name' => $request->name,
+            'value' => $request->value,
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'materi'])
+            ->with('success', 'Materi berhasil ditambahkan.');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Remove the specified materi from storage.
      */
-    public function create() {}
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function destroy($kegiatanId, $id)
     {
-        $activityMaterial = ActivityMaterial::create($request->all());
-        return response()->json($activityMaterial, 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $activityMaterial = ActivityMaterial::find($id);
-
-        if (!$activityMaterial) {
-            return response()->json(['message' => 'Activity Material not found'], 404);
-        }
-
-        return response()->json($activityMaterial);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit() {}
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $activityMaterial = ActivityMaterial::find($id);
-
-        if (!$activityMaterial) {
-            return response()->json(['message' => 'Activity Material not found'], 404);
-        }
-
-        $activityMaterial->update($request->all());
-        return response()->json($activityMaterial);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $activityMaterial = ActivityMaterial::find($id);
-
-        if (!$activityMaterial) {
-            return response()->json(['message' => 'Activity Material not found'], 404);
-        }
-
+        $activityMaterial = ActivityMaterial::where('activity_id', $kegiatanId)
+            ->findOrFail($id);
+            
         $activityMaterial->delete();
-        return response()->json(['message' => 'Activity Material deleted successfully'], 200);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'materi'])
+            ->with('success', 'Materi berhasil dihapus.');
     }
 }

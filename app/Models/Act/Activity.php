@@ -14,6 +14,7 @@ use App\Models\Act\TargetParticipant;
 use App\Models\User\WorkUnit;
 use App\Models\User\User;
 use App\Models\Act\ActivityName;
+use App\Models\Act\FundSource;
 
 
 
@@ -38,6 +39,8 @@ class Activity extends Model
         'work_unit_id',
         'user_id',
         'pic_user_id',
+        'quota_participant',
+        'fund_source_id',
     ];
 
     public function picUser()
@@ -103,5 +106,25 @@ class Activity extends Model
     public function latestStatus()
     {
         return $this->hasOne(ActivityStatus::class)->latestOfMany();
+    }
+
+    public function activityProfessions()
+    {
+        return $this->hasMany(ActivityProfession::class);
+    }
+
+    public function fundSource()
+    {
+        return $this->belongsTo(FundSource::class);
+    }
+
+    public function activityMaterials()
+    {
+        return $this->hasMany(ActivityMaterial::class);
+    }
+
+    public function activityParticipants()
+    {
+        return $this->hasMany(ActivityParticipant::class);
     }
 }

@@ -16,6 +16,7 @@ use App\Models\Act\TargetParticipant;
 use App\Models\User\WorkUnit;
 use App\Models\Act\ActivityName;
 use App\Models\User\User;
+use App\Models\Act\FundSource;
 
 class ActivityController extends Controller
 {
@@ -44,6 +45,7 @@ class ActivityController extends Controller
         $activity_formats = ActivityFormat::all();
         $target_participants = TargetParticipant::all();
         $work_units = WorkUnit::all();
+        $fund_sources = FundSource::all();
 
         return view('usulan.pengajuan.create', compact(
             'picCandidates',
@@ -55,7 +57,8 @@ class ActivityController extends Controller
             'batches',
             'activity_formats',
             'target_participants',
-            'work_units'
+            'work_units',
+            'fund_sources'
         ));
     }
 
@@ -87,10 +90,17 @@ class ActivityController extends Controller
             'targetParticipant',
             'workUnit',
             'picUser',
-            'latestStatus'
+            'latestStatus',
+            'fundSource',
+            'activityMaterials.speakers.user',
+            'activityMaterials.moderators.user',
+            'activityProfessions.profession'
         ])->findOrFail($id);
 
-        return view('usulan.detail.index', compact('kegiatan'));
+        $professions = \App\Models\User\Profession::all();
+        $users = \App\Models\User\User::all();
+
+        return view('usulan.detail.index', compact('kegiatan', 'professions', 'users'));
     }
 
     /**
@@ -110,6 +120,7 @@ class ActivityController extends Controller
         $activity_formats = ActivityFormat::all();
         $target_participants = TargetParticipant::all();
         $work_units = WorkUnit::all();
+        $fund_sources = FundSource::all();
 
         return view('usulan.pengajuan.edit', compact(
             'kegiatan',
@@ -122,7 +133,8 @@ class ActivityController extends Controller
             'batches',
             'activity_formats',
             'target_participants',
-            'work_units'
+            'work_units',
+            'fund_sources'
         ));
     }
 

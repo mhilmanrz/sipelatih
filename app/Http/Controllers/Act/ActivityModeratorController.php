@@ -2,81 +2,37 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Act\Activity;
 use App\Models\Act\ActivityModerator;
 
 class ActivityModeratorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store(Request $request, $kegiatanId)
     {
-        $activityModerators = ActivityModerator::paginate(10);
-        return response()->json($activityModerators);
+        $request->validate([
+            'activity_material_id' => 'required|exists:activity_materials,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $activity = Activity::findOrFail($kegiatanId);
+
+        ActivityModerator::create([
+            'activity_material_id' => $request->activity_material_id,
+            'user_id' => $request->user_id,
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'narasumber'])
+            ->with('success', 'Moderator berhasil ditambahkan.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create() {}
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function destroy($kegiatanId, $id)
     {
-        $activityModerator = ActivityModerator::create($request->all());
-        return response()->json($activityModerator, 201);
-    }
+        $moderator = ActivityModerator::findOrFail($id);
+        $moderator->delete();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $activityModerator = ActivityModerator::find($id);
-
-        if (!$activityModerator) {
-            return response()->json(['message' => 'Activity Moderator not found'], 404);
-        }
-
-        return response()->json($activityModerator);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit() {}
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $activityModerator = ActivityModerator::find($id);
-
-        if (!$activityModerator) {
-            return response()->json(['message' => 'Activity Moderator not found'], 404);
-        }
-
-        $activityModerator->update($request->all());
-        return response()->json($activityModerator);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $activityModerator = ActivityModerator::find($id);
-
-        if (!$activityModerator) {
-            return response()->json(['message' => 'Activity Moderator not found'], 404);
-        }
-
-        $activityModerator->delete();
-        return response()->json(['message' => 'Activity Moderator deleted successfully'], 200);
+        return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'narasumber'])
+            ->with('success', 'Moderator berhasil dihapus.');
     }
 }

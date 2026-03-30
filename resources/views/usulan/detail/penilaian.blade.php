@@ -1,127 +1,71 @@
-@extends('layout.LayoutSuperAdmin')
+<section style="margin-top: 2rem;">
+    <!-- CARD -->
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 2rem;">
 
-@section('title', 'Penilaian Diklat')
+        <div style="font-weight: bold; font-size: 1.125rem; margin-bottom: 1.5rem; color: #111827;">
+            Riwayat Penilaian & Status Dokumen
+        </div>
 
-@section('styles')
-    <link rel="stylesheet" href="{{ asset('css/LayoutSuperAdmin.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/penilaian.css') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
+        @php
+            $statuses = $kegiatan->statuses()->orderBy('created_at', 'desc')->get();
+        @endphp
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#11b9c6',
-                        sidebar: '#0f172a'
-                    }
-                }
-            }
-        }
-    </script>
-@endsection
-
-@section('content')
-
-    <div class="layout">
-
-        <div class="content">
-            <!-- MAIN -->
-            <main class="main">
-
-                <!-- CONTENT -->
-                <section class="p-6 flex-1 space-y-6">
-
-                    <h2 class="text-xl font-semibold tracking-wide">
-                        PENGAJUAN DIKLAT
-                    </h2>
-
-                    <!-- INFO BOX -->
-                    <div class="bg-white rounded shadow p-4 text-sm space-y-2">
-                        <div><span class="font-semibold">Nama Kegiatan</span> : <b>Workshop ICTEC</b></div>
-                        <div><span class="font-semibold">Pengusul</span> : <b>RSUPN Dr. Cipto Mangunkusumo</b></div>
-                        <div><span class="font-semibold">Jenis Kegiatan</span> : <b>Workshop</b></div>
-                        <div><span class="font-semibold">Cakupan</span> : <b>Nasional</b></div>
-                        <div><span class="font-semibold">Jenis Materi</span> : <b>Spesifik Keprofesian</b></div>
-                        <div><span class="font-semibold">Waktu Pelaksanaan</span> : <b>1 Nov 2025 s/d 25 Nov 2025</b></div>
-                        <div><span class="font-semibold">Status</span> : <b>Draft</b></div>
-                    </div>
-
-                    <!-- TAB MENU -->
-                    <div class="bg-white rounded shadow">
-                        <div class="flex flex-wrap border-b text-sm">
-                            <button onclick="window.location='{{ route('usulan.kegiatan') }}'">Kegiatan</button>
-                            <button onclick="window.location='{{ route('usulan.sasaran') }}'">Sasaran Profesi</button>
-                            <button onclick="window.location='{{ route('usulan.kak') }}'">KAK</button>
-                            <button onclick="window.location='{{ route('usulan.materi') }}'">Materi</button>
-                            <button onclick="window.location='{{ route('usulan.narasumber') }}'">Narasumber</button>
-                            <button onclick="window.location='{{ route('usulan.peserta') }}'">Peserta</button>
-                            <button onclick="window.location='{{ route('usulan.pengiriman') }}'">Pengiriman</button>
-                            <button onclick="window.location='{{ route('usulan.penilaian') }}'"
-                                class="active">Penilaian</button>
-                            <button onclick="window.location='{{ route('usulan.sertifikat') }}'">Sertifikat</button>
-                        </div>
-
-                        <!-- TABLE -->
-                        <div class="p-4 overflow-x-auto">
-                            <table class="w-full text-sm border">
-                                <thead class="bg-gray-100">
-                                    <tr>
-                                        <th class="border px-3 py-2 text-center">NO.</th>
-                                        <th class="border px-3 py-2">Tanggal</th>
-                                        <th class="border px-3 py-2">Status</th>
-                                        <th class="border px-3 py-2">Keterangan</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="border px-3 py-2 text-center">1</td>
-                                        <td class="border px-3 py-2">29 - 12 - 2025</td>
-                                        <td class="border px-3 py-2">
-                                            <span class="bg-red-500 text-white px-2 py-1 rounded text-xs">
-                                                ✖ Ditolak
-                                            </span>
-                                        </td>
-                                        <td class="border px-3 py-2">-</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-3 py-2 text-center">2</td>
-                                        <td class="border px-3 py-2">01 - 01 - 2026</td>
-                                        <td class="border px-3 py-2">
-                                            <span class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">
-                                                🔧 Butuh Perbaikan
-                                            </span>
-                                        </td>
-                                        <td class="border px-3 py-2 text-red-600 font-medium">
-                                            Lengkapi RAB
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-3 py-2 text-center">3</td>
-                                        <td class="border px-3 py-2">05 - 01 - 2026</td>
-                                        <td class="border px-3 py-2">
-                                            <span class="bg-green-600 text-white px-2 py-1 rounded text-xs">
-                                                ✔ Disetujui
-                                            </span>
-                                        </td>
-                                        <td class="border px-3 py-2">-</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-
-                </section>
-
-            </main>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse border border-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="border border-gray-300 px-4 py-3 text-center text-gray-700 w-16 uppercase text-xs">NO.</th>
+                        <th class="border border-gray-300 px-4 py-3 text-left text-gray-700 uppercase text-xs w-48">Tanggal Waktu</th>
+                        <th class="border border-gray-300 px-4 py-3 text-left text-gray-700 uppercase text-xs w-48">Status Mutasi</th>
+                        <th class="border border-gray-300 px-4 py-3 text-left text-gray-700 uppercase text-xs">Keterangan / Catatan Reviewer</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    @forelse($statuses as $index => $hist)
+                        <tr class="hover:bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-3 text-center text-gray-600">
+                                {{ $statuses->count() - $index }} 
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-gray-600 font-mono text-sm">
+                                {{ $hist->created_at->format('d M Y - H:i') }}
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                @if($hist->status === 'draft')
+                                    <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-xs font-bold uppercase track-wide">
+                                        ✎ Draft
+                                    </span>
+                                @elseif($hist->status === 'submitted')
+                                    <span class="bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold uppercase shadow-sm track-wide">
+                                        🚀 Terkirim / Diajukan
+                                    </span>
+                                @elseif($hist->status === 'revision')
+                                    <span class="bg-yellow-500 text-white px-3 py-1 rounded text-xs font-bold uppercase shadow-sm track-wide">
+                                        🔧 Butuh Perbaikan
+                                    </span>
+                                @elseif($hist->status === 'accepted')
+                                    <span class="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold uppercase shadow-sm track-wide">
+                                        ✔ Disetujui
+                                    </span>
+                                @else
+                                    <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded text-xs font-bold uppercase">
+                                        {{ $hist->status }}
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 {{ $hist->status === 'revision' ? 'text-red-600 font-medium' : 'text-gray-700' }}">
+                                {{ $hist->note ?? '-' }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="border border-gray-300 px-4 py-10 text-center text-gray-400">
+                                Belum ada riwayat tercatat untuk usulan ini.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
 
     </div>
-
-@endsection
-
-@section('scripts')
-    <script src="{{ assets('js/LayoutPengusul.js') }}"></script>
-    <script src="{{ assets('js/penilaian.js') }}"></script>
-@endsection
+</section>

@@ -2,81 +2,54 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Act\Activity;
 use App\Models\Act\ActivityProfession;
 
 class ActivityProfessionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Store a newly created sasaran profesi in storage.
      */
-    public function index()
+    public function store(Request $request, $kegiatanId)
     {
-        $activityProfessions = ActivityProfession::paginate(10);
-        return response()->json($activityProfessions);
-    }
+        $request->validate([
+            'profession_id' => 'required|exists:professions,id',
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create() {}
+        $activity = Activity::findOrFail($kegiatanId);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $activityProfession = ActivityProfession::create($request->all());
-        return response()->json($activityProfession, 201);
-    }
+        // Check if the profession is already added to prevent duplicates
+        $exists = ActivityProfession::where('activity_id', $activity->id)
+            ->where('profession_id', $request->profession_id)
+            ->exists();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $activityProfession = ActivityProfession::find($id);
-
-        if (!$activityProfession) {
-            return response()->json(['message' => 'Activity Profession not found'], 404);
+        if ($exists) {
+            return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'sasaran'])
+                ->withErrors(['profession_id' => 'Sasaran profesi ini sudah ditambahkan.']);
         }
 
-        return response()->json($activityProfession);
+        ActivityProfession::create([
+            'activity_id' => $activity->id,
+            'profession_id' => $request->profession_id,
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'sasaran'])
+            ->with('success', 'Sasaran Profesi berhasil ditambahkan.');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Remove the specified sasaran profesi from storage.
      */
-    public function edit() {}
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy($kegiatanId, $id)
     {
-        $activityProfession = ActivityProfession::find($id);
-
-        if (!$activityProfession) {
-            return response()->json(['message' => 'Activity Profession not found'], 404);
-        }
-
-        $activityProfession->update($request->all());
-        return response()->json($activityProfession);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $activityProfession = ActivityProfession::find($id);
-
-        if (!$activityProfession) {
-            return response()->json(['message' => 'Activity Profession not found'], 404);
-        }
-
+        $activityProfession = ActivityProfession::where('activity_id', $kegiatanId)
+            ->findOrFail($id);
+            
         $activityProfession->delete();
-        return response()->json(['message' => 'Activity Profession deleted successfully'], 200);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'sasaran'])
+            ->with('success', 'Sasaran Profesi berhasil dihapus.');
     }
 }

@@ -38,6 +38,8 @@ class UpdateActivityRequest extends FormRequest
             'budget_amount' => 'nullable|numeric',
             'work_unit_id' => 'required|exists:work_units,id',
             'pic_user_id' => 'required|exists:users,id',
+            'quota_participant' => 'nullable|integer|min:1',
+            'fund_source_id' => 'nullable|exists:fund_sources,id',
         ];
     }
 }

@@ -21,4 +21,14 @@ class ActivityMaterial extends Model
     {
         return $this->belongsTo(Activity::class);
     }
+
+    public function speakers()
+    {
+        return $this->hasMany(ActivitySpeaker::class);
+    }
+
+    public function moderators()
+    {
+        return $this->hasMany(ActivityModerator::class);
+    }
 }

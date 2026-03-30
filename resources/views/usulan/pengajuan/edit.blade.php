@@ -140,6 +140,11 @@
                     </select>
                 </div>
 
+                <div class="form-row">
+                    <label>Kuota Peserta (Orang)</label>
+                    <input type="number" name="quota_participant" value="{{ old('quota_participant', $kegiatan->quota_participant) }}" min="1">
+                </div>
+
                 <div class="form-row two">
                     <label>Tgl Mulai / Selesai</label>
                     <input type="date" name="start_date" value="{{ old('start_date', $kegiatan->start_date) }}">
@@ -150,6 +155,18 @@
                     <label>Anggaran (Rp)</label>
                     <input type="number" name="budget_amount"
                         value="{{ old('budget_amount', $kegiatan->budget_amount ? floor($kegiatan->budget_amount) : '') }}">
+                </div>
+
+                <div class="form-row">
+                    <label>Sumber Dana</label>
+                    <select name="fund_source_id">
+                        <option value="">-PILIH SUMBER DANA-</option>
+                        @foreach ($fund_sources as $fs)
+                            <option value="{{ $fs->id }}"
+                                {{ old('fund_source_id', $kegiatan->fund_source_id) == $fs->id ? 'selected' : '' }}>
+                                {{ $fs->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-row">

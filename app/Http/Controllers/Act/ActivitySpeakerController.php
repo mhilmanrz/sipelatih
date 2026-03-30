@@ -2,81 +2,37 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Act\Activity;
 use App\Models\Act\ActivitySpeaker;
 
 class ActivitySpeakerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store(Request $request, $kegiatanId)
     {
-        $activitySpeakers = ActivitySpeaker::paginate(10);
-        return response()->json($activitySpeakers);
+        $request->validate([
+            'activity_material_id' => 'required|exists:activity_materials,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $activity = Activity::findOrFail($kegiatanId);
+
+        ActivitySpeaker::create([
+            'activity_material_id' => $request->activity_material_id,
+            'user_id' => $request->user_id,
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'narasumber'])
+            ->with('success', 'Narasumber berhasil ditambahkan.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create() {}
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function destroy($kegiatanId, $id)
     {
-        $activitySpeaker = ActivitySpeaker::create($request->all());
-        return response()->json($activitySpeaker, 201);
-    }
+        $speaker = ActivitySpeaker::findOrFail($id);
+        $speaker->delete();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $activitySpeaker = ActivitySpeaker::find($id);
-
-        if (!$activitySpeaker) {
-            return response()->json(['message' => 'Activity Speaker not found'], 404);
-        }
-
-        return response()->json($activitySpeaker);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit() {}
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $activitySpeaker = ActivitySpeaker::find($id);
-
-        if (!$activitySpeaker) {
-            return response()->json(['message' => 'Activity Speaker not found'], 404);
-        }
-
-        $activitySpeaker->update($request->all());
-        return response()->json($activitySpeaker);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $activitySpeaker = ActivitySpeaker::find($id);
-
-        if (!$activitySpeaker) {
-            return response()->json(['message' => 'Activity Speaker not found'], 404);
-        }
-
-        $activitySpeaker->delete();
-        return response()->json(['message' => 'Activity Speaker deleted successfully'], 200);
+        return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'narasumber'])
+            ->with('success', 'Narasumber berhasil dihapus.');
     }
 }

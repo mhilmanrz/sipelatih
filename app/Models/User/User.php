@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Activity::class);
     }
+
+    public function activityParticipants()
+    {
+        return $this->hasMany(\App\Models\Act\ActivityParticipant::class);
+    }
 }

@@ -125,6 +125,12 @@
                 <span>Data Profesi</span>
             </a>
 
+            <a href="{{ route('roles.index') }}"
+                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('roles*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+                <i class="fa-solid fa-user-shield w-6 text-center mr-2"></i>
+                <span>Data Role</span>
+            </a>
+
             <a href="{{ route('positions.index') }}"
                 class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('positions*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
                 <i class="fa-solid fa-user-tie w-6 text-center mr-2"></i>
@@ -178,6 +184,12 @@
                 class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/batches*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
                 <i class="fa-solid fa-layer-group w-6 text-center mr-2"></i>
                 <span>Batch</span>
+            </a>
+
+            <a href="{{ route('fund-sources.index') }}"
+                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('fund-sources*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+                <i class="fa-solid fa-coins w-6 text-center mr-2"></i>
+                <span>Sumber Dana</span>
             </a>
 
             <a href="{{ route('activity-names.index') }}"

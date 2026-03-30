@@ -1,102 +1,99 @@
-@extends('layout.LayoutPngusul')
+<section style="margin-top: 2rem;">
 
-@section('title', 'Manajemen Pegawai')
-
-@push('styles')
-<link rel="stylesheet" href="{{ asset('css/peserta.css') }}">
-@endpush
-
-@section('content')
-
-<div class="page-wrap">
+    @if (session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
 
     <!-- TOP BAR -->
-    <div class="table-top">
-        <div class="left">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 8px; color: #555; font-size: 14px;">
             Show
-            <select>
-                <option>10</option>
-                <option>25</option>
-                <option>50</option>
+            <select
+                style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; outline: none; background-color: white; cursor: pointer;">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
             </select>
             entries
         </div>
 
-        <div class="right">
-            <button onclick="location.href='{{ route('user.import') }}'" class="btn gray">
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="{{ route('kegiatan.peserta.import.page', $kegiatan->id) }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded shadow transition-colors" style="text-decoration: none; display: inline-block;">
                 ⬇ Import Peserta
-            </button>
+            </a>
 
-            <button onclick="location.href='{{ route('user.tambah') }}'" class="btn green">
+            <a href="{{ route('kegiatan.peserta.create', $kegiatan->id) }}" class="hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded shadow transition-colors text-center" style="background-color: #14b8a6; color: white; display: inline-block; text-decoration: none;">
                 ＋ Tambah
-            </button>
+            </a>
         </div>
     </div>
 
     <!-- CARD -->
-    <div class="card-table">
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 2rem;">
 
         <!-- FILTER -->
-        <div class="filter-bar">
-            <div class="search">
-                <input type="text" placeholder="Cari NIP Peserta">
-                <span><i class="fa fa-search"></i></span>
+        <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; align-items: center;">
+            <div style="flex-grow: 1; max-width: 300px;">
+                <input type="text" placeholder="Cari NIP Peserta..." class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
             </div>
 
-            <div class="search">
-                <input type="text" placeholder="Cari Peserta">
-                <span><i class="fa fa-search"></i></span>
+            <div style="flex-grow: 1; max-width: 300px;">
+                <input type="text" placeholder="Cari Nama Peserta..." class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
             </div>
 
-            <button class="btn reset">⟳ Reset</button>
+            <button class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded transition-colors" onclick="alert('Feature WIP')">
+                ⟳ Reset
+            </button>
         </div>
 
         <!-- TABLE -->
-        <table>
-            <thead>
-                <tr>
-                    <th>NO.</th>
-                    <th>NIP/NPS</th>
-                    <th>Nama Peserta</th>
-                    <th>Unit Kerja</th>
-                    <th>Tenaga</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{-- Contoh static (nanti bisa pakai @foreach) --}}
-                <tr>
-                    <td>1</td>
-                    <td>nps1233521</td>
-                    <td>dr. Rabbinu Rangga</td>
-                    <td>TK Diklat</td>
-                    <td>Perawat</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>23153786129368</td>
-                    <td>Andi Ade Wijaya</td>
-                    <td>ICTEC</td>
-                    <td>Administrasi</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse border border-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-16">NO.</th>
+                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">NIP/NPS</th>
+                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Nama Peserta</th>
+                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Unit Kerja</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    @forelse ($kegiatan->activityParticipants as $index => $participant)
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $index + 1 }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->nip ?? '-' }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->name ?? '-' }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->workUnit->name ?? '-' }}</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                <form action="{{ route('kegiatan.peserta.destroy', ['kegiatan' => $kegiatan->id, 'id' => $participant->id]) }}" method="POST" onsubmit="return confirm('Hapus peserta ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #ef4444; color: white;">HAPUS</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="border border-gray-300 px-4 py-4 text-center text-gray-500">Belum ada peserta yang didaftarkan.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
         <!-- FOOTER -->
-        <div class="table-footer">
-            <span>Showing 1 to 2 of 2 entries</span>
-            <div class="pagination">
-                <button>Previous</button>
-                <button class="active">1</button>
-                <button>Next</button>
+        <div style="display: flex; justify-content: space-between; margin-top: 1.5rem; align-items: center; font-size: 0.875rem; color: #6b7280;">
+            <span>Total {{ $kegiatan->activityParticipants->count() }} peserta</span>
+            <div style="display: flex; gap: 0.25rem;">
+                <!-- Temporary static pagination UI -->
+                <button class="px-3 py-1 border border-gray-300 rounded text-gray-500 hover:bg-gray-100 disabled:opacity-50" disabled>Previous</button>
+                <button class="px-3 py-1 border border-teal-500 bg-teal-500 text-white rounded">1</button>
+                <button class="px-3 py-1 border border-gray-300 rounded text-gray-500 hover:bg-gray-100 disabled:opacity-50" disabled>Next</button>
             </div>
         </div>
 
     </div>
-
-</div>
-
-@endsection
-
-@push('scripts')
-<script src="{{ asset('js/peserta.js') }}"></script>
-@endpush
+</section>

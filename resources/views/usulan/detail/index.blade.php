@@ -156,6 +156,12 @@
                 <div class="label">Jenis Materi</div>
                 <div class="value">: {{ $kegiatan->materialType->name ?? '-' }}</div>
 
+                <div class="label">Sumber Dana</div>
+                <div class="value">: {{ $kegiatan->fundSource->name ?? '-' }}</div>
+
+                <div class="label">Kuota Peserta</div>
+                <div class="value">: {{ $kegiatan->quota_participant ? $kegiatan->quota_participant . ' Orang' : '-' }}</div>
+
                 <div class="label">Waktu Pelaksanaan</div>
                 <div class="value">:
                     @if ($kegiatan->start_date && $kegiatan->end_date)
@@ -216,6 +222,20 @@
                 @include('usulan.detail.kegiatan')
             @elseif($activeTab == 'kak')
                 @include('usulan.detail.kak')
+            @elseif($activeTab == 'sasaran')
+                @include('usulan.detail.sasaranprofesi')
+            @elseif($activeTab == 'materi')
+                @include('usulan.detail.materi')
+            @elseif($activeTab == 'narasumber')
+                @include('usulan.detail.narasumber')
+            @elseif($activeTab == 'peserta')
+                @include('usulan.detail.peserta')
+            @elseif($activeTab == 'pengiriman')
+                @include('usulan.detail.pengiriman')
+            @elseif($activeTab == 'penilaian')
+                @include('usulan.detail.penilaian')
+            @elseif($activeTab == 'sertifikat')
+                @include('usulan.detail.sertifikat')
             @else
                 <div class="p-8 text-center text-gray-500">
                     <h3 class="text-xl font-bold mb-2">Tab {{ ucfirst($activeTab) }}</h3>
