@@ -3,92 +3,36 @@
 namespace App\Http\Controllers\Act;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreActivitySpeakerRequest;
-use App\Http\Requests\UpdateActivitySpeakerRequest;
+use Illuminate\Http\Request;
+use App\Models\Act\Activity;
 use App\Models\Act\ActivitySpeaker;
-use App\Models\Act\ActivityMaterial;
 
 class ActivitySpeakerController extends Controller
 {
-    protected $relations = ['user.workUnit', 'activityMaterial'];
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store(Request $request, $kegiatanId)
     {
-        $activitySpeakers = ActivitySpeaker::with($this->relations)->paginate(10);
-        return response()->json($activitySpeakers);
+        $request->validate([
+            'activity_material_id' => 'required|exists:activity_materials,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $activity = Activity::findOrFail($kegiatanId);
+
+        ActivitySpeaker::create([
+            'activity_material_id' => $request->activity_material_id,
+            'user_id' => $request->user_id,
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'narasumber'])
+            ->with('success', 'Narasumber berhasil ditambahkan.');
     }
 
-    /**
-     * Get all speakers for a specific activity.
-     */
-    public function getByActivity($activityId)
+    public function destroy($kegiatanId, $id)
     {
-        $materialIds = ActivityMaterial::where('activity_id', $activityId)->pluck('id');
+        $speaker = ActivitySpeaker::findOrFail($id);
+        $speaker->delete();
 
-        $speakers = ActivitySpeaker::with($this->relations)
-            ->whereIn('activity_material_id', $materialIds)
-            ->get();
-
-        return response()->json($speakers);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreActivitySpeakerRequest $request)
-    {
-        $activitySpeaker = ActivitySpeaker::create($request->validated());
-        $activitySpeaker->load($this->relations);
-
-        return response()->json($activitySpeaker, 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $activitySpeaker = ActivitySpeaker::with($this->relations)->find($id);
-
-        if (!$activitySpeaker) {
-            return response()->json(['message' => 'Activity Speaker not found'], 404);
-        }
-
-        return response()->json($activitySpeaker);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateActivitySpeakerRequest $request, string $id)
-    {
-        $activitySpeaker = ActivitySpeaker::find($id);
-
-        if (!$activitySpeaker) {
-            return response()->json(['message' => 'Activity Speaker not found'], 404);
-        }
-
-        $activitySpeaker->update($request->validated());
-        $activitySpeaker->load($this->relations);
-
-        return response()->json($activitySpeaker);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $activitySpeaker = ActivitySpeaker::find($id);
-
-        if (!$activitySpeaker) {
-            return response()->json(['message' => 'Activity Speaker not found'], 404);
-        }
-
-        $activitySpeaker->delete();
-        return response()->json(['message' => 'Activity Speaker deleted successfully'], 200);
+        return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'narasumber'])
+            ->with('success', 'Narasumber berhasil dihapus.');
     }
 }

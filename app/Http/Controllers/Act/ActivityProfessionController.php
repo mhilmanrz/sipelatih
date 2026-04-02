@@ -3,87 +3,53 @@
 namespace App\Http\Controllers\Act;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreActivityProfessionRequest;
-use App\Http\Requests\UpdateActivityProfessionRequest;
+use Illuminate\Http\Request;
+use App\Models\Act\Activity;
 use App\Models\Act\ActivityProfession;
 
 class ActivityProfessionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Store a newly created sasaran profesi in storage.
      */
-    public function index()
+    public function store(Request $request, $kegiatanId)
     {
-        $activityProfessions = ActivityProfession::with('profession')->paginate(10);
-        return response()->json($activityProfessions);
-    }
+        $request->validate([
+            'profession_id' => 'required|exists:professions,id',
+        ]);
 
-    /**
-     * Get all professions for a specific activity.
-     */
-    public function getByActivity($activityId)
-    {
-        $activityProfessions = ActivityProfession::with('profession')
-            ->where('activity_id', $activityId)
-            ->get();
+        $activity = Activity::findOrFail($kegiatanId);
 
-        return response()->json($activityProfessions);
-    }
+        // Check if the profession is already added to prevent duplicates
+        $exists = ActivityProfession::where('activity_id', $activity->id)
+            ->where('profession_id', $request->profession_id)
+            ->exists();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreActivityProfessionRequest $request)
-    {
-        $activityProfession = ActivityProfession::create($request->validated());
-        $activityProfession->load('profession');
-
-        return response()->json($activityProfession, 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $activityProfession = ActivityProfession::with('profession')->find($id);
-
-        if (!$activityProfession) {
-            return response()->json(['message' => 'Activity Profession not found'], 404);
+        if ($exists) {
+            return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'sasaran'])
+                ->withErrors(['profession_id' => 'Sasaran profesi ini sudah ditambahkan.']);
         }
 
-        return response()->json($activityProfession);
+        ActivityProfession::create([
+            'activity_id' => $activity->id,
+            'profession_id' => $request->profession_id,
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'sasaran'])
+            ->with('success', 'Sasaran Profesi berhasil ditambahkan.');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified sasaran profesi from storage.
      */
-    public function update(UpdateActivityProfessionRequest $request, string $id)
+    public function destroy($kegiatanId, $id)
     {
-        $activityProfession = ActivityProfession::find($id);
-
-        if (!$activityProfession) {
-            return response()->json(['message' => 'Activity Profession not found'], 404);
-        }
-
-        $activityProfession->update($request->validated());
-        $activityProfession->load('profession');
-
-        return response()->json($activityProfession);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $activityProfession = ActivityProfession::find($id);
-
-        if (!$activityProfession) {
-            return response()->json(['message' => 'Activity Profession not found'], 404);
-        }
-
+        $activityProfession = ActivityProfession::where('activity_id', $kegiatanId)
+            ->findOrFail($id);
+            
         $activityProfession->delete();
-        return response()->json(['message' => 'Activity Profession deleted successfully'], 200);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'sasaran'])
+            ->with('success', 'Sasaran Profesi berhasil dihapus.');
     }
 }

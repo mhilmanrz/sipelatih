@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Act\Activity;
-use App\Models\Act\ActivityParticipant;
 use App\Models\User\WorkUnit;
 use App\Models\User\Profession;
 use App\Models\User\EmploymentType;
-use App\Models\User\Position;
+use App\Models\User\Positions;
 
 class User extends Authenticatable
 {
@@ -28,19 +27,10 @@ class User extends Authenticatable
         'profession_id',
         'employee_id',
         'phone_number',
-        'jpl_target',
-    ];
-
-    protected $casts = [
-        'jpl_target' => 'integer',
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
     protected $hidden = [
         'password',
-        'created_at',
-        'updated_at',
     ];
 
     public function workUnit()
@@ -50,7 +40,7 @@ class User extends Authenticatable
 
     public function position()
     {
-        return $this->belongsTo(Position::class);
+        return $this->belongsTo(Positions::class);
     }
 
     public function employmentType()
@@ -70,6 +60,6 @@ class User extends Authenticatable
 
     public function activityParticipants()
     {
-        return $this->hasMany(ActivityParticipant::class);
+        return $this->hasMany(\App\Models\Act\ActivityParticipant::class);
     }
 }

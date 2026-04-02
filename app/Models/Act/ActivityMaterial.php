@@ -14,20 +14,21 @@ class ActivityMaterial extends Model
     protected $fillable = [
         'activity_id',
         'name',
-        'jpl',
-    ];
-
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
-
-    protected $casts = [
-        'jpl' => 'decimal:1',
+        'value',
     ];
 
     public function activity()
     {
         return $this->belongsTo(Activity::class);
+    }
+
+    public function speakers()
+    {
+        return $this->hasMany(ActivitySpeaker::class);
+    }
+
+    public function moderators()
+    {
+        return $this->hasMany(ActivityModerator::class);
     }
 }

@@ -11,7 +11,7 @@ class StoreActivityKakFileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,8 +22,7 @@ class StoreActivityKakFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'activity_id' => 'required|exists:activities,id',
-            'file' => 'required|file|mimes:pdf|max:10240',
+            //
         ];
     }
 }

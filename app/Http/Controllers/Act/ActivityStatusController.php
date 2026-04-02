@@ -2,92 +2,57 @@
 
 namespace App\Http\Controllers\Act;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreActivityStatusRequest;
-use App\Http\Requests\UpdateActivityStatusRequest;
+use App\Models\Act\Activity;
 use App\Models\Act\ActivityStatus;
-use Carbon\Carbon;
 
 class ActivityStatusController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Submit an activity (change status from draft to submitted).
      */
-    public function index()
+    public function submit(Request $request, $kegiatanId)
     {
-        $activityStatuses = ActivityStatus::paginate(10);
-        return response()->json($activityStatuses);
-    }
+        $activity = Activity::findOrFail($kegiatanId);
 
-    /**
-     * Get all statuses for a specific activity, ordered by date.
-     */
-    public function getByActivity($activityId)
-    {
-        $activityStatuses = ActivityStatus::where('activity_id', $activityId)
-            ->orderBy('date', 'asc')
-            ->get();
+        // Optional: Ensure it's currently in draft or has no status
+        $latestStatus = $activity->latestStatus ? $activity->latestStatus->status : 'draft';
 
-        return response()->json($activityStatuses);
-    }
+        if ($latestStatus !== 'draft' && $latestStatus !== 'revision') {
+            return redirect()->back()->with('error', 'Status kegiatan saat ini tidak dapat dikirim.');
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     * Date is auto-set to today.
-     */
-    public function store(StoreActivityStatusRequest $request)
-    {
-        $activityStatus = ActivityStatus::create([
-            'activity_id' => $request->activity_id,
-            'date' => Carbon::today(),
-            'status' => $request->status,
-            'note' => $request->note,
+        ActivityStatus::create([
+            'activity_id' => $activity->id,
+            'status' => 'submitted',
+            'note' => $request->input('note', 'Dikirim untuk persetujuan.'),
         ]);
 
-        return response()->json($activityStatus, 201);
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'pengiriman'])
+            ->with('success', 'Usulan kegiatan berhasil dikirim.');
     }
 
     /**
-     * Display the specified resource.
+     * Cancel submission (revert to draft).
      */
-    public function show($id)
+    public function cancel(Request $request, $kegiatanId)
     {
-        $activityStatus = ActivityStatus::find($id);
+        $activity = Activity::findOrFail($kegiatanId);
+        
+        $latestStatus = $activity->latestStatus ? $activity->latestStatus->status : 'draft';
 
-        if (!$activityStatus) {
-            return response()->json(['message' => 'Activity Status not found'], 404);
+        if ($latestStatus !== 'submitted') {
+            return redirect()->back()->with('error', 'Hanya kegiatan yang baru dikirim yang dapat dibatalkan.');
         }
 
-        return response()->json($activityStatus);
-    }
+        ActivityStatus::create([
+            'activity_id' => $activity->id,
+            'status' => 'draft',
+            'note' => 'Pengiriman dibatalkan oleh pengguna.',
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateActivityStatusRequest $request, string $id)
-    {
-        $activityStatus = ActivityStatus::find($id);
-
-        if (!$activityStatus) {
-            return response()->json(['message' => 'Activity Status not found'], 404);
-        }
-
-        $activityStatus->update($request->validated());
-        return response()->json($activityStatus);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $activityStatus = ActivityStatus::find($id);
-
-        if (!$activityStatus) {
-            return response()->json(['message' => 'Activity Status not found'], 404);
-        }
-
-        $activityStatus->delete();
-        return response()->json(['message' => 'Activity Status deleted successfully'], 200);
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'pengiriman'])
+            ->with('success', 'Pengiriman usulan berhasil dibatalkan dan dikembalikan ke status Draft.');
     }
 }

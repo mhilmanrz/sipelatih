@@ -23,21 +23,7 @@ class StoreActivityProfessionRequest extends FormRequest
     {
         return [
             'activity_id' => 'required|exists:activities,id',
-            'profession_id' => [
-                'required',
-                'exists:professions,id',
-                'unique:activity_professions,profession_id,NULL,id,activity_id,' . $this->activity_id,
-            ],
-        ];
-    }
-
-    /**
-     * Custom error messages.
-     */
-    public function messages(): array
-    {
-        return [
-            'profession_id.unique' => 'Profesi ini sudah ditambahkan ke kegiatan ini.',
+            'profession_id' => 'required|exists:professions,id',
         ];
     }
 }

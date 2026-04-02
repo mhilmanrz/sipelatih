@@ -11,7 +11,7 @@ class UpdateActivityKakFileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,7 +22,7 @@ class UpdateActivityKakFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|mimes:pdf|max:10240',
+            //
         ];
     }
 }

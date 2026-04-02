@@ -2,97 +2,74 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Act\ActivityParticipant;
 use Illuminate\Http\Request;
+use App\Models\User\User;
+use App\Models\Act\ActivityParticipant;
 
 class MonitoringJplController extends Controller
 {
-    /**
-     * Display monitoring capaian JPL per peserta per kegiatan.
-     *
-     * Kolom: Nama Pegawai, NIP, Unit Kerja, Nama Kegiatan, Waktu Kegiatan,
-     *        Cakupan Kegiatan, Jabatan, Tenaga, Target, Capaian, Keterangan
-     */
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 10);
-        $searchNip = $request->input('search_nip');
-        $searchName = $request->input('search_name');
+        $searchNip = $request->input('nip');
+        $searchNama = $request->input('nama');
+        $targetJpl = 24;
 
-        $query = ActivityParticipant::query()
-            ->with([
-                'user.workUnit',
-                'user.position',
-                'user.employmentType',
-                'activity.activityScope',
-                'activity.materials',
-            ])
-            ->join('users', 'activity_participants.user_id', '=', 'users.id')
-            ->join('activities', 'activity_participants.activity_id', '=', 'activities.id')
-            ->select('activity_participants.*')
-            ->when($searchNip, function ($q) use ($searchNip) {
-                $q->where('users.employee_id', 'like', '%' . $searchNip . '%');
-            })
-            ->when($searchName, function ($q) use ($searchName) {
-                $q->where('users.name', 'like', '%' . $searchName . '%');
-            })
-            ->orderBy('users.name')
-            ->orderBy('activities.start_date');
-
-        $paginated = $query->paginate($perPage);
-
-        $data = $paginated->getCollection()->map(function ($participant) {
-            $user = $participant->user;
-            $activity = $participant->activity;
-
-            // Capaian JPL = sum semua materi JPL dari kegiatan ini
-            $capaianKegiatan = $activity->materials->sum('jpl');
-
-            // Total capaian semua kegiatan yang diikuti user ini
-            $totalCapaian = ActivityParticipant::where('user_id', $user->id)
-                ->with('activity.materials')
-                ->get()
-                ->sum(fn($p) => $p->activity->materials->sum('jpl'));
-
-            $target = $user->jpl_target ?? 24;
-            $keterangan = $totalCapaian >= $target ? 'Tercapai' : 'Belum Tercapai';
-
-            // Format waktu kegiatan
-            $waktu = null;
-            if ($activity->start_date && $activity->end_date) {
-                $start = \Carbon\Carbon::parse($activity->start_date);
-                $end = \Carbon\Carbon::parse($activity->end_date);
-                $waktu = $start->format('j') . '-' . $end->format('j') . ' ' . $end->translatedFormat('F Y');
-            } elseif ($activity->start_date) {
-                $waktu = \Carbon\Carbon::parse($activity->start_date)->translatedFormat('j F Y');
-            }
-
-            return [
-                'participant_id'     => $participant->id,
-                'nama_pegawai'       => $user->name,
-                'nip'                => $user->employee_id,
-                'unit_kerja'         => optional($user->workUnit)->name,
-                'nama_kegiatan'      => $activity->name,
-                'waktu_kegiatan'     => $waktu,
-                'cakupan_kegiatan'   => optional($activity->activityScope)->name,
-                'jabatan'            => optional($user->position)->name,
-                'tenaga'             => optional($user->employmentType)->name,
-                'target'             => $target,
-                'capaian'            => round($totalCapaian, 1),
-                'capaian_kegiatan'   => round($capaianKegiatan, 1),
-                'keterangan'         => $keterangan,
-            ];
+        // TABLE 1: Recap Pegawai
+        $usersQuery = User::with(['workUnit', 'activityParticipants' => function($q) {
+            $q->where('is_passed', true)->with('activity.activityMaterials');
+        }])->when($searchNip, function($q, $nip) {
+            $q->where('employee_id', 'like', '%' . $nip . '%');
+        })->when($searchNama, function($q, $nama) {
+            $q->where('name', 'like', '%' . $nama . '%');
         });
 
-        return response()->json([
-            'data' => $data,
-            'meta' => [
-                'current_page' => $paginated->currentPage(),
-                'last_page'    => $paginated->lastPage(),
-                'per_page'     => $paginated->perPage(),
-                'total'        => $paginated->total(),
-            ],
-        ]);
+        // Get users and format them
+        $users = $usersQuery->get()->map(function($user) use ($targetJpl) {
+            // Filter out duplicate participants for the same activity
+            $uniqueParticipants = $user->activityParticipants->unique('activity_id');
+            $capaian = $uniqueParticipants->sum(function($participant) {
+                return $participant->activity ? $participant->activity->activityMaterials->sum('value') : 0;
+            });
+            
+            $user->capaian_jpl = $capaian;
+            $user->target_jpl = $targetJpl;
+            return $user;
+        });
+
+        // TABLE 2: Detailed Activities
+        $detailedQuery = ActivityParticipant::with([
+            'user.workUnit',
+            'user.profession',
+            'user.employmentType',
+            'activity.activityName',
+            'activity.activityScope',
+            'activity.activityMaterials',
+            'activity.activityProfessions.profession'
+        ])->where('is_passed', true)
+          ->whereHas('user', function($q) use ($searchNip, $searchNama) {
+              if ($searchNip) {
+                  $q->where('employee_id', 'like', '%' . $searchNip . '%');
+              }
+              if ($searchNama) {
+                  $q->where('name', 'like', '%' . $searchNama . '%');
+              }
+          });
+
+        $detailedActivities = $detailedQuery->get()
+            ->unique(function($participant) {
+                return $participant->user_id . '-' . $participant->activity_id;
+            })
+            ->map(function($participant) use ($targetJpl) {
+                $participant->capaian_jpl = $participant->activity ? $participant->activity->activityMaterials->sum('value') : 0;
+                $participant->target_jpl = $targetJpl;
+                return $participant;
+            });
+
+        // CHART DATA: Sort by capaian descending, top 10
+        $topUsers = $users->sortByDesc('capaian_jpl')->take(10)->values();
+        $chartLabels = $topUsers->pluck('name');
+        $chartData = $topUsers->pluck('capaian_jpl');
+
+        return view('monitoringJpl', compact('users', 'detailedActivities', 'chartLabels', 'chartData'));
     }
 }

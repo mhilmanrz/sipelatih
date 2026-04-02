@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
 use App\Models\User\Position;
-use Illuminate\Http\Request;
+use App\Http\Requests\StorePositionRequest;
+use App\Http\Requests\UpdatePositionRequest;
+use App\Http\Controllers\Controller;
 
 class PositionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(\Illuminate\Http\Request $request)
     {
         $search = $request->input('search');
 
@@ -24,59 +25,71 @@ class PositionController extends Controller
 
         $positions = $query->paginate(10);
 
-        return response()->json($positions);
+        return view('user.position.index', compact('positions'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('user.position.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(\Illuminate\Http\Request $request)
     {
-        $position = Position::create($request->all());
-        return response()->json($position, 201);
+        $validated = $request->validate([
+            'code' => 'required|string|max:255|unique:positions,code',
+            'name' => 'required|string|max:255',
+        ]);
+
+        Position::create($validated);
+
+        return redirect()->route('positions.index')->with('success', 'Data Jabatan berhasil ditambahkan.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Position $position)
     {
-        $position = Position::find($id);
+        // Typically not needed for simple dictionary tables like this
+        return redirect()->route('positions.index');
+    }
 
-        if (!$position) {
-            return response()->json(['message' => 'Position not found'], 404);
-        }
-
-        return response()->json($position);
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Position $position)
+    {
+        return view('user.position.edit', compact('position'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(\Illuminate\Http\Request $request, Position $position)
     {
-        $position = Position::find($id);
+        $validated = $request->validate([
+            'code' => 'required|string|max:255|unique:positions,code,' . $position->id,
+            'name' => 'required|string|max:255',
+        ]);
 
-        if (!$position) {
-            return response()->json(['message' => 'Position not found'], 404);
-        }
+        $position->update($validated);
 
-        $position->update($request->all());
-        return response()->json($position);
+        return redirect()->route('positions.index')->with('success', 'Data Jabatan berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Position $position)
     {
-        $position = Position::find($id);
-
-        if (!$position) {
-            return response()->json(['message' => 'Position not found'], 404);
-        }
-
         $position->delete();
-        return response()->json(['message' => 'Position deleted successfully'], 200);
+
+        return redirect()->route('positions.index')->with('success', 'Data Jabatan berhasil dihapus.');
     }
 }

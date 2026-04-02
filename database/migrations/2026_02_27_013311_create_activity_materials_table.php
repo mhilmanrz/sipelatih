@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('activity_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->decimal('jpl', 5, 1);
+            $table->integer('value');
             $table->timestamps();
         });
     }

@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Act\Activity;
-use App\Models\User\Profession;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ActivityImport;
+use App\Imports\ActivityPerParticipantImport;
+use App\Exports\ActivityTemplateExport;
+use App\Exports\ActivityPerParticipantTemplateExport;
 
 class UsulanDiklatController extends Controller
 {
@@ -13,7 +17,7 @@ class UsulanDiklatController extends Controller
         $perPage = $request->input('entries', 10);
         $search = $request->input('search');
 
-        $query = Activity::with(['activityName', 'activityType', 'activityScope', 'materialType', 'latestStatus', 'workUnit', 'materials']);
+        $query = Activity::with(['activityName', 'activityType', 'materialType', 'latestStatus', 'workUnit']);
 
         if ($search) {
             $query->whereHas('activityName', function ($q) use ($search) {
@@ -26,95 +30,54 @@ class UsulanDiklatController extends Controller
 
         $kegiatan = $query->paginate($perPage);
 
-        return \Inertia\Inertia::render('Usulan/Index', [
-            'kegiatan' => $kegiatan,
-            'filters' => [
-                'search' => $search,
-                'entries' => $perPage,
-            ]
-        ]);
+        return view('usulan.usulan', compact('kegiatan'));
     }
 
-    private function loadCommonRelations(Activity $activity)
+    public function importPage()
     {
-        return $activity->load([
-            'activityName',
-            'workUnit',
-            'activityType',
-            'activityScope',
-            'materialType',
-            'latestStatus'
-        ]);
+        return view('usulan.import_kegiatan');
     }
 
-    public function showKegiatan(Activity $activity)
-    {
-        $this->loadCommonRelations($activity);
-        $activity->load(['activityMethod', 'batch', 'activityFormat', 'targetParticipant', 'picUser']);
-
-        return \Inertia\Inertia::render('Usulan/Detail/Kegiatan', [
-            'kegiatan' => $activity
-        ]);
-    }
-
-    public function showSasaranProfesi(Activity $activity)
-    {
-        $this->loadCommonRelations($activity);
-        $activity->load(['activityProfessions.profession']);
-
-        $availableProfessions = Profession::orderBy('name')->get();
-
-        return \Inertia\Inertia::render('Usulan/Detail/SasaranProfesi', [
-            'kegiatan' => $activity,
-            'availableProfessions' => $availableProfessions
-        ]);
-    }
-
-    public function showKak(Activity $activity)
-    {
-        $this->loadCommonRelations($activity);
-        $activity->load(['kakFile']);
-
-        return \Inertia\Inertia::render('Usulan/Detail/Kak', [
-            'kegiatan' => $activity
-        ]);
-    }
-
-    public function showUnderConstruction(Activity $activity, $tab)
-    {
-        $this->loadCommonRelations($activity);
-
-        $tabNames = [
-            'materi' => 'Materi',
-            'narasumber' => 'Narasumber',
-            'peserta' => 'Peserta',
-            'pengiriman' => 'Pengiriman',
-            'penilaian' => 'Penilaian',
-            'sertifikat' => 'Sertifikat',
-        ];
-
-        return \Inertia\Inertia::render('Usulan/Detail/UnderConstruction', [
-            'kegiatan' => $activity,
-            'activeTab' => $tabNames[$tab] ?? ucfirst($tab)
-        ]);
-    }
-
-    public function storeProfession(Request $request, Activity $activity)
+    public function importStore(Request $request)
     {
         $request->validate([
-            'profession_id' => 'required|exists:professions,id'
+            'file' => 'required|mimes:xlsx,xls,csv|max:10240',
         ]);
 
-        $activity->activityProfessions()->firstOrCreate([
-            'profession_id' => $request->profession_id
-        ]);
-
-        return back();
+        try {
+            Excel::import(new ActivityImport, $request->file('file'));
+            return redirect()->route('usulan-diklat')->with('success', 'Data kegiatan berhasil diimport');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat import: ' . $e->getMessage());
+        }
     }
 
-    public function destroyProfession(Activity $activity, $id)
+    public function downloadTemplate()
     {
-        $activity->activityProfessions()->where('id', $id)->delete();
-        return back();
+        return Excel::download(new ActivityTemplateExport, 'Template_Import_Kegiatan.xlsx');
+    }
+
+    public function importPerPesertaPage()
+    {
+        return view('usulan.import_kegiatan_per_peserta');
+    }
+
+    public function importPerPesertaStore(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:10240',
+        ]);
+
+        try {
+            Excel::import(new ActivityPerParticipantImport, $request->file('file'));
+            return redirect()->route('usulan-diklat')->with('success', 'Data kegiatan per peserta berhasil diimport');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat import: ' . $e->getMessage());
+        }
+    }
+
+    public function downloadTemplatePerPeserta()
+    {
+        return Excel::download(new ActivityPerParticipantTemplateExport, 'Template_Import_Kegiatan_Per_Peserta.xlsx');
     }
 }

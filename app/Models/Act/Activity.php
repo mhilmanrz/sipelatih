@@ -14,9 +14,7 @@ use App\Models\Act\TargetParticipant;
 use App\Models\User\WorkUnit;
 use App\Models\User\User;
 use App\Models\Act\ActivityName;
-use App\Models\Act\ActivityMaterial;
-use App\Models\Act\ActivityParticipant;
-use App\Models\Act\ActivityStatus;
+use App\Models\Act\FundSource;
 
 
 
@@ -41,13 +39,8 @@ class Activity extends Model
         'work_unit_id',
         'user_id',
         'pic_user_id',
-    ];
-
-    protected $casts = [
-        'date' => 'date',
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'budget_amount' => 'float',
+        'quota_participant',
+        'fund_source_id',
     ];
 
     public function picUser()
@@ -105,16 +98,6 @@ class Activity extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function materials()
-    {
-        return $this->hasMany(ActivityMaterial::class);
-    }
-
-    public function participants()
-    {
-        return $this->hasMany(ActivityParticipant::class);
-    }
-
     public function statuses()
     {
         return $this->hasMany(ActivityStatus::class);
@@ -130,8 +113,18 @@ class Activity extends Model
         return $this->hasMany(ActivityProfession::class);
     }
 
-    public function kakFile()
+    public function fundSource()
     {
-        return $this->hasOne(ActivityKakFile::class);
+        return $this->belongsTo(FundSource::class);
+    }
+
+    public function activityMaterials()
+    {
+        return $this->hasMany(ActivityMaterial::class);
+    }
+
+    public function activityParticipants()
+    {
+        return $this->hasMany(ActivityParticipant::class);
     }
 }

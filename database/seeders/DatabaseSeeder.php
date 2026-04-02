@@ -26,8 +26,7 @@ class DatabaseSeeder extends Seeder
             EmploymentTypeSeeder::class,
             BudgetCategorySeeder::class,
             BudgetSeeder::class,
-            ActivityNameSeeder::class,
-            ActivitySeeder::class, // depends on ActivityNameSeeder
+            ActivitySeeder::class,
             ActivityProfessionSeeder::class,
             ActivityKakFileSeeder::class,
             ActivityMaterialSeeder::class,

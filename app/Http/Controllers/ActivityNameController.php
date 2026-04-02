@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Act\ActivityName;
+use App\Imports\ActivityNameImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ActivityNameController extends Controller
 {
@@ -12,6 +14,37 @@ class ActivityNameController extends Controller
     {
         $activityNames = ActivityName::paginate(10);
         return view('dictionaries.activity_names.index', compact('activityNames'));
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ]);
+
+        try {
+            Excel::import(new ActivityNameImport, $request->file('file'));
+            return redirect()->route('activity-names.index')->with('success', 'Nama Kegiatan berhasil diimpor.');
+        } catch (\Exception $e) {
+            return redirect()->route('activity-names.index')->with('error', 'Gagal mengimpor Nama Kegiatan. Pastikan format file benar.');
+        }
+    }
+
+    public function downloadTemplate()
+    {
+        $header = ['nama_kegiatan'];
+        $data = [
+            ['Contoh Nama Kegiatan 1'],
+            ['Contoh Nama Kegiatan 2'],
+        ];
+
+        return Excel::download(new class($header, $data) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
+            protected $header;
+            protected $data;
+            public function __construct($header, $data) { $this->header = $header; $this->data = $data; }
+            public function collection() { return collect($this->data); }
+            public function headings(): array { return $this->header; }
+        }, 'template_nama_kegiatan.xlsx');
     }
 
     public function create()

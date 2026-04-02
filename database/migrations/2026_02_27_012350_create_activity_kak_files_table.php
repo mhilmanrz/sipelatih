@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('activity_kak_files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('activity_id')->constrained()->onDelete('cascade');
-            $table->string('file_path');
-            $table->string('original_name');
+            $table->string('url');
             $table->timestamps();
         });
     }

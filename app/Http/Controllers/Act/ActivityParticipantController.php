@@ -3,143 +3,131 @@
 namespace App\Http\Controllers\Act;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreActivityParticipantRequest;
-use App\Http\Requests\UpdateActivityParticipantRequest;
-use App\Imports\ActivityParticipantsImport;
-use App\Models\Act\ActivityParticipant;
 use Illuminate\Http\Request;
+use App\Models\Act\Activity;
+use App\Models\Act\ActivityParticipant;
+use App\Models\User\User;
 use Maatwebsite\Excel\Facades\Excel;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Imports\ParticipantImport;
+use App\Exports\ParticipantTemplateExport;
 
 class ActivityParticipantController extends Controller
 {
-    protected $relations = ['user.workUnit', 'user.profession'];
-
     /**
-     * Display a listing of the resource.
+     * Tampilkan halaman API untuk pencarian pengguna yang tersedia.
      */
-    public function index()
+    public function availableUsers(Request $request, $kegiatanId)
     {
-        $activityParticipants = ActivityParticipant::with($this->relations)->paginate(10);
-        return response()->json($activityParticipants);
-    }
+        $search = $request->input('search');
 
-    /**
-     * Get all participants for a specific activity.
-     */
-    public function getByActivity($activityId)
-    {
-        $participants = ActivityParticipant::with($this->relations)
-            ->where('activity_id', $activityId)
-            ->get();
+        // Ambil ID peserta yang sudah terdaftar di kegiatan ini
+        $existingUserIds = ActivityParticipant::where('activity_id', $kegiatanId)->pluck('user_id')->toArray();
 
-        return response()->json($participants);
-    }
+        // Query pengguna yang BUKAN peserta
+        $query = User::whereNotIn('id', $existingUserIds);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreActivityParticipantRequest $request)
-    {
-        $activityParticipant = ActivityParticipant::create($request->validated());
-        $activityParticipant->load($this->relations);
-
-        return response()->json($activityParticipant, 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $activityParticipant = ActivityParticipant::with($this->relations)->find($id);
-
-        if (!$activityParticipant) {
-            return response()->json(['message' => 'Activity Participant not found'], 404);
+        if (!empty($search)) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('nip', 'like', '%' . $search . '%');
+            });
         }
 
-        return response()->json($activityParticipant);
+        // Return Data pagination API JSON
+        $users = $query->paginate(10);
+
+        return response()->json($users);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Show the form for creating a new participant (Dual Pane UI).
      */
-    public function update(UpdateActivityParticipantRequest $request, string $id)
+    public function create($kegiatanId)
     {
-        $activityParticipant = ActivityParticipant::find($id);
-
-        if (!$activityParticipant) {
-            return response()->json(['message' => 'Activity Participant not found'], 404);
-        }
-
-        $activityParticipant->update($request->validated());
-        $activityParticipant->load($this->relations);
-
-        return response()->json($activityParticipant);
+        $kegiatan = Activity::findOrFail($kegiatanId);
+        
+        return view('usulan.detail.tambah_peserta', compact('kegiatan'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Store new participants in storage.
      */
-    public function destroy(string $id)
-    {
-        $activityParticipant = ActivityParticipant::find($id);
-
-        if (!$activityParticipant) {
-            return response()->json(['message' => 'Activity Participant not found'], 404);
-        }
-
-        $activityParticipant->delete();
-        return response()->json(['message' => 'Activity Participant deleted successfully'], 200);
-    }
-
-    /**
-     * Import participants from Excel file.
-     */
-    public function import(Request $request, $activityId)
+    public function store(Request $request, $kegiatanId)
     {
         $request->validate([
-            'file' => 'required|file|mimes:xlsx,xls|max:2048',
+            'user_ids' => 'required|array',
+            'user_ids.*' => 'exists:users,id',
         ]);
 
-        $import = new ActivityParticipantsImport((int) $activityId);
-        Excel::import($import, $request->file('file'));
+        $activity = Activity::findOrFail($kegiatanId);
 
-        return response()->json([
-            'message' => 'Import selesai.',
-            'imported' => $import->getImported(),
-            'errors' => $import->getErrors(),
-        ]);
+        foreach ($request->user_ids as $userId) {
+            // Hindari duplikasi jika front-end gagal filter
+            $exists = ActivityParticipant::where('activity_id', $activity->id)
+                        ->where('user_id', $userId)
+                        ->exists();
+
+            if (!$exists) {
+                ActivityParticipant::create([
+                    'activity_id' => $activity->id,
+                    'user_id' => $userId,
+                    'is_passed' => false, // default
+                ]);
+            }
+        }
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'peserta'])
+            ->with('success', 'Peserta berhasil ditambahkan.');
     }
 
     /**
-     * Download Excel template for participant import.
+     * Remove the specified participant from storage.
+     */
+    public function destroy($kegiatanId, $id)
+    {
+        $participant = ActivityParticipant::where('activity_id', $kegiatanId)
+            ->findOrFail($id);
+            
+        $participant->delete();
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'peserta'])
+            ->with('success', 'Peserta berhasil dihapus.');
+    }
+
+    /**
+     * Show the form to import participants.
+     */
+    public function importPage($kegiatanId)
+    {
+        $kegiatan = Activity::findOrFail($kegiatanId);
+        return view('usulan.detail.import_peserta', compact('kegiatan'));
+    }
+
+    /**
+     * Process excel file and import.
+     */
+    public function importStore(Request $request, $kegiatanId)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ]);
+
+        $activity = Activity::findOrFail($kegiatanId);
+
+        try {
+            Excel::import(new ParticipantImport($activity->id), $request->file('file'));
+            return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'peserta'])
+                ->with('success', 'Import peserta berhasil. Data NIP tidak terdaftar telah diabaikan.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat meng-import data: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Download Excel template.
      */
     public function downloadTemplate()
     {
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        // Header row
-        $sheet->setCellValue('A1', 'NIP');
-        $sheet->setCellValue('B1', 'Nama');
-
-        // Example rows
-        $sheet->setCellValue('A2', 'EMP001');
-        $sheet->setCellValue('B2', 'Contoh Nama Peserta');
-
-        $writer = new Xlsx($spreadsheet);
-
-        $filename = 'template_import_peserta.xlsx';
-        $tempPath = storage_path('app/temp/' . $filename);
-
-        if (!file_exists(storage_path('app/temp'))) {
-            mkdir(storage_path('app/temp'), 0755, true);
-        }
-
-        $writer->save($tempPath);
-
-        return response()->download($tempPath, $filename)->deleteFileAfterSend(true);
+        return Excel::download(new ParticipantTemplateExport, 'Template_Import_Peserta.xlsx');
     }
 }

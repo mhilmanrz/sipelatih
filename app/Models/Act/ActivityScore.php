@@ -18,12 +18,6 @@ class ActivityScore extends Model
         'practice_score',
     ];
 
-    protected $casts = [
-        'pre_test_score' => 'float',
-        'post_test_score' => 'float',
-        'practice_score' => 'float',
-    ];
-
     public function activityParticipant()
     {
         return $this->belongsTo(ActivityParticipant::class);

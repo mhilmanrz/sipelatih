@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User\Position;
+use App\Models\User\Positions;
 
 class PositionSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class PositionSeeder extends Seeder
      */
     public function run(): void
     {
-        $Position = [
+        $positions = [
             ['code' => 'DIR', 'name' => 'Direktur'],
             ['code' => 'MGR', 'name' => 'Manager'],
             ['code' => 'SPV', 'name' => 'Supervisor'],
@@ -20,8 +20,8 @@ class PositionSeeder extends Seeder
             ['code' => 'ADM', 'name' => 'Admin'],
         ];
 
-        foreach ($Position as $position) {
-            Position::create($position);
+        foreach ($positions as $position) {
+            Positions::create($position);
         }
     }
 }

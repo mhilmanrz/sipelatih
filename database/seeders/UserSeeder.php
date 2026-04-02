@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
-use App\Models\User\Position;
+use App\Models\User\Positions;
 use App\Models\User\EmploymentType;
 use App\Models\User\Profession;
 use Illuminate\Database\Seeder;
@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $workUnits = WorkUnit::all();
-        $Position = Position::all();
+        $positions = Positions::all();
         $employmentTypes = EmploymentType::all();
         $professions = Profession::all();
 
@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
                 'email' => 'admin@mail.com',
                 'password' => Hash::make('password'),
                 'work_unit_id' => $workUnits->where('code', 'TI')->first()->id ?? null,
-                'position_id' => $Position->first()->id ?? null,
+                'position_id' => $positions->first()->id ?? null,
                 'employment_type_id' => $employmentTypes->where('code', 'ASN')->first()->id ?? null,
                 'profession_id' => $professions->where('code', 'PRO')->first()->id ?? null,
                 'employee_id' => 'EMP001',
@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
                 'email' => 'budi@mail.com',
                 'password' => Hash::make('password'),
                 'work_unit_id' => $workUnits->where('code', 'KEU')->first()->id ?? null,
-                'position_id' => $Position->skip(1)->first()->id ?? null,
+                'position_id' => $positions->skip(1)->first()->id ?? null,
                 'employment_type_id' => $employmentTypes->where('code', 'ASN')->first()->id ?? null,
                 'profession_id' => $professions->where('code', 'ACT')->first()->id ?? null,
                 'employee_id' => 'EMP002',
@@ -47,7 +47,7 @@ class UserSeeder extends Seeder
                 'email' => 'siti@mail.com',
                 'password' => Hash::make('password'),
                 'work_unit_id' => $workUnits->where('code', 'SDM')->first()->id ?? null,
-                'position_id' => $Position->skip(2)->first()->id ?? null,
+                'position_id' => $positions->skip(2)->first()->id ?? null,
                 'employment_type_id' => $employmentTypes->where('code', 'NON_ASN')->first()->id ?? null,
                 'profession_id' => $professions->where('code', 'NUR')->first()->id ?? null,
                 'employee_id' => 'EMP003',
@@ -58,7 +58,7 @@ class UserSeeder extends Seeder
                 'email' => 'ahmad@mail.com',
                 'password' => Hash::make('password'),
                 'work_unit_id' => $workUnits->where('code', 'UMUM')->first()->id ?? null,
-                'position_id' => $Position->skip(3)->first()->id ?? null,
+                'position_id' => $positions->skip(3)->first()->id ?? null,
                 'employment_type_id' => $employmentTypes->where('code', 'MITRA')->first()->id ?? null,
                 'profession_id' => $professions->where('code', 'DOC')->first()->id ?? null,
                 'employee_id' => 'EMP004',
@@ -69,7 +69,7 @@ class UserSeeder extends Seeder
                 'email' => 'dewi@mail.com',
                 'password' => Hash::make('password'),
                 'work_unit_id' => $workUnits->where('code', 'DIKLAT')->first()->id ?? null,
-                'position_id' => $Position->skip(4)->first()->id ?? null,
+                'position_id' => $positions->skip(4)->first()->id ?? null,
                 'employment_type_id' => $employmentTypes->where('code', 'ASN')->first()->id ?? null,
                 'profession_id' => $professions->where('code', 'BID')->first()->id ?? null,
                 'employee_id' => 'EMP005',

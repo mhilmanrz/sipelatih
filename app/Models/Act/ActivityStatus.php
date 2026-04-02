@@ -13,13 +13,8 @@ class ActivityStatus extends Model
 
     protected $fillable = [
         'activity_id',
-        'date',
         'status',
         'note',
-    ];
-
-    protected $casts = [
-        'date' => 'date',
     ];
 
     public function activity()
