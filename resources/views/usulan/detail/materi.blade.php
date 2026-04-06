@@ -36,6 +36,7 @@
         <button onclick="window.location='{{ route('usulan.narasumber') }}'">Narasumber</button>
         <button onclick="window.location='{{ route('usulan.peserta') }}'">Peserta</button>
         <button onclick="window.location='{{ route('usulan.pengiriman') }}'">Pengiriman</button>
+        <button onclick="window.location='{{ route('usulan.penilaian') }}'">Input Nilai</button>
         <button onclick="window.location='{{ route('usulan.penilaian') }}'">Penilaian</button>
         <button onclick="window.location='{{ route('usulan.sertifikat') }}'">Sertifikat</button>
     </div>

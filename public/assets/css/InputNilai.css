@@ -123,7 +123,50 @@ tbody tr:nth-child(even) {
 .btn-edit:hover {
     background: #17b88a;
 }
-
+/* CSS tambahan untuk mendukung kode baru Anda */
+    .page-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 20px;
+    }
+    .info-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        color: #333;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .info-grid {
+        display: grid;
+        grid-template-columns: 180px auto;
+        gap: 8px 15px;
+        font-size: 14px;
+    }
+    .info-grid div { font-weight: bold; color: #1f5f59; }
+    
+    .tab-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 30px;
+        border-bottom: 2px solid rgba(255,255,255,0.2);
+        padding-bottom: 10px;
+    }
+    .tab-menu button {
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.1);
+        color: white;
+        font-weight: 600;
+        transition: 0.3s;
+        border: 1px solid transparent;
+    }
+    .tab-menu button.active, .tab-menu button:hover {
+        background: #0f7f86;
+        color: #ffff;
+    }
 /* FOOTER */
 .table-footer {
     margin-top: 10px;
@@ -221,7 +264,25 @@ tbody tr:nth-child(even) {
     border: 2px solid #1aa6b0;
     outline: none;
 }
+/* TABS */
+.tabs {
+    background: #0a6f6f;
+    display: flex;
+    padding: 15px;
+    gap: 15px;
+}
 
+.tabs span {
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tabs span.active {
+    background: #63c6a8;
+    padding: 6px 14px;
+    border-radius: 15px;
+}
 /* BUTTON MODAL */
 .modal-actions {
     display: flex;

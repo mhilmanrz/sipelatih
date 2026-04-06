@@ -21,6 +21,7 @@
         <button onclick="window.location='{{ route('usulan.narasumber') }}'" class="tab">Narasumber</button>
         <button onclick="window.location='{{ route('usulan.peserta') }}'" class="tab">Peserta</button>
         <button onclick="window.location='{{ route('usulan.pengiriman') }}'" class="tab">Pengiriman</button>
+        <button onclick="window.location='{{ route('usulan.penilaian') }}'" class="tab">Input Nilai</button>
         <button onclick="window.location='{{ route('usulan.penilaian') }}'" class="tab">Penilaian</button>
         <button onclick="window.location='{{ route('usulan.sertifikat') }}'" class="tab active">Sertifikat</button>
         </div>
