@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityMaterial;
-use App\Http\Requests\StoreActivityMaterialRequest;
-use App\Http\Requests\UpdateActivityMaterialRequest;
+use App\Http\Requests\Act\StoreActivityMaterialRequest;
+use App\Http\Requests\Act\UpdateActivityMaterialRequest;
 
 class ActivityMaterialController extends Controller
 {

@@ -23,21 +23,19 @@
         <div>{{ $kegiatan->materialType->name ?? '-' }}</div>
         <div style="font-weight: 600; color: #4b5563;">Metode</div>
         <div>{{ $kegiatan->activityMethod->name ?? '-' }}</div>
-        <div style="font-weight: 600; color: #4b5563;">Angkatan</div>
-        <div>{{ $kegiatan->batch->name ?? '-' }}</div>
         <div style="font-weight: 600; color: #4b5563;">Bentuk</div>
         <div>{{ $kegiatan->activityFormat->name ?? '-' }}</div>
         <div style="font-weight: 600; color: #4b5563;">Target Peserta</div>
-        <div>{{ $kegiatan->targetParticipant->name ?? '-' }}</div>
+        <div>{{ $kegiatan->quota_participant ?? '-' }}</div>
         <div style="font-weight: 600; color: #4b5563;">Institusi Kerjasama</div>
         <div>{{ $kegiatan->collaboration_inst ?? '-' }}</div>
         <div style="font-weight: 600; color: #4b5563;">Waktu Pelaksanaan</div>
         <div>
             @if ($kegiatan->start_date && $kegiatan->end_date)
-                {{ \Carbon\Carbon::parse($kegiatan->start_date)->format('d M Y') }} –
-                {{ \Carbon\Carbon::parse($kegiatan->end_date)->format('d M Y') }}
+            {{ \Carbon\Carbon::parse($kegiatan->start_date)->format('d M Y') }} –
+            {{ \Carbon\Carbon::parse($kegiatan->end_date)->format('d M Y') }}
             @else
-                -
+            -
             @endif
         </div>
         <div style="font-weight: 600; color: #4b5563;">Anggaran</div>

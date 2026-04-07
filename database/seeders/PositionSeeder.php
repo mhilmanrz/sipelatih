@@ -21,7 +21,10 @@ class PositionSeeder extends Seeder
         ];
 
         foreach ($positions as $position) {
-            Positions::create($position);
+            Positions::updateOrCreate(
+                ['code' => $position['code']],
+                ['name' => $position['name']]
+            );
         }
     }
 }

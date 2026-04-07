@@ -17,6 +17,7 @@ use App\Models\User\WorkUnit;
 use App\Models\Act\ActivityName;
 use App\Models\User\User;
 use App\Models\Act\FundSource;
+use App\Models\Budget;
 
 class ActivityController extends Controller
 {
@@ -46,6 +47,7 @@ class ActivityController extends Controller
         $target_participants = TargetParticipant::all();
         $work_units = WorkUnit::all();
         $fund_sources = FundSource::all();
+        $budgets = Budget::with('budgetCategory')->get();
 
         return view('usulan.pengajuan.create', compact(
             'picCandidates',
@@ -58,7 +60,8 @@ class ActivityController extends Controller
             'activity_formats',
             'target_participants',
             'work_units',
-            'fund_sources'
+            'fund_sources',
+            'budgets'
         ));
     }
 
@@ -94,7 +97,10 @@ class ActivityController extends Controller
             'fundSource',
             'activityMaterials.speakers.user',
             'activityMaterials.moderators.user',
-            'activityProfessions.profession'
+            'activityProfessions.profession',
+            'kakFiles',
+            'activityParticipants.user.workUnit',
+            'activityParticipants.score',
         ])->findOrFail($id);
 
         $professions = \App\Models\User\Profession::all();
@@ -121,6 +127,7 @@ class ActivityController extends Controller
         $target_participants = TargetParticipant::all();
         $work_units = WorkUnit::all();
         $fund_sources = FundSource::all();
+        $budgets = Budget::with('budgetCategory')->get();
 
         return view('usulan.pengajuan.edit', compact(
             'kegiatan',
@@ -134,7 +141,8 @@ class ActivityController extends Controller
             'activity_formats',
             'target_participants',
             'work_units',
-            'fund_sources'
+            'fund_sources',
+            'budgets'
         ));
     }
 

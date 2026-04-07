@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityModerator;
-use App\Http\Requests\StoreActivityModeratorRequest;
-use App\Http\Requests\UpdateActivityModeratorRequest;
+use App\Http\Requests\Act\StoreActivityModeratorRequest;
+use App\Http\Requests\Act\UpdateActivityModeratorRequest;
 
 class ActivityModeratorController extends Controller
 {

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Act\ActivityMethod;
 
@@ -14,13 +13,14 @@ class ActivityMethodSeeder extends Seeder
     public function run(): void
     {
         $activityMethods = [
+            ['name' => 'Blended'],
             ['name' => 'Luring'],
             ['name' => 'Daring'],
-            ['name' => 'Blanded'],
+            ['name' => 'LMS'],
         ];
 
         foreach ($activityMethods as $activityMethod) {
-            ActivityMethod::create($activityMethod);
+            ActivityMethod::firstOrCreate($activityMethod);
         }
     }
 }

@@ -14,15 +14,12 @@ class ActivityFormatSeeder extends Seeder
     public function run(): void
     {
         $activityFormats = [
-            ['name' => 'Klasikal'],
-            ['name' => 'Non Klasikal'],
-            ['name' => 'Workshop'],
-            ['name' => 'Seminar'],
-            ['name' => 'Webinar'],
+            ['name' => 'Mandiri'], //gbsa isi institusi Kerjasama
+            ['name' => 'Kerjasama'],
         ];
 
         foreach ($activityFormats as $activityFormat) {
-            ActivityFormat::create($activityFormat);
+            ActivityFormat::firstOrCreate($activityFormat);
         }
     }
 }

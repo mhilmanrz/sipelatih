@@ -52,11 +52,25 @@
                     Usulan Anda berstatus <strong class="text-gray-800">Menunggu Verifikasi</strong> dan sedang dalam antrean Tim Peninjau. Apabila Anda menyadari ada kesalahan, Anda masih bisa menarik kembali usulan ini selama belum direview.
                 </p>
 
-                <button onclick="document.getElementById('modalBatalKirim').style.display='flex';"
-                    class="font-semibold py-3 px-8 text-lg rounded-full shadow transition-colors"
-                    style="cursor: pointer; background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">
-                    ⮌ Menarik Kembali Usulan
-                </button>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                    <button onclick="document.getElementById('modalBatalKirim').style.display='flex';"
+                        class="font-semibold py-3 px-8 text-lg rounded-full shadow transition-colors"
+                        style="cursor: pointer; background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">
+                        ⮌ Menarik Kembali Usulan
+                    </button>
+
+                    {{-- Admin Actions --}}
+                    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin'))
+                        <button onclick="document.getElementById('modalTerima').style.display='flex';"
+                            style="cursor: pointer; background-color: #16a34a; color: white; border: none; font-weight: 600; padding: 0.75rem 2rem; font-size: 1.125rem; border-radius: 9999px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                            ✅ Terima & Setujui
+                        </button>
+                        <button onclick="document.getElementById('modalTolak').style.display='flex';"
+                            style="cursor: pointer; background-color: #dc2626; color: white; border: none; font-weight: 600; padding: 0.75rem 2rem; font-size: 1.125rem; border-radius: 9999px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                            ❌ Kembalikan untuk Revisi
+                        </button>
+                    @endif
+                </div>
             @else
                 <p style="color: #6b7280; margin-bottom: 2rem; max-width: 80%; line-height: 1.6;">
                     Usulan ini sudah ditinjau / disetujui. Silakan cek menu <strong class="text-gray-800">Penilaian</strong> untuk melihat rekam jejak persetujuan.
@@ -135,6 +149,68 @@
                     style="cursor: pointer; border: none; background-color: #ef4444; color: white;">
                     BATALKAN PENGIRIMAN
                 </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- MODAL TERIMA (ADMIN) -->
+<div id="modalTerima"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 8px; padding: 2rem; width: 480px; max-width: 90%; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">✅</div>
+        <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem; color: #111827;">Setujui Usulan?</h2>
+
+        @if($kegiatan->budget_id && $kegiatan->budget_amount)
+            <p style="font-size: 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 0.5rem 1rem; margin-bottom: 1rem; color: #166534;">
+                Pagu <strong>{{ $kegiatan->budget->rkkal_code ?? '-' }}</strong> akan berkurang sebesar
+                <strong>Rp {{ number_format($kegiatan->budget_amount, 0, ',', '.') }}</strong>
+            </p>
+        @elseif(!$kegiatan->budget_id)
+            <p style="font-size: 0.85rem; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 6px; padding: 0.5rem 1rem; margin-bottom: 1rem; color: #9a3412;">
+                ⚠ Kegiatan ini belum dikaitkan ke Pagu. Pagu tidak akan dikurangi otomatis.
+            </p>
+        @endif
+
+        <form action="{{ route('kegiatan.accept', $kegiatan->id) }}" method="POST">
+            @csrf
+            <div style="text-align: left; margin-bottom: 1.5rem;">
+                <label style="font-size: 0.875rem; font-weight: 600; color: #374151; display: block; margin-bottom: 0.5rem;">Catatan Persetujuan (Opsional)</label>
+                <textarea name="note" rows="2" style="width: 100%; border: 1px solid #d1d5db; border-radius: 6px; padding: 0.5rem; font-size: 0.875rem;" placeholder="Misal: Usulan disetujui dengan catatan..."></textarea>
+            </div>
+            <div style="display: flex; gap: 0.75rem;">
+                <button type="button" onclick="document.getElementById('modalTerima').style.display='none';"
+                    style="flex: 1; background: #f3f4f6; color: #374151; border: none; border-radius: 6px; padding: 0.75rem; font-weight: bold; cursor: pointer;">BATAL</button>
+                <button type="submit"
+                    style="flex: 1; background: #16a34a; color: white; border: none; border-radius: 6px; padding: 0.75rem; font-weight: bold; cursor: pointer;">YA, SETUJUI</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- MODAL TOLAK (ADMIN) -->
+<div id="modalTolak"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 8px; padding: 2rem; width: 480px; max-width: 90%; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">❌</div>
+        <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem; color: #111827;">Kembalikan untuk Revisi?</h2>
+        <p style="color: #6b7280; margin-bottom: 1.5rem; font-size: 0.9rem;">Usulan akan dikembalikan ke status <strong>Perlu Revisi</strong>. Pengguna dapat memperbaiki dan mengirim ulang.</p>
+
+        <form action="{{ route('kegiatan.reject', $kegiatan->id) }}" method="POST">
+            @csrf
+            <div style="text-align: left; margin-bottom: 1.5rem;">
+                <label style="font-size: 0.875rem; font-weight: 600; color: #374151; display: block; margin-bottom: 0.5rem;">Alasan Penolakan <span style="color: red;">*</span></label>
+                <textarea name="note" rows="3" required style="width: 100%; border: 1px solid #d1d5db; border-radius: 6px; padding: 0.5rem; font-size: 0.875rem;" placeholder="Jelaskan apa yang perlu diperbaiki..."></textarea>
+            </div>
+            <div style="display: flex; gap: 0.75rem;">
+                <button type="button" onclick="document.getElementById('modalTolak').style.display='none';"
+                    style="flex: 1; background: #f3f4f6; color: #374151; border: none; border-radius: 6px; padding: 0.75rem; font-weight: bold; cursor: pointer;">BATAL</button>
+                <button type="submit"
+                    style="flex: 1; background: #dc2626; color: white; border: none; border-radius: 6px; padding: 0.75rem; font-weight: bold; cursor: pointer;">KEMBALIKAN</button>
             </div>
         </form>
 

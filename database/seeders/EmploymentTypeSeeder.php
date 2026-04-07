@@ -22,7 +22,7 @@ class EmploymentTypeSeeder extends Seeder
         ];
 
         foreach ($types as $type) {
-            EmploymentType::create($type);
+            EmploymentType::firstOrCreate($type);
         }
     }
 }

@@ -18,7 +18,7 @@ class ActivityScoreSeeder extends Seeder
         ];
 
         foreach ($activityScores as $activityScore) {
-            ActivityScore::create($activityScore);
+            ActivityScore::firstOrCreate($activityScore);
         }
     }
 }

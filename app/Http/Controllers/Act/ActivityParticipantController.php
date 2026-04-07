@@ -29,7 +29,7 @@ class ActivityParticipantController extends Controller
         if (!empty($search)) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('nip', 'like', '%' . $search . '%');
+                  ->orWhere('employee_id', 'like', '%' . $search . '%');
             });
         }
 

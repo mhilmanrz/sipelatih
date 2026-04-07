@@ -23,7 +23,10 @@ class ProfessionSeeder extends Seeder
         ];
 
         foreach ($professions as $profession) {
-            Profession::create($profession);
+            Profession::updateOrCreate(
+                ['name' => $profession['name']],
+                ['code' => $profession['code']]
+            );
         }
     }
 }

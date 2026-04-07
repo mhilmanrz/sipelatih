@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivitySpeaker;
-use App\Http\Requests\StoreActivitySpeakerRequest;
-use App\Http\Requests\UpdateActivitySpeakerRequest;
+use App\Http\Requests\Act\StoreActivitySpeakerRequest;
+use App\Http\Requests\Act\UpdateActivitySpeakerRequest;
 
 class ActivitySpeakerController extends Controller
 {

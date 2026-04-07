@@ -18,7 +18,7 @@ class ActivityProfessionSeeder extends Seeder
         ];
 
         foreach ($activityProfessions as $activityProfession) {
-            ActivityProfession::create($activityProfession);
+            ActivityProfession::firstOrCreate($activityProfession);
         }
     }
 }

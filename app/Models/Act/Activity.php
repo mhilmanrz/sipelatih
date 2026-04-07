@@ -11,6 +11,7 @@ use App\Models\Act\ActivityMethod;
 use App\Models\Act\Batch;
 use App\Models\Act\ActivityFormat;
 use App\Models\Act\TargetParticipant;
+use App\Models\Act\ActivityKakFile;
 use App\Models\User\WorkUnit;
 use App\Models\User\User;
 use App\Models\Act\ActivityName;
@@ -41,11 +42,17 @@ class Activity extends Model
         'pic_user_id',
         'quota_participant',
         'fund_source_id',
+        'budget_id',
     ];
 
     public function picUser()
     {
         return $this->belongsTo(User::class, 'pic_user_id');
+    }
+
+    public function budget()
+    {
+        return $this->belongsTo(\App\Models\Budget::class);
     }
 
     public function activityName()
@@ -126,5 +133,10 @@ class Activity extends Model
     public function activityParticipants()
     {
         return $this->hasMany(ActivityParticipant::class);
+    }
+
+    public function kakFiles()
+    {
+        return $this->hasMany(ActivityKakFile::class);
     }
 }

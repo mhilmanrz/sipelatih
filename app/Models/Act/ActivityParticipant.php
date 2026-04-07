@@ -32,4 +32,9 @@ class ActivityParticipant extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function score()
+    {
+        return $this->hasOne(ActivityScore::class, 'activity_participant_id');
+    }
 }

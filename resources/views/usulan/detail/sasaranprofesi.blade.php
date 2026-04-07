@@ -92,6 +92,7 @@
     </div>
 </div>
 
+@push('scripts')
 <script>
     document.getElementById('openModal')?.addEventListener('click', function() {
         document.getElementById('modal').style.display = 'flex';
@@ -102,4 +103,16 @@
     document.getElementById('cancelBtn')?.addEventListener('click', function() {
         document.getElementById('modal').style.display = 'none';
     });
+
+    // Inisialisasi Select2
+    $(document).ready(function() {
+        $('#professionSelect').select2({
+            placeholder: "- PILIH PROFESI -",
+            allowClear: true,
+            tags: true,
+            width: '100%',
+            dropdownParent: $('#modal') // Penting untuk Select2 di dalam modal
+        });
+    });
 </script>
+@endpush

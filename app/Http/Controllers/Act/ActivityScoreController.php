@@ -9,74 +9,59 @@ use App\Models\Act\ActivityScore;
 class ActivityScoreController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display the score input page for a specific activity.
      */
-    public function index()
+    public function index($kegiatanId)
     {
-        $activityScores = ActivityScore::paginate(10);
-        return response()->json($activityScores);
+        $kegiatan = \App\Models\Act\Activity::findOrFail($kegiatanId);
+
+        // Ambil semua peserta di kegiatan ini beserta data user, work_unit, dan score (jika ada)
+        $participants = \App\Models\Act\ActivityParticipant::with(['user.workUnit', 'score'])
+            ->where('activity_id', $kegiatanId)
+            ->get();
+
+        return view('InputNilai', compact('kegiatan', 'participants'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store or update score for a participant via AJAX.
      */
-    public function create() {}
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function storeOrUpdate(Request $request, $kegiatanId, $participantId)
     {
-        $activityScore = ActivityScore::create($request->all());
-        return response()->json($activityScore, 201);
-    }
+        $request->validate([
+            'pre_test_score' => 'nullable|integer|min:0|max:100',
+            'post_test_score' => 'nullable|integer|min:0|max:100',
+            'practice_score' => 'nullable|integer|min:0|max:100',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $activityScore = ActivityScore::find($id);
+        $participant = \App\Models\Act\ActivityParticipant::where('id', $participantId)
+            ->where('activity_id', $kegiatanId)
+            ->firstOrFail();
 
-        if (!$activityScore) {
-            return response()->json(['message' => 'Activity Score not found'], 404);
-        }
+        // Cari existing score atau buat baru
+        $score = ActivityScore::firstOrNew(['activity_participant_id' => $participant->id]);
 
-        return response()->json($activityScore);
-    }
+        $score->pre_test_score = $request->input('pre_test_score');
+        $score->post_test_score = $request->input('post_test_score');
+        $score->practice_score = $request->input('practice_score');
+        $score->save();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit() {}
+        // Hitung status kelulusan (akumulasi >= 80)
+        $akumulasi = collect([$score->pre_test_score, $score->post_test_score, $score->practice_score])->average();
+        
+        $batas = 80; // Hardcode untuk sekarang, atau bisa diambil dari setting
+        $isPassed = $akumulasi >= $batas;
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $activityScore = ActivityScore::find($id);
+        $participant->update(['is_passed' => $isPassed]);
 
-        if (!$activityScore) {
-            return response()->json(['message' => 'Activity Score not found'], 404);
-        }
-
-        $activityScore->update($request->all());
-        return response()->json($activityScore);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $activityScore = ActivityScore::find($id);
-
-        if (!$activityScore) {
-            return response()->json(['message' => 'Activity Score not found'], 404);
-        }
-
-        $activityScore->delete();
-        return response()->json(['message' => 'Activity Score deleted successfully'], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Nilai berhasil disimpan.',
+            'data' => [
+                'akumulasi' => round($akumulasi),
+                'status' => $isPassed ? 'Lulus' : 'Tidak Lulus',
+                'warna' => $isPassed ? 'bg-green-600' : 'bg-red-600'
+            ]
+        ]);
     }
 }

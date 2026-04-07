@@ -116,3 +116,34 @@
     margin-bottom:10px;
     margin-top:0px;
 }
+
+/* ================= SELECT2 CUSTOM STYLING TO MATCH NATIVE INPUT ================= */
+
+.select2-container .select2-selection--single {
+    height: auto !important;
+    padding: 7px 12px;
+    border: 2px solid #00B8A5 !important;
+    border-radius: 12px !important;
+    font-size: 14px;
+    background: #f9f9f9 !important;
+    display: flex;
+    align-items: center;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100% !important;
+    right: 10px !important;
+}
+
+.select2-container--focus .select2-selection--single {
+    border-color: #007a7f !important;
+    box-shadow: 0 0 0 3px rgba(0,184,165,.15) !important;
+    background: #fff !important;
+}
+
+.select2-dropdown {
+    border: 2px solid #00B8A5 !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    margin-top: 5px;
+}

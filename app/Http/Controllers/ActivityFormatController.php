@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityFormat;
-use App\Http\Requests\StoreActivityFormatRequest;
-use App\Http\Requests\UpdateActivityFormatRequest;
+use App\Http\Requests\Act\StoreActivityFormatRequest;
+use App\Http\Requests\Act\UpdateActivityFormatRequest;
 
 class ActivityFormatController extends Controller
 {

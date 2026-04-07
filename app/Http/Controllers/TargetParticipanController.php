@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\TargetParticipan;
-use App\Http\Requests\StoreTargetParticipanRequest;
-use App\Http\Requests\UpdateTargetParticipanRequest;
+use App\Http\Requests\Act\StoreTargetParticipanRequest;
+use App\Http\Requests\Act\UpdateTargetParticipanRequest;
 
 class TargetParticipanController extends Controller
 {

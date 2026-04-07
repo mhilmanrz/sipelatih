@@ -15,14 +15,22 @@ class ActivityProfessionController extends Controller
     public function store(Request $request, $kegiatanId)
     {
         $request->validate([
-            'profession_id' => 'required|exists:professions,id',
+            'profession_id' => 'required',
         ]);
+
+        $professionInput = $request->profession_id;
+        if (!is_numeric($professionInput)) {
+            $profession = \App\Models\User\Profession::firstOrCreate(['name' => $professionInput]);
+            $professionId = $profession->id;
+        } else {
+            $professionId = $professionInput;
+        }
 
         $activity = Activity::findOrFail($kegiatanId);
 
         // Check if the profession is already added to prevent duplicates
         $exists = ActivityProfession::where('activity_id', $activity->id)
-            ->where('profession_id', $request->profession_id)
+            ->where('profession_id', $professionId)
             ->exists();
 
         if ($exists) {
@@ -32,7 +40,7 @@ class ActivityProfessionController extends Controller
 
         ActivityProfession::create([
             'activity_id' => $activity->id,
-            'profession_id' => $request->profession_id,
+            'profession_id' => $professionId,
         ]);
 
         return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'sasaran'])

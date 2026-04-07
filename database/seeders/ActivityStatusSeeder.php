@@ -18,7 +18,7 @@ class ActivityStatusSeeder extends Seeder
         ];
 
         foreach ($activityStatuses as $activityStatus) {
-            ActivityStatus::create($activityStatus);
+            ActivityStatus::firstOrCreate($activityStatus);
         }
     }
 }

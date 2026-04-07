@@ -18,7 +18,7 @@ class ActivitySpeakerSeeder extends Seeder
         ];
 
         foreach ($activitySpeakers as $activitySpeaker) {
-            ActivitySpeaker::create($activitySpeaker);
+            ActivitySpeaker::firstOrCreate($activitySpeaker);
         }
     }
 }

@@ -64,7 +64,7 @@
                     @forelse ($kegiatan->activityParticipants as $index => $participant)
                         <tr>
                             <td class="border border-gray-300 px-4 py-2 text-center">{{ $index + 1 }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->nip ?? '-' }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->employee_id ?? '-' }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $participant->user->name ?? '-' }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $participant->user->workUnit->name ?? '-' }}</td>
                             <td class="border border-gray-300 px-4 py-2 text-center">

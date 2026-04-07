@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityScore;
-use App\Http\Requests\StoreActivityScoreRequest;
-use App\Http\Requests\UpdateActivityScoreRequest;
+use App\Http\Requests\Act\StoreActivityScoreRequest;
+use App\Http\Requests\Act\UpdateActivityScoreRequest;
 
 class ActivityScoreController extends Controller
 {

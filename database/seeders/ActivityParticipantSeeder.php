@@ -18,7 +18,7 @@ class ActivityParticipantSeeder extends Seeder
         ];
 
         foreach ($activityParticipants as $activityParticipant) {
-            ActivityParticipant::create($activityParticipant);
+            ActivityParticipant::firstOrCreate($activityParticipant);
         }
     }
 }

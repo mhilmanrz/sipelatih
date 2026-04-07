@@ -22,7 +22,7 @@ class BatchSeeder extends Seeder
         ];
 
         foreach ($batches as $batch) {
-            Batch::create($batch);
+            Batch::firstOrCreate($batch);
         }
     }
 }

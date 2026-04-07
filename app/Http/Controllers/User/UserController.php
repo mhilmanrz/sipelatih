@@ -10,8 +10,10 @@ use App\Models\User\Positions;
 use App\Models\User\EmploymentType;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+use App\Jobs\ImportUsersJob;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\UsersImport;
 
 class UserController extends Controller
 {
@@ -163,6 +165,14 @@ class UserController extends Controller
     }
 
     /**
+     * Download Excel template for user import.
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new \App\Exports\ParticipantTemplateExport, 'Template_Import_Pegawai.xlsx');
+    }
+
+    /**
      * Show the form for importing users via CSV.
      */
     public function importView()
@@ -171,24 +181,54 @@ class UserController extends Controller
     }
 
     /**
-     * Handle the import request and dispatch the job.
+     * Handle the import request and dispatch the job to queue.
      */
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240', // 10MB max
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
         ], [
             'file.required' => 'Pilih file terlebih dahulu.',
-            'file.mimes' => 'Format file harus berupa Excel (.xlsx, .xls) atau CSV.',
-            'file.max' => 'Ukuran file terlalu besar (maks 10MB).'
+            'file.mimes'    => 'Format file harus berupa Excel (.xlsx, .xls) atau CSV.',
+            'file.max'      => 'Ukuran file terlalu besar (maks 10MB).',
         ]);
 
-        if ($request->hasFile('file')) {
-            Excel::import(new UsersImport, $request->file('file'));
+        // Simpan file ke storage/app/imports/
+        $path = $request->file('file')->store('imports');
 
-            return redirect('/users')->with('success', 'File berhasil diunggah. Proses import sedang berjalan di latar belakang.');
-        }
+        // Dispatch ke background queue
+        ImportUsersJob::dispatch($path, auth()->id());
 
-        return redirect()->back()->with('error', 'Gagal mengunggah file.');
+        return redirect('/users')->with('success', 'File berhasil diunggah dan sudah masuk antrean. Anda akan mendapat notifikasi setelah proses selesai.');
+    }
+
+    /**
+     * Get unread notifications for the authenticated user (JSON).
+     */
+    public function notifications()
+    {
+        $notifications = auth()->user()->unreadNotifications;
+        return response()->json($notifications);
+    }
+
+    /**
+     * Check if there is a pending ImportUsersJob in the queue.
+     */
+    public function importStatus()
+    {
+        $pending = \DB::table('jobs')
+            ->where('payload', 'like', '%ImportUsersJob%')
+            ->exists();
+
+        return response()->json(['pending' => $pending]);
+    }
+
+    /**
+     * Mark all notifications as read.
+     */
+    public function markNotificationsRead()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return response()->json(['status' => 'ok']);
     }
 }

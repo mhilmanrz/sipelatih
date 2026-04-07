@@ -18,7 +18,7 @@ class ActivityMaterialSeeder extends Seeder
         ];
 
         foreach ($activityMaterials as $activityMaterial) {
-            ActivityMaterial::create($activityMaterial);
+            ActivityMaterial::firstOrCreate($activityMaterial);
         }
     }
 }

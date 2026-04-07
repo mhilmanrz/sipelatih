@@ -18,7 +18,7 @@ class ActivityModeratorSeeder extends Seeder
         ];
 
         foreach ($activityModerators as $activityModerator) {
-            ActivityModerator::create($activityModerator);
+            ActivityModerator::firstOrCreate($activityModerator);
         }
     }
 }

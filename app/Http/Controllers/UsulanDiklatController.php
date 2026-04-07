@@ -12,7 +12,7 @@ class UsulanDiklatController extends Controller
         $perPage = $request->input('entries', 10);
         $search = $request->input('search');
 
-        $query = Activity::with(['activityName', 'activityType', 'materialType', 'latestStatus', 'workUnit']);
+        $query = Activity::with(['activityName', 'activityType', 'materialType', 'latestStatus', 'workUnit', 'activityMaterials']);
 
         if ($search) {
             $query->whereHas('activityName', function ($q) use ($search) {

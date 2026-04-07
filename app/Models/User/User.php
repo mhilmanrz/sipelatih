@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Act\Activity;
 use App\Models\User\WorkUnit;
@@ -13,7 +14,7 @@ use App\Models\User\Positions;
 
 class User extends Authenticatable
 {
-    use HasFactory, HasRoles;
+    use HasFactory, HasRoles, Notifiable;
 
     protected $table = 'users';
 

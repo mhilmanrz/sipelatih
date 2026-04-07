@@ -14,12 +14,12 @@ class MaterialTypeSeeder extends Seeder
     public function run(): void
     {
         $materialTypes = [
-            ['name' => 'Bahan Habis Pakai'],
-            ['name' => 'Bahan Tidak Habis Pakai'],
+            ['name' => 'Kurikulum'],
+            ['name' => 'Non Kurikulum'],
         ];
 
         foreach ($materialTypes as $materialType) {
-            MaterialType::create($materialType);
+            MaterialType::firstOrCreate($materialType);
         }
     }
 }

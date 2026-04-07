@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityParticipant;
-use App\Http\Requests\StoreActivityParticipantRequest;
-use App\Http\Requests\UpdateActivityParticipantRequest;
+use App\Http\Requests\Act\StoreActivityParticipantRequest;
+use App\Http\Requests\Act\UpdateActivityParticipantRequest;
 
 class ActivityParticipantController extends Controller
 {

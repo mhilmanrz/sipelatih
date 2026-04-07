@@ -25,7 +25,7 @@ class BudgetSeeder extends Seeder
         ];
 
         foreach ($budgets as $budget) {
-            Budget::create($budget);
+            Budget::firstOrCreate($budget);
         }
     }
 }

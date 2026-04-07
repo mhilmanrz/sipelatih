@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityMethod;
-use App\Http\Requests\StoreActivityMethodRequest;
-use App\Http\Requests\UpdateActivityMethodRequest;
+use App\Http\Requests\Act\StoreActivityMethodRequest;
+use App\Http\Requests\Act\UpdateActivityMethodRequest;
 
 class ActivityMethodController extends Controller
 {

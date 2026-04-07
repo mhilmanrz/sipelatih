@@ -21,7 +21,7 @@ class TargetParticipantSeeder extends Seeder
         ];
 
         foreach ($targetParticipants as $targetParticipant) {
-            TargetParticipant::create($targetParticipant);
+            TargetParticipant::firstOrCreate($targetParticipant);
         }
     }
 }

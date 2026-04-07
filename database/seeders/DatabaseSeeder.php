@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BatchSeeder::class,
             ActivityFormatSeeder::class,
+            ActivityMethodSeeder::class,
             ActivityTypeSeeder::class,
             ActivityScopeSeeder::class,
             MaterialTypeSeeder::class,

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityKakFile;
-use App\Http\Requests\StoreActivityKakFileRequest;
-use App\Http\Requests\UpdateActivityKakFileRequest;
+use App\Http\Requests\Act\StoreActivityKakFileRequest;
+use App\Http\Requests\Act\UpdateActivityKakFileRequest;
 
 class ActivityKakFileController extends Controller
 {

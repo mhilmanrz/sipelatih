@@ -311,7 +311,7 @@
             }
 
             filteredAvailable.forEach(user => {
-                const nipText = user.nip ? `${user.nip}` : '-';
+                const nipText = user.employee_id ? `${user.employee_id}` : '-';
                 const nameText = user.name;
                 
                 // Construct inner list border UI matching screenshot
@@ -336,7 +336,7 @@
             // Apply frontend filter
             const filterKeyword = searchInputSelected.value.toLowerCase();
             const filteredSelected = selectedUsers.filter(u => {
-                const fullName = `${u.name} ${u.nip}`.toLowerCase();
+                const fullName = `${u.name} ${u.employee_id}`.toLowerCase();
                 return fullName.includes(filterKeyword);
             });
 
@@ -351,7 +351,7 @@
 
             // Render list
             filteredSelected.forEach(user => {
-                const nipText = user.nip ? `${user.nip}` : '-';
+                const nipText = user.employee_id ? `${user.employee_id}` : '-';
                 const nameText = user.name;
 
                 const htmlStr = `

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityStatus;
-use App\Http\Requests\StoreActivityStatusRequest;
-use App\Http\Requests\UpdateActivityStatusRequest;
+use App\Http\Requests\Act\StoreActivityStatusRequest;
+use App\Http\Requests\Act\UpdateActivityStatusRequest;
 
 class ActivityStatusController extends Controller
 {

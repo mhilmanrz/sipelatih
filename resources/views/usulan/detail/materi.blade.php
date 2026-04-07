@@ -1,20 +1,20 @@
 <section style="margin-top: 2rem;">
 
     @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <span class="block sm:inline">{{ session('success') }}</span>
-        </div>
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline">{{ session('success') }}</span>
+    </div>
     @endif
 
     @if ($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-            <strong class="font-bold">Terjadi kesalahan!</strong>
-            <ul class="list-disc pl-5 mt-2">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <strong class="font-bold">Terjadi kesalahan!</strong>
+        <ul class="list-disc pl-5 mt-2">
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
 
     <!-- TABLE CARD -->
@@ -37,26 +37,42 @@
                 </thead>
                 <tbody id="materiTableBody" class="bg-white">
                     @forelse ($kegiatan->activityMaterials as $index => $item)
-                        <tr>
-                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $index + 1 }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $item->name }}</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $item->value }}</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
-                                <form action="{{ route('kegiatan.materi.destroy', ['kegiatan' => $kegiatan->id, 'id' => $item->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus materi ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #ef4444; color: white;">
-                                        HAPUS
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2 text-center">{{ $index + 1 }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $item->name }}</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">{{ $item->value }}</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            <form action="{{ route('kegiatan.materi.destroy', ['kegiatan' => $kegiatan->id, 'id' => $item->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus materi ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #ef4444; color: white;">
+                                    HAPUS
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                     @empty
-                        <tr>
-                            <td colspan="4" class="border border-gray-300 px-4 py-2 text-center text-gray-500 py-4">Belum ada materi yang ditambahkan.</td>
-                        </tr>
+                    <tr>
+                        <td colspan="4" class="border border-gray-300 px-4 py-2 text-center text-gray-500 py-4">Belum ada materi yang ditambahkan.</td>
+                    </tr>
                     @endforelse
                 </tbody>
+
+                @php
+                $totalJpl = $kegiatan->activityMaterials->sum('value');
+                @endphp
+
+                <tfoot>
+                    <tr class="bg-gray-100 font-semibold">
+                        <td colspan="2" class="border border-gray-300 px-4 py-2 text-right">
+                            Total JPL
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            {{ $totalJpl }}
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2"></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

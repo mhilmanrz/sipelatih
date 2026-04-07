@@ -14,15 +14,15 @@ class ActivityTypeSeeder extends Seeder
     public function run(): void
     {
         $types = [
-            ['name' => 'Pelatihan Teknis'],
-            ['name' => 'Pelatihan Fungsional'],
-            ['name' => 'Pelatihan Manajerial'],
-            ['name' => 'Pelatihan Sosial Kultural'],
-            ['name' => 'Pelatihan Kepemimpinan'],
+            ['name' => 'Pelatihan'],
+            ['name' => 'Workshop'],
+            ['name' => 'Webinar'],
+            ['name' => 'Seminar'],
+            ['name' => 'MOOC'],
         ];
 
         foreach ($types as $type) {
-            ActivityType::create($type);
+            ActivityType::firstOrCreate($type);
         }
     }
 }

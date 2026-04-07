@@ -3,85 +3,107 @@
 @section('title', 'Import Pegawai')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/importmanajemenpegawai.css') }}">
+<script src="https://cdn.tailwindcss.com"></script>
 @endpush
 
 @section('content')
-    <div class="wrap">
-        <div class="page-title">IMPORT PESERTA</div>
+<div class="p-8">
+    <div class="mb-6 flex justify-between items-center">
+        <h1 class="text-2xl font-bold uppercase" style="color: white; font-size: 1.5rem; background-color: #14b8a6; padding: 1rem 2rem; border-radius: 8px; display: inline-block;">IMPORT PEGAWAI</h1>
 
-        @if (session('error'))
-            <div style="padding: 15px; background-color: #f8d7da; color: #721c24; margin-bottom: 20px; border-radius: 5px;">
-                {{ session('error') }}
-            </div>
-        @endif
+        <a href="{{ route('users.index') }}" class="text-gray-600 hover:text-gray-900 font-medium bg-white px-4 py-2 rounded shadow transition-colors">
+            ← Kembali ke Daftar Pegawai
+        </a>
+    </div>
 
-        @if ($errors->any())
-            <div style="padding: 15px; background-color: #f8d7da; color: #721c24; margin-bottom: 20px; border-radius: 5px;">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    @if (session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        {{ session('error') }}
+    </div>
+    @endif
 
-        <!-- TEMPLATE CARD -->
-        <div class="card">
-            <h3>TEMPLATE</h3>
-            <div class="template-row">
-                <div style="color:#2B6B71;font-weight:700;font-size:12px;opacity:.8">
-                    Unduh template Excel, isi datanya, lalu unggah di bawah.
-                </div>
-                <a href="#" class="btn" style="text-decoration:none;">
-                    <span aria-hidden="true">⬇️</span>
-                    Download Template
-                </a>
+    @if (session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if ($errors->any())
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <ul class="list-disc pl-5 mt-2">
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <!-- STEP 1: Download Template -->
+        <div class="bg-white rounded-xl shadow p-8 border-t-4 border-teal-500">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="bg-teal-100 text-teal-600 rounded-full h-12 w-12 flex items-center justify-center font-bold text-xl">1</div>
+                <h2 class="text-xl font-bold text-gray-800">Unduh Format Excel</h2>
             </div>
+
+            <p class="text-gray-600 mb-6 leading-relaxed">
+                Gunakan template resmi berikut. Anda dapat melengkapi seluruh data seperti NIP, Nama, Email, Password, No HP, Unit Kerja, Jabatan, Jenis Tenaga, dan Profesi.
+            </p>
+
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                <p class="text-sm text-blue-700">
+                    <strong>Catatan:</strong> Untuk kolom relasi (Unit Kerja, Jabatan, Jenis Tenaga, Profesi), cukup tulis <strong>namanya</strong> — sistem akan otomatis mencocokkan dengan data master. Jika NIP sudah terdaftar, baris tersebut akan dilewati.
+                </p>
+            </div>
+
+            <a href="{{ route('users.import.template') }}" class="inline-flex py-3 px-6 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded-lg shadow items-center transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Download Template (.xlsx)
+            </a>
         </div>
 
-        <!-- IMPORT CARD -->
-        <div class="card">
-            <h3>IMPORT PESERTA</h3>
+        <!-- STEP 2: Upload File -->
+        <div class="bg-white rounded-xl shadow p-8 border-t-4 border-teal-500">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="bg-teal-100 text-teal-600 rounded-full h-12 w-12 flex items-center justify-center font-bold text-xl">2</div>
+                <h2 class="text-xl font-bold text-gray-800">Unggah Data Pegawai</h2>
+            </div>
+
+            <p class="text-gray-600 mb-6">
+                Arahkan file <span class="font-semibold text-gray-800">.xlsx / .xls / .csv</span> yang sudah Anda lengkapi ke area di bawah ini.
+            </p>
 
             <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="import-footer" style="margin-top:20px; margin-bottom: 20px;">
-                    <div class="file-wrap">
-                        <label class="fake" for="fileInput">Choose File</label>
-                        <div class="name" id="fileName">No file chosen</div>
-                        <input name="file" id="fileInput" type="file"
-                            accept=".csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
-                            required />
-                    </div>
+                <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-50 transition-colors">
+                    <label for="excel_file" class="cursor-pointer flex flex-col items-center justify-center">
+                        <svg class="w-16 h-16 text-teal-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span class="text-gray-600 font-medium text-lg leading-tight mb-1">Klik untuk Memilih File</span>
+                        <span class="text-sm text-gray-400">Atau tarik file (drag & drop) ke kotak ini</span>
+
+                        <input type="file" id="excel_file" name="file" class="hidden" accept=".xlsx, .xls, .csv" required onchange="document.getElementById('file-name').innerText = this.files[0].name" />
+                    </label>
                 </div>
 
-                <div class="note" style="margin-bottom: 20px;">
-                    Format file harus <b>Excel (.xlsx, .xls)</b> atau <b>CSV</b> dengan header minimal:
-                    <b>nama,email,telepon</b>.<br />
-                    Validasi: nama tidak kosong; email format dasar; telepon boleh kosong.
-                </div>
+                <div id="file-name" class="mt-4 text-center font-medium text-teal-600 h-6"></div>
 
-                <button type="submit" class="btn save"
-                    style="background:#00B8A5; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">
-                    <span aria-hidden="true">💾</span>
-                    SIMPAN JALANKAN IMPORT
-                </button>
-                <a href="{{ route('users.index') }}" class="btn"
-                    style="padding:10px 20px; border:1px solid #ccc; border-radius:5px; text-decoration:none; color:#333; margin-left: 10px;">Batal</a>
+                <div class="mt-6 flex justify-end">
+                    <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors w-full md:w-auto">
+                        Masukkan ke Antrean Import
+                    </button>
+                </div>
+                <p class="mt-3 text-center text-sm text-gray-400">
+                    ⏳ File akan diproses di latar belakang. Anda akan mendapat notifikasi di halaman Daftar Pegawai setelah selesai.
+                </p>
             </form>
         </div>
-    </div>
-@endsection
 
-@push('scripts')
-    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
-    <script>
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            var fileName = e.target.files[0] ? e.target.files[0].name : "No file chosen";
-            document.getElementById('fileName').textContent = fileName;
-        });
-    </script>
-@endpush
+    </div>
+</div>
+@endsection

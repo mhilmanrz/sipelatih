@@ -41,7 +41,6 @@ Route::middleware(['auth'])->group(function () {
     Route::view('/manajemen-sasaran-profesi', 'ManajemenSasaranProfesi');
     Route::get('/monitoring-jpl', [\App\Http\Controllers\MonitoringJplController::class, 'index'])->name('monitoring.jpl.index');
     Route::resource('/pagu', \App\Http\Controllers\PaguController::class);
-    Route::view('/input-nilai', 'usulan/detail/penilaian');
     Route::view('/laporan-kegiatan', 'laporanKegiatan');
     Route::view('/evaluasi1', 'evaluasi1');
     Route::view('/evaluasi2', 'evaluasi2');
@@ -49,7 +48,11 @@ Route::middleware(['auth'])->group(function () {
     Route::view('/bank-data', 'bankData');
 
     Route::get('users/import', [UserController::class, 'importView'])->name('users.import.view');
+    Route::get('users/import/template', [UserController::class, 'downloadTemplate'])->name('users.import.template');
     Route::post('users/import', [UserController::class, 'import'])->name('users.import');
+    Route::get('users/notifications', [UserController::class, 'notifications'])->name('users.notifications');
+    Route::post('users/notifications/read', [UserController::class, 'markNotificationsRead'])->name('users.notifications.read');
+    Route::get('users/import-status', [UserController::class, 'importStatus'])->name('users.import.status');
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('kegiatan', ActivityController::class);
@@ -66,9 +69,27 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('kegiatan/{kegiatan}/peserta/{id}', [App\Http\Controllers\Act\ActivityParticipantController::class, 'destroy'])->name('kegiatan.peserta.destroy');
     Route::get('kegiatan/{kegiatan}/peserta/available-users', [App\Http\Controllers\Act\ActivityParticipantController::class, 'availableUsers'])->name('kegiatan.peserta.available-users');
 
+    // Input Nilai Routes
+    Route::get('/input-nilai', function() {
+        $kegiatan = \App\Models\Act\Activity::first();
+        if($kegiatan) {
+            return redirect()->route('kegiatan.input-nilai', $kegiatan->id);
+        }
+        return abort(404, 'Data kegiatan kosong, silakan tambah kegiatan terlebih dahulu.');
+    });
+    Route::get('kegiatan/{kegiatan}/input-nilai', [App\Http\Controllers\Act\ActivityScoreController::class, 'index'])->name('kegiatan.input-nilai');
+    Route::post('kegiatan/{kegiatan}/peserta/{participant}/score', [App\Http\Controllers\Act\ActivityScoreController::class, 'storeOrUpdate'])->name('kegiatan.peserta.score');
+
     // Pengiriman (Status Tracker) Routes
     Route::post('kegiatan/{kegiatan}/submit', [App\Http\Controllers\Act\ActivityStatusController::class, 'submit'])->name('kegiatan.submit');
     Route::post('kegiatan/{kegiatan}/cancel-submit', [App\Http\Controllers\Act\ActivityStatusController::class, 'cancel'])->name('kegiatan.cancel_submit');
+    Route::post('kegiatan/{kegiatan}/accept', [App\Http\Controllers\Act\ActivityStatusController::class, 'accept'])->name('kegiatan.accept');
+    Route::post('kegiatan/{kegiatan}/reject', [App\Http\Controllers\Act\ActivityStatusController::class, 'reject'])->name('kegiatan.reject');
+
+    // KAK Routes
+    Route::post('kegiatan/{kegiatan}/kak', [App\Http\Controllers\Act\ActivityKakController::class, 'store'])->name('kegiatan.kak.store');
+    Route::delete('kegiatan/{kegiatan}/kak/{kak}', [App\Http\Controllers\Act\ActivityKakController::class, 'destroy'])->name('kegiatan.kak.destroy');
+    Route::get('kegiatan/kak/template', [App\Http\Controllers\Act\ActivityKakController::class, 'downloadTemplate'])->name('kegiatan.kak.template');
 
     // Excel Import Routes
     Route::get('kegiatan/peserta/template', [App\Http\Controllers\Act\ActivityParticipantController::class, 'downloadTemplate'])->name('kegiatan.peserta.template');

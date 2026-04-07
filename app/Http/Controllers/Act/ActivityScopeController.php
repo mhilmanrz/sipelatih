@@ -35,7 +35,7 @@ class ActivityScopeController extends Controller
         ]);
 
         ActivityScope::create($request->all());
-        return redirect()->route('activity-scopes.index')->with('success', 'Ruang Lingkup Kegiatan berhasil ditambahkan.');
+        return redirect()->route('activity-scopes.index')->with('success', 'Cakupan Kegiatan Kegiatan berhasil ditambahkan.');
     }
 
     /**
@@ -67,7 +67,7 @@ class ActivityScopeController extends Controller
         $activityScope = ActivityScope::findOrFail($id);
         $activityScope->update($request->all());
 
-        return redirect()->route('activity-scopes.index')->with('success', 'Ruang Lingkup Kegiatan berhasil diperbarui.');
+        return redirect()->route('activity-scopes.index')->with('success', 'Cakupan Kegiatan Kegiatan berhasil diperbarui.');
     }
 
     /**
@@ -78,6 +78,6 @@ class ActivityScopeController extends Controller
         $activityScope = ActivityScope::findOrFail($id);
         $activityScope->delete();
 
-        return redirect()->route('activity-scopes.index')->with('success', 'Ruang Lingkup Kegiatan berhasil dihapus.');
+        return redirect()->route('activity-scopes.index')->with('success', 'Cakupan Kegiatan Kegiatan berhasil dihapus.');
     }
 }

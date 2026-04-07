@@ -22,7 +22,7 @@ class BudgetCategorySeeder extends Seeder
         ];
 
         foreach ($budgetCategories as $budgetCategory) {
-            BudgetCategory::create($budgetCategory);
+            BudgetCategory::firstOrCreate($budgetCategory);
         }
     }
 }

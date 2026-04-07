@@ -14,12 +14,13 @@ class ActivityScopeSeeder extends Seeder
     public function run(): void
     {
         $activityScopes = [
-            ['name' => 'Internal'],
-            ['name' => 'External'],
+            ['name' => 'Teknis'],
+            ['name' => 'Manajerial'],
+            ['name' => 'Sosiokultural'],
         ];
 
         foreach ($activityScopes as $activityScope) {
-            ActivityScope::create($activityScope);
+            ActivityScope::firstOrCreate($activityScope);
         }
     }
 }

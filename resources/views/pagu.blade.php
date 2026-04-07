@@ -175,8 +175,10 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Pagu <span class="text-red-500">*</span></label>
-                        <input type="number" name="total_amount" id="inputAmount" required
-                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm">
+                        <input type="text" id="inputAmountDisplay" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm"
+                               placeholder="Contoh: 50.000.000">
+                        <input type="hidden" name="total_amount" id="inputAmount">
                     </div>
                 </div>
 
@@ -206,6 +208,19 @@
             const inputCategory = document.getElementById('inputCategory');
             const inputSubmark = document.getElementById('inputSubmark');
             const inputAmount = document.getElementById('inputAmount');
+            const inputAmountDisplay = document.getElementById('inputAmountDisplay');
+
+            // Function format angka ribuan
+            function formatNumber(n) {
+                if (!n) return '';
+                return n.toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+
+            // Keyup event formatting
+            inputAmountDisplay.addEventListener('keyup', function(e) {
+                this.value = formatNumber(this.value);
+                inputAmount.value = this.value.replace(/\./g, "");
+            });
 
             // Function to close modal
             function hideModal() {
@@ -229,6 +244,7 @@
                 inputCategory.value = '';
                 inputSubmark.value = '';
                 inputAmount.value = '';
+                inputAmountDisplay.value = '';
             });
 
             // Close Modal bindings
@@ -257,6 +273,7 @@
                     inputCategory.value = category;
                     inputSubmark.value = submark;
                     inputAmount.value = amount;
+                    inputAmountDisplay.value = formatNumber(amount);
                 });
             });
 

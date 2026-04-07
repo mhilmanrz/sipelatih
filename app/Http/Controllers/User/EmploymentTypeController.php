@@ -35,7 +35,7 @@ class EmploymentTypeController extends Controller
         ]);
 
         EmploymentType::create($request->all());
-        return redirect()->route('employment-types.index')->with('success', 'Jenis Kepegawaian berhasil ditambahkan.');
+        return redirect()->route('employment-types.index')->with('success', 'Jenis Tenaga berhasil ditambahkan.');
     }
 
     /**
@@ -67,7 +67,7 @@ class EmploymentTypeController extends Controller
         $employmentType = EmploymentType::findOrFail($id);
         $employmentType->update($request->all());
 
-        return redirect()->route('employment-types.index')->with('success', 'Jenis Kepegawaian berhasil diperbarui.');
+        return redirect()->route('employment-types.index')->with('success', 'Jenis Tenaga berhasil diperbarui.');
     }
 
     /**
@@ -78,6 +78,6 @@ class EmploymentTypeController extends Controller
         $employmentType = EmploymentType::findOrFail($id);
         $employmentType->delete();
 
-        return redirect()->route('employment-types.index')->with('success', 'Jenis Kepegawaian berhasil dihapus.');
+        return redirect()->route('employment-types.index')->with('success', 'Jenis Tenaga berhasil dihapus.');
     }
 }

@@ -6,16 +6,20 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Models\Act\ActivityName;
 
 class ActivitySeeder extends Seeder
 {
     public function run(): void
     {
+        $name1 = ActivityName::firstOrCreate(['name' => 'Pelatihan Laravel Dasar']);
+        $name2 = ActivityName::firstOrCreate(['name' => 'Workshop Keamanan Aplikasi']);
+
         DB::table('activities')->insert([
             [
                 'date' => Carbon::now()->toDateString(),
                 'reference_number' => 'ACT-' . Str::upper(Str::random(6)),
-                'name' => 'Pelatihan Laravel Dasar',
+                'activity_name_id' => $name1->id,
                 'activity_type_id' => 1,
                 'activity_scope_id' => 1,
                 'material_type_id' => 1,
@@ -35,7 +39,7 @@ class ActivitySeeder extends Seeder
             [
                 'date' => Carbon::now()->subDays(10)->toDateString(),
                 'reference_number' => 'ACT-' . Str::upper(Str::random(6)),
-                'name' => 'Workshop Keamanan Aplikasi',
+                'activity_name_id' => $name2->id,
                 'activity_type_id' => 2,
                 'activity_scope_id' => 2,
                 'material_type_id' => 2,

@@ -31,173 +31,183 @@
         <!-- ======================= -->
         <!-- MENU PENGUSUL -->
         <!-- ======================= -->
-        @hasrole('Pengusul')
-            <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
-                Manajemen
-            </div>
+        @if(auth()->user()->hasAnyRole(['SuperAdmin', 'Admin', 'admin', 'super-admin', 'administrator']) || (auth()->user()->workUnit && (stripos(auth()->user()->workUnit->name, 'TI') !== false || stripos(auth()->user()->workUnit->name, 'Teknologi Informasi') !== false)))
+        <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
+            Manajemen
+        </div>
 
-            <a href="{{ route('users.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('users*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-id-card w-6 text-center mr-2"></i>
-                <span>Management Pegawai</span>
-            </a>
+        <a href="{{ route('users.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('users*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-id-card w-6 text-center mr-2"></i>
+            <span>Manajemen Pegawai</span>
+        </a>
 
-            <a href="{{ url('/manajemen-sasaran-profesi') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('manajemen-sasaran-profesi*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-briefcase w-6 text-center mr-2"></i>
-                <span>Management Sasaran profesi</span>
-            </a>
-        @endhasrole
+        <a href="{{ url('/manajemen-sasaran-profesi') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('manajemen-sasaran-profesi*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-user-gear w-6 text-center mr-2"></i>
+            <span>Manajemen Sasaran Profesi</span>
+        </a>
+        @endif
 
         <!-- ======================= -->
         <!-- MENU SUPERADMIN -->
         <!-- ======================= -->
-        @hasrole('SuperAdmin')
-            <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
-                Evaluasi & Laporan
-            </div>
+        @if(auth()->user()->hasAnyRole(['SuperAdmin', 'Admin', 'admin', 'super-admin', 'administrator']) || (auth()->user()->workUnit && (stripos(auth()->user()->workUnit->name, 'TI') !== false || stripos(auth()->user()->workUnit->name, 'Teknologi Informasi') !== false)))
 
-            <a href="{{ url('/pagu') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('pagu*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-money-bill w-6 text-center mr-2"></i>
-                <span>Pagu</span>
-            </a>
+        <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
+            Manajemen Anggaran
+        </div>
 
-            <a href="{{ url('/input-nilai') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('input-nilai*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-pen-to-square w-6 text-center mr-2"></i>
-                <span>Input Nilai</span>
-            </a>
+        <a href="{{ route('budget-categories.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/budget-categories*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-tags w-6 text-center mr-2"></i>
+            <span>Kategori Pagu</span>
+        </a>
 
-            <a href="{{ url('/laporan-kegiatan') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('laporan-kegiatan*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-file-invoice w-6 text-center mr-2"></i>
-                <span>Laporan Kegiatan</span>
-            </a>
+        <a href="{{ url('/pagu') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('pagu*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-money-bill w-6 text-center mr-2"></i>
+            <span>Input Pagu</span>
+        </a>
+        <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
+            Evaluasi & Laporan
+        </div>
 
-            <a href="{{ url('/evaluasi1') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('evaluasi1*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-clipboard-check w-6 text-center mr-2"></i>
-                <span>Evaluasi I</span>
-            </a>
+        <a href="{{ url('/kegiatan/' . (\App\Models\Act\Activity::first()->id ?? 1) . '/input-nilai') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('kegiatan/*/input-nilai') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-pen-to-square w-6 text-center mr-2"></i>
+            <span>Input Nilai</span>
+        </a>
 
-            <a href="{{ url('/evaluasi2') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('evaluasi2*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-clipboard-check w-6 text-center mr-2"></i>
-                <span>Evaluasi II</span>
-            </a>
+        <a href="{{ url('/laporan-kegiatan') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('laporan-kegiatan*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-file-invoice w-6 text-center mr-2"></i>
+            <span>Laporan Kegiatan</span>
+        </a>
 
-            <a href="{{ url('/evaluasi3') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('evaluasi3*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-clipboard-check w-6 text-center mr-2"></i>
-                <span>Evaluasi III</span>
-            </a>
+        <a href="{{ url('/evaluasi1') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('evaluasi1*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-clipboard-check w-6 text-center mr-2"></i>
+            <span>Evaluasi I</span>
+        </a>
 
-            <a href="{{ url('/bank-data') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('bank-data*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-database w-6 text-center mr-2"></i>
-                <span>Bank Data</span>
-            </a>
+        <a href="{{ url('/evaluasi2') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('evaluasi2*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-clipboard-check w-6 text-center mr-2"></i>
+            <span>Evaluasi II</span>
+        </a>
 
-            <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
-                Manajemen Utama
-            </div>
+        <a href="{{ url('/evaluasi3') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('evaluasi3*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-clipboard-check w-6 text-center mr-2"></i>
+            <span>Evaluasi III</span>
+        </a>
 
-            <a href="{{ route('users.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('users*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-id-card w-6 text-center mr-2"></i>
-                <span>Manajemen Pegawai</span>
-            </a>
+        <a href="{{ url('/bank-data') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('bank-data*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-database w-6 text-center mr-2"></i>
+            <span>Bank Data</span>
+        </a>
 
-            <a href="{{ url('/manajemen-sasaran-profesi') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('manajemen-sasaran-profesi*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-user-gear w-6 text-center mr-2"></i>
-                <span>Manajemen Sasaran Profesi</span>
-            </a>
+        <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
+            Manajemen Utama
+        </div>
 
-            <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
-                Master Data
-            </div>
+        <a href="{{ route('users.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('users*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-id-card w-6 text-center mr-2"></i>
+            <span>Manajemen Pegawai</span>
+        </a>
 
-            <a href="{{ route('professions.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('professions*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-briefcase w-6 text-center mr-2"></i>
-                <span>Data Profesi</span>
-            </a>
+        <a href="{{ url('/manajemen-sasaran-profesi') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('manajemen-sasaran-profesi*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-user-gear w-6 text-center mr-2"></i>
+            <span>Manajemen Sasaran Profesi</span>
+        </a>
 
-            <a href="{{ route('roles.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('roles*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-user-shield w-6 text-center mr-2"></i>
-                <span>Data Role</span>
-            </a>
+        <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
+            Master Data
+        </div>
 
-            <a href="{{ route('positions.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('positions*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-user-tie w-6 text-center mr-2"></i>
-                <span>Data Jabatan</span>
-            </a>
+        <a href="{{ route('professions.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('professions*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-briefcase w-6 text-center mr-2"></i>
+            <span>Data Profesi</span>
+        </a>
 
-            <!-- Other Master Data placeholders from the unused sidebar -->
-            <a href="{{ route('work-units.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('work-units*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-building w-6 text-center mr-2"></i>
-                <span>Unit Kerja</span>
-            </a>
+        <a href="{{ route('roles.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('roles*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-user-shield w-6 text-center mr-2"></i>
+            <span>Data Role</span>
+        </a>
 
-            <a href="{{ route('activity-types.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-types*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-tags w-6 text-center mr-2"></i>
-                <span>Jenis Kegiatan</span>
-            </a>
+        <a href="{{ route('positions.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('positions*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-user-tie w-6 text-center mr-2"></i>
+            <span>Data Jabatan</span>
+        </a>
 
-            <a href="{{ route('activity-scopes.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-scopes*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-globe w-6 text-center mr-2"></i>
-                <span>Ruang Lingkup</span>
-            </a>
+        <!-- Other Master Data placeholders from the unused sidebar -->
+        <a href="{{ route('work-units.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('work-units*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-building w-6 text-center mr-2"></i>
+            <span>Unit Kerja</span>
+        </a>
 
-            <a href="{{ route('material-types.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/material-types*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-book-open w-6 text-center mr-2"></i>
-                <span>Jenis Materi</span>
-            </a>
+        <a href="{{ route('activity-types.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-types*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-tags w-6 text-center mr-2"></i>
+            <span>Jenis Kegiatan</span>
+        </a>
 
-            <a href="{{ route('activity-formats.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-formats*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-shapes w-6 text-center mr-2"></i>
-                <span>Bentuk Kegiatan</span>
-            </a>
+        <a href="{{ route('activity-scopes.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-scopes*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-globe w-6 text-center mr-2"></i>
+            <span>Cakupan Kegiatan</span>
+        </a>
 
-            <a href="{{ route('activity-methods.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-methods*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-layer-group w-6 text-center mr-2"></i>
-                <span>Metode Kegiatan</span>
-            </a>
+        <a href="{{ route('material-types.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/material-types*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-book-open w-6 text-center mr-2"></i>
+            <span>Jenis Materi</span>
+        </a>
 
-            <a href="{{ route('employment-types.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('employment-types*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-address-book w-6 text-center mr-2"></i>
-                <span>Jenis Kepegawaian</span>
-            </a>
+        <a href="{{ route('activity-formats.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-formats*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-shapes w-6 text-center mr-2"></i>
+            <span>Bentuk Kegiatan</span>
+        </a>
 
-            <a href="{{ route('batches.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/batches*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-layer-group w-6 text-center mr-2"></i>
-                <span>Batch</span>
-            </a>
+        <a href="{{ route('activity-methods.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-methods*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-layer-group w-6 text-center mr-2"></i>
+            <span>Metode Kegiatan</span>
+        </a>
 
-            <a href="{{ route('fund-sources.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('fund-sources*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-coins w-6 text-center mr-2"></i>
-                <span>Sumber Dana</span>
-            </a>
+        <a href="{{ route('employment-types.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('employment-types*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-address-book w-6 text-center mr-2"></i>
+            <span>Jenis Tenaga</span>
+        </a>
 
-            <a href="{{ route('activity-names.index') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-names*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-signature w-6 text-center mr-2"></i>
-                <span>Nama Kegiatan</span>
-            </a>
-        @endhasrole
+        <a href="{{ route('batches.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/batches*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-layer-group w-6 text-center mr-2"></i>
+            <span>Batch</span>
+        </a>
+
+        <a href="{{ route('fund-sources.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('fund-sources*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-coins w-6 text-center mr-2"></i>
+            <span>Sumber Dana</span>
+        </a>
+
+        <a href="{{ route('activity-names.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-names*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-signature w-6 text-center mr-2"></i>
+            <span>Nama Kegiatan</span>
+        </a>
+        @endif
 
     </div>
 </div>

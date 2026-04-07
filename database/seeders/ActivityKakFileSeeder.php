@@ -18,7 +18,7 @@ class ActivityKakFileSeeder extends Seeder
         ];
 
         foreach ($activityKakFiles as $activityKakFile) {
-            ActivityKakFile::create($activityKakFile);
+            ActivityKakFile::firstOrCreate($activityKakFile);
         }
     }
 }
