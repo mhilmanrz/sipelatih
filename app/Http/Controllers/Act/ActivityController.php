@@ -94,7 +94,9 @@ class ActivityController extends Controller
             'fundSource',
             'activityMaterials.speakers.user',
             'activityMaterials.moderators.user',
-            'activityProfessions.profession'
+            'activityProfessions.profession',
+            'activityParticipants.score',
+            'activityParticipants.user.workUnit'
         ])->findOrFail($id);
 
         $professions = \App\Models\User\Profession::all();

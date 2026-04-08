@@ -1,0 +1,22 @@
+{
+    "agents": [
+        "gemini",
+        "cursor",
+        "codex",
+        "opencode",
+        "copilot"
+    ],
+    "guidelines": true,
+    "mcp": true,
+    "nightwatch_mcp": false,
+    "packages": [
+        "spatie/laravel-permission"
+    ],
+    "sail": false,
+    "skills": [
+        "ai-sdk-development",
+        "laravel-best-practices",
+        "tailwindcss-development",
+        "laravel-permission-development"
+    ]
+}

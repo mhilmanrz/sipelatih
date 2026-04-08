@@ -11,12 +11,33 @@ class PaguController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $budgets = Budget::with('budgetCategory')->get();
+        $selectedYear = $request->input('year');
+        
+        $query = Budget::with('budgetCategory');
+        if ($selectedYear) {
+            $query->where('year', $selectedYear);
+        }
+        
+        $budgets = $query->get();
         $categories = BudgetCategory::all();
         
-        return view('pagu', compact('budgets', 'categories'));
+        $availableYears = Budget::select('year')
+                            ->whereNotNull('year')
+                            ->distinct()
+                            ->orderBy('year', 'desc')
+                            ->pluck('year')
+                            ->toArray();
+                            
+        if (empty($availableYears)) {
+            $availableYears = [date('Y')];
+        } else if (!in_array(date('Y'), $availableYears)) {
+            $availableYears[] = date('Y');
+            rsort($availableYears);
+        }
+        
+        return view('pagu', compact('budgets', 'categories', 'selectedYear', 'availableYears'));
     }
 
     /**
@@ -25,10 +46,20 @@ class PaguController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'rkkal_code' => 'required|string|max:255',
+            'year' => 'required|integer|min:2000',
+            'rkkal_code' => [
+                'required',
+                'string',
+                'max:255',
+                \Illuminate\Validation\Rule::unique('budgets')->where(function ($query) use ($request) {
+                    return $query->where('year', $request->year);
+                })
+            ],
             'budget_category_id' => 'required|exists:budget_categories,id',
             'submark' => 'nullable|string|max:255',
             'total_amount' => 'required|numeric|min:0',
+        ], [
+            'rkkal_code.unique' => 'Pagu dengan kombinasi Kode RKKAL dan Tahun Anggaran tersebut sudah ada.',
         ]);
 
         $data = $request->all();
@@ -46,10 +77,20 @@ class PaguController extends Controller
     public function update(Request $request, Budget $pagu)
     {
         $request->validate([
-            'rkkal_code' => 'required|string|max:255',
+            'year' => 'required|integer|min:2000',
+            'rkkal_code' => [
+                'required',
+                'string',
+                'max:255',
+                \Illuminate\Validation\Rule::unique('budgets')->where(function ($query) use ($request) {
+                    return $query->where('year', $request->year);
+                })->ignore($pagu->id)
+            ],
             'budget_category_id' => 'required|exists:budget_categories,id',
             'submark' => 'nullable|string|max:255',
             'total_amount' => 'required|numeric|min:0',
+        ], [
+            'rkkal_code.unique' => 'Pagu dengan kombinasi Kode RKKAL dan Tahun Anggaran tersebut sudah ada.',
         ]);
 
         // Calculate difference if total_amount is being updated

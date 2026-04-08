@@ -2,81 +2,38 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Act\ActivityParticipant;
 use App\Models\Act\ActivityScore;
+use Illuminate\Http\Request;
 
 class ActivityScoreController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function update(Request $request, $kegiatan_id, $participant_id)
     {
-        $activityScores = ActivityScore::paginate(10);
-        return response()->json($activityScores);
-    }
+        $request->validate([
+            'pre_test_score' => 'nullable|integer|min:0|max:100',
+            'post_test_score' => 'nullable|integer|min:0|max:100',
+            'practice_score' => 'nullable|integer|min:0|max:100',
+            'is_passed' => 'required|boolean',
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create() {}
+        $participant = ActivityParticipant::where('activity_id', $kegiatan_id)
+            ->findOrFail($participant_id);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $activityScore = ActivityScore::create($request->all());
-        return response()->json($activityScore, 201);
-    }
+        $participant->update([
+            'is_passed' => $request->is_passed,
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $activityScore = ActivityScore::find($id);
+        ActivityScore::updateOrCreate(
+            ['activity_participant_id' => $participant->id],
+            [
+                'pre_test_score' => $request->pre_test_score,
+                'post_test_score' => $request->post_test_score,
+                'practice_score' => $request->practice_score,
+            ]
+        );
 
-        if (!$activityScore) {
-            return response()->json(['message' => 'Activity Score not found'], 404);
-        }
-
-        return response()->json($activityScore);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit() {}
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $activityScore = ActivityScore::find($id);
-
-        if (!$activityScore) {
-            return response()->json(['message' => 'Activity Score not found'], 404);
-        }
-
-        $activityScore->update($request->all());
-        return response()->json($activityScore);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $activityScore = ActivityScore::find($id);
-
-        if (!$activityScore) {
-            return response()->json(['message' => 'Activity Score not found'], 404);
-        }
-
-        $activityScore->delete();
-        return response()->json(['message' => 'Activity Score deleted successfully'], 200);
+        return back()->with('success', 'Nilai peserta berhasil diperbarui.');
     }
 }

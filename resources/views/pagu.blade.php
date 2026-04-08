@@ -33,12 +33,26 @@
 
 @section('content')
     <div class="tw-wrap p-6">
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
             <h1 class="text-2xl font-bold text-gray-800">Manajemen Pagu Anggaran</h1>
-            <button type="button" id="btnTambahPagu"
-                class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow">
-                + Tambah Pagu
-            </button>
+            
+            <div class="flex items-center gap-4">
+                <form action="{{ route('pagu.index') }}" method="GET" class="flex items-center gap-2">
+                    <label for="filterYear" class="text-sm font-medium text-gray-700">Filter Tahun:</label>
+                    <select name="year" id="filterYear" onchange="this.form.submit()" 
+                            class="border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-teal-500 focus:border-teal-500 shadow-sm w-36">
+                        <option value="">-- Semua --</option>
+                        @foreach($availableYears as $y)
+                            <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
+                        @endforeach
+                    </select>
+                </form>
+
+                <button type="button" id="btnTambahPagu"
+                    class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow whitespace-nowrap">
+                    + Tambah Pagu
+                </button>
+            </div>
         </div>
 
         @if ($errors->any())
@@ -64,6 +78,7 @@
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-16">No.</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">No. RKAKL</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Tahun</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kategori Pagu</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Submark</th>
                         <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">Pagu</th>
@@ -83,6 +98,9 @@
                                 {{ $budget->rkkal_code }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $budget->year }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {{ $budget->budgetCategory->name ?? '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -98,6 +116,7 @@
                                 <button type="button" class="btn-edit inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 rounded text-sm font-medium transition-colors"
                                         data-id="{{ $budget->id }}"
                                         data-rkkal="{{ $budget->rkkal_code }}"
+                                        data-year="{{ $budget->year }}"
                                         data-category="{{ $budget->budget_category_id }}"
                                         data-submark="{{ $budget->submark }}"
                                         data-amount="{{ $budget->total_amount }}">
@@ -123,7 +142,7 @@
                 </tbody>
                 <tfoot class="bg-gray-100 font-bold border-t-2 border-gray-300">
                     <tr>
-                        <td colspan="4" class="px-6 py-4 text-right text-sm text-gray-800 uppercase">
+                        <td colspan="5" class="px-6 py-4 text-right text-sm text-gray-800 uppercase">
                             Total Pagu
                         </td>
                         <td class="px-6 py-4 text-right text-sm text-gray-800">
@@ -154,6 +173,13 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">No. RKAKL <span class="text-red-500">*</span></label>
                         <input type="text" name="rkkal_code" id="inputRkkal" required
                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tahun Anggaran <span class="text-red-500">*</span></label>
+                        <input type="number" name="year" id="inputYear" required min="2000"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm"
+                               placeholder="Contoh: {{ date('Y') }}">
                     </div>
 
                     <div>
@@ -203,6 +229,7 @@
             
             // Form Inputs
             const inputRkkal = document.getElementById('inputRkkal');
+            const inputYear = document.getElementById('inputYear');
             const inputCategory = document.getElementById('inputCategory');
             const inputSubmark = document.getElementById('inputSubmark');
             const inputAmount = document.getElementById('inputAmount');
@@ -226,6 +253,7 @@
                 
                 // Reset fields
                 inputRkkal.value = '';
+                inputYear.value = new Date().getFullYear();
                 inputCategory.value = '';
                 inputSubmark.value = '';
                 inputAmount.value = '';
@@ -244,6 +272,7 @@
                     // Get data from data-* attributes
                     const id = this.getAttribute('data-id');
                     const rkkal = this.getAttribute('data-rkkal');
+                    const year = this.getAttribute('data-year');
                     const category = this.getAttribute('data-category');
                     const submark = this.getAttribute('data-submark');
                     const amount = this.getAttribute('data-amount');
@@ -254,6 +283,7 @@
 
                     // Set input values
                     inputRkkal.value = rkkal;
+                    inputYear.value = year;
                     inputCategory.value = category;
                     inputSubmark.value = submark;
                     inputAmount.value = amount;

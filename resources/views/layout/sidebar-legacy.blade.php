@@ -57,19 +57,13 @@
                 Evaluasi & Laporan
             </div>
 
-            <a href="{{ url('/pagu') }}"
+            <a href="{{ route('pagu.index') }}"
                 class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('pagu*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
                 <i class="fa-solid fa-money-bill w-6 text-center mr-2"></i>
                 <span>Pagu</span>
             </a>
 
-            <a href="{{ url('/input-nilai') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('input-nilai*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-pen-to-square w-6 text-center mr-2"></i>
-                <span>Input Nilai</span>
-            </a>
-
-            <a href="{{ url('/laporan-kegiatan') }}"
+            <a href="{{ route('kegiatan.laporan.index') }}"
                 class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('laporan-kegiatan*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
                 <i class="fa-solid fa-file-invoice w-6 text-center mr-2"></i>
                 <span>Laporan Kegiatan</span>
@@ -93,31 +87,15 @@
                 <span>Evaluasi III</span>
             </a>
 
-            <a href="{{ url('/bank-data') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('bank-data*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-database w-6 text-center mr-2"></i>
-                <span>Bank Data</span>
-            </a>
-
             <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
-                Manajemen Utama
+                Master Data
             </div>
 
             <a href="{{ route('users.index') }}"
                 class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('users*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
                 <i class="fa-solid fa-id-card w-6 text-center mr-2"></i>
-                <span>Manajemen Pegawai</span>
+                <span>Data Pengguna</span>
             </a>
-
-            <a href="{{ url('/manajemen-sasaran-profesi') }}"
-                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('manajemen-sasaran-profesi*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
-                <i class="fa-solid fa-user-gear w-6 text-center mr-2"></i>
-                <span>Manajemen Sasaran Profesi</span>
-            </a>
-
-            <div class="px-5 pt-4 pb-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
-                Master Data
-            </div>
 
             <a href="{{ route('professions.index') }}"
                 class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('professions*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
@@ -198,6 +176,5 @@
                 <span>Nama Kegiatan</span>
             </a>
         @endhasrole
-
     </div>
 </div>

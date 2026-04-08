@@ -32,6 +32,7 @@
                         <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-16">NO.</th>
                         <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Materi</th>
                         <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-24">JPL</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-24">JPL / 45 Menit</th>
                         <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-32">Aksi</th>
                     </tr>
                 </thead>
@@ -41,6 +42,7 @@
                             <td class="border border-gray-300 px-4 py-2 text-center">{{ $index + 1 }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $item->name }}</td>
                             <td class="border border-gray-300 px-4 py-2 text-center">{{ $item->value }}</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">{{ round($item->value / 45, 2) }}</td>
                             <td class="border border-gray-300 px-4 py-2 text-center">
                                 <form action="{{ route('kegiatan.materi.destroy', ['kegiatan' => $kegiatan->id, 'id' => $item->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus materi ini?');">
                                     @csrf

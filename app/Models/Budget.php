@@ -13,6 +13,7 @@ class Budget extends Model
 
     protected $fillable = [
         'budget_category_id',
+        'year',
         'rkkal_code',
         'submark',
         'total_amount',

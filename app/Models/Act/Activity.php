@@ -2,25 +2,15 @@
 
 namespace App\Models\Act;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Act\ActivityType;
-use App\Models\Act\ActivityScope;
-use App\Models\Act\MaterialType;
-use App\Models\Act\ActivityMethod;
-use App\Models\Act\Batch;
-use App\Models\Act\ActivityFormat;
-use App\Models\Act\TargetParticipant;
-use App\Models\User\WorkUnit;
 use App\Models\User\User;
-use App\Models\Act\ActivityName;
-use App\Models\Act\FundSource;
-
-
+use App\Models\User\WorkUnit;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Activity extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'date',
         'reference_number',
@@ -126,5 +116,10 @@ class Activity extends Model
     public function activityParticipants()
     {
         return $this->hasMany(ActivityParticipant::class);
+    }
+
+    public function report()
+    {
+        return $this->hasOne(ActivityReport::class);
     }
 }

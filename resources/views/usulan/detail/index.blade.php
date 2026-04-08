@@ -206,6 +206,9 @@
             <a href="{{ route('kegiatan.show', ['kegiatan' => $kegiatan->id, 'tab' => 'peserta']) }}"
                 class="tab-link {{ $activeTab == 'peserta' ? 'active' : '' }}">Peserta</a>
 
+            <a href="{{ route('kegiatan.show', ['kegiatan' => $kegiatan->id, 'tab' => 'input-nilai']) }}"
+                class="tab-link {{ $activeTab == 'input-nilai' ? 'active' : '' }}">Input Nilai</a>
+
             <a href="{{ route('kegiatan.show', ['kegiatan' => $kegiatan->id, 'tab' => 'pengiriman']) }}"
                 class="tab-link {{ $activeTab == 'pengiriman' ? 'active' : '' }}">Pengiriman</a>
 
@@ -230,6 +233,8 @@
                 @include('usulan.detail.narasumber')
             @elseif($activeTab == 'peserta')
                 @include('usulan.detail.peserta')
+            @elseif($activeTab == 'input-nilai')
+                @include('usulan.detail.input_nilai')
             @elseif($activeTab == 'pengiriman')
                 @include('usulan.detail.pengiriman')
             @elseif($activeTab == 'penilaian')
