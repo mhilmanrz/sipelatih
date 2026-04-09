@@ -1,15 +1,10 @@
 @extends('layout.LayoutSuperAdmin')
 
-@section('title', 'Manajemen Profesi')
+@section('title', 'Manajemen Kategori Profesi')
 
 @push('styles')
-    <!-- Using Tailwind via CDN just for this page if not globally installed,
-         but assuming it's available or we can use standard Tailwind classes.
-         If the project uses Vite+Tailwind, the classes will work. -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Prevent conflict with existing layout styles where possible,
-           but use Tailwind for the main content area */
         .tw-wrap p,
         .tw-wrap h1,
         .tw-wrap h2,
@@ -35,10 +30,10 @@
 @section('content')
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Manajemen Profesi</h1>
-            <a href="{{ route('professions.create') }}"
+            <h1 class="text-2xl font-bold text-gray-800">Manajemen Kategori Profesi</h1>
+            <a href="{{ route('profession-categories.create') }}"
                 class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow">
-                + Tambah Profesi
+                + Tambah Kategori
             </a>
         </div>
 
@@ -58,11 +53,11 @@
                         </th>
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                            Kategori Profesi
+                            Nama Kategori
                         </th>
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                            Nama Profesi
+                            Target JPL
                         </th>
                         <th scope="col"
                             class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-48">
@@ -71,29 +66,29 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($professions as $index => $profession)
+                    @forelse($categories as $index => $category)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $professions->firstItem() + $index }}
+                                {{ $categories->firstItem() + $index }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ $profession->category ? $profession->category->name : '-' }}
+                                {{ $category->name }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ $profession->name }}
+                                {{ $category->jpl_target }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center space-x-2">
-                                <a href="{{ route('professions.edit', $profession->id) }}"
+                                <a href="{{ route('profession-categories.edit', $category->id) }}"
                                     class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 rounded text-sm font-medium transition-colors">
                                     Edit
                                 </a>
-                                <form action="{{ route('professions.destroy', $profession->id) }}" method="POST"
+                                <form action="{{ route('profession-categories.destroy', $category->id) }}" method="POST"
                                     class="inline-block">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
                                         class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded text-sm font-medium transition-colors"
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus profesi ini?')">
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus kategori profesi ini?')">
                                         Hapus
                                     </button>
                                 </form>
@@ -102,16 +97,16 @@
                     @empty
                         <tr>
                             <td colspan="4" class="px-6 py-10 text-center text-gray-500 text-sm">
-                                Belum ada data profesi.
+                                Belum ada data kategori profesi.
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
 
-            @if ($professions->hasPages())
+            @if ($categories->hasPages())
                 <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                    {{ $professions->links() }}
+                    {{ $categories->links() }}
                 </div>
             @endif
         </div>

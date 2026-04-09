@@ -14,5 +14,11 @@ class Profession extends Model
     protected $fillable = [
         'code',
         'name',
+        'profession_category_id',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(\App\Models\ProfessionCategory::class, 'profession_category_id');
+    }
 }

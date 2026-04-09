@@ -56,6 +56,9 @@
         <a href="{{ url('/professions') }}" class="list-group-item list-group-item-action bg-dark text-white border-bottom border-secondary {{ request()->is('professions*') ? 'active' : '' }}">
             <i class="fa-solid fa-briefcase fa-fw me-2"></i> Profesi
         </a>
+        <a href="{{ route('profession-categories.index') }}" class="list-group-item list-group-item-action bg-dark text-white border-bottom border-secondary {{ request()->is('profession-categories*') ? 'active' : '' }}">
+            <i class="fa-solid fa-list fa-fw me-2"></i> Kategori Profesi
+        </a>
         <a href="{{ url('/work-units') }}" class="list-group-item list-group-item-action bg-dark text-white border-bottom border-secondary {{ request()->is('work-units*') ? 'active' : '' }}">
             <i class="fa-solid fa-building fa-fw me-2"></i> Unit Kerja
         </a>

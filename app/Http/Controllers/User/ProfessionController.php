@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User\Profession;
+use App\Models\ProfessionCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -13,7 +14,7 @@ class ProfessionController extends Controller
      */
     public function index()
     {
-        $professions = Profession::paginate(10);
+        $professions = Profession::with('category')->paginate(10);
         return view('profession.index', compact('professions'));
     }
 
@@ -22,7 +23,8 @@ class ProfessionController extends Controller
      */
     public function create()
     {
-        return view('profession.create');
+        $categories = ProfessionCategory::all();
+        return view('profession.create', compact('categories'));
     }
 
     /**
@@ -32,6 +34,7 @@ class ProfessionController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'profession_category_id' => 'required|exists:profession_categories,id',
         ]);
 
         Profession::create($request->all());
@@ -53,7 +56,8 @@ class ProfessionController extends Controller
     public function edit($id)
     {
         $profession = Profession::findOrFail($id);
-        return view('profession.edit', compact('profession'));
+        $categories = ProfessionCategory::all();
+        return view('profession.edit', compact('profession', 'categories'));
     }
 
     /**
@@ -63,6 +67,7 @@ class ProfessionController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'profession_category_id' => 'required|exists:profession_categories,id',
         ]);
 
         $profession = Profession::findOrFail($id);

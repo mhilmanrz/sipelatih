@@ -47,6 +47,24 @@
                 @method('PUT')
 
                 <div class="mb-4">
+                    <label for="profession_category_id" class="block text-gray-700 font-semibold mb-2">Kategori Profesi <span
+                            class="text-red-500">*</span></label>
+                    <select name="profession_category_id" id="profession_category_id"
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 @error('profession_category_id') border-red-500 @enderror"
+                        required>
+                        <option value="" disabled selected>Pilih Kategori Profesi</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" {{ old('profession_category_id', $profession->profession_category_id) == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('profession_category_id')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
                     <label for="name" class="block text-gray-700 font-semibold mb-2">Nama Profesi <span
                             class="text-red-500">*</span></label>
                     <input type="text" name="name" id="name" value="{{ old('name', $profession->name) }}"

@@ -1,6 +1,6 @@
 @extends('layout.LayoutSuperAdmin')
 
-@section('title', 'Tambah Profesi')
+@section('title', 'Edit Kategori Profesi')
 
 @push('styles')
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,8 +26,8 @@
 @section('content')
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Tambah Profesi Baru</h1>
-            <p class="text-gray-600 mt-1">Silakan isi form di bawah ini untuk menambahkan data profesi baru.</p>
+            <h1 class="text-2xl font-bold text-gray-800">Edit Kategori Profesi</h1>
+            <p class="text-gray-600 mt-1">Silakan perbarui form di bawah ini untuk mengubah data kategori profesi.</p>
         </div>
 
         @if ($errors->any())
@@ -42,46 +42,40 @@
         @endif
 
         <div class="bg-white rounded-lg shadow-md p-6">
-            <form action="{{ route('professions.store') }}" method="POST">
+            <form action="{{ route('profession-categories.update', $professionCategory->id) }}" method="POST">
                 @csrf
+                @method('PUT')
 
                 <div class="mb-4">
-                    <label for="profession_category_id" class="block text-gray-700 font-semibold mb-2">Kategori Profesi <span
+                    <label for="name" class="block text-gray-700 font-semibold mb-2">Nama Kategori <span
                             class="text-red-500">*</span></label>
-                    <select name="profession_category_id" id="profession_category_id"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 @error('profession_category_id') border-red-500 @enderror"
-                        required>
-                        <option value="" disabled selected>Pilih Kategori Profesi</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" {{ old('profession_category_id') == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('profession_category_id')
+                    <input type="text" name="name" id="name" value="{{ old('name', $professionCategory->name) }}"
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 @error('name') border-red-500 @enderror"
+                        placeholder="Contoh: Dokter" required>
+                    @error('name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-
+                
                 <div class="mb-4">
-                    <label for="name" class="block text-gray-700 font-semibold mb-2">Nama Profesi <span
+                    <label for="jpl_target" class="block text-gray-700 font-semibold mb-2">Target JPL <span
                             class="text-red-500">*</span></label>
-                    <input type="text" name="name" id="name" value="{{ old('name') }}"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 @error('name') border-red-500 @enderror"
-                        placeholder="Contoh: Dokter Umum" required>
-                    @error('name')
+                    <input type="number" name="jpl_target" id="jpl_target" value="{{ old('jpl_target', $professionCategory->jpl_target) }}" min="0"
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 @error('jpl_target') border-red-500 @enderror"
+                        required>
+                    @error('jpl_target')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="mt-8 flex items-center justify-end space-x-4">
-                    <a href="{{ route('professions.index') }}"
+                    <a href="{{ route('profession-categories.index') }}"
                         class="text-gray-600 hover:text-gray-800 font-medium px-4 py-2 border border-gray-300 rounded shadow-sm hover:bg-gray-50 transition-colors">
                         Batal
                     </a>
                     <button type="submit"
                         class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-6 rounded shadow transition-colors">
-                        Simpan Data
+                        Perbarui Data
                     </button>
                 </div>
             </form>

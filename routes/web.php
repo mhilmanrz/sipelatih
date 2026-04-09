@@ -23,6 +23,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MonitoringJplController;
 use App\Http\Controllers\PaguController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfessionCategoryController;
 use App\Http\Controllers\User\EmploymentTypeController;
 use App\Http\Controllers\User\PositionController;
 use App\Http\Controllers\User\ProfessionController;
@@ -103,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('fund-sources', FundSourceController::class);
     Route::resource('professions', ProfessionController::class);
+    Route::resource('profession-categories', ProfessionCategoryController::class);
     Route::resource('work-units', WorkUnitController::class);
     Route::resource('positions', PositionController::class);
     // Kegiatan Master Data

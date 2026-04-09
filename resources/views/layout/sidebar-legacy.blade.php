@@ -103,6 +103,12 @@
                 <span>Data Profesi</span>
             </a>
 
+            <a href="{{ route('profession-categories.index') }}"
+                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('profession-categories*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+                <i class="fa-solid fa-list w-6 text-center mr-2"></i>
+                <span>Kategori Profesi</span>
+            </a>
+
             <a href="{{ route('roles.index') }}"
                 class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('roles*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
                 <i class="fa-solid fa-user-shield w-6 text-center mr-2"></i>
