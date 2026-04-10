@@ -92,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('kegiatan/{kegiatan}/moderator/{id}', [ActivityModeratorController::class, 'destroy'])->name('kegiatan.moderator.destroy');
     Route::get('kegiatan/{kegiatan}/peserta/tambah', [ActivityParticipantController::class, 'create'])->name('kegiatan.peserta.create');
     Route::post('kegiatan/{kegiatan}/peserta', [ActivityParticipantController::class, 'store'])->name('kegiatan.peserta.store');
+    Route::put('kegiatan/{kegiatan}/peserta/{id}/sertifikat', [ActivityParticipantController::class, 'updateCertificate'])->name('kegiatan.peserta.update_certificate');
     Route::delete('kegiatan/{kegiatan}/peserta/{id}', [ActivityParticipantController::class, 'destroy'])->name('kegiatan.peserta.destroy');
     Route::get('kegiatan/{kegiatan}/peserta/available-users', [ActivityParticipantController::class, 'availableUsers'])->name('kegiatan.peserta.available-users');
 

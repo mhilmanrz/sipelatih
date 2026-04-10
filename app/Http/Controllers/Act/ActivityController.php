@@ -81,8 +81,10 @@ class ActivityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(\Illuminate\Http\Request $request, $id)
     {
+        $searchPeserta = $request->input('search_peserta');
+
         $kegiatan = Activity::with([
             'activityName',
             'activityType',
@@ -99,6 +101,14 @@ class ActivityController extends Controller
             'activityMaterials.speakers.user',
             'activityMaterials.moderators.user',
             'activityProfessions.profession',
+            'activityParticipants' => function($query) use ($searchPeserta) {
+                if ($searchPeserta) {
+                    $query->whereHas('user', function($q) use ($searchPeserta) {
+                        $q->where('name', 'like', '%' . $searchPeserta . '%')
+                          ->orWhere('nip', 'like', '%' . $searchPeserta . '%');
+                    });
+                }
+            },
             'activityParticipants.score',
             'activityParticipants.user.workUnit',
         ])->findOrFail($id);

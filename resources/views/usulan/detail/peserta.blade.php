@@ -35,17 +35,14 @@
 
         <!-- FILTER -->
         <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; align-items: center;">
-            <div style="flex-grow: 1; max-width: 300px;">
-                <input type="text" placeholder="Cari NIP Peserta..." class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
-            </div>
-
-            <div style="flex-grow: 1; max-width: 300px;">
-                <input type="text" placeholder="Cari Nama Peserta..." class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
-            </div>
-
-            <button class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded transition-colors" onclick="alert('Feature WIP')">
-                ⟳ Reset
-            </button>
+            <form action="{{ request()->url() }}" method="GET" style="flex-grow: 1; max-width: 400px; display: flex; gap: 0.5rem;">
+                <input type="hidden" name="tab" value="peserta">
+                <input type="text" name="search_peserta" value="{{ request('search_peserta') }}" placeholder="Cari Nama/NIP Peserta..." class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
+                <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded shadow transition-colors" style="background-color: #14b8a6; color: white;">Cari</button>
+                @if(request('search_peserta'))
+                    <a href="{{ request()->url() }}?tab=peserta" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded shadow transition-colors text-decoration-none" style="display: inline-flex; align-items: center;">Reset</a>
+                @endif
+            </form>
         </div>
 
         <!-- TABLE -->
@@ -57,6 +54,7 @@
                         <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">NIP/NPS</th>
                         <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Nama Peserta</th>
                         <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Unit Kerja</th>
+                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Sertifikat</th>
                         <th class="border border-gray-300 px-4 py-2 text-center text-gray-700">Aksi</th>
                     </tr>
                 </thead>
@@ -67,12 +65,16 @@
                             <td class="border border-gray-300 px-4 py-2">{{ $participant->user->nip ?? '-' }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $participant->user->name ?? '-' }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $participant->user->workUnit->name ?? '-' }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $participant->certificate_number ?? '-' }}</td>
                             <td class="border border-gray-300 px-4 py-2 text-center">
-                                <form action="{{ route('kegiatan.peserta.destroy', ['kegiatan' => $kegiatan->id, 'id' => $participant->id]) }}" method="POST" onsubmit="return confirm('Hapus peserta ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #ef4444; color: white;">HAPUS</button>
-                                </form>
+                                <div style="display: flex; justify-content: center; gap: 0.5rem;">
+                                    <button type="button" onclick="openModalSertifikat('{{ route('kegiatan.peserta.update_certificate', ['kegiatan' => $kegiatan->id, 'id' => $participant->id]) }}', '{{ $participant->certificate_number }}')" class="hover:bg-blue-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #3b82f6; color: white; border: none; cursor: pointer;">EDIT</button>
+                                    <form action="{{ route('kegiatan.peserta.destroy', ['kegiatan' => $kegiatan->id, 'id' => $participant->id]) }}" method="POST" onsubmit="return confirm('Hapus peserta ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #ef4444; color: white; border: none; cursor: pointer;">HAPUS</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -96,4 +98,35 @@
         </div>
 
     </div>
+
+    <!-- Modal Sertifikat -->
+    <div id="modalSertifikat" style="display: none; position: fixed; inset: 0; z-index: 50; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.5);">
+        <div style="background-color: white; border-radius: 8px; padding: 1.5rem; width: 100%; max-width: 28rem; margin: 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; color: #111827;">Edit Nomor Sertifikat</h3>
+            <form id="formSertifikat" method="POST">
+                @csrf
+                @method('PUT')
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Nomor Sertifikat</label>
+                    <input type="text" name="certificate_number" id="inputSertifikat" style="width: 100%; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem; outline: none;" placeholder="Masukkan Nomor Sertifikat">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                    <button type="button" onclick="closeModalSertifikat()" style="padding: 0.5rem 1rem; background-color: #e5e7eb; color: #1f2937; border-radius: 0.375rem; cursor: pointer; border: none; font-size: 0.875rem; font-weight: 500;">Batal</button>
+                    <button type="submit" style="padding: 0.5rem 1rem; background-color: #14b8a6; color: white; border-radius: 0.375rem; cursor: pointer; border: none; font-size: 0.875rem; font-weight: 500;">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModalSertifikat(url, number) {
+            document.getElementById('formSertifikat').action = url;
+            document.getElementById('inputSertifikat').value = number || '';
+            document.getElementById('modalSertifikat').style.display = 'flex';
+        }
+
+        function closeModalSertifikat() {
+            document.getElementById('modalSertifikat').style.display = 'none';
+        }
+    </script>
 </section>
