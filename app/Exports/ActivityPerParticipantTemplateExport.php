@@ -10,13 +10,17 @@ class ActivityPerParticipantTemplateExport implements FromArray, WithHeadings
     public function headings(): array
     {
         return [
-            'nip_peserta',
-            'judul_kegiatan',
-            'pengusul_unit_kerja',
-            'jenis_kegiatan',
-            'waktu_mulai',
-            'waktu_selesai',
-            'jenis_materi'
+            'nip',
+            'nama pelatihan',
+            'tanggal mulai',
+            'tanggal selesai',
+            'no sertifikat',
+            'jenis kegiatan',
+            'jenis materi',
+            'metode',
+            'bentuk kegiatan',
+            'institusi',
+            'jpl',
         ];
     }
 
@@ -25,13 +29,17 @@ class ActivityPerParticipantTemplateExport implements FromArray, WithHeadings
         return [
             [
                 '199001012020121001',
-                'Diklat Teknis Dasar', 
-                'Pusdiklatwas BPKP', 
-                'Pelatihan Teknis', 
-                '2024-01-01', 
-                '2024-01-05', 
-                'Substantif'
-            ]
+                'Diklat Teknis Dasar',
+                '2024-01-01',
+                '2024-01-05',
+                'SER-123456',
+                'Pelatihan Teknis',
+                'Substantif',
+                'Klasikal',
+                'Tatap Muka',
+                'Pusdiklatwas BPKP',
+                '10',
+            ],
         ];
     }
 }

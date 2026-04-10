@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Act\ActivitySpeaker;
+use Illuminate\Database\Seeder;
 
 class ActivitySpeakerSeeder extends Seeder
 {

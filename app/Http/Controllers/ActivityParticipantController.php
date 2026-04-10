@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivityParticipant;
 use App\Http\Requests\StoreActivityParticipantRequest;
 use App\Http\Requests\UpdateActivityParticipantRequest;
+use App\Models\ActivityParticipant;
 
 class ActivityParticipantController extends Controller
 {

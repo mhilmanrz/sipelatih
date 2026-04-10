@@ -3,18 +3,17 @@
 namespace App\Imports;
 
 use App\Models\Act\ActivityName;
+use Illuminate\Database\Eloquent\Model;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class ActivityNameImport implements ToModel, WithHeadingRow, SkipsEmptyRows, WithValidation
+class ActivityNameImport implements SkipsEmptyRows, ToModel, WithHeadingRow, WithValidation
 {
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @return Model|null
+     */
     public function model(array $row)
     {
         // Check if the activity name already exists to avoid duplicates

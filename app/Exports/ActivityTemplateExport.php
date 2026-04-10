@@ -15,7 +15,7 @@ class ActivityTemplateExport implements FromArray, WithHeadings
             'jenis_kegiatan',
             'waktu_mulai',
             'waktu_selesai',
-            'jenis_materi'
+            'jenis_materi',
         ];
     }
 
@@ -23,13 +23,13 @@ class ActivityTemplateExport implements FromArray, WithHeadings
     {
         return [
             [
-                'Diklat Teknis Dasar', 
-                'Pusdiklatwas BPKP', 
-                'Pelatihan Teknis', 
-                '2024-01-01', 
-                '2024-01-05', 
-                'Substantif'
-            ]
+                'Diklat Teknis Dasar',
+                'Pusdiklatwas BPKP',
+                'Pelatihan Teknis',
+                '2024-01-01',
+                '2024-01-05',
+                'Substantif',
+            ],
         ];
     }
 }

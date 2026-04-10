@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivitySpeaker;
 use App\Http\Requests\StoreActivitySpeakerRequest;
 use App\Http\Requests\UpdateActivitySpeakerRequest;
+use App\Models\ActivitySpeaker;
 
 class ActivitySpeakerController extends Controller
 {

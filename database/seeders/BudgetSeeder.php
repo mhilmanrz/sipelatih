@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Budget;
 use App\Models\BudgetCategory;
+use Illuminate\Database\Seeder;
 
 class BudgetSeeder extends Seeder
 {

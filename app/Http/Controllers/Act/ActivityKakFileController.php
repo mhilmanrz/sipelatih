@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Act\ActivityKakFile;
+use Illuminate\Http\Request;
 
 class ActivityKakFileController extends Controller
 {
@@ -14,6 +14,7 @@ class ActivityKakFileController extends Controller
     public function index()
     {
         $activityKakFiles = ActivityKakFile::paginate(10);
+
         return response()->json($activityKakFiles);
     }
 
@@ -28,6 +29,7 @@ class ActivityKakFileController extends Controller
     public function store(Request $request)
     {
         $activityKakFile = ActivityKakFile::create($request->all());
+
         return response()->json($activityKakFile, 201);
     }
 
@@ -38,7 +40,7 @@ class ActivityKakFileController extends Controller
     {
         $activityKakFile = ActivityKakFile::find($id);
 
-        if (!$activityKakFile) {
+        if (! $activityKakFile) {
             return response()->json(['message' => 'Activity Kak File not found'], 404);
         }
 
@@ -57,11 +59,12 @@ class ActivityKakFileController extends Controller
     {
         $activityKakFile = ActivityKakFile::find($id);
 
-        if (!$activityKakFile) {
+        if (! $activityKakFile) {
             return response()->json(['message' => 'Activity Kak File not found'], 404);
         }
 
         $activityKakFile->update($request->all());
+
         return response()->json($activityKakFile);
     }
 
@@ -72,11 +75,12 @@ class ActivityKakFileController extends Controller
     {
         $activityKakFile = ActivityKakFile::find($id);
 
-        if (!$activityKakFile) {
+        if (! $activityKakFile) {
             return response()->json(['message' => 'Activity Kak File not found'], 404);
         }
 
         $activityKakFile->delete();
+
         return response()->json(['message' => 'Activity Kak File deleted successfully'], 200);
     }
 }

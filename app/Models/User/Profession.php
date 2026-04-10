@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Models\ProfessionCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,6 +20,6 @@ class Profession extends Model
 
     public function category()
     {
-        return $this->belongsTo(\App\Models\ProfessionCategory::class, 'profession_category_id');
+        return $this->belongsTo(ProfessionCategory::class, 'profession_category_id');
     }
 }

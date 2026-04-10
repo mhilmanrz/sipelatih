@@ -13,6 +13,7 @@ class BudgetController extends Controller
     public function index()
     {
         $budgets = Budget::with('budgetCategory')->paginate(10);
+
         return response()->json($budgets);
     }
 
@@ -27,6 +28,7 @@ class BudgetController extends Controller
     public function store(Request $request)
     {
         $budget = Budget::create($request->all());
+
         return response()->json($budget->load('budgetCategory'), 201);
     }
 
@@ -37,7 +39,7 @@ class BudgetController extends Controller
     {
         $budget = Budget::with('budgetCategory')->find($id);
 
-        if (!$budget) {
+        if (! $budget) {
             return response()->json(['message' => 'Budget not found'], 404);
         }
 
@@ -56,11 +58,12 @@ class BudgetController extends Controller
     {
         $budget = Budget::find($id);
 
-        if (!$budget) {
+        if (! $budget) {
             return response()->json(['message' => 'Budget not found'], 404);
         }
 
         $budget->update($request->all());
+
         return response()->json($budget->load('budgetCategory'));
     }
 
@@ -71,11 +74,12 @@ class BudgetController extends Controller
     {
         $budget = Budget::find($id);
 
-        if (!$budget) {
+        if (! $budget) {
             return response()->json(['message' => 'Budget not found'], 404);
         }
 
         $budget->delete();
+
         return response()->json(['message' => 'Budget deleted successfully'], 200);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\user;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserRequest extends FormRequest
@@ -17,13 +18,13 @@ class UpdateUserRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $this->route('id'),
+            'email' => 'required|email|max:255|unique:users,email,'.$this->route('id'),
             'password' => 'nullable|string|min:6',
             'work_unit_id' => 'nullable|integer|exists:work_units,id',
             'position_id' => 'nullable|integer|exists:positions,id',

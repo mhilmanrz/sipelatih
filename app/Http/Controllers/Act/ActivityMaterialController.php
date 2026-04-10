@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Act;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityMaterial;
+use Illuminate\Http\Request;
 
 class ActivityMaterialController extends Controller
 {
@@ -38,7 +38,7 @@ class ActivityMaterialController extends Controller
     {
         $activityMaterial = ActivityMaterial::where('activity_id', $kegiatanId)
             ->findOrFail($id);
-            
+
         $activityMaterial->delete();
 
         return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'materi'])

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Act\TargetParticipant;
+use Illuminate\Http\Request;
 
 class TargetParticipantController extends Controller
 {
@@ -14,6 +14,7 @@ class TargetParticipantController extends Controller
     public function index()
     {
         $targetParticipants = TargetParticipant::paginate(10);
+
         return response()->json($targetParticipants);
     }
 
@@ -28,6 +29,7 @@ class TargetParticipantController extends Controller
     public function store(Request $request)
     {
         $targetParticipant = TargetParticipant::create($request->all());
+
         return response()->json($targetParticipant, 201);
     }
 
@@ -38,7 +40,7 @@ class TargetParticipantController extends Controller
     {
         $targetParticipant = TargetParticipant::find($id);
 
-        if (!$targetParticipant) {
+        if (! $targetParticipant) {
             return response()->json(['message' => 'Target Participant not found'], 404);
         }
 
@@ -57,11 +59,12 @@ class TargetParticipantController extends Controller
     {
         $targetParticipant = TargetParticipant::find($id);
 
-        if (!$targetParticipant) {
+        if (! $targetParticipant) {
             return response()->json(['message' => 'Target Participant not found'], 404);
         }
 
         $targetParticipant->update($request->all());
+
         return response()->json($targetParticipant);
     }
 
@@ -72,11 +75,12 @@ class TargetParticipantController extends Controller
     {
         $targetParticipant = TargetParticipant::find($id);
 
-        if (!$targetParticipant) {
+        if (! $targetParticipant) {
             return response()->json(['message' => 'Target Participant not found'], 404);
         }
 
         $targetParticipant->delete();
+
         return response()->json(['message' => 'Target Participant deleted successfully'], 200);
     }
 }

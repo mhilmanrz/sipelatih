@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\user;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateEmploymentTypeRequest extends FormRequest
@@ -17,12 +18,12 @@ class UpdateEmploymentTypeRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'code' => 'required|string|max:255|unique:employment_types,code,' . $this->route('id'),
+            'code' => 'required|string|max:255|unique:employment_types,code,'.$this->route('id'),
             'name' => 'required|string|max:255',
         ];
     }

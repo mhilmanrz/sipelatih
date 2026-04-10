@@ -124,7 +124,7 @@
 
                 <div class="form-row">
                     <label>Target Peserta</label>
-                    <select name="target_participant_id" required>
+                    <select name="target_participant_id">
                         <option value="">-PILIH-</option>
                         @foreach ($target_participants as $target)
                             <option value="{{ $target->id }}"
@@ -151,19 +151,20 @@
                 </div>
 
                 <div class="form-row">
-                    <label>Sumber Dana</label>
-                    <select name="fund_source_id">
-                        <option value="">-PILIH SUMBER DANA-</option>
-                        @foreach ($fund_sources as $fs)
-                            <option value="{{ $fs->id }}" {{ old('fund_source_id') == $fs->id ? 'selected' : '' }}>
-                                {{ $fs->name }}</option>
+                    <label>Pagu</label>
+                    <select name="budget_id">
+                        <option value="">-PILIH PAGU-</option>
+                        @foreach ($budgets as $bg)
+                            <option value="{{ $bg->id }}" {{ old('budget_id') == $bg->id ? 'selected' : '' }}>
+                                {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Rp {{ number_format($bg->total_amount, 0, ',', '.') }})
+                            </option>
                         @endforeach
                     </select>
                 </div>
 
                 <div class="form-row">
                     <label>Unit Pengusul</label>
-                    <select name="work_unit_id" required>
+                    <select name="work_unit_id">
                         <option value="">-PILIH-</option>
                         @foreach ($work_units as $unit)
                             <option value="{{ $unit->id }}" {{ old('work_unit_id') == $unit->id ? 'selected' : '' }}>
@@ -174,7 +175,7 @@
 
                 <div class="form-row">
                     <label>Nama PIC</label>
-                    <select name="pic_user_id" id="pic_user_id" required onchange="updateWaPic(this)">
+                    <select name="pic_user_id" id="pic_user_id" onchange="updateWaPic(this)">
                         <option value="" data-phone="">-PILIH PEGAWAI (PIC)-</option>
                         @foreach ($picCandidates as $pic)
                             <option value="{{ $pic->id }}" data-phone="{{ $pic->phone_number ?? '-' }}"

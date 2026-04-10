@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Act\Batch;
+use Illuminate\Http\Request;
 
 class BatchController extends Controller
 {
@@ -14,6 +14,7 @@ class BatchController extends Controller
     public function index()
     {
         $batches = Batch::paginate(10);
+
         return view('batch.index', compact('batches'));
     }
 
@@ -35,6 +36,7 @@ class BatchController extends Controller
         ]);
 
         Batch::create($request->all());
+
         return redirect()->route('batches.index')->with('success', 'Batch berhasil ditambahkan.');
     }
 
@@ -52,6 +54,7 @@ class BatchController extends Controller
     public function edit($id)
     {
         $batch = Batch::findOrFail($id);
+
         return view('batch.edit', compact('batch'));
     }
 

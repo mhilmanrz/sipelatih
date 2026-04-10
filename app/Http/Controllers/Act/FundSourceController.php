@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Act;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Act\FundSource;
+use Illuminate\Http\Request;
 
 class FundSourceController extends Controller
 {
@@ -14,6 +14,7 @@ class FundSourceController extends Controller
     public function index()
     {
         $fundSources = FundSource::paginate(10);
+
         return view('fund_source.index', compact('fundSources'));
     }
 
@@ -45,6 +46,7 @@ class FundSourceController extends Controller
     public function edit($id)
     {
         $fundSource = FundSource::findOrFail($id);
+
         return view('fund_source.edit', compact('fundSource'));
     }
 
@@ -56,7 +58,7 @@ class FundSourceController extends Controller
         $fundSource = FundSource::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255|unique:fund_sources,name,' . $id,
+            'name' => 'required|string|max:255|unique:fund_sources,name,'.$id,
         ]);
 
         $fundSource->update($request->all());

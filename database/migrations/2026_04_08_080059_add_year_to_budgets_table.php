@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('budgets', function (Blueprint $table) {
             $table->integer('year')->after('budget_category_id')->nullable();
-            
+
             // Add unique constraint for year and rkkal_code
             $table->unique(['year', 'rkkal_code'], 'budgets_year_rkkal_unique');
         });

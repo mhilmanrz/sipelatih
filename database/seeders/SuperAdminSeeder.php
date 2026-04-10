@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-
 use App\Models\User\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -27,7 +25,7 @@ class SuperAdminSeeder extends Seeder
         );
 
         // Assign Role
-        if (!$user->hasRole('SuperAdmin')) {
+        if (! $user->hasRole('SuperAdmin')) {
             $user->assignRole($superAdminRole);
         }
     }

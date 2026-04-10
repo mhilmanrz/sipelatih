@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivityModerator;
 use App\Http\Requests\StoreActivityModeratorRequest;
 use App\Http\Requests\UpdateActivityModeratorRequest;
+use App\Models\ActivityModerator;
 
 class ActivityModeratorController extends Controller
 {

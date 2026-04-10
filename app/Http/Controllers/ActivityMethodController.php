@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivityMethod;
 use App\Http\Requests\StoreActivityMethodRequest;
 use App\Http\Requests\UpdateActivityMethodRequest;
+use App\Models\ActivityMethod;
 
 class ActivityMethodController extends Controller
 {

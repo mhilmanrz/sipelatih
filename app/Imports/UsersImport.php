@@ -4,17 +4,15 @@ namespace App\Imports;
 
 use App\Models\User\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Support\Str;
 
-class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQueue
+class UsersImport implements ShouldQueue, ToModel, WithChunkReading, WithHeadingRow
 {
     /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return Model|null
      */
     public function model(array $row)
     {
@@ -30,9 +28,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQu
         }
 
         return new User([
-            'name'         => $row['nama'],
-            'email'        => $row['email'],
-            'password'     => bcrypt('password123'),
+            'name' => $row['nama'],
+            'email' => $row['email'],
+            'password' => bcrypt('password123'),
             'phone_number' => $row['telepon'] ?? null,
         ]);
     }

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Act;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityModerator;
+use Illuminate\Http\Request;
 
 class ActivityModeratorController extends Controller
 {

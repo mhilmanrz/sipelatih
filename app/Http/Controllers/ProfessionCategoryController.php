@@ -13,6 +13,7 @@ class ProfessionCategoryController extends Controller
     public function index()
     {
         $categories = ProfessionCategory::paginate(10);
+
         return view('profession-category.index', compact('categories'));
     }
 

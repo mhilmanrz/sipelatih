@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Act;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateActivityRequest extends FormRequest
@@ -17,7 +18,7 @@ class UpdateActivityRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -32,14 +33,14 @@ class UpdateActivityRequest extends FormRequest
             'batch_id' => 'required|exists:batches,id',
             'activity_format_id' => 'required|exists:activity_formats,id',
             'collaboration_inst' => 'nullable|string|max:255',
-            'target_participant_id' => 'required|exists:target_participants,id',
+            'target_participant_id' => 'nullable|exists:target_participants,id',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
             'budget_amount' => 'nullable|numeric',
-            'work_unit_id' => 'required|exists:work_units,id',
-            'pic_user_id' => 'required|exists:users,id',
+            'work_unit_id' => 'nullable|exists:work_units,id',
+            'pic_user_id' => 'nullable|exists:users,id',
             'quota_participant' => 'nullable|integer|min:1',
-            'fund_source_id' => 'nullable|exists:fund_sources,id',
+            'budget_id' => 'nullable|exists:budgets,id',
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Act\Activity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,5 +24,15 @@ class Budget extends Model
     public function budgetCategory()
     {
         return $this->belongsTo(BudgetCategory::class);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
+    public function getRemainingAmountAttribute()
+    {
+        return $this->total_amount - $this->activities()->sum('budget_amount');
     }
 }

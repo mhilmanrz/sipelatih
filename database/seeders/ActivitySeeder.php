@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 class ActivitySeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class ActivitySeeder extends Seeder
         DB::table('activities')->insert([
             [
                 'date' => Carbon::now()->toDateString(),
-                'reference_number' => 'ACT-' . Str::upper(Str::random(6)),
+                'reference_number' => 'ACT-'.Str::upper(Str::random(6)),
                 'activity_type_id' => 1,
                 'activity_scope_id' => 1,
                 'material_type_id' => 1,
@@ -33,7 +33,7 @@ class ActivitySeeder extends Seeder
             ],
             [
                 'date' => Carbon::now()->subDays(10)->toDateString(),
-                'reference_number' => 'ACT-' . Str::upper(Str::random(6)),
+                'reference_number' => 'ACT-'.Str::upper(Str::random(6)),
                 'activity_type_id' => 2,
                 'activity_scope_id' => 2,
                 'material_type_id' => 2,

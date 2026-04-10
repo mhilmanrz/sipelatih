@@ -14,11 +14,11 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         $query = Role::query();
-        
+
         if ($request->filled('q')) {
-            $query->where('name', 'like', '%' . $request->q . '%');
+            $query->where('name', 'like', '%'.$request->q.'%');
         }
-        
+
         $perPage = $request->get('per_page', 10);
         $roles = $query->paginate($perPage)->appends($request->all());
 
@@ -61,6 +61,7 @@ class RoleController extends Controller
     public function edit(string $id)
     {
         $role = Role::findOrFail($id);
+
         return view('role.edit', compact('role'));
     }
 

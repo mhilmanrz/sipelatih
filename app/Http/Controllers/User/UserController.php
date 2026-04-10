@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Imports\UsersImport;
+use App\Models\User\EmploymentType;
+use App\Models\User\Positions;
+use App\Models\User\Profession;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
-use App\Models\User\Profession;
-use App\Models\User\Positions;
-use App\Models\User\EmploymentType;
-use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\UsersImport;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -47,6 +47,7 @@ class UserController extends Controller
 
         $perPage = $request->input('per_page', 10);
         $users = $query->paginate($perPage)->appends($request->all());
+
         return view('user.index', compact('users'));
     }
 
@@ -60,6 +61,7 @@ class UserController extends Controller
         $positions = Positions::all();
         $employmentTypes = EmploymentType::all();
         $roles = Role::all();
+
         return view('user.tambah', compact('workUnits', 'professions', 'positions', 'employmentTypes', 'roles'));
     }
 
@@ -113,6 +115,7 @@ class UserController extends Controller
         $positions = Positions::all();
         $employmentTypes = EmploymentType::all();
         $roles = Role::all();
+
         return view('user.edit', compact('user', 'workUnits', 'professions', 'positions', 'employmentTypes', 'roles'));
     }
 
@@ -125,7 +128,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'employee_id' => 'nullable|string',
             'phone_number' => 'nullable|string',
             'work_unit_id' => 'nullable|exists:work_units,id',
@@ -180,7 +183,7 @@ class UserController extends Controller
         ], [
             'file.required' => 'Pilih file terlebih dahulu.',
             'file.mimes' => 'Format file harus berupa Excel (.xlsx, .xls) atau CSV.',
-            'file.max' => 'Ukuran file terlalu besar (maks 10MB).'
+            'file.max' => 'Ukuran file terlalu besar (maks 10MB).',
         ]);
 
         if ($request->hasFile('file')) {

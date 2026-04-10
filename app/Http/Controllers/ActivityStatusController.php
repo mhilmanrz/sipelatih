@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivityStatus;
 use App\Http\Requests\StoreActivityStatusRequest;
 use App\Http\Requests\UpdateActivityStatusRequest;
+use App\Models\ActivityStatus;
 
 class ActivityStatusController extends Controller
 {

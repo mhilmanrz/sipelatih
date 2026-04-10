@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Act\ActivityType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ActivityTypeSeeder extends Seeder

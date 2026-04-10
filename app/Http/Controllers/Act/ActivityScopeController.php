@@ -14,6 +14,7 @@ class ActivityScopeController extends Controller
     public function index()
     {
         $activityScopes = ActivityScope::paginate(10);
+
         return view('activity_scope.index', compact('activityScopes'));
     }
 
@@ -35,6 +36,7 @@ class ActivityScopeController extends Controller
         ]);
 
         ActivityScope::create($request->all());
+
         return redirect()->route('activity-scopes.index')->with('success', 'Ruang Lingkup Kegiatan berhasil ditambahkan.');
     }
 
@@ -52,6 +54,7 @@ class ActivityScopeController extends Controller
     public function edit($id)
     {
         $activityScope = ActivityScope::findOrFail($id);
+
         return view('activity_scope.edit', compact('activityScope'));
     }
 

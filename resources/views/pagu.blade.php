@@ -48,8 +48,13 @@
                     </select>
                 </form>
 
+                <a href="{{ route('pagu.import.page') }}" id="btnImportPagu"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded shadow whitespace-nowrap text-sm"
+                    style="text-decoration:none;">
+                    Import Pagu
+                </a>
                 <button type="button" id="btnTambahPagu"
-                    class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow whitespace-nowrap">
+                    class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow whitespace-nowrap text-sm">
                     + Tambah Pagu
                 </button>
             </div>
@@ -113,6 +118,9 @@
                                 {{ number_format($budget->remaining_amount, 0, ',', '.') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center space-x-2 flex justify-center">
+                                <a href="{{ route('pagu.show', $budget->id) }}" class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 border border-green-200 rounded text-sm font-medium transition-colors" style="text-decoration:none;">
+                                    Detail
+                                </a>
                                 <button type="button" class="btn-edit inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 rounded text-sm font-medium transition-colors"
                                         data-id="{{ $budget->id }}"
                                         data-rkkal="{{ $budget->rkkal_code }}"
@@ -290,7 +298,6 @@
                 });
             });
 
-            // Close when click outside modal
             window.onclick = function(event) {
                 if (event.target == modal) {
                     hideModal();

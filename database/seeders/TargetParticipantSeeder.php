@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Act\TargetParticipant;
+use Illuminate\Database\Seeder;
 
 class TargetParticipantSeeder extends Seeder
 {

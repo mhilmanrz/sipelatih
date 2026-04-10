@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Act;
 
+use App\Exports\ParticipantTemplateExport;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Imports\ParticipantImport;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityParticipant;
 use App\Models\User\User;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\ParticipantImport;
-use App\Exports\ParticipantTemplateExport;
 
 class ActivityParticipantController extends Controller
 {
@@ -26,10 +26,10 @@ class ActivityParticipantController extends Controller
         // Query pengguna yang BUKAN peserta
         $query = User::whereNotIn('id', $existingUserIds);
 
-        if (!empty($search)) {
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('nip', 'like', '%' . $search . '%');
+        if (! empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('nip', 'like', '%'.$search.'%');
             });
         }
 
@@ -45,7 +45,7 @@ class ActivityParticipantController extends Controller
     public function create($kegiatanId)
     {
         $kegiatan = Activity::findOrFail($kegiatanId);
-        
+
         return view('usulan.detail.tambah_peserta', compact('kegiatan'));
     }
 
@@ -64,10 +64,10 @@ class ActivityParticipantController extends Controller
         foreach ($request->user_ids as $userId) {
             // Hindari duplikasi jika front-end gagal filter
             $exists = ActivityParticipant::where('activity_id', $activity->id)
-                        ->where('user_id', $userId)
-                        ->exists();
+                ->where('user_id', $userId)
+                ->exists();
 
-            if (!$exists) {
+            if (! $exists) {
                 ActivityParticipant::create([
                     'activity_id' => $activity->id,
                     'user_id' => $userId,
@@ -87,7 +87,7 @@ class ActivityParticipantController extends Controller
     {
         $participant = ActivityParticipant::where('activity_id', $kegiatanId)
             ->findOrFail($id);
-            
+
         $participant->delete();
 
         return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'peserta'])
@@ -100,6 +100,7 @@ class ActivityParticipantController extends Controller
     public function importPage($kegiatanId)
     {
         $kegiatan = Activity::findOrFail($kegiatanId);
+
         return view('usulan.detail.import_peserta', compact('kegiatan'));
     }
 
@@ -116,10 +117,11 @@ class ActivityParticipantController extends Controller
 
         try {
             Excel::import(new ParticipantImport($activity->id), $request->file('file'));
+
             return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'peserta'])
                 ->with('success', 'Import peserta berhasil. Data NIP tidak terdaftar telah diabaikan.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan saat meng-import data: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat meng-import data: '.$e->getMessage());
         }
     }
 

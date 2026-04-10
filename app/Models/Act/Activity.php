@@ -2,6 +2,7 @@
 
 namespace App\Models\Act;
 
+use App\Models\Budget;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,6 +32,7 @@ class Activity extends Model
         'pic_user_id',
         'quota_participant',
         'fund_source_id',
+        'budget_id',
     ];
 
     public function picUser()
@@ -106,6 +108,11 @@ class Activity extends Model
     public function fundSource()
     {
         return $this->belongsTo(FundSource::class);
+    }
+
+    public function budget()
+    {
+        return $this->belongsTo(Budget::class);
     }
 
     public function activityMaterials()

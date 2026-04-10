@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivityMaterial;
 use App\Http\Requests\StoreActivityMaterialRequest;
 use App\Http\Requests\UpdateActivityMaterialRequest;
+use App\Models\ActivityMaterial;
 
 class ActivityMaterialController extends Controller
 {

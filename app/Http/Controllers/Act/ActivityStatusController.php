@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityStatus;
+use Illuminate\Http\Request;
 
 class ActivityStatusController extends Controller
 {
@@ -39,7 +39,7 @@ class ActivityStatusController extends Controller
     public function cancel(Request $request, $kegiatanId)
     {
         $activity = Activity::findOrFail($kegiatanId);
-        
+
         $latestStatus = $activity->latestStatus ? $activity->latestStatus->status : 'draft';
 
         if ($latestStatus !== 'submitted') {

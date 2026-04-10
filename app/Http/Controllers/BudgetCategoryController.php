@@ -13,6 +13,7 @@ class BudgetCategoryController extends Controller
     public function index()
     {
         $budgetCategories = BudgetCategory::paginate(10);
+
         return response()->json($budgetCategories);
     }
 
@@ -27,6 +28,7 @@ class BudgetCategoryController extends Controller
     public function store(Request $request)
     {
         $budgetCategory = BudgetCategory::create($request->all());
+
         return response()->json($budgetCategory, 201);
     }
 
@@ -37,7 +39,7 @@ class BudgetCategoryController extends Controller
     {
         $budgetCategory = BudgetCategory::find($id);
 
-        if (!$budgetCategory) {
+        if (! $budgetCategory) {
             return response()->json(['message' => 'Budget Category not found'], 404);
         }
 
@@ -56,11 +58,12 @@ class BudgetCategoryController extends Controller
     {
         $budgetCategory = BudgetCategory::find($id);
 
-        if (!$budgetCategory) {
+        if (! $budgetCategory) {
             return response()->json(['message' => 'Budget Category not found'], 404);
         }
 
         $budgetCategory->update($request->all());
+
         return response()->json($budgetCategory);
     }
 
@@ -71,11 +74,12 @@ class BudgetCategoryController extends Controller
     {
         $budgetCategory = BudgetCategory::find($id);
 
-        if (!$budgetCategory) {
+        if (! $budgetCategory) {
             return response()->json(['message' => 'Budget Category not found'], 404);
         }
 
         $budgetCategory->delete();
+
         return response()->json(['message' => 'Budget Category deleted successfully'], 200);
     }
 }

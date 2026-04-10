@@ -2,9 +2,9 @@
 
 namespace App\Models\User;
 
+use App\Models\Act\Activity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Act\Activity;
 
 class WorkUnit extends Model
 {

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\User\Profession;
-use App\Models\ProfessionCategory;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ProfessionCategory;
+use App\Models\User\Profession;
+use Illuminate\Http\Request;
 
 class ProfessionController extends Controller
 {
@@ -15,6 +15,7 @@ class ProfessionController extends Controller
     public function index()
     {
         $professions = Profession::with('category')->paginate(10);
+
         return view('profession.index', compact('professions'));
     }
 
@@ -24,6 +25,7 @@ class ProfessionController extends Controller
     public function create()
     {
         $categories = ProfessionCategory::all();
+
         return view('profession.create', compact('categories'));
     }
 
@@ -38,6 +40,7 @@ class ProfessionController extends Controller
         ]);
 
         Profession::create($request->all());
+
         return redirect()->route('professions.index')->with('success', 'Profesi berhasil ditambahkan.');
     }
 
@@ -57,6 +60,7 @@ class ProfessionController extends Controller
     {
         $profession = Profession::findOrFail($id);
         $categories = ProfessionCategory::all();
+
         return view('profession.edit', compact('profession', 'categories'));
     }
 

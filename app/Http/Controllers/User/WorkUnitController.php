@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Models\User\WorkUnit;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class WorkUnitController extends Controller
 {
@@ -14,6 +14,7 @@ class WorkUnitController extends Controller
     public function index()
     {
         $workUnits = WorkUnit::paginate(10);
+
         return view('workunit.index', compact('workUnits'));
     }
 
@@ -35,6 +36,7 @@ class WorkUnitController extends Controller
         ]);
 
         WorkUnit::create($request->all());
+
         return redirect()->route('work-units.index')->with('success', 'Unit Kerja berhasil ditambahkan.');
     }
 
@@ -52,6 +54,7 @@ class WorkUnitController extends Controller
     public function edit($id)
     {
         $workUnit = WorkUnit::findOrFail($id);
+
         return view('workunit.edit', compact('workUnit'));
     }
 

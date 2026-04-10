@@ -3,20 +3,22 @@
 namespace App\Http\Controllers\Act;
 
 use App\Http\Controllers\Controller;
-use App\Models\Act\Activity;
 use App\Http\Requests\Act\StoreActivityRequest;
 use App\Http\Requests\Act\UpdateActivityRequest;
-use App\Models\Act\ActivityType;
-use App\Models\Act\ActivityScope;
-use App\Models\Act\MaterialType;
-use App\Models\Act\ActivityMethod;
-use App\Models\Act\Batch;
+use App\Models\Act\Activity;
 use App\Models\Act\ActivityFormat;
-use App\Models\Act\TargetParticipant;
-use App\Models\User\WorkUnit;
+use App\Models\Act\ActivityMethod;
 use App\Models\Act\ActivityName;
+use App\Models\Act\ActivityScope;
+use App\Models\Act\ActivityType;
+use App\Models\Act\Batch;
+use App\Models\Act\MaterialType;
+use App\Models\Act\TargetParticipant;
+use App\Models\Budget;
+use App\Models\User\Profession;
 use App\Models\User\User;
-use App\Models\Act\FundSource;
+use App\Models\User\WorkUnit;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityController extends Controller
 {
@@ -27,6 +29,7 @@ class ActivityController extends Controller
     {
         // For Usulan Pengajuan Index
         $dataKegiatan = Activity::paginate(10);
+
         return view('usulan.pengajuan.index', compact('dataKegiatan'));
     }
 
@@ -36,7 +39,7 @@ class ActivityController extends Controller
     public function create()
     {
         $picCandidates = User::all();
-        $activity_names = ActivityName::all();
+        $activity_names = ActivityName::whereDoesntHave('activities')->get();
         $activity_types = ActivityType::all();
         $activity_scopes = ActivityScope::all();
         $material_types = MaterialType::all();
@@ -45,7 +48,7 @@ class ActivityController extends Controller
         $activity_formats = ActivityFormat::all();
         $target_participants = TargetParticipant::all();
         $work_units = WorkUnit::all();
-        $fund_sources = FundSource::all();
+        $budgets = Budget::all();
 
         return view('usulan.pengajuan.create', compact(
             'picCandidates',
@@ -58,7 +61,7 @@ class ActivityController extends Controller
             'activity_formats',
             'target_participants',
             'work_units',
-            'fund_sources'
+            'budgets'
         ));
     }
 
@@ -68,9 +71,10 @@ class ActivityController extends Controller
     public function store(StoreActivityRequest $request)
     {
         $data = $request->validated();
-        $data['user_id'] = auth()->id();
+        $data['user_id'] = Auth::user()->id;
 
         Activity::create($data);
+
         return redirect()->route('usulan-diklat')->with('success', 'Kegiatan berhasil diajukan.');
     }
 
@@ -96,11 +100,11 @@ class ActivityController extends Controller
             'activityMaterials.moderators.user',
             'activityProfessions.profession',
             'activityParticipants.score',
-            'activityParticipants.user.workUnit'
+            'activityParticipants.user.workUnit',
         ])->findOrFail($id);
 
-        $professions = \App\Models\User\Profession::all();
-        $users = \App\Models\User\User::all();
+        $professions = Profession::all();
+        $users = User::all();
 
         return view('usulan.detail.index', compact('kegiatan', 'professions', 'users'));
     }
@@ -122,7 +126,7 @@ class ActivityController extends Controller
         $activity_formats = ActivityFormat::all();
         $target_participants = TargetParticipant::all();
         $work_units = WorkUnit::all();
-        $fund_sources = FundSource::all();
+        $budgets = Budget::all();
 
         return view('usulan.pengajuan.edit', compact(
             'kegiatan',
@@ -136,7 +140,7 @@ class ActivityController extends Controller
             'activity_formats',
             'target_participants',
             'work_units',
-            'fund_sources'
+            'budgets'
         ));
     }
 

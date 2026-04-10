@@ -9,6 +9,7 @@ use App\Http\Controllers\Act\ActivityParticipantController;
 use App\Http\Controllers\Act\ActivityProfessionController;
 use App\Http\Controllers\Act\ActivityReportController;
 use App\Http\Controllers\Act\ActivityScopeController;
+use App\Http\Controllers\Act\ActivityScoreController;
 use App\Http\Controllers\Act\ActivitySpeakerController;
 use App\Http\Controllers\Act\ActivityStatusController;
 use App\Http\Controllers\Act\ActivityTypeController;
@@ -16,14 +17,14 @@ use App\Http\Controllers\Act\BatchController;
 use App\Http\Controllers\Act\BudgetCategoryController;
 use App\Http\Controllers\Act\FundSourceController;
 use App\Http\Controllers\Act\MaterialTypeController;
-use App\Http\Controllers\Act\TargetParticipantController;
-use App\Http\Controllers\ActivityNameController; // Added ProfileController
+use App\Http\Controllers\Act\TargetParticipantController; // Added ProfileController
+use App\Http\Controllers\ActivityNameController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MonitoringJplController;
 use App\Http\Controllers\PaguController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfessionCategoryController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\EmploymentTypeController;
 use App\Http\Controllers\User\PositionController;
 use App\Http\Controllers\User\ProfessionController;
@@ -64,6 +65,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::view('/manajemen-sasaran-profesi', 'ManajemenSasaranProfesi');
     Route::get('/monitoring-jpl', [MonitoringJplController::class, 'index'])->name('monitoring.jpl.index');
+    Route::get('/pagu/import/template', [PaguController::class, 'downloadTemplate'])->name('pagu.import.template');
+    Route::get('/pagu/import', [PaguController::class, 'importPage'])->name('pagu.import.page');
+    Route::post('/pagu/import', [PaguController::class, 'importStore'])->name('pagu.import.store');
     Route::resource('/pagu', PaguController::class);
     Route::get('/laporan-kegiatan/template', [ActivityReportController::class, 'downloadTemplate'])->name('kegiatan.laporan.template');
     Route::get('/laporan-kegiatan', [ActivityReportController::class, 'index'])->name('kegiatan.laporan.index');
@@ -91,7 +95,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('kegiatan/{kegiatan}/peserta/{id}', [ActivityParticipantController::class, 'destroy'])->name('kegiatan.peserta.destroy');
     Route::get('kegiatan/{kegiatan}/peserta/available-users', [ActivityParticipantController::class, 'availableUsers'])->name('kegiatan.peserta.available-users');
 
-    Route::put('kegiatan/{kegiatan}/input-nilai/{participant_id}', [\App\Http\Controllers\Act\ActivityScoreController::class, 'update'])->name('kegiatan.input-nilai.update');
+    Route::put('kegiatan/{kegiatan}/input-nilai/{participant_id}', [ActivityScoreController::class, 'update'])->name('kegiatan.input-nilai.update');
 
     // Pengiriman (Status Tracker) Routes
     Route::post('kegiatan/{kegiatan}/submit', [ActivityStatusController::class, 'submit'])->name('kegiatan.submit');

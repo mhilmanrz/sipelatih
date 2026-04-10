@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivityScore;
 use App\Http\Requests\StoreActivityScoreRequest;
 use App\Http\Requests\UpdateActivityScoreRequest;
+use App\Models\ActivityScore;
 
 class ActivityScoreController extends Controller
 {

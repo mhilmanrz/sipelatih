@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\User\Position;
-use App\Http\Requests\StorePositionRequest;
-use App\Http\Requests\UpdatePositionRequest;
 use App\Http\Controllers\Controller;
+use App\Models\User\Position;
+use Illuminate\Http\Request;
 
 class PositionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(\Illuminate\Http\Request $request)
+    public function index(Request $request)
     {
         $search = $request->input('search');
 
         $query = Position::query();
 
         if ($search) {
-            $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('code', 'like', '%' . $search . '%');
+            $query->where('name', 'like', '%'.$search.'%')
+                ->orWhere('code', 'like', '%'.$search.'%');
         }
 
         $positions = $query->paginate(10);
@@ -39,7 +38,7 @@ class PositionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(\Illuminate\Http\Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'code' => 'required|string|max:255|unique:positions,code',
@@ -71,10 +70,10 @@ class PositionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(\Illuminate\Http\Request $request, Position $position)
+    public function update(Request $request, Position $position)
     {
         $validated = $request->validate([
-            'code' => 'required|string|max:255|unique:positions,code,' . $position->id,
+            'code' => 'required|string|max:255|unique:positions,code,'.$position->id,
             'name' => 'required|string|max:255',
         ]);
 

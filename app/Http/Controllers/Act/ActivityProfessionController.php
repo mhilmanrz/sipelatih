@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Act;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityProfession;
+use Illuminate\Http\Request;
 
 class ActivityProfessionController extends Controller
 {
@@ -46,7 +46,7 @@ class ActivityProfessionController extends Controller
     {
         $activityProfession = ActivityProfession::where('activity_id', $kegiatanId)
             ->findOrFail($id);
-            
+
         $activityProfession->delete();
 
         return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'sasaran'])

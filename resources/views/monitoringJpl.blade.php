@@ -56,6 +56,7 @@
                         <th class="px-3 py-2">Nama Pegawai</th>
                         <th class="px-3 py-2">NIP</th>
                         <th class="px-3 py-2">Unit Kerja</th>
+                        <th class="px-3 py-2">Jumlah Kegiatan</th>
                         <th class="px-3 py-2">Target</th>
                         <th class="px-3 py-2">Capaian</th>
                         <th class="px-3 py-2">Keterangan</th>
@@ -68,6 +69,8 @@
                             <td class="px-3 py-2 text-teal-700 font-medium">{{ $user->name }}</td>
                             <td class="px-3 py-2 font-mono text-sm">{{ $user->employee_id ?? '-' }}</td>
                             <td class="px-3 py-2 text-gray-600">{{ $user->workUnit->name ?? '-' }}</td>
+                            <td class="px-3 py-2 text-center font-bold text-gray-700">
+                                {{ $user->unique_activities_count }}</td>
                             <td class="px-3 py-2 text-center font-bold text-gray-700">{{ $user->target_jpl }} JPL</td>
                             <td
                                 class="px-3 py-2 text-center font-bold {{ $user->capaian_jpl >= $user->target_jpl ? 'text-green-600' : 'text-orange-500' }}">

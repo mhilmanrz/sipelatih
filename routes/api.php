@@ -1,29 +1,29 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\User\ProfessionController;
-use App\Http\Controllers\User\WorkUnitController;
-use App\Http\Controllers\User\PositionsController;
 use App\Http\Controllers\Act\ActivityController;
-use App\Http\Controllers\Act\ActivityTypeController;
-use App\Http\Controllers\Act\ActivityScopeController;
-use App\Http\Controllers\Act\ActivityMethodController;
-use App\Http\Controllers\Act\MaterialTypeController;
-use App\Http\Controllers\Act\BatchController;
 use App\Http\Controllers\Act\ActivityFormatController;
-use App\Http\Controllers\Act\TargetParticipantController;
-use App\Http\Controllers\User\EmploymentTypeController;
-use App\Http\Controllers\BudgetCategoryController;
-use App\Http\Controllers\BudgetController;
-use App\Http\Controllers\Act\ActivityProfessionController;
 use App\Http\Controllers\Act\ActivityKakFileController;
 use App\Http\Controllers\Act\ActivityMaterialController;
-use App\Http\Controllers\Act\ActivitySpeakerController;
+use App\Http\Controllers\Act\ActivityMethodController;
 use App\Http\Controllers\Act\ActivityModeratorController;
 use App\Http\Controllers\Act\ActivityParticipantController;
-use App\Http\Controllers\Act\ActivityStatusController;
+use App\Http\Controllers\Act\ActivityProfessionController;
+use App\Http\Controllers\Act\ActivityScopeController;
 use App\Http\Controllers\Act\ActivityScoreController;
+use App\Http\Controllers\Act\ActivitySpeakerController;
+use App\Http\Controllers\Act\ActivityStatusController;
+use App\Http\Controllers\Act\ActivityTypeController;
+use App\Http\Controllers\Act\BatchController;
+use App\Http\Controllers\Act\MaterialTypeController;
+use App\Http\Controllers\Act\TargetParticipantController;
+use App\Http\Controllers\BudgetCategoryController;
+use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\User\EmploymentTypeController;
+use App\Http\Controllers\User\PositionsController;
+use App\Http\Controllers\User\ProfessionController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\WorkUnitController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/users', [UserController::class, 'index']);
 Route::post('/users', [UserController::class, 'store']);

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Act\ActivityMethod;
-
+use Illuminate\Http\Request;
 
 class ActivityMethodController extends Controller
 {
@@ -15,6 +14,7 @@ class ActivityMethodController extends Controller
     public function index()
     {
         $activityMethods = ActivityMethod::paginate(10);
+
         return view('activity_method.index', compact('activityMethods'));
     }
 
@@ -36,6 +36,7 @@ class ActivityMethodController extends Controller
         ]);
 
         ActivityMethod::create($request->all());
+
         return redirect()->route('activity-methods.index')->with('success', 'Metode Kegiatan berhasil ditambahkan.');
     }
 
@@ -53,6 +54,7 @@ class ActivityMethodController extends Controller
     public function edit($id)
     {
         $activityMethod = ActivityMethod::findOrFail($id);
+
         return view('activity_method.edit', compact('activityMethod'));
     }
 
@@ -67,7 +69,7 @@ class ActivityMethodController extends Controller
 
         $activityMethod = ActivityMethod::findOrFail($id);
         $activityMethod->update($request->all());
-        
+
         return redirect()->route('activity-methods.index')->with('success', 'Metode Kegiatan berhasil diperbarui.');
     }
 
@@ -78,7 +80,7 @@ class ActivityMethodController extends Controller
     {
         $activityMethod = ActivityMethod::findOrFail($id);
         $activityMethod->delete();
-        
+
         return redirect()->route('activity-methods.index')->with('success', 'Metode Kegiatan berhasil dihapus.');
     }
 }

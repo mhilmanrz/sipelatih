@@ -14,6 +14,7 @@ class EmploymentTypeController extends Controller
     public function index()
     {
         $employmentTypes = EmploymentType::paginate(10);
+
         return view('employment_type.index', compact('employmentTypes'));
     }
 
@@ -35,6 +36,7 @@ class EmploymentTypeController extends Controller
         ]);
 
         EmploymentType::create($request->all());
+
         return redirect()->route('employment-types.index')->with('success', 'Jenis Kepegawaian berhasil ditambahkan.');
     }
 
@@ -52,6 +54,7 @@ class EmploymentTypeController extends Controller
     public function edit($id)
     {
         $employmentType = EmploymentType::findOrFail($id);
+
         return view('employment_type.edit', compact('employmentType'));
     }
 

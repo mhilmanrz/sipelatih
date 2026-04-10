@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Act\ActivityParticipant;
+use Illuminate\Database\Seeder;
 
 class ActivityParticipantSeeder extends Seeder
 {

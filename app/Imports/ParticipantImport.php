@@ -21,7 +21,7 @@ class ParticipantImport implements ToCollection, WithHeadingRow
     {
         foreach ($rows as $row) {
             // Kita coba membaca header 'nip' / 'NIP' via array mapping WithHeadingRow
-            if (!isset($row['nip'])) {
+            if (! isset($row['nip'])) {
                 continue; // Lemah jika tidak ada kolom nip
             }
 
@@ -39,7 +39,7 @@ class ParticipantImport implements ToCollection, WithHeadingRow
                     ->where('user_id', $user->id)
                     ->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     ActivityParticipant::create([
                         'activity_id' => $this->activityId,
                         'user_id' => $user->id,

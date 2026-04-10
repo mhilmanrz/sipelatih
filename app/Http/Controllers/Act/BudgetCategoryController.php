@@ -14,6 +14,7 @@ class BudgetCategoryController extends Controller
     public function index()
     {
         $categoryPagus = BudgetCategory::paginate(10);
+
         return view('budget_categories.index', compact('categoryPagus'));
     }
 
@@ -36,6 +37,7 @@ class BudgetCategoryController extends Controller
         ]);
 
         BudgetCategory::create($request->all());
+
         return redirect()->route('budget-categories.index')->with('success', 'Kategori Pagu berhasil ditambahkan.');
     }
 
@@ -53,6 +55,7 @@ class BudgetCategoryController extends Controller
     public function edit($id)
     {
         $categoryPagu = BudgetCategory::findOrFail($id);
+
         return view('budget_categories.edit', compact('categoryPagu'));
     }
 

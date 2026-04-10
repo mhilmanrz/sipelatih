@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivityFormat;
 use App\Http\Requests\StoreActivityFormatRequest;
 use App\Http\Requests\UpdateActivityFormatRequest;
+use App\Models\ActivityFormat;
 
 class ActivityFormatController extends Controller
 {

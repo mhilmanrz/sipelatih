@@ -14,6 +14,7 @@ class PositionsController extends Controller
     public function index()
     {
         $positions = Positions::paginate(10);
+
         return response()->json($positions);
     }
 
@@ -28,6 +29,7 @@ class PositionsController extends Controller
     public function store(Request $request)
     {
         $position = Positions::create($request->all());
+
         return response()->json($position, 201);
     }
 
@@ -38,7 +40,7 @@ class PositionsController extends Controller
     {
         $position = Positions::find($id);
 
-        if (!$position) {
+        if (! $position) {
             return response()->json(['message' => 'Position not found'], 404);
         }
 
@@ -57,11 +59,12 @@ class PositionsController extends Controller
     {
         $position = Positions::find($id);
 
-        if (!$position) {
+        if (! $position) {
             return response()->json(['message' => 'Position not found'], 404);
         }
 
         $position->update($request->all());
+
         return response()->json($position);
     }
 
@@ -72,11 +75,12 @@ class PositionsController extends Controller
     {
         $position = Positions::find($id);
 
-        if (!$position) {
+        if (! $position) {
             return response()->json(['message' => 'Position not found'], 404);
         }
 
         $position->delete();
+
         return response()->json(['message' => 'Position deleted successfully'], 200);
     }
 }

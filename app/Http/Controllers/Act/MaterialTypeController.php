@@ -14,6 +14,7 @@ class MaterialTypeController extends Controller
     public function index()
     {
         $materialTypes = MaterialType::paginate(10);
+
         return view('material_type.index', compact('materialTypes'));
     }
 
@@ -35,6 +36,7 @@ class MaterialTypeController extends Controller
         ]);
 
         MaterialType::create($request->all());
+
         return redirect()->route('material-types.index')->with('success', 'Jenis Materi berhasil ditambahkan.');
     }
 
@@ -52,6 +54,7 @@ class MaterialTypeController extends Controller
     public function edit($id)
     {
         $materialType = MaterialType::findOrFail($id);
+
         return view('material_type.edit', compact('materialType'));
     }
 

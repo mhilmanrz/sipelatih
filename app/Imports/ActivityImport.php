@@ -10,14 +10,14 @@ use App\Models\User\WorkUnit;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class ActivityImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            if (!isset($row['judul_kegiatan'])) {
+            if (! isset($row['judul_kegiatan'])) {
                 continue;
             }
 
@@ -31,17 +31,17 @@ class ActivityImport implements ToCollection, WithHeadingRow
             $startDate = null;
             $endDate = null;
             try {
-                if (!empty($row['waktu_mulai'])) {
+                if (! empty($row['waktu_mulai'])) {
                     // Coba parsing
-                    $startDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['waktu_mulai'])->format('Y-m-d');
+                    $startDate = Date::excelToDateTimeObject($row['waktu_mulai'])->format('Y-m-d');
                 }
             } catch (\Exception $e) {
                 $startDate = date('Y-m-d', strtotime($row['waktu_mulai']));
             }
 
             try {
-                if (!empty($row['waktu_selesai'])) {
-                    $endDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['waktu_selesai'])->format('Y-m-d');
+                if (! empty($row['waktu_selesai'])) {
+                    $endDate = Date::excelToDateTimeObject($row['waktu_selesai'])->format('Y-m-d');
                 }
             } catch (\Exception $e) {
                 $endDate = date('Y-m-d', strtotime($row['waktu_selesai']));

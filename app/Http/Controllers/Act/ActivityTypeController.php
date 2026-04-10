@@ -14,6 +14,7 @@ class ActivityTypeController extends Controller
     public function index()
     {
         $activityTypes = ActivityType::paginate(10);
+
         return view('activity_type.index', compact('activityTypes'));
     }
 
@@ -35,6 +36,7 @@ class ActivityTypeController extends Controller
         ]);
 
         ActivityType::create($request->all());
+
         return redirect()->route('activity-types.index')->with('success', 'Jenis Kegiatan berhasil ditambahkan.');
     }
 
@@ -52,6 +54,7 @@ class ActivityTypeController extends Controller
     public function edit($id)
     {
         $activityType = ActivityType::findOrFail($id);
+
         return view('activity_type.edit', compact('activityType'));
     }
 

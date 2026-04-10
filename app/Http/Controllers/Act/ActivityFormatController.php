@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Act;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Act\ActivityFormat;
+use Illuminate\Http\Request;
 
 class ActivityFormatController extends Controller
 {
@@ -14,6 +14,7 @@ class ActivityFormatController extends Controller
     public function index()
     {
         $activityFormats = ActivityFormat::paginate(10);
+
         return view('activity_format.index', compact('activityFormats'));
     }
 
@@ -35,6 +36,7 @@ class ActivityFormatController extends Controller
         ]);
 
         ActivityFormat::create($request->all());
+
         return redirect()->route('activity-formats.index')->with('success', 'Bentuk Kegiatan berhasil ditambahkan.');
     }
 
@@ -52,6 +54,7 @@ class ActivityFormatController extends Controller
     public function edit($id)
     {
         $activityFormat = ActivityFormat::findOrFail($id);
+
         return view('activity_format.edit', compact('activityFormat'));
     }
 
