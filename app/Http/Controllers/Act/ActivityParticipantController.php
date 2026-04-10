@@ -95,6 +95,26 @@ class ActivityParticipantController extends Controller
     }
 
     /**
+     * Update the certificate number of the specified participant.
+     */
+    public function updateCertificate(Request $request, $kegiatanId, $id)
+    {
+        $request->validate([
+            'certificate_number' => 'nullable|string|max:255',
+        ]);
+
+        $participant = ActivityParticipant::where('activity_id', $kegiatanId)
+            ->findOrFail($id);
+
+        $participant->update([
+            'certificate_number' => $request->certificate_number,
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'peserta'])
+            ->with('success', 'Nomor Sertifikat berhasil diperbarui.');
+    }
+
+    /**
      * Show the form to import participants.
      */
     public function importPage($kegiatanId)
