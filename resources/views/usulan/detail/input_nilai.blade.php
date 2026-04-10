@@ -20,6 +20,9 @@
         
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-bold text-gray-800">Input Nilai Peserta</h2>
+            <a href="{{ route('kegiatan.input-nilai.import.page', $kegiatan->id) }}" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded text-sm font-bold shadow flex items-center gap-2 transition-colors" style="text-decoration:none;">
+                Import Nilai
+            </a>
         </div>
 
         <!-- TABLE -->

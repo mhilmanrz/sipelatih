@@ -28,6 +28,12 @@
             <span>Monitoring JPL</span>
         </a>
 
+        <a href="{{ url('/indikator-kinerja') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('indikator-kinerja*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+            <i class="fa-solid fa-chart-bar w-6 text-center mr-2"></i>
+            <span>Indikator Kinerja</span>
+        </a>
+
         <!-- ======================= -->
         <!-- MENU PENGUSUL -->
         <!-- ======================= -->
@@ -132,6 +138,12 @@
                 class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-types*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
                 <i class="fa-solid fa-tags w-6 text-center mr-2"></i>
                 <span>Jenis Kegiatan</span>
+            </a>
+
+            <a href="{{ route('activity-categories.index') }}"
+                class="flex items-center px-4 py-3 text-gray-200 hover:bg-teal-700 hover:text-white transition-colors {{ request()->is('dictionaries/activity-categories*') ? 'bg-teal-800 border-l-4 border-teal-400 font-semibold' : '' }}">
+                <i class="fa-solid fa-list-alt w-6 text-center mr-2"></i>
+                <span>Kategori Kegiatan</span>
             </a>
 
             <a href="{{ route('activity-scopes.index') }}"

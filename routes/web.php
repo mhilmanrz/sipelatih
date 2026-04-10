@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Act\ActivityCategoryController;
 use App\Http\Controllers\Act\ActivityController;
 use App\Http\Controllers\Act\ActivityFormatController;
 use App\Http\Controllers\Act\ActivityMaterialController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Act\TargetParticipantController; // Added ProfileContro
 use App\Http\Controllers\ActivityNameController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\IndikatorKinerjaController;
 use App\Http\Controllers\MonitoringJplController;
 use App\Http\Controllers\PaguController;
 use App\Http\Controllers\ProfessionCategoryController;
@@ -65,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::view('/manajemen-sasaran-profesi', 'ManajemenSasaranProfesi');
     Route::get('/monitoring-jpl', [MonitoringJplController::class, 'index'])->name('monitoring.jpl.index');
+    Route::get('/indikator-kinerja', [IndikatorKinerjaController::class, 'index'])->name('indikator-kinerja.index');
     Route::get('/pagu/import/template', [PaguController::class, 'downloadTemplate'])->name('pagu.import.template');
     Route::get('/pagu/import', [PaguController::class, 'importPage'])->name('pagu.import.page');
     Route::post('/pagu/import', [PaguController::class, 'importStore'])->name('pagu.import.store');
@@ -96,6 +99,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('kegiatan/{kegiatan}/peserta/{id}', [ActivityParticipantController::class, 'destroy'])->name('kegiatan.peserta.destroy');
     Route::get('kegiatan/{kegiatan}/peserta/available-users', [ActivityParticipantController::class, 'availableUsers'])->name('kegiatan.peserta.available-users');
 
+    Route::get('kegiatan/{kegiatan}/input-nilai/template', [ActivityScoreController::class, 'downloadTemplate'])->name('kegiatan.input-nilai.template');
+    Route::get('kegiatan/{kegiatan}/input-nilai/import', [ActivityScoreController::class, 'importPage'])->name('kegiatan.input-nilai.import.page');
+    Route::post('kegiatan/{kegiatan}/input-nilai/import', [ActivityScoreController::class, 'importStore'])->name('kegiatan.input-nilai.import.store');
     Route::put('kegiatan/{kegiatan}/input-nilai/{participant_id}', [ActivityScoreController::class, 'update'])->name('kegiatan.input-nilai.update');
 
     // Pengiriman (Status Tracker) Routes
@@ -114,6 +120,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('positions', PositionController::class);
     // Kegiatan Master Data
     Route::resource('dictionaries/activity-types', ActivityTypeController::class);
+    Route::resource('dictionaries/activity-categories', ActivityCategoryController::class);
     Route::resource('dictionaries/material-types', MaterialTypeController::class);
     Route::resource('dictionaries/activity-scopes', ActivityScopeController::class);
     Route::resource('dictionaries/activity-formats', ActivityFormatController::class);

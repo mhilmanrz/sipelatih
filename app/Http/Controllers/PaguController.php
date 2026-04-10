@@ -27,6 +27,11 @@ class PaguController extends Controller
         $budgets = $query->get();
         $categories = BudgetCategory::all();
 
+        $totalDana = $budgets->sum('total_amount');
+        $budgetIds = $budgets->pluck('id');
+        $totalTerserap = \App\Models\Act\Activity::whereIn('budget_id', $budgetIds)->sum('budget_amount');
+        $totalSisa = $totalDana - $totalTerserap;
+
         $availableYears = Budget::select('year')
             ->whereNotNull('year')
             ->distinct()
@@ -41,7 +46,33 @@ class PaguController extends Controller
             rsort($availableYears);
         }
 
-        return view('pagu', compact('budgets', 'categories', 'selectedYear', 'availableYears'));
+        // Data for Bar Chart Per RKAKL
+        $chartYear = $selectedYear ?: (empty($availableYears) ? date('Y') : max($availableYears));
+        $budgetsForChart = Budget::with('activities')->where('year', $chartYear)->get();
+        
+        $rkaklLabels = [];
+        $rkaklDigunakan = [];
+        $rkaklSisa = [];
+        
+        foreach ($budgetsForChart as $b) {
+            $used = $b->activities->sum('budget_amount');
+            $sisa = $b->total_amount - $used;
+            
+            $label = $b->rkkal_code;
+            if ($b->submark) {
+                $label .= ' - ' . \Illuminate\Support\Str::limit($b->submark, 20);
+            }
+            
+            $rkaklLabels[] = $label;
+            $rkaklDigunakan[] = $used;
+            $rkaklSisa[] = $sisa < 0 ? 0 : $sisa;
+        }
+
+        return view('pagu', compact(
+            'budgets', 'categories', 'selectedYear', 'availableYears', 
+            'totalDana', 'totalTerserap', 'totalSisa',
+            'chartYear', 'rkaklLabels', 'rkaklDigunakan', 'rkaklSisa'
+        ));
     }
 
     /**

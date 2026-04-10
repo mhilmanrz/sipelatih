@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Act\StoreActivityRequest;
 use App\Http\Requests\Act\UpdateActivityRequest;
 use App\Models\Act\Activity;
+use App\Models\Act\ActivityCategory;
 use App\Models\Act\ActivityFormat;
 use App\Models\Act\ActivityMethod;
 use App\Models\Act\ActivityName;
@@ -18,6 +19,7 @@ use App\Models\Budget;
 use App\Models\User\Profession;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ActivityController extends Controller
@@ -40,6 +42,7 @@ class ActivityController extends Controller
     {
         $picCandidates = User::all();
         $activity_names = ActivityName::whereDoesntHave('activities')->get();
+        $activity_categories = ActivityCategory::all();
         $activity_types = ActivityType::all();
         $activity_scopes = ActivityScope::all();
         $material_types = MaterialType::all();
@@ -53,6 +56,7 @@ class ActivityController extends Controller
         return view('usulan.pengajuan.create', compact(
             'picCandidates',
             'activity_names',
+            'activity_categories',
             'activity_types',
             'activity_scopes',
             'material_types',
@@ -81,7 +85,7 @@ class ActivityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(\Illuminate\Http\Request $request, $id)
+    public function show(Request $request, $id)
     {
         $searchPeserta = $request->input('search_peserta');
 
@@ -101,11 +105,11 @@ class ActivityController extends Controller
             'activityMaterials.speakers.user',
             'activityMaterials.moderators.user',
             'activityProfessions.profession',
-            'activityParticipants' => function($query) use ($searchPeserta) {
+            'activityParticipants' => function ($query) use ($searchPeserta) {
                 if ($searchPeserta) {
-                    $query->whereHas('user', function($q) use ($searchPeserta) {
-                        $q->where('name', 'like', '%' . $searchPeserta . '%')
-                          ->orWhere('nip', 'like', '%' . $searchPeserta . '%');
+                    $query->whereHas('user', function ($q) use ($searchPeserta) {
+                        $q->where('name', 'like', '%'.$searchPeserta.'%')
+                            ->orWhere('nip', 'like', '%'.$searchPeserta.'%');
                     });
                 }
             },
@@ -128,6 +132,7 @@ class ActivityController extends Controller
 
         $picCandidates = User::all();
         $activity_names = ActivityName::all();
+        $activity_categories = ActivityCategory::all();
         $activity_types = ActivityType::all();
         $activity_scopes = ActivityScope::all();
         $material_types = MaterialType::all();
@@ -142,6 +147,7 @@ class ActivityController extends Controller
             'kegiatan',
             'picCandidates',
             'activity_names',
+            'activity_categories',
             'activity_types',
             'activity_scopes',
             'material_types',

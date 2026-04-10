@@ -17,6 +17,7 @@ class Activity extends Model
         'reference_number',
         'activity_name_id',
         'activity_type_id',
+        'activity_category_id',
         'activity_scope_id',
         'material_type_id',
         'activity_method_id',
@@ -48,6 +49,11 @@ class Activity extends Model
     public function activityType()
     {
         return $this->belongsTo(ActivityType::class);
+    }
+
+    public function activityCategory()
+    {
+        return $this->belongsTo(ActivityCategory::class);
     }
 
     public function activityScope()

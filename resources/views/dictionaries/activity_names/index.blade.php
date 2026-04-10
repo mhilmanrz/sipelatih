@@ -68,6 +68,18 @@
                             Nama Kegiatan
                         </th>
                         <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                            Tanggal Mulai
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                            Tanggal Selesai
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                            Tahun
+                        </th>
+                        <th scope="col"
                             class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-48">
                             Aksi
                         </th>
@@ -81,6 +93,15 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {{ $activityName->name }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {{ $activityName->start_date }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {{ $activityName->end_date }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {{ $activityName->year ?? '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center space-x-2">
                                 <a href="{{ route('activity-names.edit', $activityName->id) }}"
@@ -101,7 +122,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="px-6 py-10 text-center text-gray-500 text-sm">
+                            <td colspan="6" class="px-6 py-10 text-center text-gray-500 text-sm">
                                 Belum ada data Nama Kegiatan.
                             </td>
                         </tr>

@@ -38,10 +38,11 @@
 
                 <div class="form-row">
                     <label>Nama Kegiatan</label>
-                    <select name="activity_name_id" required>
-                        <option value="">-PILIH-</option>
+                    <select name="activity_name_id" id="activity_name_select" required>
+                        <option value="" data-start="" data-end="">-PILIH-</option>
                         @foreach ($activity_names as $actName)
                             <option value="{{ $actName->id }}"
+                                data-start="{{ $actName->start_date }}" data-end="{{ $actName->end_date }}"
                                 {{ old('activity_name_id') == $actName->id ? 'selected' : '' }}>{{ $actName->name }}
                             </option>
                         @endforeach
@@ -55,6 +56,17 @@
                         @foreach ($activity_types as $type)
                             <option value="{{ $type->id }}"
                                 {{ old('activity_type_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Kategori Kegiatan</label>
+                    <select name="activity_category_id" required>
+                        <option value="">-PILIH-</option>
+                        @foreach ($activity_categories as $category)
+                            <option value="{{ $category->id }}"
+                                {{ old('activity_category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -141,8 +153,8 @@
 
                 <div class="form-row two">
                     <label>Tgl Mulai / Selesai</label>
-                    <input type="date" name="start_date" value="{{ old('start_date') }}">
-                    <input type="date" name="end_date" value="{{ old('end_date') }}">
+                    <input type="date" name="start_date" id="act_start_date" value="{{ old('start_date') }}">
+                    <input type="date" name="end_date" id="act_end_date" value="{{ old('end_date') }}">
                 </div>
 
                 <div class="form-row">
@@ -203,6 +215,31 @@
         </form>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const select = document.getElementById('activity_name_select');
+        const startDateInput = document.getElementById('act_start_date');
+        const endDateInput = document.getElementById('act_end_date');
+
+        if (select && startDateInput && endDateInput) {
+            select.addEventListener('change', function() {
+                const selectedOption = select.options[select.selectedIndex];
+                const start = selectedOption.getAttribute('data-start');
+                const end = selectedOption.getAttribute('data-end');
+
+                if (start) {
+                    startDateInput.value = start;
+                }
+                if (end) {
+                    endDateInput.value = end;
+                }
+            });
+        }
+    });
+</script>
+@endpush
 
 @push('scripts')
     <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>

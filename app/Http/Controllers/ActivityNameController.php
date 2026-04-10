@@ -35,10 +35,10 @@ class ActivityNameController extends Controller
 
     public function downloadTemplate()
     {
-        $header = ['nama_kegiatan'];
+        $header = ['nama_kegiatan', 'start_date', 'end_date', 'year'];
         $data = [
-            ['Contoh Nama Kegiatan 1'],
-            ['Contoh Nama Kegiatan 2'],
+            ['Contoh Nama Kegiatan 1', '2026-05-01', '2026-05-10', '2026'],
+            ['Contoh Nama Kegiatan 2', null, null, null],
         ];
 
         return Excel::download(new class($header, $data) implements FromCollection, WithHeadings
@@ -72,7 +72,12 @@ class ActivityNameController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|string|max:255']);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'year' => 'nullable|integer',
+        ]);
         ActivityName::create($request->all());
 
         return redirect()->route('activity-names.index')->with('success', 'Nama Kegiatan berhasil ditambahkan.');
@@ -85,7 +90,12 @@ class ActivityNameController extends Controller
 
     public function update(Request $request, ActivityName $activityName)
     {
-        $request->validate(['name' => 'required|string|max:255']);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'year' => 'nullable|integer',
+        ]);
         $activityName->update($request->all());
 
         return redirect()->route('activity-names.index')->with('success', 'Nama Kegiatan berhasil diperbarui.');

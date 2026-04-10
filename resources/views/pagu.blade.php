@@ -60,6 +60,31 @@
             </div>
         </div>
 
+        <!-- CHART AREA -->
+        @if($totalDana > 0)
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-700 mb-4 text-center">Persentase Penyerapan Dana Pagu</h2>
+            <div class="relative w-full max-w-md" style="height: 250px;">
+                <canvas id="paguPieChart"></canvas>
+            </div>
+            <div class="mt-4 text-center text-sm text-gray-600">
+                <p>Total Pagu: Rp {{ number_format($totalDana, 0, ',', '.') }}</p>
+                <p>Pagu Digunakan: Rp {{ number_format($totalTerserap, 0, ',', '.') }}</p>
+                <p>Pagu Tersisa: Rp {{ number_format($totalSisa, 0, ',', '.') }}</p>
+            </div>
+        </div>
+        @endif
+
+        @if(count($rkaklLabels) > 0)
+        <!-- BAR CHART AREA per RKAKL -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-700 mb-4 text-center">Penyerapan Pagu per RKAKL (Tahun {{ $chartYear }})</h2>
+            <div class="relative w-full" style="height: 350px;">
+                <canvas id="paguBarChart"></canvas>
+            </div>
+        </div>
+        @endif
+
         @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
                 <strong>Terdapat kesalahan:</strong>
@@ -305,4 +330,139 @@
             }
         });
     </script>
+    
+    @if($totalDana > 0)
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('paguPieChart').getContext('2d');
+            
+            const data = {
+                labels: ['Dana Digunakan', 'Dana Tersisa'],
+                datasets: [{
+                    label: 'Serapan Pagu',
+                    data: [
+                        {{ $totalTerserap ?? 0 }},
+                        {{ $totalSisa < 0 ? 0 : $totalSisa }}
+                    ],
+                    backgroundColor: [
+                        '#3b82f6', // blue-500
+                        '#10b981'  // emerald-500
+                    ],
+                    borderColor: [
+                        '#2563eb', // blue-600
+                        '#059669'  // emerald-600
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    let value = context.raw;
+                                    let total = context.chart._metasets[context.datasetIndex].total;
+                                    let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                    label += percentage + '% (Rp ' + new Intl.NumberFormat('id-ID').format(value) + ')';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    @endif
+
+    @if(count($rkaklLabels) > 0)
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const barCtx = document.getElementById('paguBarChart').getContext('2d');
+            
+            const barData = {
+                labels: {!! json_encode($rkaklLabels) !!},
+                datasets: [
+                    {
+                        label: 'Dana Digunakan',
+                        data: {!! json_encode($rkaklDigunakan) !!},
+                        backgroundColor: '#3b82f6', // blue-500
+                        borderColor: '#2563eb', // blue-600
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Dana Tersisa',
+                        data: {!! json_encode($rkaklSisa) !!},
+                        backgroundColor: '#10b981', // emerald-500
+                        borderColor: '#059669', // emerald-600
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            new Chart(barCtx, {
+                type: 'bar',
+                data: barData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    if (value >= 1000000000) {
+                                        return (value / 1000000000) + ' M';
+                                    } else if (value >= 1000000) {
+                                        return (value / 1000000) + ' Jt';
+                                    }
+                                    return new Intl.NumberFormat('id-ID').format(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    let value = context.raw;
+                                    label += 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    @endif
 @endpush

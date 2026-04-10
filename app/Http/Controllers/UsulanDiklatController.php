@@ -16,21 +16,56 @@ class UsulanDiklatController extends Controller
     {
         $perPage = $request->input('entries', 10);
         $search = $request->input('search');
+        $year = $request->input('year');
+        $status = $request->input('status');
 
         $query = Activity::with(['activityName', 'activityType', 'materialType', 'latestStatus', 'workUnit']);
 
         if ($search) {
             $query->whereHas('activityName', function ($q) use ($search) {
-                $q->where('name', 'like', '%'.$search.'%');
+                $q->where('name', 'like', '%' . $search . '%');
             })
                 ->orWhereHas('workUnit', function ($q) use ($search) {
-                    $q->where('name', 'like', '%'.$search.'%');
+                    $q->where('name', 'like', '%' . $search . '%');
                 });
+        }
+
+        if ($year) {
+            $query->where(function ($q) use ($year) {
+                $q->whereYear('end_date', $year)
+                    ->orWhereYear('start_date', $year)
+                    ->orWhereYear('date', $year);
+            });
+        }
+
+        if ($status) {
+            if ($status === 'draft') {
+                $query->whereDoesntHave('latestStatus');
+            } else {
+                $query->whereHas('latestStatus', function ($q) use ($status) {
+                    $q->where('status', $status);
+                });
+            }
         }
 
         $kegiatan = $query->paginate($perPage);
 
-        return view('usulan.usulan', compact('kegiatan'));
+        // Fetch data for Pie Chart
+        $totalActivities = Activity::count();
+        $statusCounts = [
+            'draft' => Activity::whereDoesntHave('latestStatus')->count(),
+            'submitted' => Activity::whereHas('latestStatus', function ($q) {
+                $q->where('status', 'submitted');
+            })->count(),
+            'revision' => Activity::whereHas('latestStatus', function ($q) {
+                $q->where('status', 'revision');
+            })->count(),
+            'accepted' => Activity::whereHas('latestStatus', function ($q) {
+                $q->where('status', 'accepted');
+            })->count(),
+        ];
+
+        return view('usulan.usulan', compact('kegiatan', 'totalActivities', 'statusCounts'));
     }
 
     public function importPage()
@@ -49,7 +84,7 @@ class UsulanDiklatController extends Controller
 
             return redirect()->route('usulan-diklat')->with('success', 'Data kegiatan berhasil diimport');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat import: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat import: ' . $e->getMessage());
         }
     }
 
@@ -75,7 +110,7 @@ class UsulanDiklatController extends Controller
 
             return redirect()->route('usulan-diklat')->with('success', 'Data kegiatan per peserta sedang diimport di antrean (background). Harap periksa beberapa saat lagi.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat upload untuk import: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat upload untuk import: ' . $e->getMessage());
         }
     }
 

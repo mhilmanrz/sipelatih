@@ -27,6 +27,7 @@ class StoreActivityRequest extends FormRequest
             'date' => 'nullable|date',
             'reference_number' => 'nullable|string|max:255',
             'activity_type_id' => 'required|exists:activity_types,id',
+            'activity_category_id' => 'required|exists:activity_categories,id',
             'activity_scope_id' => 'required|exists:activity_scopes,id',
             'material_type_id' => 'required|exists:material_types,id',
             'activity_method_id' => 'required|exists:activity_methods,id',

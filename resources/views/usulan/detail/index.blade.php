@@ -150,6 +150,9 @@
                 <div class="label">Jenis Kegiatan</div>
                 <div class="value">: {{ $kegiatan->activityType->name ?? '-' }}</div>
 
+                <div class="label">Kategori Kegiatan</div>
+                <div class="value">: {{ $kegiatan->activityCategory->name ?? '-' }}</div>
+
                 <div class="label">Cakupan</div>
                 <div class="value">: {{ $kegiatan->activityScope->name ?? '-' }}</div>
 
