@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
-            $table->foreignId('budget_id')->nullable()->constrained('budgets')->nullOnDelete();
-            // Drop fund_source_id if you want, but maybe we just leave it for legacy
-        });
+        if (!Schema::hasColumn('activities', 'budget_id')) {
+            Schema::table('activities', function (Blueprint $table) {
+                $table->foreignId('budget_id')->nullable()->constrained('budgets')->nullOnDelete();
+            });
+        }
     }
 
     /**

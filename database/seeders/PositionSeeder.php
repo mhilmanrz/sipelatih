@@ -20,8 +20,6 @@ class PositionSeeder extends Seeder
             ['code' => 'ADM', 'name' => 'Admin'],
         ];
 
-        foreach ($positions as $position) {
-            Positions::create($position);
-        }
+        Positions::upsert($positions, ['code'], ['name']);
     }
 }
