@@ -9,7 +9,7 @@
 @section('content')
     <div class="tw-wrap p-6">
         <div class="max-w-xl bg-white rounded-lg shadow p-6">
-            <h1 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Tambah Data Sumber Dana</h1>
+            <h1 class="text-2xl font-bold text-white mb-6 border-b pb-2">TAMBAH SUMBER DANA</h1>
 
             @if ($errors->any())
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">

@@ -9,7 +9,6 @@
 @endpush
 
 @section('content')
-    <h2 style="color:white;">Dashboard</h2>
 
     <div class="cards">
         <div class="card"><i class="fa fa-file-alt"></i>Draft<br><b>{{ $draftCount }}</b></div>

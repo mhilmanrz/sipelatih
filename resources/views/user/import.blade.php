@@ -70,7 +70,7 @@
                     SIMPAN JALANKAN IMPORT
                 </button>
                 <a href="{{ route('users.index') }}" class="btn"
-                    style="padding:10px 20px; border:1px solid #ccc; border-radius:5px; text-decoration:none; color:#333; margin-left: 10px;">Batal</a>
+                    style="padding:10px 20px; border:1px solid #ccc; border-radius:5px; text-decoration:none; color:#D6DE20; margin-left: 10px;">Batal</a>
             </form>
         </div>
     </div>

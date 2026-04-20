@@ -14,7 +14,7 @@
 @section('content')
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 border-b pb-2">Tambah Kategori Pagu</h1>
+            <h1 class="text-2xl font-bold text-white border-b pb-2">TAMBAH KATEGORI PAGU</h1>
         </div>
 
         @if ($errors->any())

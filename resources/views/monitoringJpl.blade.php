@@ -26,7 +26,7 @@
     <div class="p-6 space-y-6">
 
         <!-- TITLE -->
-        <h2 class="text-2xl font-bold text-[#007A7F] text-left">
+        <h2 class="text-2xl font-bold text-[#FFFFFF] text-left">
             MONITORING CAPAIAN JPL
         </h2>
 
@@ -34,14 +34,14 @@
         <form action="{{ route('monitoring.jpl.index') }}" method="GET"
             class="bg-white p-4 rounded shadow flex flex-col md:flex-row gap-4 md:items-center">
             <input type="text" name="nip" value="{{ request('nip') }}" placeholder="Cari NIP Pegawai"
-                class="border rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
+                class="border-4 rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
             <input type="text" name="nama" value="{{ request('nama') }}" placeholder="Cari Nama Pegawai"
-                class="border rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
+                class="border-4 rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
             <button type="submit" class="bg-[#007A7F] hover:bg-teal-700 text-white px-6 py-2 rounded w-full md:w-auto">
                 Cari
             </button>
             <a href="{{ route('monitoring.jpl.index') }}"
-                class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded w-full md:w-auto text-center"
+                class="bg-[#D6DE20] hover:bg-[#006bd6] text-black px-6 py-2 rounded w-full md:w-auto text-center"
                 style="text-decoration: none;">
                 Reset
             </a>

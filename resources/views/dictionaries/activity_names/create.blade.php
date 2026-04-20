@@ -30,7 +30,7 @@
 @section('content')
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Tambah Nama Kegiatan</h1>
+            <h1 class="text-2xl font-bold text-white">TAMBAH NAMA KEGIATAN</h1>
         </div>
 
         <div class="bg-white rounded-lg shadow overflow-hidden p-6">

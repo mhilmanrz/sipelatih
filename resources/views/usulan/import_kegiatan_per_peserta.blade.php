@@ -10,7 +10,7 @@
 @section('content')
     <div class="p-8">
         <div class="mb-6 flex justify-between items-center">
-            <h1 class="text-2xl font-bold uppercase" style="color: white; font-size: 1.5rem; background-color: #1e40af; padding: 1rem 2rem; border-radius: 8px; display: inline-block;">IMPORT KEGIATAN PER PESERTA</h1>
+            <h1 class="text-2xl font-bold uppercase" style="color: white; font-size: 1.5rem; padding: 1rem 2rem; border-radius: 8px; display: inline-block;">IMPORT KEGIATAN PER PESERTA</h1>
             
             <a href="{{ route('usulan-diklat') }}" class="text-gray-600 hover:text-gray-900 font-medium bg-white px-4 py-2 rounded shadow transition-colors">
                 ← Kembali ke Usulan Diklat
@@ -42,7 +42,7 @@
                     </p>
                 </div>
 
-                <a href="{{ route('kegiatan.import-per-peserta.template') }}" class="inline-flex py-3 px-6 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded-lg shadow items-center transition-colors">
+                <a href="{{ route('kegiatan.import-per-peserta.template') }}" class="inline-flex py-3 px-6 bg-[#1A5555] hover:bg-gray-900 text-white font-semibold rounded-lg shadow items-center transition-colors">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     Download Template (.xlsx)
                 </a>
@@ -75,7 +75,7 @@
                     <div id="file-name" class="mt-4 text-center font-medium text-blue-600 h-6"></div>
 
                     <div class="mt-6 flex justify-end">
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors w-full md:w-auto">
+                        <button type="submit" class="bg-[#D6DE20] hover:bg-[#D6DE20] text-BLACK font-bold py-3 px-8 rounded-full shadow-lg transition-colors w-full md:w-auto">
                             Mulai Import Data
                         </button>
                     </div>

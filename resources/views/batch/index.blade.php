@@ -30,9 +30,9 @@
 @section('content')
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Manajemen Batch</h1>
+            <h1 class="text-2xl font-bold text-white">MANAJEMEN BATCH</h1>
             <a href="{{ route('batches.create') }}"
-                class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow">
+                class="bg-[#1A5555] hover:bg-[#1A5555] text-white font-semibold py-2 px-4 rounded shadow">
                 + Tambah Batch
             </a>
         </div>
@@ -72,7 +72,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center space-x-2">
                                 <a href="{{ route('batches.edit', $batch->id) }}"
-                                    class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 rounded text-sm font-medium transition-colors">
+                                    class="inline-flex items-center px-3 py-1.5 bg-[#1A5555] text-white hover:bg-[#1A5555] border border-[#1A5555] rounded text-sm font-medium transition-colors">
                                     Edit
                                 </a>
                                 <form action="{{ route('batches.destroy', $batch->id) }}" method="POST"
@@ -80,7 +80,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                        class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded text-sm font-medium transition-colors"
+                                        class="inline-flex items-center px-3 py-1.5 bg-[#FF0000] text-white hover:bg-red-100 border border-red-200 rounded text-sm font-medium transition-colors"
                                         onclick="return confirm('Apakah Anda yakin ingin menghapus Batch ini?')">
                                         Hapus
                                     </button>

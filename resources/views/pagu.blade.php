@@ -34,13 +34,13 @@
 @section('content')
     <div class="tw-wrap p-6">
         <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
-            <h1 class="text-2xl font-bold text-gray-800">Manajemen Pagu Anggaran</h1>
+            <h1 class="text-2xl font-bold text-white">MANAJEMEN PAGU ANGGARAN</h1>
             
             <div class="flex items-center gap-4">
                 <form action="{{ route('pagu.index') }}" method="GET" class="flex items-center gap-2">
-                    <label for="filterYear" class="text-sm font-medium text-gray-700">Filter Tahun:</label>
+                    <label for="filterYear" class="text-sm font-medium text-white">Filter Tahun:</label>
                     <select name="year" id="filterYear" onchange="this.form.submit()" 
-                            class="border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-teal-500 focus:border-teal-500 shadow-sm w-36">
+                            class="border-2 border-white rounded-md py-2 px-3 text-sm focus:ring-teal-500 focus:border-teal-500 shadow-sm w-36">
                         <option value="">-- Semua --</option>
                         @foreach($availableYears as $y)
                             <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
@@ -49,7 +49,7 @@
                 </form>
 
                 <a href="{{ route('pagu.import.page') }}" id="btnImportPagu"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded shadow whitespace-nowrap text-sm"
+                    class="bg-[#D6DE20] hover:bg-[#006bd6] text-black font-semibold py-2 px-4 rounded shadow whitespace-nowrap text-sm"
                     style="text-decoration:none;">
                     Import Pagu
                 </a>

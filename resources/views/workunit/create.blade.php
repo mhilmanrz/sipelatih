@@ -26,8 +26,8 @@
 @section('content')
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Tambah Unit Kerja Baru</h1>
-            <p class="text-gray-600 mt-1">Silakan isi form di bawah ini untuk menambahkan data unit kerja baru.</p>
+            <h1 class="text-2xl font-bold text-white">TAMBAH UNIT KERJA</h1>
+            <p class="text-gray-300 mt-1">Silakan isi form di bawah ini untuk menambahkan data unit kerja baru.</p>
         </div>
 
         @if ($errors->any())
