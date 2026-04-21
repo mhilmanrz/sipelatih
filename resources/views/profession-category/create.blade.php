@@ -26,7 +26,7 @@
 @section('content')
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Tambah Kategori Profesi Baru</h1>
+            <h1 class="text-2xl font-bold text-white">TAMBAH KATEGORI PROFESI BARU</h1>
             <p class="text-gray-600 mt-1">Silakan isi form di bawah ini untuk menambahkan data kategori profesi baru.</p>
         </div>
 

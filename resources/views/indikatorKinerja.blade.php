@@ -34,7 +34,7 @@
 @section('content')
     <div class="p-8">
         <div class="mb-6 flex justify-between items-center">
-            <h1 class="text-2xl font-bold uppercase" style="color: white; font-size: 1.5rem; background-color: #14b8a6; padding: 1rem 2rem; border-radius: 8px; display: inline-block;">INDIKATOR KINERJA</h1>
+            <h1 class="text-2xl font-bold uppercase" style="color: white; font-size: 1.5rem; padding: 1rem 2rem; border-radius: 8px; display: inline-block;">INDIKATOR KINERJA</h1>
         </div>
 
         <div class="custom-filter shadow-sm">
@@ -67,7 +67,7 @@
                         <p class="text-sm text-gray-500 mt-1">Mencapai Target : {{ $numerator1 }} dari {{ $denominator1 }} Pegawai</p>
                     </div>
                     <div class="text-teal-200">
-                        <i class="fas fa-users fa-3x"></i>
+                        <i class="fas fa-stethoscope fa-3x"></i>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                         <p class="text-sm text-gray-500 mt-1">Mencapai Target : {{ $numerator2 }} dari {{ $denominator2 }} Pegawai</p>
                     </div>
                     <div class="text-blue-200">
-                        <i class="fas fa-stethoscope fa-3x"></i>
+                        <i class="fas fa-users fa-3x"></i>
                     </div>
                 </div>
             </div>

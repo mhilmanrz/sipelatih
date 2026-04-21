@@ -30,14 +30,14 @@
 @section('content')
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Manajemen Nama Kegiatan</h1>
+            <h1 class="text-2xl font-bold text-white">MANAJEMEN NAMA KEGIATAN</h1>
             <div class="flex space-x-2">
                 <button type="button" onclick="toggleModal('importModal')"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
+                    class="bg-[#1A5555] hover:bg-[#1A5555] text-white font-semibold py-2 px-4 rounded shadow">
                     Import Excel
                 </button>
                 <a href="{{ route('activity-names.create') }}"
-                    class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow">
+                    class="bg-[#D6DE20] hover:bg-[#D6DE20] text-[#007A7F] font-semibold py-2 px-4 rounded shadow">
                     + Tambah Nama Kegiatan
                 </a>
             </div>

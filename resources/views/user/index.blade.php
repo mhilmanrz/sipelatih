@@ -12,7 +12,7 @@
 
         <!-- TOP BAR -->
         <div class="table-top" style="display:flex; justify-content:space-between; margin-bottom:15px;">
-            <div class="left" style="display:flex; align-items:center; gap:8px; color:#555; font-size:14px;">
+            <div class="left" style="display:flex; align-items:center; gap:8px; color:#000000; font-size:14px;">
                 Show
                 <select
                     style="padding:6px 12px; border:1px solid #ddd; border-radius:4px; font-size:14px; outline:none; background-color:white; cursor:pointer;"
@@ -26,10 +26,10 @@
 
             <div class="right">
                 <a href="{{ route('users.import.view') }}" class="btn gray"
-                    style="background:#ccc; padding:8px 15px; border-radius:5px; text-decoration:none; color:black; margin-right:5px;">⬇
+                    style="background:#D6DE20; padding:8px 15px; border-radius:5px; text-decoration:none; color:black; margin-right:5px;">⬇
                     Import Peserta</a>
                 <a href="{{ url('users/create') }}" class="btn green"
-                    style="background:#00B8A5; padding:8px 15px; border-radius:5px; text-decoration:none; color:white;">＋
+                    style="background:#1A5555; padding:8px 15px; border-radius:5px; text-decoration:none; color:white;">＋
                     Tambah</a>
             </div>
         </div>

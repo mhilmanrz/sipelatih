@@ -46,7 +46,7 @@
 @section('content')
     <div class="p-8">
         <div class="mb-6 flex justify-between items-center">
-            <h1 class="text-2xl font-bold uppercase" style="color: white; font-size: 1.5rem; background-color: #14b8a6; padding: 1rem 2rem; border-radius: 8px; display: inline-block;">LAPORAN KEGIATAN</h1>
+            <h1 class="text-2xl font-bold uppercase" style="color: white; font-size: 1.5rem;padding: 1rem 2rem; border-radius: 8px; display: inline-block;">LAPORAN KEGIATAN</h1>
         </div>
 
         @if (session('success'))
@@ -66,8 +66,8 @@
 
         <div class="bg-white rounded-xl shadow p-6 mb-8">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-800">Daftar Laporan Kegiatan</h2>
-                <a href="{{ route('kegiatan.laporan.template') }}" class="inline-flex py-2 px-4 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded shadow items-center transition-colors text-sm">
+                <h2 class="text-xl font-semibold text-gray-800">DAFTAR LAPORAN KEGIATAN</h2>
+                <a href="{{ route('kegiatan.laporan.template') }}" class="inline-flex py-2 px-4 bg-[#D6DE20] hover:bg-[#006bd6] text-black font-semibold rounded shadow items-center transition-colors text-sm">
                     <i class="fas fa-download mr-2"></i> Download Template
                 </a>
             </div>
@@ -75,7 +75,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-gray-100">
+                        <tr class="bg-[#1A5555] text-white">
                             <th class="border px-4 py-2 border-gray-300 w-16 text-center">NO.</th>
                             <th class="border px-4 py-2 border-gray-300">Nama Kegiatan</th>
                             <th class="border px-4 py-2 border-gray-300 w-32 text-center">Tgl Mulai</th>

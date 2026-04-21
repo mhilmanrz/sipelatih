@@ -18,7 +18,7 @@
             <a href="{{ route('roles.index') }}" class="text-gray-500 hover:text-gray-700 mr-4">
                 <i class="fa-solid fa-arrow-left text-xl"></i>
             </a>
-            <h1 class="text-2xl font-bold text-gray-800">Tambah Role</h1>
+            <h1 class="text-2xl font-bold text-white">TAMBAH ROLE</h1>
         </div>
 
         @if ($errors->any())

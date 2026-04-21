@@ -26,7 +26,7 @@
 @section('content')
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Tambah Jenis Kepegawaian Baru</h1>
+            <h1 class="text-2xl font-bold text-white">TAMBAH JENIS KEPEGAWAIAN</h1>
             <p class="text-gray-600 mt-1">Silakan isi form di bawah ini untuk menambahkan data jenis kepegawaian baru.</p>
         </div>
 
