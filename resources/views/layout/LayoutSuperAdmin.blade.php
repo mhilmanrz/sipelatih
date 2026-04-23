@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}?v={{ time() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
@@ -42,15 +42,9 @@
         © 2026 — Saskya • Nina • Sandra • Hilman
     </footer>
 
-    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
+    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}?v={{ time() }}"></script>
     <!-- Jika ada fungsi toggle untuk profil yang bergantung pada js Pengusul -->
     <script>
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('hidden');
-            document.querySelector('.topbar').classList.toggle('full');
-            document.querySelector('.content').classList.toggle('full');
-        }
-
         function toggleProfileMenu() {
             let menu = document.getElementById('profileMenu');
             menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';

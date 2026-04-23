@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Act\Activity;
 use App\Models\User\User;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -45,5 +46,18 @@ class DashboardController extends Controller
             'acceptedCount',
             'chartData'
         ));
+    }
+
+    public function getActivitiesByDate(Request $request)
+    {
+        $date = $request->query('date', now()->format('Y-m-d'));
+
+        $activities = Activity::with('activityName')
+            ->whereDate('start_date', '<=', $date)
+            ->whereDate('end_date', '>=', $date)
+            ->orderBy('start_date', 'asc')
+            ->get();
+
+        return response()->json($activities);
     }
 }

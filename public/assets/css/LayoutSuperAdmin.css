@@ -238,7 +238,7 @@ body{
     min-height:calc(100vh - 60px);
 }
 .content.full{
-    margin-left:0;
+    margin-left:0 !important;
 }
 
 

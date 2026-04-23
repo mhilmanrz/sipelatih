@@ -8,9 +8,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* ===== SIDEBAR ===== */
 function toggleSidebar(){
-    document.getElementById("sidebar").classList.toggle("hidden");
-    document.getElementById("topbar").classList.toggle("full");
-    document.querySelector(".content").classList.toggle("full");
+    const sidebar = document.getElementById("sidebar");
+    const topbar = document.getElementById("topbar") || document.querySelector(".topbar");
+    const content = document.querySelector(".content") || document.getElementById("pageArea");
+
+    if (sidebar) sidebar.classList.toggle("hidden");
+    if (topbar) topbar.classList.toggle("full");
+    if (content) {
+        content.classList.toggle("full");
+        if (sidebar && sidebar.classList.contains("hidden")) {
+            content.style.marginLeft = "0px";
+        } else {
+            content.style.marginLeft = "240px";
+        }
+    }
+    
+    setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+    }, 300);
 }
 
 /* ===== SUBMENU (Pagu, dll) ===== */
