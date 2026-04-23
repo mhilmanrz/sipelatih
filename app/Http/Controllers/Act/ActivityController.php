@@ -52,7 +52,7 @@ class ActivityController extends Controller
         $activity_formats = ActivityFormat::all();
         $target_participants = TargetParticipant::all();
         $work_units = WorkUnit::all();
-        $budgets = Budget::all();
+        $budgets = Budget::withSum('activities', 'budget_amount')->get();
         $fund_sources = FundSource::all();
 
         return view('usulan.pengajuan.create', compact(
@@ -145,7 +145,7 @@ class ActivityController extends Controller
         $activity_formats = ActivityFormat::all();
         $target_participants = TargetParticipant::all();
         $work_units = WorkUnit::all();
-        $budgets = Budget::all();
+        $budgets = Budget::withSum('activities', 'budget_amount')->get();
         $fund_sources = FundSource::all();
 
         return view('usulan.pengajuan.edit', compact(

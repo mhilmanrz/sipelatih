@@ -194,8 +194,9 @@
                     <select name="budget_id">
                         <option value="">-PILIH PAGU-</option>
                         @foreach ($budgets as $bg)
+                            @php $sisa = $bg->total_amount - ($bg->activities_sum_budget_amount ?? 0); @endphp
                             <option value="{{ $bg->id }}" {{ old('budget_id') == $bg->id ? 'selected' : '' }}>
-                                {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Rp {{ number_format($bg->total_amount, 0, ',', '.') }})
+                                {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Sisa: Rp {{ number_format($sisa, 0, ',', '.') }})
                             </option>
                         @endforeach
                     </select>
