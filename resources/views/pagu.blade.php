@@ -102,8 +102,8 @@
             </div>
         @endif
 
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <table class="min-w-full divide-y divide-gray-200">
+        <div class="bg-white rounded-lg shadow overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200" style="min-width:700px;">
                 <thead class="bg-teal-600">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-16">No.</th>
