@@ -32,7 +32,20 @@
 
         <!-- FILTER -->
         <form action="{{ route('monitoring.jpl.index') }}" method="GET"
-            class="bg-white p-4 rounded shadow flex flex-col md:flex-row gap-4 md:items-center">
+            class="bg-white p-4 rounded shadow flex flex-col md:flex-row gap-4 md:items-center flex-wrap">
+            <div class="flex items-center gap-2">
+                <label for="year" class="font-semibold text-gray-700 whitespace-nowrap">Tahun:</label>
+                <select name="year" id="year"
+                    class="border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-primary/40">
+                    @php
+                        $currentYear = date('Y');
+                        $startYear = 2020;
+                    @endphp
+                    @for ($y = $currentYear + 1; $y >= $startYear; $y--)
+                        <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+            </div>
             <input type="text" name="nip" value="{{ request('nip') }}" placeholder="Cari NIP Pegawai"
                 class="border rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
             <input type="text" name="nama" value="{{ request('nama') }}" placeholder="Cari Nama Pegawai"
@@ -167,9 +180,63 @@
         <!-- CHART -->
         <div class="bg-white rounded shadow p-6">
             <h3 class="text-lg font-semibold mb-4 text-gray-700">
-                Grafik Capaian JPL
+                Grafik Capaian JPL Tahun {{ $year }}
             </h3>
             <canvas id="jplChart"></canvas>
+        </div>
+
+        <!-- INDIKATOR KINERJA -->
+        <h2 class="text-2xl font-bold text-[#007A7F] text-left mt-4">
+            INDIKATOR KINERJA TAHUN {{ $year }}
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- TEI Card -->
+            <div class="bg-white rounded-lg shadow p-6 border-t-4 border-teal-500">
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Training Effectiveness Index (40 JPL)</h3>
+                <div class="flex items-end justify-between">
+                    <div>
+                        <p class="text-3xl font-extrabold text-teal-600">{{ $teiPercentage }}%</p>
+                        <p class="text-sm text-gray-500 mt-1">Mencapai Target: {{ $numerator1 }} dari {{ $denominator1 }} Pegawai</p>
+                    </div>
+                    <div class="text-teal-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-4-4h-1M9 20H4v-2a4 4 0 014-4h1m4 6v-2m0 0a4 4 0 10-8 0m8 0a4 4 0 108 0" />
+                        </svg>
+                    </div>
+                </div>
+                <!-- Progress bar -->
+                <div class="mt-4 bg-gray-200 rounded-full h-3">
+                    <div class="bg-teal-500 h-3 rounded-full transition-all" style="width: {{ min($teiPercentage, 100) }}%"></div>
+                </div>
+            </div>
+
+            <!-- CG Card -->
+            <div class="bg-white rounded-lg shadow p-6 border-t-4 border-blue-500">
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Clinical &amp; Governance (24 JPL)</h3>
+                <div class="flex items-end justify-between">
+                    <div>
+                        <p class="text-3xl font-extrabold text-blue-600">{{ $cgPercentage }}%</p>
+                        <p class="text-sm text-gray-500 mt-1">Mencapai Target: {{ $numerator2 }} dari {{ $denominator2 }} Pegawai</p>
+                    </div>
+                    <div class="text-blue-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-3-3v6m9 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <!-- Progress bar -->
+                <div class="mt-4 bg-gray-200 rounded-full h-3">
+                    <div class="bg-blue-500 h-3 rounded-full transition-all" style="width: {{ min($cgPercentage, 100) }}%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHART INDIKATOR KINERJA -->
+        <div class="bg-white rounded shadow p-6">
+            <div style="position: relative; height: 350px; width: 100%;">
+                <canvas id="kpiChart"></canvas>
+            </div>
         </div>
 
     </div>
@@ -203,4 +270,54 @@
     </script>
     <script src="{{ asset('JS/LayoutPengusul.js') }}"></script>
     <script src="{{ asset('JS/monitoringJpl.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const kpiCtx = document.getElementById('kpiChart').getContext('2d');
+            new Chart(kpiCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Training Effectiveness Index (40 JPL)', 'Clinical & Governance (24 JPL)'],
+                    datasets: [{
+                        label: 'Persentase Capaian (%)',
+                        data: [{{ $teiPercentage }}, {{ $cgPercentage }}],
+                        backgroundColor: [
+                            'rgba(20, 184, 166, 0.7)',
+                            'rgba(59, 130, 246, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(20, 184, 166, 1)',
+                            'rgba(59, 130, 246, 1)'
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'Persentase (%)' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Capaian Indikator Kinerja Pegawai (Tahun {{ $year }})',
+                            font: { size: 16 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) { return context.raw + '% Capaian Target'; }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endpush

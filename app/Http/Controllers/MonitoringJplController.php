@@ -12,17 +12,22 @@ class MonitoringJplController extends Controller
     {
         $searchNip = $request->input('nip');
         $searchNama = $request->input('nama');
-        $usersQuery = User::with(['workUnit', 'profession.category', 'activityParticipants' => function ($q) {
-            $q->where('is_passed', true)->with('activity.activityMaterials');
+        $year = $request->input('year', date('Y'));
+
+        $usersQuery = User::with(['workUnit', 'profession.category', 'activityParticipants' => function ($q) use ($year) {
+            $q->where('is_passed', true)
+                ->whereHas('activity', function ($qa) use ($year) {
+                    $qa->whereYear('end_date', $year)
+                        ->orWhereYear('start_date', $year);
+                })
+                ->with('activity.activityMaterials');
         }])->when($searchNip, function ($q, $nip) {
             $q->where('employee_id', 'like', '%'.$nip.'%');
         })->when($searchNama, function ($q, $nama) {
             $q->where('name', 'like', '%'.$nama.'%');
         });
 
-        // Get users and format them
         $users = $usersQuery->get()->map(function ($user) {
-            // Filter out duplicate participants for the same activity
             $uniqueParticipants = $user->activityParticipants->unique('activity_id');
             $capaian = $uniqueParticipants->sum(function ($participant) {
                 return $participant->activity ? $participant->activity->activityMaterials->sum('value') : 0;
@@ -45,6 +50,10 @@ class MonitoringJplController extends Controller
             'activity.activityMaterials',
             'activity.activityProfessions.profession',
         ])->where('is_passed', true)
+            ->whereHas('activity', function ($qa) use ($year) {
+                $qa->whereYear('end_date', $year)
+                    ->orWhereYear('start_date', $year);
+            })
             ->whereHas('user', function ($q) use ($searchNip, $searchNama) {
                 if ($searchNip) {
                     $q->where('employee_id', 'like', '%'.$searchNip.'%');
@@ -70,6 +79,53 @@ class MonitoringJplController extends Controller
         $chartLabels = $topUsers->pluck('name');
         $chartData = $topUsers->pluck('capaian_jpl');
 
-        return view('monitoringJpl', compact('users', 'detailedActivities', 'chartLabels', 'chartData'));
+        // INDIKATOR KINERJA
+        $allUsers = User::whereDoesntHave('roles', function ($q) {
+            $q->where('name', 'SuperAdmin');
+        })->with(['profession.category', 'activityParticipants' => function ($q) use ($year) {
+            $q->where('is_passed', true)
+                ->whereHas('activity', function ($qa) use ($year) {
+                    $qa->whereYear('end_date', $year)
+                        ->orWhereYear('start_date', $year);
+                })
+                ->with('activity.activityMaterials');
+        }])->get();
+
+        $numerator1 = 0;
+        $denominator1 = 0;
+        $numerator2 = 0;
+        $denominator2 = 0;
+
+        foreach ($allUsers as $u) {
+            $targetJpl = $u->profession?->category?->jpl_target ?? 24;
+            if ($targetJpl == 40 || $targetJpl == 24) {
+                $uniqueParticipants = $u->activityParticipants->unique('activity_id');
+                $capaian = $uniqueParticipants->sum(function ($p) {
+                    return $p->activity ? $p->activity->activityMaterials->sum('value') : 0;
+                });
+                $capaianJpl = round($capaian / 45, 2);
+
+                if ($targetJpl == 40) {
+                    $denominator1++;
+                    if ($capaianJpl >= 40) {
+                        $numerator1++;
+                    }
+                } elseif ($targetJpl == 24) {
+                    $denominator2++;
+                    if ($capaianJpl >= 24) {
+                        $numerator2++;
+                    }
+                }
+            }
+        }
+
+        $teiPercentage = $denominator1 > 0 ? round(($numerator1 / $denominator1) * 100, 2) : 0;
+        $cgPercentage = $denominator2 > 0 ? round(($numerator2 / $denominator2) * 100, 2) : 0;
+
+        return view('monitoringJpl', compact(
+            'users', 'detailedActivities', 'chartLabels', 'chartData', 'year',
+            'numerator1', 'denominator1', 'teiPercentage',
+            'numerator2', 'denominator2', 'cgPercentage'
+        ));
     }
 }
