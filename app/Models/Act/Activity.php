@@ -24,6 +24,7 @@ class Activity extends Model
         'batch_id',
         'activity_format_id',
         'collaboration_inst',
+        'tempat',
         'tujuan',
         'justifikasi',
         'target_kompetensi',

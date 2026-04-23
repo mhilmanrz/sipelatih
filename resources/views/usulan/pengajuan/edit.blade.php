@@ -142,6 +142,11 @@
                 </div>
 
                 <div class="form-row">
+                    <label>Tempat</label>
+                    <input type="text" name="tempat" value="{{ old('tempat', $kegiatan->tempat) }}">
+                </div>
+
+                <div class="form-row">
                     <label>Tujuan</label>
                     <textarea name="tujuan" rows="3" style="resize:vertical;">{{ old('tujuan', $kegiatan->tujuan) }}</textarea>
                 </div>
