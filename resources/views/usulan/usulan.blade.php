@@ -15,7 +15,8 @@
             <x-page-title>Usulan Diklat</x-page-title>
             <div class="flex gap-2">
                 <a href="{{ route('kegiatan.import.page') }}"
-                    class="inline-flex items-center justify-center bg-gray-800 text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-gray-900 transition"
+                    class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition"
+                    style="background-color:#D6DE20;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"
                     title="Import Usulan Kegiatan dari Excel" id="btnImport">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -24,7 +25,8 @@
                     Import Kegiatan
                 </a>
                 <a href="{{ route('kegiatan.import-per-peserta.page') }}"
-                    class="inline-flex items-center justify-center bg-blue-800 text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-blue-900 transition"
+                    class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition"
+                    style="background-color:#D6DE20;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"
                     title="Import Kegiatan beserta Peserta dari Excel" id="btnImportPeserta">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -33,7 +35,8 @@
                     Import Kegiatan per Peserta
                 </a>
                 <a href="{{ route('kegiatan.create') }}"
-                    class="inline-flex items-center justify-center bg-white text-[#007a7a] px-5 py-2.5 rounded-full font-bold shadow hover:bg-gray-50 transition"
+                    class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition"
+                    style="background-color:#D6DE20;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"
                     id="btnTambah">
                     ➕ Tambah Data
                 </a>
