@@ -33,21 +33,35 @@
 /* ================= INPUT ================= */
 
 .form-row input,
-.form-row select{
+.form-row select,
+.form-row textarea{
     width:100%;
-    padding:9px 12px;         /* lebih compact */
+    padding:9px 12px;
     border:2px solid #00B8A5;
     border-radius:12px;
     font-size:14px;
     background:#f9f9f9;
     box-sizing:border-box;
+    font-family:inherit;
+}
+
+.form-row textarea{
+    resize:vertical;
+    min-height:90px;
+    line-height:1.5;
+}
+
+.form-row:has(textarea){
+    align-items:start;
 }
 
 .form-row input:focus,
-.form-row select:focus{
+.form-row select:focus,
+.form-row textarea:focus{
     border-color:#007a7f;
     box-shadow:0 0 0 3px rgba(0,184,165,.15);
     background:#fff;
+    outline:none;
 }
 
 /* ================= BUTTON ================= */
