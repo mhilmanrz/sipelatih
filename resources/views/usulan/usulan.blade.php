@@ -46,7 +46,7 @@
         <!-- CHART AREA -->
 
         <!-- AREA TABLE -->
-        <section class="mx-8 bg-white rounded-[20px] overflow-hidden shadow">
+        <section class="mx-8 bg-white rounded-[20px] shadow overflow-hidden">
 
             <!-- Table Control -->
             <form method="GET" action="{{ route('usulan-diklat') }}"
@@ -96,7 +96,7 @@
             </form>
 
             <div class="overflow-x-auto">
-                <table class="w-full border-collapse" id="monitorTable">
+                <table class="w-full border-collapse" id="monitorTable" style="min-width:900px;">
                     <thead class="bg-[#007a7a] text-white">
                         <tr>
                             <th class="border border-gray-400 py-3 px-4 font-semibold text-center w-16">No</th>
