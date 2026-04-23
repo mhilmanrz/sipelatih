@@ -118,6 +118,7 @@ class ActivityController extends Controller
             },
             'activityParticipants.score',
             'activityParticipants.user.workUnit',
+            'activityTargets',
         ])->findOrFail($id);
 
         $professions = Profession::all();

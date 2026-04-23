@@ -6,6 +6,7 @@ use App\Http\Controllers\Act\ActivityFormatController;
 use App\Http\Controllers\Act\ActivityMaterialController;
 use App\Http\Controllers\Act\ActivityMethodController;
 use App\Http\Controllers\Act\ActivityModeratorController;
+use App\Http\Controllers\Act\ActivityTargetController;
 use App\Http\Controllers\Act\ActivityParticipantController;
 use App\Http\Controllers\Act\ActivityProfessionController;
 use App\Http\Controllers\Act\ActivityReportController;
@@ -94,6 +95,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('kegiatan/{kegiatan}/narasumber/{id}', [ActivitySpeakerController::class, 'destroy'])->name('kegiatan.narasumber.destroy');
     Route::post('kegiatan/{kegiatan}/moderator', [ActivityModeratorController::class, 'store'])->name('kegiatan.moderator.store');
     Route::delete('kegiatan/{kegiatan}/moderator/{id}', [ActivityModeratorController::class, 'destroy'])->name('kegiatan.moderator.destroy');
+    Route::post('kegiatan/{kegiatan}/target', [ActivityTargetController::class, 'store'])->name('kegiatan.target.store');
+    Route::put('kegiatan/{kegiatan}/target/{id}', [ActivityTargetController::class, 'update'])->name('kegiatan.target.update');
+    Route::delete('kegiatan/{kegiatan}/target/{id}', [ActivityTargetController::class, 'destroy'])->name('kegiatan.target.destroy');
     Route::get('kegiatan/{kegiatan}/peserta/tambah', [ActivityParticipantController::class, 'create'])->name('kegiatan.peserta.create');
     Route::post('kegiatan/{kegiatan}/peserta', [ActivityParticipantController::class, 'store'])->name('kegiatan.peserta.store');
     Route::put('kegiatan/{kegiatan}/peserta/{id}/sertifikat', [ActivityParticipantController::class, 'updateCertificate'])->name('kegiatan.peserta.update_certificate');

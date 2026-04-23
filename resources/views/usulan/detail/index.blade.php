@@ -194,6 +194,9 @@
             <a href="{{ route('kegiatan.show', ['kegiatan' => $kegiatan->id, 'tab' => 'kegiatan']) }}"
                 class="tab-link {{ $activeTab == 'kegiatan' ? 'active' : '' }}">Kegiatan</a>
 
+            <a href="{{ route('kegiatan.show', ['kegiatan' => $kegiatan->id, 'tab' => 'justifikasi']) }}"
+                class="tab-link {{ $activeTab == 'justifikasi' ? 'active' : '' }}">Justifikasi</a>
+
             <a href="{{ route('kegiatan.show', ['kegiatan' => $kegiatan->id, 'tab' => 'sasaran']) }}"
                 class="tab-link {{ $activeTab == 'sasaran' ? 'active' : '' }}">Sasaran Profesi</a>
 
@@ -226,6 +229,8 @@
         <div class="tab-content-area">
             @if ($activeTab == 'kegiatan')
                 @include('usulan.detail.kegiatan')
+            @elseif($activeTab == 'justifikasi')
+                @include('usulan.detail.justifikasi')
             @elseif($activeTab == 'kak')
                 @include('usulan.detail.kak')
             @elseif($activeTab == 'sasaran')

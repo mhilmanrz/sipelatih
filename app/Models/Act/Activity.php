@@ -138,4 +138,9 @@ class Activity extends Model
     {
         return $this->hasOne(ActivityReport::class);
     }
+
+    public function activityTargets()
+    {
+        return $this->hasMany(ActivityTarget::class)->orderBy('target_number');
+    }
 }
