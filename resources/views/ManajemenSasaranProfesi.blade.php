@@ -9,8 +9,7 @@
 @section('content')
 
 <main class="input-page">
-
-    <h1>Sasaran Profesi</h1>
+    <x-page-title>Sasaran Profesi</x-page-title>
 
     <div class="table-section">
 

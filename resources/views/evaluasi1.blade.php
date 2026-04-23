@@ -8,8 +8,7 @@
 @section('content')
 
 <div class="evaluasi-page bg-[#14B8C5] min-h-screen p-6">
-
-    <h1 class="text-white text-3xl font-bold mb-8">EVALUASI I</h1>
+    <x-page-title>EVALUASI I</x-page-title>
 
     <!-- CARD -->
     <div class="bg-white rounded-[24px] p-8 mb-10 shadow w-full">

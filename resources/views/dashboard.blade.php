@@ -1,43 +1,43 @@
 <x-layouts.app>
     @section('title', 'Dashboard')
 
-    <h2 class="text-white text-2xl font-semibold mb-6">Dashboard</h2>
+    <x-page-title>Dashboard</x-page-title>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-        <div class="bg-white rounded-xl p-5 text-center shadow-sm">
-            <i class="fa fa-file-alt text-3xl text-teal-500 mb-2 block"></i>
-            <span class="text-gray-600 text-sm">Draft</span><br>
-            <b class="text-lg text-gray-800">{{ $draftCount }}</b>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-[15px] mb-6">
+        <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
+            <i class="fa fa-file-alt text-[26px] text-[#00B8A5] mb-1.5 block"></i>
+            <span class="text-gray-800 text-sm">Draft</span><br>
+            <b class="text-base text-gray-900">{{ $draftCount }}</b>
         </div>
-        <div class="bg-white rounded-xl p-5 text-center shadow-sm">
-            <i class="fa fa-paper-plane text-3xl text-teal-500 mb-2 block"></i>
-            <span class="text-gray-600 text-sm">Tahap Pengajuan</span><br>
-            <b class="text-lg text-gray-800">{{ $submittedCount }}</b>
+        <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
+            <i class="fa fa-paper-plane text-[26px] text-[#00B8A5] mb-1.5 block"></i>
+            <span class="text-gray-800 text-sm">Tahap Pengajuan</span><br>
+            <b class="text-base text-gray-900">{{ $submittedCount }}</b>
         </div>
-        <div class="bg-white rounded-xl p-5 text-center shadow-sm">
-            <i class="fa fa-tasks text-3xl text-teal-500 mb-2 block"></i>
-            <span class="text-gray-600 text-sm">Proses Penilaian</span><br>
-            <b class="text-lg text-gray-800">10</b>
+        <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
+            <i class="fa fa-tasks text-[26px] text-[#00B8A5] mb-1.5 block"></i>
+            <span class="text-gray-800 text-sm">Proses Penilaian</span><br>
+            <b class="text-base text-gray-900">10</b>
         </div>
-        <div class="bg-white rounded-xl p-5 text-center shadow-sm">
-            <i class="fa fa-exclamation-triangle text-3xl text-teal-500 mb-2 block"></i>
-            <span class="text-gray-600 text-sm">Butuh Perbaikan</span><br>
-            <b class="text-lg text-gray-800">{{ $revisionCount }}</b>
+        <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
+            <i class="fa fa-exclamation-triangle text-[26px] text-[#00B8A5] mb-1.5 block"></i>
+            <span class="text-gray-800 text-sm">Butuh Perbaikan</span><br>
+            <b class="text-base text-gray-900">{{ $revisionCount }}</b>
         </div>
-        <div class="bg-white rounded-xl p-5 text-center shadow-sm">
-            <i class="fa fa-check-circle text-3xl text-teal-500 mb-2 block"></i>
-            <span class="text-gray-600 text-sm">Telah Perbaikan</span><br>
-            <b class="text-lg text-gray-800">0</b>
+        <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
+            <i class="fa fa-check-circle text-[26px] text-[#00B8A5] mb-1.5 block"></i>
+            <span class="text-gray-800 text-sm">Telah Perbaikan</span><br>
+            <b class="text-base text-gray-900">0</b>
         </div>
-        <div class="bg-white rounded-xl p-5 text-center shadow-sm">
-            <i class="fa fa-thumbs-up text-3xl text-teal-500 mb-2 block"></i>
-            <span class="text-gray-600 text-sm">Disetujui</span><br>
-            <b class="text-lg text-gray-800">{{ $acceptedCount }}</b>
+        <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
+            <i class="fa fa-thumbs-up text-[26px] text-[#00B8A5] mb-1.5 block"></i>
+            <span class="text-gray-800 text-sm">Disetujui</span><br>
+            <b class="text-base text-gray-900">{{ $acceptedCount }}</b>
         </div>
-        <div class="bg-white rounded-xl p-5 text-center shadow-sm">
-            <i class="fa fa-ban text-3xl text-teal-500 mb-2 block"></i>
-            <span class="text-gray-600 text-sm">Ditolak</span><br>
-            <b class="text-lg text-gray-800">7</b>
+        <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
+            <i class="fa fa-ban text-[26px] text-[#00B8A5] mb-1.5 block"></i>
+            <span class="text-gray-800 text-sm">Ditolak</span><br>
+            <b class="text-base text-gray-900">7</b>
         </div>
     </div>
 

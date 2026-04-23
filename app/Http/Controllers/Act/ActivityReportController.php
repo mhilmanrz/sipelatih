@@ -13,8 +13,22 @@ class ActivityReportController extends Controller
     public function index()
     {
         $activities = Activity::with(['report', 'activityName'])->get();
+        // Fetch data for Pie Chart
+        $totalActivities = Activity::count();
+        $statusCounts = [
+            'draft' => Activity::whereDoesntHave('latestStatus')->count(),
+            'submitted' => Activity::whereHas('latestStatus', function ($q) {
+                $q->where('status', 'submitted');
+            })->count(),
+            'revision' => Activity::whereHas('latestStatus', function ($q) {
+                $q->where('status', 'revision');
+            })->count(),
+            'accepted' => Activity::whereHas('latestStatus', function ($q) {
+                $q->where('status', 'accepted');
+            })->count(),
+        ];
 
-        return view('laporanKegiatan', compact('activities'));
+        return view('laporanKegiatan', compact('activities', 'totalActivities', 'statusCounts'));
     }
 
     public function store(Request $request)
@@ -25,7 +39,7 @@ class ActivityReportController extends Controller
         ]);
 
         $file = $request->file('file');
-        $filename = time().'_'.$file->getClientOriginalName();
+        $filename = time() . '_' . $file->getClientOriginalName();
         $path = $file->storeAs('reports', $filename, 'public');
 
         ActivityReport::create([
@@ -50,7 +64,7 @@ class ActivityReportController extends Controller
         }
 
         $file = $request->file('file');
-        $filename = time().'_'.$file->getClientOriginalName();
+        $filename = time() . '_' . $file->getClientOriginalName();
         $path = $file->storeAs('reports', $filename, 'public');
 
         $report->update([

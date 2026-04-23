@@ -11,9 +11,7 @@
 
     <!-- HEADER -->
     <div class="bg-primary px-8 py-6">
-        <h2 class="text-white text-3xl font-bold">
-            NILAI PRE TEST & POST TEST
-        </h2>
+        <x-page-title>NILAI PRE TEST & POST TEST</x-page-title>
     </div>
 
     <!-- CONTENT -->

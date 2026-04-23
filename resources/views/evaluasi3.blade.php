@@ -13,7 +13,7 @@
 
     <!-- TITLE -->
     <section class="px-8 py-6">
-        <h1 class="text-white text-3xl font-bold">EVALUASI III</h1>
+        <x-page-title>EVALUASI III</x-page-title>
     </section>
 
     <!-- CARD DOWNLOAD -->

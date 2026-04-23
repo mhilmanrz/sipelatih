@@ -50,22 +50,7 @@ class UsulanDiklatController extends Controller
 
         $kegiatan = $query->paginate($perPage);
 
-        // Fetch data for Pie Chart
-        $totalActivities = Activity::count();
-        $statusCounts = [
-            'draft' => Activity::whereDoesntHave('latestStatus')->count(),
-            'submitted' => Activity::whereHas('latestStatus', function ($q) {
-                $q->where('status', 'submitted');
-            })->count(),
-            'revision' => Activity::whereHas('latestStatus', function ($q) {
-                $q->where('status', 'revision');
-            })->count(),
-            'accepted' => Activity::whereHas('latestStatus', function ($q) {
-                $q->where('status', 'accepted');
-            })->count(),
-        ];
-
-        return view('usulan.usulan', compact('kegiatan', 'totalActivities', 'statusCounts'));
+        return view('usulan.usulan', compact('kegiatan'));
     }
 
     public function importPage()

@@ -12,68 +12,58 @@
 
         <!-- TITLE & BUTTON -->
         <section class="px-8 py-6 flex flex-wrap justify-between items-center gap-4">
-            <h1 class="text-white text-3xl font-bold">USULAN DIKLAT</h1>
+            <x-page-title>Usulan Diklat</x-page-title>
             <div class="flex gap-2">
                 <a href="{{ route('kegiatan.import.page') }}"
-    class="inline-flex items-center justify-center bg-[#1A5555] text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#154444] transition"
-    title="Import Usulan Kegiatan dari Excel" id="btnImport">
-    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
-    </svg>
-    Import Kegiatan
-</a>
-
-<a href="{{ route('kegiatan.import-per-peserta.page') }}"
-    class="inline-flex items-center justify-center bg-[#D6DE20] text-[#1A5555] px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#c4cb1d] transition"
-    title="Import Kegiatan beserta Peserta dari Excel" id="btnImportPeserta">
-    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
-    </svg>
-    Import Kegiatan per Peserta
-</a>
-
-<a href="{{ route('kegiatan.create') }}"
-    class="inline-flex items-center justify-center bg-white text-[#007A7F] px-5 py-2.5 rounded-full font-bold shadow hover:bg-gray-50 transition"
-    id="btnTambah">
-    ➕ Tambah Data
-</a>
-                
+                    class="inline-flex items-center justify-center bg-gray-800 text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-gray-900 transition"
+                    title="Import Usulan Kegiatan dari Excel" id="btnImport">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
+                    </svg>
+                    Import Kegiatan
+                </a>
+                <a href="{{ route('kegiatan.import-per-peserta.page') }}"
+                    class="inline-flex items-center justify-center bg-blue-800 text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-blue-900 transition"
+                    title="Import Kegiatan beserta Peserta dari Excel" id="btnImportPeserta">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
+                    </svg>
+                    Import Kegiatan per Peserta
+                </a>
+                <a href="{{ route('kegiatan.create') }}"
+                    class="inline-flex items-center justify-center bg-white text-[#007a7a] px-5 py-2.5 rounded-full font-bold shadow hover:bg-gray-50 transition"
+                    id="btnTambah">
+                    ➕ Tambah Data
+                </a>
             </div>
         </section>
 
-        <!-- CHART AREA 
-        <section class="mx-8 bg-white overflow-hidden shadow" style="border-radius: 20px; margin-bottom: 24px; padding: 24px; display: flex; flex-direction: column; align-items: center;">
-            <h2 style="font-size: 1.25rem; font-weight: bold; color: #374151; margin-bottom: 16px; text-align: center;">Persentase Usulan Kegiatan Berdasarkan Status</h2>
-            <div style="position: relative; width: 100%; max-width: 400px; height: 250px;">
-                <canvas id="statusPieChart"></canvas>
-            </div>
-            <p style="font-size: 0.875rem; color: #6b7280; margin-top: 16px;">Total Kegiatan: {{ $totalActivities }}</p>
-        </section>
+        <!-- CHART AREA -->
 
-        <--AREA TABLE -->
+        <!-- AREA TABLE -->
         <section class="mx-8 bg-white rounded-[20px] overflow-hidden shadow">
 
             <!-- Table Control -->
             <form method="GET" action="{{ route('usulan-diklat') }}"
-    class="flex flex-wrap justify-between items-center p-6 border-b border-gray-200 gap-4 bg-[#1A5555] text-[#FFFFFF]">
+                class="flex flex-wrap justify-between items-center p-6 border-b border-gray-200 gap-4">
 
-    <div class="flex items-center gap-2">
-        <span>Show</span>
-        <select name="entries" onchange="this.form.submit()"
-            class="border rounded px-2 py-1 outline-none focus:ring-1 focus:ring-[#FFFFFF] text-white">
-            <option value="5" {{ request('entries') == 5 ? 'selected' : '' }}>5</option>
-            <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
-            <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
-        </select>
-        <span>entries</span>
-    </div>
+                <div class="flex items-center gap-2 text-gray-700">
+                    <span>Show</span>
+                    <select name="entries" onchange="this.form.submit()"
+                        class="border rounded px-2 py-1 outline-none focus:ring-1 focus:ring-[#007a7a]">
+                        <option value="5" {{ request('entries') == 5 ? 'selected' : '' }}>5</option>
+                        <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                    </select>
+                    <span>entries</span>
+                </div>
 
-    <div class="flex flex-wrap items-center gap-3">
-        <select name="year" onchange="this.form.submit()"
-            class="border rounded-full px-3 py-1.5 outline-none focus:ring-1 focus:ring-[#FFFFFF] text-sm text-white">
-            <option value="">Semua Tahun</option>
+                <div class="flex flex-wrap items-center gap-3">
+                    <select name="year" onchange="this.form.submit()"
+                        class="border rounded-full px-3 py-1.5 outline-none focus:ring-1 focus:ring-[#007a7a] text-sm text-gray-700">
+                        <option value="">Semua Tahun</option>
                         @php
                             $currentYear = date('Y');
                         @endphp
@@ -84,7 +74,7 @@
                     </select>
 
                     <select name="status" onchange="this.form.submit()"
-                        class="border rounded-full px-3 py-1.5 outline-none focus:ring-1 focus:ring-[#FFFFFF] text-sm text-white">
+                        class="border rounded-full px-3 py-1.5 outline-none focus:ring-1 focus:ring-[#007a7a] text-sm text-gray-700">
                         <option value="">Semua Status</option>
                         <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
                         <option value="submitted" {{ request('status') === 'submitted' ? 'selected' : '' }}>Submitted
@@ -95,9 +85,9 @@
 
                     <div class="flex items-center gap-2">
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search..."
-                            class="border rounded-full px-4 py-1.5 outline-none focus:ring-1 focus:ring-[#FFFFFF] text-sm">
+                            class="border rounded-full px-4 py-1.5 outline-none focus:ring-1 focus:ring-[#007a7a] text-sm">
                         <button type="submit"
-                            class="bg-[#D6DE20] text-black px-4 py-1.5 rounded-full hover:bg-[#006bd6] transition text-sm">Search</button>
+                            class="bg-[#007a7a] text-white px-4 py-1.5 rounded-full hover:bg-[#006bd6] transition text-sm">Search</button>
                     </div>
                 </div>
             </form>
@@ -197,71 +187,4 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('statusPieChart').getContext('2d');
-
-            const data = {
-                labels: ['Draft', 'Submitted', 'Revision', 'Accepted'],
-                datasets: [{
-                    label: 'Jumlah Kegiatan',
-                    data: [
-                        {{ $statusCounts['draft'] ?? 0 }},
-                        {{ $statusCounts['submitted'] ?? 0 }},
-                        {{ $statusCounts['revision'] ?? 0 }},
-                        {{ $statusCounts['accepted'] ?? 0 }}
-                    ],
-                    backgroundColor: [
-                        '#e5e7eb', // gray-200 for draft
-                        '#dbeafe', // blue-100 for submitted
-                        '#fef08a', // yellow-200 for revision
-                        '#bbf7d0' // green-200 for accepted
-                    ],
-                    borderColor: [
-                        '#9ca3af', // gray-400
-                        '#3b82f6', // blue-500
-                        '#eab308', // yellow-500
-                        '#22c55e' // green-500
-                    ],
-                    borderWidth: 1
-                }]
-            };
-
-            new Chart(ctx, {
-                type: 'pie',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    let value = context.raw;
-                                    let total = context.chart._metasets[context.datasetIndex].total;
-                                    let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-                                    label += value + ' (' + percentage + '%)';
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    </script>
 @endpush

@@ -10,7 +10,7 @@
 @section('content')
     <div class="p-8">
         <div class="mb-6 flex justify-between items-center">
-            <h1 class="text-2xl font-bold uppercase" style="color: white; font-size: 1.5rem; background-color: #0f766e; padding: 1rem 2rem; border-radius: 8px; display: inline-block;">IMPORT PAGU ANGGARAN</h1>
+            <x-page-title>IMPORT PAGU ANGGARAN</x-page-title>
             
             <a href="{{ route('pagu.index') }}" class="text-gray-600 hover:text-gray-900 font-medium bg-white px-4 py-2 rounded shadow transition-colors">
                 ← Kembali ke Manajemen Pagu
