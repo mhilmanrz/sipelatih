@@ -14,12 +14,13 @@ class ActivityReportController extends Controller
     {
         $year = $request->input('year', date('Y'));
 
-        $activities = Activity::with(['report', 'activityName'])
-            ->where(function ($q) use ($year) {
-                $q->whereYear('start_date', $year)
-                    ->orWhereYear('end_date', $year);
-            })
-            ->get();
+        $activities = Activity::with([
+            'report', 'activityName', 'activityScope', 'activityCategory',
+            'activityMaterials', 'activityParticipants', 'latestStatus',
+        ])->where(function ($q) use ($year) {
+            $q->whereYear('start_date', $year)
+                ->orWhereYear('end_date', $year);
+        })->get();
 
         // Fetch data for Pie Chart (tidak difilter tahun agar tetap akurat)
         $totalActivities = Activity::count();

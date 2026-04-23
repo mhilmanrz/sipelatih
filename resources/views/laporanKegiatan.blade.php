@@ -106,39 +106,67 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse text-sm">
                     <thead>
-                        <tr class="bg-gray-100">
-                            <th class="border px-4 py-2 border-gray-300 w-16 text-center">NO.</th>
-                            <th class="border px-4 py-2 border-gray-300">Nama Kegiatan</th>
-                            <th class="border px-4 py-2 border-gray-300 w-32 text-center">Tgl Mulai</th>
-                            <th class="border px-4 py-2 border-gray-300 w-32 text-center">Tgl Selesai</th>
-                            <th class="border px-4 py-2 border-gray-300 w-48 text-center">Laporan</th>
+                        <tr class="bg-gray-100 text-gray-700">
+                            <th class="border px-3 py-2 border-gray-300 text-center w-10">NO.</th>
+                            <th class="border px-3 py-2 border-gray-300">Nama Kegiatan</th>
+                            <th class="border px-3 py-2 border-gray-300 text-center">Tgl Mulai</th>
+                            <th class="border px-3 py-2 border-gray-300 text-center">Tgl Selesai</th>
+                            <th class="border px-3 py-2 border-gray-300 text-center">Jml Peserta</th>
+                            <th class="border px-3 py-2 border-gray-300 text-center">Cakupan Kegiatan</th>
+                            <th class="border px-3 py-2 border-gray-300 text-center">JP Total Materi</th>
+                            <th class="border px-3 py-2 border-gray-300 text-center">Kategori Diklat</th>
+                            <th class="border px-3 py-2 border-gray-300 text-center">Status</th>
+                            <th class="border px-3 py-2 border-gray-300 text-center">Laporan</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($activities as $index => $item)
+                            @php
+                                $status = $item->latestStatus?->status ?? 'draft';
+                                $statusMap = [
+                                    'draft'     => ['label' => 'Draft',     'class' => 'bg-gray-200 text-gray-700'],
+                                    'submitted' => ['label' => 'Diajukan',  'class' => 'bg-blue-100 text-blue-700'],
+                                    'revision'  => ['label' => 'Revisi',    'class' => 'bg-yellow-100 text-yellow-700'],
+                                    'accepted'  => ['label' => 'Disetujui', 'class' => 'bg-green-100 text-green-700'],
+                                ];
+                                $badge = $statusMap[$status] ?? ['label' => ucfirst($status), 'class' => 'bg-gray-100 text-gray-600'];
+                            @endphp
                             <tr class="hover:bg-gray-50">
-                                <td class="border px-4 py-2 border-gray-300 text-center">{{ $index + 1 }}</td>
-                                <td class="border px-4 py-2 border-gray-300">
+                                <td class="border px-3 py-2 border-gray-300 text-center">{{ $index + 1 }}</td>
+                                <td class="border px-3 py-2 border-gray-300 font-medium">
                                     {{ $item->activityName->name ?? ($item->reference_number ?? '-') }}</td>
-                                <td class="border px-4 py-2 border-gray-300 text-center">{{ $item->start_date }}</td>
-                                <td class="border px-4 py-2 border-gray-300 text-center">{{ $item->end_date }}</td>
-                                <td class="border px-4 py-2 border-gray-300 text-center">
+                                <td class="border px-3 py-2 border-gray-300 text-center">{{ $item->start_date ?? '-' }}</td>
+                                <td class="border px-3 py-2 border-gray-300 text-center">{{ $item->end_date ?? '-' }}</td>
+                                <td class="border px-3 py-2 border-gray-300 text-center font-semibold">
+                                    {{ $item->activityParticipants->count() }}</td>
+                                <td class="border px-3 py-2 border-gray-300 text-center">
+                                    {{ $item->activityScope->name ?? '-' }}</td>
+                                <td class="border px-3 py-2 border-gray-300 text-center font-semibold">
+                                    {{ $item->activityMaterials->sum('value') }} JP</td>
+                                <td class="border px-3 py-2 border-gray-300 text-center">
+                                    {{ $item->activityCategory->name ?? '-' }}</td>
+                                <td class="border px-3 py-2 border-gray-300 text-center">
+                                    <span class="px-2 py-1 rounded-full text-xs font-semibold {{ $badge['class'] }}">
+                                        {{ $badge['label'] }}
+                                    </span>
+                                </td>
+                                <td class="border px-3 py-2 border-gray-300 text-center whitespace-nowrap">
                                     @if ($item->report)
                                         <button
                                             onclick="openModal({{ $item->id }}, {{ $item->report->id }}, '{{ addslashes($item->activityName->name ?? ($item->reference_number ?? '-')) }}')"
-                                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm mr-1">
+                                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs mr-1">
                                             <i class="fas fa-edit"></i> Ubah
                                         </button>
                                         <a href="{{ Storage::url($item->report->file_path) }}" target="_blank"
-                                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm inline-block">
+                                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs inline-block">
                                             <i class="fas fa-eye"></i> Lihat
                                         </a>
                                     @else
                                         <button
                                             onclick="openModal({{ $item->id }}, null, '{{ addslashes($item->activityName->name ?? ($item->reference_number ?? '-')) }}')"
-                                            class="bg-teal-500 hover:bg-teal-600 text-white px-3 py-1 rounded text-sm">
+                                            class="bg-teal-500 hover:bg-teal-600 text-white px-3 py-1 rounded text-xs">
                                             <i class="fas fa-upload"></i> Upload
                                         </button>
                                     @endif
@@ -146,8 +174,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="border px-4 py-2 border-gray-300 text-center text-gray-500">Tidak
-                                    ada data kegiatan.</td>
+                                <td colspan="10" class="border px-4 py-4 border-gray-300 text-center text-gray-500">
+                                    Tidak ada data kegiatan.</td>
                             </tr>
                         @endforelse
                     </tbody>
