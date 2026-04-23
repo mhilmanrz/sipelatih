@@ -10,11 +10,18 @@ use Illuminate\Support\Facades\Storage;
 
 class ActivityReportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $activities = Activity::with(['report', 'activityName'])->get();
+        $year = $request->input('year', date('Y'));
 
-        return view('laporanKegiatan', compact('activities'));
+        $activities = Activity::with(['report', 'activityName'])
+            ->where(function ($q) use ($year) {
+                $q->whereYear('start_date', $year)
+                    ->orWhereYear('end_date', $year);
+            })
+            ->get();
+
+        return view('laporanKegiatan', compact('activities', 'year'));
     }
 
     public function store(Request $request)

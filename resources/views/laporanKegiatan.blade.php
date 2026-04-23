@@ -65,11 +65,30 @@
         @endif
 
         <div class="bg-white rounded-xl shadow p-6 mb-8">
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
                 <h2 class="text-xl font-semibold text-gray-800">Daftar Laporan Kegiatan</h2>
-                <a href="{{ route('kegiatan.laporan.template') }}" class="inline-flex py-2 px-4 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded shadow items-center transition-colors text-sm">
-                    <i class="fas fa-download mr-2"></i> Download Template
-                </a>
+                <div class="flex flex-wrap items-center gap-3">
+                    <form action="{{ route('kegiatan.laporan.index') }}" method="GET" class="flex items-center gap-2">
+                        <label for="year" class="font-semibold text-gray-700 whitespace-nowrap text-sm">Tahun:</label>
+                        <select name="year" id="year"
+                            class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-teal-200">
+                            @php
+                                $currentYear = date('Y');
+                                $startYear = 2020;
+                            @endphp
+                            @for ($y = $currentYear + 1; $y >= $startYear; $y--)
+                                <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                            @endfor
+                        </select>
+                        <button type="submit"
+                            class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded text-sm transition-colors">
+                            Tampilkan
+                        </button>
+                    </form>
+                    <a href="{{ route('kegiatan.laporan.template') }}" class="inline-flex py-2 px-4 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded shadow items-center transition-colors text-sm">
+                        <i class="fas fa-download mr-2"></i> Download Template
+                    </a>
+                </div>
             </div>
 
             <div class="overflow-x-auto">
