@@ -10,10 +10,18 @@ use Illuminate\Support\Facades\Storage;
 
 class ActivityReportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $activities = Activity::with(['report', 'activityName'])->get();
-        // Fetch data for Pie Chart
+        $year = $request->input('year', date('Y'));
+
+        $activities = Activity::with(['report', 'activityName'])
+            ->where(function ($q) use ($year) {
+                $q->whereYear('start_date', $year)
+                    ->orWhereYear('end_date', $year);
+            })
+            ->get();
+
+        // Fetch data for Pie Chart (tidak difilter tahun agar tetap akurat)
         $totalActivities = Activity::count();
         $statusCounts = [
             'draft' => Activity::whereDoesntHave('latestStatus')->count(),
@@ -28,7 +36,7 @@ class ActivityReportController extends Controller
             })->count(),
         ];
 
-        return view('laporanKegiatan', compact('activities', 'totalActivities', 'statusCounts'));
+        return view('laporanKegiatan', compact('activities', 'totalActivities', 'statusCounts', 'year'));
     }
 
     public function store(Request $request)

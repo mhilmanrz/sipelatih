@@ -16,8 +16,9 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
         }
+
         .modal-content {
             background-color: #fefefe;
             margin: 10% auto;
@@ -28,6 +29,7 @@
             border-radius: 8px;
             position: relative;
         }
+
         .close {
             color: #aaa;
             float: right;
@@ -35,6 +37,7 @@
             font-weight: bold;
             cursor: pointer;
         }
+
         .close:hover,
         .close:focus {
             color: black;
@@ -46,7 +49,7 @@
 @section('content')
     <div class="p-8">
         <div class="mb-6 flex justify-between items-center">
-            <h1 class="text-2xl font-bold uppercase" style="color: white; font-size: 1.5rem;padding: 1rem 2rem; border-radius: 8px; display: inline-block;">LAPORAN KEGIATAN</h1>
+            <x-page-title>LAPORAN KEGIATAN</x-page-title>
         </div>
 
         @if (session('success'))
@@ -64,18 +67,48 @@
             </div>
         @endif
 
+        <section class="bg-white overflow-hidden shadow"
+            style="border-radius: 20px; margin-bottom: 24px; padding: 24px; display: flex; flex-direction: column; align-items: center;">
+            <h2 style="font-size: 1.25rem; font-weight: bold; color: #374151; margin-bottom: 16px; text-align: center;">
+                Persentase Usulan Kegiatan Berdasarkan Status</h2>
+            <div style="position: relative; width: 100%; max-width: 400px; height: 250px;">
+                <canvas id="statusPieChart"></canvas>
+            </div>
+            <p style="font-size: 0.875rem; color: #6b7280; margin-top: 16px;">Total Kegiatan: {{ $totalActivities }}</p>
+        </section>
+
         <div class="bg-white rounded-xl shadow p-6 mb-8">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-800">DAFTAR LAPORAN KEGIATAN</h2>
-                <a href="{{ route('kegiatan.laporan.template') }}" class="inline-flex py-2 px-4 bg-[#D6DE20] hover:bg-[#006bd6] text-black font-semibold rounded shadow items-center transition-colors text-sm">
-                    <i class="fas fa-download mr-2"></i> Download Template
-                </a>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Daftar Laporan Kegiatan</h2>
+                <div class="flex flex-wrap items-center gap-3">
+                    <form action="{{ route('kegiatan.laporan.index') }}" method="GET" class="flex items-center gap-2">
+                        <label for="year" class="font-semibold text-gray-700 whitespace-nowrap text-sm">Tahun:</label>
+                        <select name="year" id="year"
+                            class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-teal-200">
+                            @php
+                                $currentYear = date('Y');
+                                $startYear = 2020;
+                            @endphp
+                            @for ($y = $currentYear + 1; $y >= $startYear; $y--)
+                                <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                            @endfor
+                        </select>
+                        <button type="submit"
+                            class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded text-sm transition-colors">
+                            Tampilkan
+                        </button>
+                    </form>
+                    <a href="{{ route('kegiatan.laporan.template') }}"
+                        class="inline-flex py-2 px-4 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded shadow items-center transition-colors text-sm">
+                        <i class="fas fa-download mr-2"></i> Download Template
+                    </a>
+                </div>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-[#1A5555] text-white">
+                        <tr class="bg-gray-100">
                             <th class="border px-4 py-2 border-gray-300 w-16 text-center">NO.</th>
                             <th class="border px-4 py-2 border-gray-300">Nama Kegiatan</th>
                             <th class="border px-4 py-2 border-gray-300 w-32 text-center">Tgl Mulai</th>
@@ -85,30 +118,37 @@
                     </thead>
                     <tbody>
                         @forelse($activities as $index => $item)
-                        <tr class="hover:bg-gray-50">
-                            <td class="border px-4 py-2 border-gray-300 text-center">{{ $index + 1 }}</td>
-                            <td class="border px-4 py-2 border-gray-300">{{ $item->activityName->name ?? $item->reference_number ?? '-' }}</td>
-                            <td class="border px-4 py-2 border-gray-300 text-center">{{ $item->start_date }}</td>
-                            <td class="border px-4 py-2 border-gray-300 text-center">{{ $item->end_date }}</td>
-                            <td class="border px-4 py-2 border-gray-300 text-center">
-                                @if($item->report)
-                                    <button onclick="openModal({{ $item->id }}, {{ $item->report->id }}, '{{ addslashes($item->activityName->name ?? $item->reference_number ?? '-') }}')" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm mr-1">
-                                        <i class="fas fa-edit"></i> Ubah
-                                    </button>
-                                    <a href="{{ Storage::url($item->report->file_path) }}" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm inline-block">
-                                        <i class="fas fa-eye"></i> Lihat
-                                    </a>
-                                @else
-                                    <button onclick="openModal({{ $item->id }}, null, '{{ addslashes($item->activityName->name ?? $item->reference_number ?? '-') }}')" class="bg-teal-500 hover:bg-teal-600 text-white px-3 py-1 rounded text-sm">
-                                        <i class="fas fa-upload"></i> Upload
-                                    </button>
-                                @endif
-                            </td>
-                        </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border px-4 py-2 border-gray-300 text-center">{{ $index + 1 }}</td>
+                                <td class="border px-4 py-2 border-gray-300">
+                                    {{ $item->activityName->name ?? ($item->reference_number ?? '-') }}</td>
+                                <td class="border px-4 py-2 border-gray-300 text-center">{{ $item->start_date }}</td>
+                                <td class="border px-4 py-2 border-gray-300 text-center">{{ $item->end_date }}</td>
+                                <td class="border px-4 py-2 border-gray-300 text-center">
+                                    @if ($item->report)
+                                        <button
+                                            onclick="openModal({{ $item->id }}, {{ $item->report->id }}, '{{ addslashes($item->activityName->name ?? ($item->reference_number ?? '-')) }}')"
+                                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm mr-1">
+                                            <i class="fas fa-edit"></i> Ubah
+                                        </button>
+                                        <a href="{{ Storage::url($item->report->file_path) }}" target="_blank"
+                                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm inline-block">
+                                            <i class="fas fa-eye"></i> Lihat
+                                        </a>
+                                    @else
+                                        <button
+                                            onclick="openModal({{ $item->id }}, null, '{{ addslashes($item->activityName->name ?? ($item->reference_number ?? '-')) }}')"
+                                            class="bg-teal-500 hover:bg-teal-600 text-white px-3 py-1 rounded text-sm">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </button>
+                                    @endif
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="5" class="border px-4 py-2 border-gray-300 text-center text-gray-500">Tidak ada data kegiatan.</td>
-                        </tr>
+                            <tr>
+                                <td colspan="5" class="border px-4 py-2 border-gray-300 text-center text-gray-500">Tidak
+                                    ada data kegiatan.</td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -121,26 +161,30 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle" class="text-xl font-bold mb-4">Upload Laporan</h2>
-            
+
             <form id="laporanForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div id="methodContainer"></div>
-                
+
                 <input type="hidden" name="activity_id" id="activity_id">
-                
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Kegiatan</label>
-                    <input type="text" id="activity_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight bg-gray-100 cursor-not-allowed" readonly>
+                    <input type="text" id="activity_name"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight bg-gray-100 cursor-not-allowed"
+                        readonly>
                 </div>
 
                 <div class="mb-6">
                     <label class="block text-gray-700 text-sm font-bold mb-2">File Laporan</label>
-                    <input type="file" name="file" accept=".pdf,.doc,.docx,.xls,.xlsx" required class="w-full text-gray-700 border rounded py-2 px-3">
+                    <input type="file" name="file" accept=".pdf,.doc,.docx,.xls,.xlsx" required
+                        class="w-full text-gray-700 border rounded py-2 px-3">
                     <p class="text-xs text-gray-500 mt-1">Maksimal ukuran file: 10MB (PDF, DOC/X, XLS/X)</p>
                 </div>
 
                 <div class="flex justify-end">
-                    <button type="button" onclick="closeModal()" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded mr-2">
+                    <button type="button" onclick="closeModal()"
+                        class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded mr-2">
                         Batal
                     </button>
                     <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded">
@@ -153,41 +197,108 @@
 @endsection
 
 @push('scripts')
-<script>
-    function openModal(activityId, reportId, activityName) {
-        document.getElementById('activity_id').value = activityId;
-        document.getElementById('activity_name').value = activityName;
-        
-        let form = document.getElementById('laporanForm');
-        let methodContainer = document.getElementById('methodContainer');
-        let modalTitle = document.getElementById('modalTitle');
-        
-        if (reportId) {
-            // Edit mode
-            modalTitle.innerText = "Ubah Laporan";
-            form.action = "{{ url('laporan-kegiatan') }}/" + reportId;
-            methodContainer.innerHTML = '<input type="hidden" name="_method" value="PUT">';
-        } else {
-            // Upload mode
-            modalTitle.innerText = "Upload Laporan";
-            form.action = "{{ route('kegiatan.laporan.store') }}";
-            methodContainer.innerHTML = '';
-        }
-        
-        document.getElementById('laporanModal').style.display = 'block';
-    }
+    <script>
+        function openModal(activityId, reportId, activityName) {
+            document.getElementById('activity_id').value = activityId;
+            document.getElementById('activity_name').value = activityName;
 
-    function closeModal() {
-        document.getElementById('laporanModal').style.display = 'none';
-        document.getElementById('laporanForm').reset();
-    }
+            let form = document.getElementById('laporanForm');
+            let methodContainer = document.getElementById('methodContainer');
+            let modalTitle = document.getElementById('modalTitle');
 
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-        let modal = document.getElementById('laporanModal');
-        if (event.target == modal) {
-            closeModal();
+            if (reportId) {
+                // Edit mode
+                modalTitle.innerText = "Ubah Laporan";
+                form.action = "{{ url('laporan-kegiatan') }}/" + reportId;
+                methodContainer.innerHTML = '<input type="hidden" name="_method" value="PUT">';
+            } else {
+                // Upload mode
+                modalTitle.innerText = "Upload Laporan";
+                form.action = "{{ route('kegiatan.laporan.store') }}";
+                methodContainer.innerHTML = '';
+            }
+
+            document.getElementById('laporanModal').style.display = 'block';
         }
-    }
-</script>
+
+        function closeModal() {
+            document.getElementById('laporanModal').style.display = 'none';
+            document.getElementById('laporanForm').reset();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            let modal = document.getElementById('laporanModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('statusPieChart').getContext('2d');
+
+            const data = {
+                labels: ['Draft', 'Submitted', 'Revision', 'Accepted'],
+                datasets: [{
+                    label: 'Jumlah Kegiatan',
+                    data: [
+                        {{ $statusCounts['draft'] ?? 0 }},
+                        {{ $statusCounts['submitted'] ?? 0 }},
+                        {{ $statusCounts['revision'] ?? 0 }},
+                        {{ $statusCounts['accepted'] ?? 0 }}
+                    ],
+                    backgroundColor: [
+                        '#e5e7eb', // gray-200 for draft
+                        '#dbeafe', // blue-100 for submitted
+                        '#fef08a', // yellow-200 for revision
+                        '#bbf7d0' // green-200 for accepted
+                    ],
+                    borderColor: [
+                        '#9ca3af', // gray-400
+                        '#3b82f6', // blue-500
+                        '#eab308', // yellow-500
+                        '#22c55e' // green-500
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    let value = context.raw;
+                                    let total = context.chart._metasets[context.datasetIndex].total;
+                                    let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                    label += value + ' (' + percentage + '%)';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endpush
