@@ -51,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Menu Layout Placeholder Routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/activities', [DashboardController::class, 'getActivitiesByDate'])->name('dashboard.activities');
     Route::get('/usulan-diklat', [UsulanDiklatController::class, 'index'])->name('usulan-diklat');
 
     // Import Kegiatan Routes
