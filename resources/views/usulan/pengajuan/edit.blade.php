@@ -142,6 +142,33 @@
                 </div>
 
                 <div class="form-row">
+                    <label>Tujuan</label>
+                    <textarea name="tujuan" rows="3" style="resize:vertical;">{{ old('tujuan', $kegiatan->tujuan) }}</textarea>
+                </div>
+
+                <div class="form-row">
+                    <label>Justifikasi</label>
+                    <textarea name="justifikasi" rows="3" style="resize:vertical;">{{ old('justifikasi', $kegiatan->justifikasi) }}</textarea>
+                </div>
+
+                <div class="form-row">
+                    <label>Target Kompetensi</label>
+                    <textarea name="target_kompetensi" rows="3" style="resize:vertical;">{{ old('target_kompetensi', $kegiatan->target_kompetensi) }}</textarea>
+                </div>
+
+                <div class="form-row">
+                    <label>Sumber Dana</label>
+                    <select name="fund_source_id">
+                        <option value="">-PILIH-</option>
+                        @foreach ($fund_sources as $fs)
+                            <option value="{{ $fs->id }}" {{ old('fund_source_id', $kegiatan->fund_source_id) == $fs->id ? 'selected' : '' }}>
+                                {{ $fs->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-row">
                     <label>Target Peserta</label>
                     <select name="target_participant_id">
                         <option value="">-PILIH-</option>

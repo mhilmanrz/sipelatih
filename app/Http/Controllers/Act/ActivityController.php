@@ -14,6 +14,7 @@ use App\Models\Act\ActivityScope;
 use App\Models\Act\ActivityType;
 use App\Models\Act\Batch;
 use App\Models\Act\MaterialType;
+use App\Models\Act\FundSource;
 use App\Models\Act\TargetParticipant;
 use App\Models\Budget;
 use App\Models\User\Profession;
@@ -52,6 +53,7 @@ class ActivityController extends Controller
         $target_participants = TargetParticipant::all();
         $work_units = WorkUnit::all();
         $budgets = Budget::all();
+        $fund_sources = FundSource::all();
 
         return view('usulan.pengajuan.create', compact(
             'picCandidates',
@@ -65,7 +67,8 @@ class ActivityController extends Controller
             'activity_formats',
             'target_participants',
             'work_units',
-            'budgets'
+            'budgets',
+            'fund_sources'
         ));
     }
 
@@ -142,6 +145,7 @@ class ActivityController extends Controller
         $target_participants = TargetParticipant::all();
         $work_units = WorkUnit::all();
         $budgets = Budget::all();
+        $fund_sources = FundSource::all();
 
         return view('usulan.pengajuan.edit', compact(
             'kegiatan',
@@ -156,7 +160,8 @@ class ActivityController extends Controller
             'activity_formats',
             'target_participants',
             'work_units',
-            'budgets'
+            'budgets',
+            'fund_sources'
         ));
     }
 
