@@ -24,14 +24,21 @@
                 entries
             </div>
 
-            <div class="right">
-                <a href="{{ route('users.import.view') }}" class="btn gray"
-                    style="background:#D6DE20; padding:8px 15px; border-radius:5px; text-decoration:none; color:black; margin-right:5px;">⬇
-                    Import Peserta</a>
-                <a href="{{ url('users/create') }}" class="btn green"
-                    style="background:#1A5555; padding:8px 15px; border-radius:5px; text-decoration:none; color:white;">＋
-                    Tambah</a>
-            </div>
+            <div class="right flex gap-2">
+    
+    <a href="{{ route('users.import.view') }}"
+       class="inline-flex items-center justify-center bg-[#D6DE20] text-[#1A5555] px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#c4cb1d] transition"
+       style="text-decoration: none;">
+        ⬇ Import Peserta
+    </a>
+
+    <a href="{{ url('users/create') }}"
+       class="inline-flex items-center justify-center bg-[#1A5555] text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#154444] transition"
+       style="text-decoration: none;">
+        ＋ Tambah
+    </a>
+
+</div>
         </div>
 
         <!-- CARD -->
@@ -45,11 +52,16 @@
                         style="width: 100%; padding:8px; border:1px solid #ccc; border-radius:5px;">
                 </div>
 
-                <button type="submit" class="btn text-white"
-                    style="padding:8px 15px; background:#007A7F; border:none; border-radius:5px; cursor:pointer;">Cari</button>
-                <a href="{{ route('users.index') }}" class="btn reset"
-                    style="padding:8px 15px; background:#f4f4f4; border:1px solid #ccc; border-radius:5px; cursor:pointer; text-decoration:none; color:black;">⟳
-                    Reset</a>
+                <button type="submit"
+    class="inline-flex items-center justify-center bg-[#1A5555] text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#154444] transition">
+    Cari
+</button>
+
+<a href="{{ route('users.index') }}"
+    class="inline-flex items-center justify-center bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full font-bold shadow hover:bg-gray-300 transition"
+    style="text-decoration: none;">
+    ⟳ Reset
+</a>
             </form>
             <table style="width:100%; border-collapse:collapse;">
                 <thead>

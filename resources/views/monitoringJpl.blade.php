@@ -34,15 +34,15 @@
         <form action="{{ route('monitoring.jpl.index') }}" method="GET"
             class="bg-white p-4 rounded shadow flex flex-col md:flex-row gap-4 md:items-center">
             <input type="text" name="nip" value="{{ request('nip') }}" placeholder="Cari NIP Pegawai"
-                class="border-4 rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
+                class="border-4 rounded-full px-4 py-1.5 outline-none focus:ring-1 focus:ring-[#FFFFFF] text-sm w-full md:w-64">
             <input type="text" name="nama" value="{{ request('nama') }}" placeholder="Cari Nama Pegawai"
-                class="border-4 rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
-            <button type="submit" class="bg-[#007A7F] hover:bg-teal-700 text-white px-6 py-2 rounded w-full md:w-auto">
+                class="border-4 rounded-full px-4 py-1.5 outline-none focus:ring-1 focus:ring-[#FFFFFF] text-sm w-full md:w-64">
+            <button type="submit" class="inline-flex items-center justify-center bg-[#1A5555] text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#154444] transition w-full md:w-auto">
                 Cari
             </button>
             <a href="{{ route('monitoring.jpl.index') }}"
-                class="bg-[#D6DE20] hover:bg-[#006bd6] text-black px-6 py-2 rounded w-full md:w-auto text-center"
-                style="text-decoration: none;">
+                class="inline-flex items-center justify-center bg-[#D6DE20] text-[#1A5555] px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#c4cb1d] transition w-full md:w-auto"
+style="text-decoration: none;">
                 Reset
             </a>
         </form>

@@ -67,12 +67,12 @@
         <div class="bg-white rounded-xl shadow p-6 mb-8">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-semibold text-gray-800">DAFTAR LAPORAN KEGIATAN</h2>
-                <a href="{{ route('kegiatan.laporan.template') }}" class="inline-flex py-2 px-4 bg-[#D6DE20] hover:bg-[#006bd6] text-black font-semibold rounded shadow items-center transition-colors text-sm">
+                <a href="{{ route('kegiatan.laporan.template') }}" class="inline-flex items-center justify-center bg-[#D6DE20] text-[#1A5555] px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#c4cb1d] transition w-full md:w-auto"style="text-decoration: none;">
                     <i class="fas fa-download mr-2"></i> Download Template
                 </a>
             </div>
 
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto rounded-xl border border-gray-400 shadow-sm">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-[#1A5555] text-white">

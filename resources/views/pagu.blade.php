@@ -40,7 +40,7 @@
                 <form action="{{ route('pagu.index') }}" method="GET" class="flex items-center gap-2">
                     <label for="filterYear" class="text-sm font-medium text-white">Filter Tahun:</label>
                     <select name="year" id="filterYear" onchange="this.form.submit()" 
-                            class="border-2 border-white rounded-md py-2 px-3 text-sm focus:ring-teal-500 focus:border-teal-500 shadow-sm w-36">
+                            class="border-4 border-white rounded-full py-1.5 px-4 text-sm focus:ring-teal-200 focus:ring focus:ring-opacity-50 focus:border-teal-300 shadow-sm w-36"
                         <option value="">-- Semua --</option>
                         @foreach($availableYears as $y)
                             <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
@@ -49,12 +49,10 @@
                 </form>
 
                 <a href="{{ route('pagu.import.page') }}" id="btnImportPagu"
-                    class="bg-[#D6DE20] hover:bg-[#006bd6] text-black font-semibold py-2 px-4 rounded shadow whitespace-nowrap text-sm"
-                    style="text-decoration:none;">
+                    class="inline-flex items-center justify-center bg-[#D6DE20] text-[#1A5555] px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#c4cb1d] transition w-full md:w-auto"style="text-decoration: none;">
                     Import Pagu
                 </a>
-                <button type="button" id="btnTambahPagu"
-                    class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow whitespace-nowrap text-sm">
+                <button type="submit" class="inline-flex items-center justify-center bg-[#1A5555] text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#154444] transition w-full md:w-auto">
                     + Tambah Pagu
                 </button>
             </div>
@@ -102,18 +100,18 @@
             </div>
         @endif
 
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-teal-600">
+        <div class="bg-white rounded-lg shadow">
+    <div class="w-full overflow-x-auto">
+            <table class="min-w-full table-fixed divide-y divide-gray-200">
+                <thead class="bg-[#1A5555] text-white shadow">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-16">No.</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">No. RKAKL</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Tahun</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kategori Pagu</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Submark</th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">Pagu</th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">Sisa Pagu</th>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-48">Aksi</th>
+                        <th scope="col" class="px-6 py-3 w-40 text-center text-xs font-medium text-white uppercase tracking-wider w-16">No.</th>
+                        <th scope="col" class="px-6 py-3 w-48 text-left text-xs font-medium text-white uppercase tracking-wider">No. RKAKL</th>
+                        <th scope="col" class="px-6 py-3 w-48 text-left text-xs font-medium text-white uppercase tracking-wider">Kategori Pagu</th>
+                        <th scope="col" class="px-6 py-3 w-64 text-left text-xs font-medium text-white uppercase tracking-wider">Submark</th>
+                        <th scope="col" class="px-6 py-3 w-32 text-right text-xs font-medium text-white uppercase tracking-wider">Pagu</th>
+                        <th scope="col" class="px-6 py-3 w-32 text-right text-xs font-medium text-white uppercase tracking-wider">Sisa Pagu</th>
+                        <th scope="col" class="px-6 py-3 w-40 text-center text-xs font-medium text-white uppercase tracking-wider w-48">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -128,12 +126,9 @@
                                 {{ $budget->rkkal_code }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $budget->year }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {{ $budget->budgetCategory->name ?? '-' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 truncate">
                                 {{ $budget->submark }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
@@ -142,28 +137,31 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
                                 {{ number_format($budget->remaining_amount, 0, ',', '.') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center space-x-2 flex justify-center">
-                                <a href="{{ route('pagu.show', $budget->id) }}" class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 border border-green-200 rounded text-sm font-medium transition-colors" style="text-decoration:none;">
-                                    Detail
-                                </a>
-                                <button type="button" class="btn-edit inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 rounded text-sm font-medium transition-colors"
-                                        data-id="{{ $budget->id }}"
-                                        data-rkkal="{{ $budget->rkkal_code }}"
-                                        data-year="{{ $budget->year }}"
-                                        data-category="{{ $budget->budget_category_id }}"
-                                        data-submark="{{ $budget->submark }}"
-                                        data-amount="{{ $budget->total_amount }}">
-                                    Edit
-                                </button>
-                                <form action="{{ route('pagu.destroy', $budget->id) }}" method="POST" class="inline-block m-0 h-full">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded text-sm font-medium transition-colors"
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus pagu ini?')">
-                                        Hapus
-                                    </button>
-                                </form>
-                            </td>
+                            <td class="px-6 py-4">
+    <div class="flex items-center justify-center gap-2 h-full">
+    <a href="{{ route('pagu.show', $budget->id) }}" 
+       class="text-white px-2.5 py-1 rounded text-xs font-semibold inline-flex items-center"
+       style="background-color: #3b82f6; text-decoration:none;">
+        Detail
+    </a>
+
+    <button type="button"
+        class="btn-edit inline-flex items-center text-white px-2.5 py-1 rounded text-xs font-semibold"
+        style="background-color: #eab308;">
+        Edit
+    </button>
+
+    <form action="{{ route('pagu.destroy', $budget->id) }}" method="POST" class="m-0">
+        @csrf
+        @method('DELETE')
+        <button type="submit"
+            class="text-white px-2.5 py-1 rounded text-xs font-semibold"
+            style="background-color: #ef4444;">
+            Hapus
+        </button>
+    </form>
+    </div>
+</td>
                         </tr>
                     @empty
                         <tr>
@@ -175,7 +173,7 @@
                 </tbody>
                 <tfoot class="bg-gray-100 font-bold border-t-2 border-gray-300">
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-right text-sm text-gray-800 uppercase">
+                        <td colspan="4" class="px-6 py-4 text-right text-sm text-gray-800 uppercase">
                             Total Pagu
                         </td>
                         <td class="px-6 py-4 text-right text-sm text-gray-800">

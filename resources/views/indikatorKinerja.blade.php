@@ -41,7 +41,7 @@
             <form action="{{ route('indikator-kinerja.index') }}" method="GET" class="flex items-center gap-4 w-full">
                 <div class="flex items-center gap-2">
                     <label for="year" class="font-semibold text-gray-700">Filter Tahun:</label>
-                    <select name="year" id="year" class="border-gray-300 rounded-md shadow-sm focus:border-teal-300 focus:ring focus:ring-teal-200 focus:ring-opacity-50 px-3 py-2 border">
+                    <select name="year" id="year" class="border-4 rounded-full shadow-sm focus:border-teal-300 focus:ring focus:ring-teal-200 focus:ring-opacity-50 px-4 py-1.5 border"
                         @php
                             $currentYear = date('Y');
                             $startYear = 2020;
@@ -51,7 +51,7 @@
                         @endfor
                     </select>
                 </div>
-                <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-6 rounded transition-colors shadow">
+                <button type="submit" class="inline-flex items-center justify-center bg-[#1A5555] text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#154444] transition w-full md:w-auto">
                     Tampilkan
                 </button>
             </form>

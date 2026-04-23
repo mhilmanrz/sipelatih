@@ -37,7 +37,7 @@
                     Import Excel
                 </button>
                 <a href="{{ route('activity-names.create') }}"
-                    class="bg-[#D6DE20] hover:bg-[#D6DE20] text-[#007A7F] font-semibold py-2 px-4 rounded shadow">
+                    class="inline-flex items-center justify-center bg-[#1A5555] text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#154444] transition w-full md:w-auto">
                     + Tambah Nama Kegiatan
                 </a>
             </div>

@@ -32,7 +32,7 @@
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white">MANAJEMEN JENIS KEGIATAN</h1>
             <a href="{{ route('activity-types.create') }}"
-                class="bg-[#1A5555] hover:bg-[#1A5555] text-white font-semibold py-2 px-4 rounded shadow">
+                class="inline-flex items-center justify-center bg-[#1A5555] text-white px-5 py-2.5 rounded-full font-bold shadow hover:bg-[#154444] transition w-full md:w-auto">
                 + Tambah Jenis Kegiatan
             </a>
         </div>
