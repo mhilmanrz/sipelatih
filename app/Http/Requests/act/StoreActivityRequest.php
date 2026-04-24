@@ -31,7 +31,7 @@ class StoreActivityRequest extends FormRequest
             'activity_scope_id' => 'required|exists:activity_scopes,id',
             'material_type_id' => 'required|exists:material_types,id',
             'activity_method_id' => 'required|exists:activity_methods,id',
-            'batch_id' => 'required|exists:batches,id',
+            'batch_id' => 'required|integer|min:1',
             'activity_format_id' => 'required|exists:activity_formats,id',
             'collaboration_inst' => 'nullable|string|max:255',
             'target_participant_id' => 'nullable|exists:target_participants,id',

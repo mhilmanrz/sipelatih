@@ -14,10 +14,8 @@ class ActivityTypeSeeder extends Seeder
     {
         $types = [
             ['name' => 'Pelatihan Teknis'],
-            ['name' => 'Pelatihan Fungsional'],
             ['name' => 'Pelatihan Manajerial'],
             ['name' => 'Pelatihan Sosial Kultural'],
-            ['name' => 'Pelatihan Kepemimpinan'],
         ];
 
         foreach ($types as $type) {
