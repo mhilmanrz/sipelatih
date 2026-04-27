@@ -1,33 +1,31 @@
-@extends('layout.LayoutSuperAdmin')
+<x-layouts.app>
+    <x-slot:title>Edit Nama Kegiatan</x-slot>
 
-@section('title', 'Edit Nama Kegiatan')
+    @push('styles')
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            .tw-wrap p,
+            .tw-wrap h1,
+            .tw-wrap h2,
+            .tw-wrap h3,
+            .tw-wrap h4,
+            .tw-wrap h5,
+            .tw-wrap h6,
+            .tw-wrap span,
+            .tw-wrap div,
+            .tw-wrap a,
+            .tw-wrap button,
+            .tw-wrap table,
+            .tw-wrap th,
+            .tw-wrap td,
+            .tw-wrap tr,
+            .tw-wrap thead,
+            .tw-wrap tbody {
+                font-family: inherit;
+            }
+        </style>
+    @endpush
 
-@push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .tw-wrap p,
-        .tw-wrap h1,
-        .tw-wrap h2,
-        .tw-wrap h3,
-        .tw-wrap h4,
-        .tw-wrap h5,
-        .tw-wrap h6,
-        .tw-wrap span,
-        .tw-wrap div,
-        .tw-wrap a,
-        .tw-wrap button,
-        .tw-wrap table,
-        .tw-wrap th,
-        .tw-wrap td,
-        .tw-wrap tr,
-        .tw-wrap thead,
-        .tw-wrap tbody {
-            font-family: inherit;
-        }
-    </style>
-@endpush
-
-@section('content')
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Edit Nama Kegiatan</h1>
@@ -91,4 +89,4 @@
             </form>
         </div>
     </div>
-@endsection
+</x-layouts.app>

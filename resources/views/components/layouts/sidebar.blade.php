@@ -1,9 +1,9 @@
 <aside
-    class="w-[240px] h-screen bg-[#1A5555] text-white fixed top-0 transition-all duration-300 overflow-y-auto z-[1000]"
+    class="w-[240px] h-[calc(100vh-60px)] lg:h-screen bg-[#1A5555] text-white fixed top-[60px] lg:top-0 transition-all duration-300 overflow-y-auto z-[1000]"
     :class="sidebarOpen ? 'left-0' : '-left-[240px]'"
 >
     <div class="p-4 text-center bg-[#113a3a]">
-        <img src="{{ asset('assets/images/logo-sipelatih.png') }}" class="w-44 mx-auto mb-2">
+        <img src="{{ $appSettings->get('app_logo') ? asset('storage/' . $appSettings->get('app_logo')) : asset('assets/images/logo-sipelatih.png') }}" class="w-44 mx-auto mb-2">
         <small class="text-xs block text-gray-300 mt-1">RSUPN Dr. Cipto Mangunkusumo</small>
     </div>
 
@@ -32,7 +32,7 @@
                 </span>
                 <i class="fa-solid fa-chevron-down text-xs transform group-open:rotate-180 transition-transform"></i>
             </summary>
-            <div class="flex flex-col bg-black bg-opacity-20 pb-1">
+            <div class="flex flex-col bg-[#113a3a] pb-1">
                 <a href="{{ url('/monitoring-jpl') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('monitoring-jpl*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                     <i class="fa-solid fa-chart-line w-6 text-center mr-2 text-sm"></i>
@@ -57,11 +57,11 @@
                 </span>
                 <i class="fa-solid fa-chevron-down text-xs transform group-open:rotate-180 transition-transform"></i>
             </summary>
-            <div class="flex flex-col bg-black bg-opacity-20 pb-1">
+            <div class="flex flex-col bg-[#113a3a] pb-1">
                 <a href="{{ route('users.index') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('users*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-id-card w-6 text-center mr-2 text-sm"></i>
-                    <span>Management Pegawai</span>
+                    <i class="fa-solid fa-users w-6 text-center mr-2 text-sm"></i>
+                    <span>Data Pegawai</span>
                 </a>
                 <a href="{{ url('/manajemen-sasaran-profesi') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('manajemen-sasaran-profesi*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
@@ -83,12 +83,12 @@
         <details class="group" {{ $isEvaluasiOpen ? 'open' : '' }}>
             <summary class="flex items-center justify-between px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                 <span class="flex items-center">
-                    <i class="fa-solid fa-file-chart-column w-6 text-center mr-2"></i>
+                    <i class="fa-solid fa-chart-column w-6 text-center mr-2"></i>
                     <span>Evaluasi & Laporan</span>
                 </span>
                 <i class="fa-solid fa-chevron-down text-xs transform group-open:rotate-180 transition-transform"></i>
             </summary>
-            <div class="flex flex-col bg-black bg-opacity-20 pb-1">
+            <div class="flex flex-col bg-[#113a3a] pb-1">
                 <a href="{{ route('pagu.index') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('pagu*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                     <i class="fa-solid fa-money-bill w-6 text-center mr-2 text-sm"></i>
@@ -135,11 +135,16 @@
                 </span>
                 <i class="fa-solid fa-chevron-down text-xs transform group-open:rotate-180 transition-transform"></i>
             </summary>
-            <div class="flex flex-col bg-black bg-opacity-20 pb-1">
+            <div class="flex flex-col bg-[#113a3a] pb-1">
                 <a href="{{ route('users.index') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('users*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-id-card w-6 text-center mr-2 text-sm"></i>
-                    <span>Data Pengguna</span>
+                    <i class="fa-solid fa-users w-6 text-center mr-2 text-sm"></i>
+                    <span>Data Pegawai</span>
+                </a>
+                <a href="{{ route('accounts.index') }}"
+                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('accounts*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+                    <i class="fa-solid fa-user-shield w-6 text-center mr-2 text-sm"></i>
+                    <span>Data Akun</span>
                 </a>
                 <a href="{{ route('professions.index') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('professions*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
@@ -220,5 +225,15 @@
         </details>
 
         @endhasrole
+
+        <!-- PENGATURAN (SUPERADMIN) -->
+        @hasrole('SuperAdmin')
+        <a href="{{ route('settings.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('settings*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+            <i class="fa-solid fa-gear w-6 text-center mr-2"></i>
+            <span>Pengaturan</span>
+        </a>
+        @endhasrole
+
     </div>
 </aside>
