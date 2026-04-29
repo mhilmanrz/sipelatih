@@ -1,94 +1,132 @@
 @extends('layout.LayoutSuperAdmin')
 
+@section('title', 'Manajemen Jabatan')
+
+@push('styles')
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    .tw-wrap p,
+    .tw-wrap h1,
+    .tw-wrap h2,
+    .tw-wrap h3,
+    .tw-wrap h4,
+    .tw-wrap h5,
+    .tw-wrap h6,
+    .tw-wrap span,
+    .tw-wrap div,
+    .tw-wrap a,
+    .tw-wrap button,
+    .tw-wrap table,
+    .tw-wrap th,
+    .tw-wrap td,
+    .tw-wrap tr,
+    .tw-wrap thead,
+    .tw-wrap tbody {
+        font-family: inherit;
+    }
+</style>
+@endpush
+
 @section('content')
-    <div class="bg-[#13b9c6] min-h-screen font-sans pb-8">
-
-        <!-- TITLE & BUTTON -->
-        <section class="px-8 py-6 flex flex-wrap justify-between items-center gap-4">
-            <h1 class="text-white text-3xl font-bold">Manajemen Jabatan</h1>
-            <a href="{{ route('positions.create') }}"
-                class="inline-flex items-center gap-2 bg-white text-[#007a7a] px-5 py-2.5 rounded-full font-bold shadow hover:bg-gray-50 transition"
-                id="btnTambah">
-                ➕ Tambah Jabatan
-            </a>
-        </section>
-
-        @if (session('success'))
-            <div class="mx-8 mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-                role="alert">
-                <span class="block sm:inline">{{ session('success') }}</span>
-            </div>
-        @endif
-
-        <!-- AREA TABLE -->
-        <section class="mx-8 bg-white rounded-[20px] overflow-hidden shadow">
-
-            <!-- Table Control -->
-            <form method="GET" action="{{ route('positions.index') }}"
-                class="flex flex-wrap justify-end items-center p-6 border-b border-gray-200">
-                <div class="flex items-center gap-2">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Kode/Nama..."
-                        class="border rounded-full px-4 py-1.5 outline-none focus:ring-1 focus:ring-[#007a7a]">
-                    <button type="submit"
-                        class="bg-[#007a7a] text-white px-4 py-1.5 rounded-full hover:bg-[#006bd6] transition">Search</button>
-                </div>
-            </form>
-
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse" id="monitorTable">
-                    <thead class="bg-[#007a7a] text-white">
-                        <tr>
-                            <th class="border border-gray-400 py-3 px-4 font-semibold text-center w-16">No</th>
-                            <th class="border border-gray-400 py-3 px-4 font-semibold text-center w-48">Aksi</th>
-                            <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Kode Jabatan</th>
-                            <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Nama Jabatan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($positions as $key => $item)
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="border border-gray-300 py-3 px-4 text-center">
-                                    {{ $positions->firstItem() + $key }}</td>
-                                <td class="border border-gray-300 py-3 px-4 text-center">
-                                    <div class="flex justify-center gap-2">
-                                        <!-- Edit Button -->
-                                        <a href="{{ route('positions.edit', $item->id) }}"
-                                            class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded hover:bg-yellow-200 text-sm font-medium transition"
-                                            title="Edit">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </a>
-                                        <!-- Delete Button -->
-                                        <form action="{{ route('positions.destroy', $item->id) }}" method="POST"
-                                            class="inline"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus jabatan ini?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 text-sm font-medium transition"
-                                                title="Hapus">
-                                                <i class="fas fa-trash"></i> Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td class="border border-gray-300 py-3 px-4">{{ $item->code }}</td>
-                                <td class="border border-gray-300 py-3 px-4">{{ $item->name }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="border border-gray-300 py-4 text-center text-gray-500">Belum ada
-                                    data jabatan.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- PAGINATION -->
-            <div class="mt-4 px-6 pb-6 flex justify-end">
-                {{ $positions->appends(request()->query())->links('pagination::tailwind') }}
-            </div>
-        </section>
-
+<div class="tw-wrap p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-white">MANAJEMEN JABATAN</h1>
+        <a href="{{ route('positions.create') }}"
+            class="inline-flex items-center justify-center bg-[#1A5555] hover:opacity-85 text-white font-bold px-5 py-2.5 rounded-full shadow transition">
+            + Tambah Jabatan
+        </a>
     </div>
+
+    @if (session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline">{{ session('success') }}</span>
+    </div>
+    @endif
+
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <!-- Table Control Bar -->
+        <form method="GET" action="{{ route('positions.index') }}"
+            class="flex flex-wrap justify-between items-center p-6 gap-4 text-white" style="background-color:#205252;">
+            <div class="flex items-center gap-2">
+                <span>Show</span>
+                <select name="entries" onchange="this.form.submit()"
+                    class="bg-transparent border border-white text-white rounded px-2 py-1 outline-none">
+                    <option value="10" class="text-black" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
+                    <option value="25" class="text-black" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                    <option value="50" class="text-black" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                </select>
+                <span>entries</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <input type="text" name="q" value="{{ request('q') }}"
+                    placeholder="Cari Kode/Nama Jabatan..."
+                    class="bg-transparent border border-white text-white placeholder-gray-300 rounded-full px-4 py-1.5 outline-none text-sm">
+                <button type="submit" style="background-color:#D6DE20; color:black;"
+                    class="px-4 py-1.5 rounded-full font-bold hover:opacity-90 transition text-sm">Search</button>
+            </div>
+        </form>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
+                    <tr>
+                        <th scope="col"
+                            class="text-left w-16 border border-white py-3 px-4 font-semibold">
+                            No.
+                        </th>
+                        <th scope="col"
+                            class="text-left border border-white py-3 px-4 font-semibold">
+                            Kode Jabatan
+                        </th>
+                        <th scope="col"
+                            class="text-left border border-white py-3 px-4 font-semibold">
+                            Nama Jabatan
+                        </th>
+                        <th scope="col"
+                            class="text-center w-48 border border-white py-3 px-4 font-semibold">
+                            Aksi
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($positions as $index => $item)
+                    <tr class="hover:bg-gray-50">
+                        <td class="whitespace-nowrap text-sm text-gray-500 border border-gray-200 py-3 px-4">
+                            {{ $positions->firstItem() + $index }}
+                        </td>
+                        <td class="whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200 py-3 px-4">
+                            {{ $item->code }}
+                        </td>
+                        <td class="whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200 py-3 px-4">
+                            {{ $item->name }}
+                        </td>
+                        <td class="whitespace-nowrap text-sm font-medium text-center space-x-2 border border-gray-200 py-3 px-4">
+                            <a href="{{ route('positions.edit', $item->id) }}"
+                                class="inline-flex items-center px-3 py-1.5 bg-[#1A5555] text-white hover:bg-[#1A5555] border border-[#1A5555] rounded text-sm font-medium transition-colors">
+                                Edit
+                            </a>
+                            <form action="{{ route('positions.destroy', $item->id) }}" method="POST"
+                                class="inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus jabatan ini?')" style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-gray-500 text-sm border border-gray-200 py-3 px-4">
+                            Belum ada data jabatan.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <x-table-footer :paginator="$positions->appends(request()->query())" />
+    </div>
+</div>
 @endsection

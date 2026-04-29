@@ -18,7 +18,7 @@
         </button>
 
         <table>
-            <thead>
+            <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                 <tr>
                     <th>NO.</th>
                     <th>NIK</th>
@@ -34,7 +34,7 @@
                     <td>Ilham Fauzie</td>
                     <td>Perawat Vokasi</td>
                     <td>
-                        <button class="hapus">HAPUS</button>
+                        <button  style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">Hapus</button>
                         <button class="update">UPDATE</button>
                     </td>
                 </tr>
@@ -44,7 +44,7 @@
                     <td>Handry Tanubrata</td>
                     <td>Ners Spesialis Keperawatan Jiwa</td>
                     <td>
-                        <button class="hapus">HAPUS</button>
+                        <button  style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">Hapus</button>
                         <button class="update">UPDATE</button>
                     </td>
                 </tr>

@@ -26,24 +26,24 @@
     <div class="bg-[#007C82] rounded-[20px] shadow overflow-x-auto">
 
         <table class="w-full min-w-[700px] text-sm">
-            <thead class="bg-[#007C82] text-white">
+            <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                 <tr>
-                    <th class="py-4 px-3 text-center">NO.</th>
-                    <th class="py-4 px-3">Nama Kegiatan</th>
-                    <th class="py-4 px-3 text-center">Tanggal</th>
-                    <th class="py-4 px-3 text-center">Tanggal Upload</th>
-                    <th class="py-4 px-3 text-center">Laporan</th>
+                    <th class="text-center border border-white py-3 px-4 font-semibold">NO.</th>
+                    <th class="border border-white py-3 px-4 font-semibold">Nama Kegiatan</th>
+                    <th class="text-center border border-white py-3 px-4 font-semibold">Tanggal</th>
+                    <th class="text-center border border-white py-3 px-4 font-semibold">Tanggal Upload</th>
+                    <th class="text-center border border-white py-3 px-4 font-semibold">Laporan</th>
                 </tr>
             </thead>
 
             <tbody class="bg-white text-gray-800">
 
                 <tr class="border-b">
-                    <td class="py-4 text-center">1</td>
-                    <td class="py-4">Workshop ICTEC</td>
-                    <td class="py-4 text-center">15 Januari 2026</td>
-                    <td class="py-4 text-center">16 Januari 2026</td>
-                    <td class="py-4 text-center">
+                    <td class="text-center border border-gray-200 py-3 px-4">1</td>
+                    <td class="border border-gray-200 py-3 px-4">Workshop ICTEC</td>
+                    <td class="text-center border border-gray-200 py-3 px-4">15 Januari 2026</td>
+                    <td class="text-center border border-gray-200 py-3 px-4">16 Januari 2026</td>
+                    <td class="text-center border border-gray-200 py-3 px-4">
                         <a href="{{ asset('laporan/workshop-ictec-15-jan-2026.pdf') }}"
                            target="_blank"
                            class="text-blue-600 underline hover:text-blue-800">
@@ -53,11 +53,11 @@
                 </tr>
 
                 <tr>
-                    <td class="py-4 text-center">2</td>
-                    <td class="py-4">Workshop ICTEC</td>
-                    <td class="py-4 text-center">21 Januari 2026</td>
-                    <td class="py-4 text-center">23 Januari 2026</td>
-                    <td class="py-4 text-center">
+                    <td class="text-center border border-gray-200 py-3 px-4">2</td>
+                    <td class="border border-gray-200 py-3 px-4">Workshop ICTEC</td>
+                    <td class="text-center border border-gray-200 py-3 px-4">21 Januari 2026</td>
+                    <td class="text-center border border-gray-200 py-3 px-4">23 Januari 2026</td>
+                    <td class="text-center border border-gray-200 py-3 px-4">
                         <a href="{{ asset('laporan/workshop-ictec-21-jan-2026.pdf') }}"
                            target="_blank"
                            class="text-blue-600 underline hover:text-blue-800">

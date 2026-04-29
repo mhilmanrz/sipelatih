@@ -3,265 +3,302 @@
 @section('title', 'Tambah Data Kegiatan')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+<style>
+    .tw-wrap p,
+    .tw-wrap h1,
+    .tw-wrap h2,
+    .tw-wrap h3,
+    .tw-wrap span,
+    .tw-wrap div,
+    .tw-wrap a,
+    .tw-wrap button,
+    .tw-wrap table,
+    .tw-wrap th,
+    .tw-wrap td,
+    .tw-wrap tr,
+    .tw-wrap thead,
+    .tw-wrap tbody,
+    .tw-wrap input,
+    .tw-wrap select,
+    .tw-wrap textarea,
+    .tw-wrap label {
+        font-family: inherit;
+    }
+</style>
 @endpush
 
 @section('content')
-    <div class="input-page" style="padding: 15px;">
-        <h3 class="title">Data Kegiatan</h3>
+<div class="tw-wrap p-6">
+    <h3 class="title">Data Kegiatan</h3>
 
-        <form method="POST" action="{{ route('kegiatan.store') }}">
-            @csrf
+    <form method="POST" action="{{ route('kegiatan.store') }}">
+        @csrf
 
-            @if ($errors->any())
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <strong class="font-bold">Oops! Ada kesalahan.</strong>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>- {{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+        @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong class="font-bold">Oops! Ada kesalahan.</strong>
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>- {{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
 
-            <div class="form-card">
-                <div class="form-row">
-                    <label>Tanggal Usulan</label>
-                    <input type="date" name="date" value="{{ old('date') }}">
-                </div>
-
-                <div class="form-row">
-                    <label>No. Surat</label>
-                    <input type="text" name="reference_number" value="{{ old('reference_number') }}">
-                </div>
-
-                <div class="form-row">
-                    <label>Nama Kegiatan</label>
-                    <select name="activity_name_id" id="activity_name_select" required>
-                        <option value="" data-start="" data-end="">-PILIH-</option>
-                        @foreach ($activity_names as $actName)
-                            <option value="{{ $actName->id }}"
-                                data-start="{{ $actName->start_date }}" data-end="{{ $actName->end_date }}"
-                                {{ old('activity_name_id') == $actName->id ? 'selected' : '' }}>{{ $actName->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Jenis Kegiatan</label>
-                    <select name="activity_type_id" required>
-                        <option value="">-PILIH-</option>
-                        @foreach ($activity_types as $type)
-                            <option value="{{ $type->id }}"
-                                {{ old('activity_type_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Kategori Kegiatan</label>
-                    <select name="activity_category_id" required>
-                        <option value="">-PILIH-</option>
-                        @foreach ($activity_categories as $category)
-                            <option value="{{ $category->id }}"
-                                {{ old('activity_category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Cakupan Kegiatan</label>
-                    <select name="activity_scope_id" required>
-                        <option value="">-PILIH-</option>
-                        @foreach ($activity_scopes as $scope)
-                            <option value="{{ $scope->id }}"
-                                {{ old('activity_scope_id') == $scope->id ? 'selected' : '' }}>{{ $scope->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Jenis Materi</label>
-                    <select name="material_type_id" required>
-                        <option value="">-PILIH-</option>
-                        @foreach ($material_types as $mat)
-                            <option value="{{ $mat->id }}"
-                                {{ old('material_type_id') == $mat->id ? 'selected' : '' }}>{{ $mat->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Metode</label>
-                    <select name="activity_method_id" required>
-                        <option value="">-PILIH-</option>
-                        @foreach ($activity_methods as $method)
-                            <option value="{{ $method->id }}"
-                                {{ old('activity_method_id') == $method->id ? 'selected' : '' }}>{{ $method->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Angkatan</label>
-                    <select id="angka" name="batch_id" required>
-                        <option value="">-PILIH-</option>
-                        @foreach ($batches as $batch)
-                            <option value="{{ $batch->id }}" {{ old('batch_id') == $batch->id ? 'selected' : '' }}>
-                                {{ $batch->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Bentuk</label>
-                    <select name="activity_format_id" required>
-                        <option value="">-PILIH-</option>
-                        @foreach ($activity_formats as $format)
-                            <option value="{{ $format->id }}"
-                                {{ old('activity_format_id') == $format->id ? 'selected' : '' }}>{{ $format->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Institusi Kerjasama (Opsional)</label>
-                    <input type="text" name="collaboration_inst" value="{{ old('collaboration_inst') }}">
-                </div>
-
-                <div class="form-row">
-                    <label>Tempat</label>
-                    <input type="text" name="tempat" value="{{ old('tempat') }}">
-                </div>
-
-                <div class="form-row">
-                    <label>Tujuan</label>
-                    <textarea name="tujuan" rows="3" style="resize:vertical;">{{ old('tujuan') }}</textarea>
-                </div>
-
-                <div class="form-row">
-                    <label>Justifikasi</label>
-                    <textarea name="justifikasi" rows="3" style="resize:vertical;">{{ old('justifikasi') }}</textarea>
-                </div>
-
-                <div class="form-row">
-                    <label>Target Kompetensi</label>
-                    <textarea name="target_kompetensi" rows="3" style="resize:vertical;">{{ old('target_kompetensi') }}</textarea>
-                </div>
-
-                <div class="form-row">
-                    <label>Sumber Dana</label>
-                    <select name="fund_source_id">
-                        <option value="">-PILIH-</option>
-                        @foreach ($fund_sources as $fs)
-                            <option value="{{ $fs->id }}" {{ old('fund_source_id') == $fs->id ? 'selected' : '' }}>
-                                {{ $fs->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Target Peserta</label>
-                    <select name="target_participant_id">
-                        <option value="">-PILIH-</option>
-                        @foreach ($target_participants as $target)
-                            <option value="{{ $target->id }}"
-                                {{ old('target_participant_id') == $target->id ? 'selected' : '' }}>{{ $target->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Kuota Peserta (Orang)</label>
-                    <input type="number" name="quota_participant" value="{{ old('quota_participant') }}" min="1">
-                </div>
-
-                <div class="form-row two">
-                    <label>Tgl Mulai / Selesai</label>
-                    <input type="date" name="start_date" id="act_start_date" value="{{ old('start_date') }}">
-                    <input type="date" name="end_date" id="act_end_date" value="{{ old('end_date') }}">
-                </div>
-
-                <div class="form-row">
-                    <label>Anggaran (Rp)</label>
-                    <input type="number" name="budget_amount" value="{{ old('budget_amount') }}">
-                </div>
-
-                <div class="form-row">
-                    <label>Pagu</label>
-                    <select name="budget_id">
-                        <option value="">-PILIH PAGU-</option>
-                        @foreach ($budgets as $bg)
-                            @php $sisa = $bg->total_amount - ($bg->activities_sum_budget_amount ?? 0); @endphp
-                            <option value="{{ $bg->id }}" {{ old('budget_id') == $bg->id ? 'selected' : '' }}>
-                                {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Sisa: Rp {{ number_format($sisa, 0, ',', '.') }})
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Unit Pengusul</label>
-                    <select name="work_unit_id">
-                        <option value="">-PILIH-</option>
-                        @foreach ($work_units as $unit)
-                            <option value="{{ $unit->id }}" {{ old('work_unit_id') == $unit->id ? 'selected' : '' }}>
-                                {{ $unit->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>Nama PIC</label>
-                    <select name="pic_user_id" id="pic_user_id" onchange="updateWaPic(this)">
-                        <option value="" data-phone="">-PILIH PEGAWAI (PIC)-</option>
-                        @foreach ($picCandidates as $pic)
-                            <option value="{{ $pic->id }}" data-phone="{{ $pic->phone_number ?? '-' }}"
-                                {{ old('pic_user_id') == $pic->id ? 'selected' : '' }}>
-                                {{ $pic->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>WA PIC</label>
-                    <input type="text" id="wa_pic_temp" disabled placeholder="Pilih Nama PIC di atas untuk melihat WA"
-                        class="bg-gray-100 font-bold text-gray-700">
-                </div>
-
-                <div class="form-action">
-                    <button type="submit" id="btnSave" class="btn-save" style="cursor:pointer;">💾 SIMPAN</button>
-                    <a href="{{ route('kegiatan.index') }}" id="btnCancel" class="btn-cancel"
-                        style="cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">✖
-                        BATAL</a>
-                </div>
-
+        <div class="form-card">
+            <div class="form-row">
+                <label>Tanggal Usulan</label>
+                <input type="date" name="date" value="{{ old('date') }}">
             </div>
-        </form>
-    </div>
+
+            <div class="form-row">
+                <label>No. Surat</label>
+                <input type="text" name="reference_number" value="{{ old('reference_number') }}">
+            </div>
+
+            <div class="form-row">
+                <label>Nama Kegiatan</label>
+                <select name="activity_name_id" id="activity_name_select" required>
+                    <option value="" data-start="" data-end="">-PILIH-</option>
+                    @foreach ($activity_names as $actName)
+                    <option value="{{ $actName->id }}"
+                        data-start="{{ $actName->start_date }}" data-end="{{ $actName->end_date }}"
+                        {{ old('activity_name_id') == $actName->id ? 'selected' : '' }}>{{ $actName->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Jenis Kegiatan</label>
+                <select name="activity_type_id" required>
+                    <option value="">-PILIH-</option>
+                    @foreach ($activity_types as $type)
+                    <option value="{{ $type->id }}"
+                        {{ old('activity_type_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Kategori Kegiatan</label>
+                <select name="activity_category_id" required>
+                    <option value="">-PILIH-</option>
+                    @foreach ($activity_categories as $category)
+                    <option value="{{ $category->id }}"
+                        {{ old('activity_category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Cakupan Kegiatan</label>
+                <select name="activity_scope_id" required>
+                    <option value="">-PILIH-</option>
+                    @foreach ($activity_scopes as $scope)
+                    <option value="{{ $scope->id }}"
+                        {{ old('activity_scope_id') == $scope->id ? 'selected' : '' }}>{{ $scope->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Jenis Materi</label>
+                <select name="material_type_id" required>
+                    <option value="">-PILIH-</option>
+                    @foreach ($material_types as $mat)
+                    <option value="{{ $mat->id }}"
+                        {{ old('material_type_id') == $mat->id ? 'selected' : '' }}>{{ $mat->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Metode</label>
+                <select name="activity_method_id" required>
+                    <option value="">-PILIH-</option>
+                    @foreach ($activity_methods as $method)
+                    <option value="{{ $method->id }}"
+                        {{ old('activity_method_id') == $method->id ? 'selected' : '' }}>{{ $method->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Angkatan</label>
+                <select id="angka" name="batch_id" required>
+                    <option value="">-PILIH-</option>
+                    @foreach ($batches as $batch)
+                    <option value="{{ $batch->id }}" {{ old('batch_id') == $batch->id ? 'selected' : '' }}>
+                        {{ $batch->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Bentuk</label>
+                <select name="activity_format_id" id="activity_format_select" required>
+                    <option value="">-PILIH-</option>
+                    @foreach ($activity_formats as $format)
+                    <option value="{{ $format->id }}" data-name="{{ $format->name }}"
+                        {{ old('activity_format_id') == $format->id ? 'selected' : '' }}>{{ $format->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Institusi Kerjasama</label>
+                <input type="text" id="collaboration_inst" name="collaboration_inst"
+                    value="{{ old('collaboration_inst') }}"
+                    placeholder="">
+            </div>
+
+            <div class="form-row">
+                <label>Tempat</label>
+                <input type="text" name="tempat" value="{{ old('tempat') }}">
+            </div>
+
+            <div class="form-row">
+                <label>Tujuan</label>
+                <textarea name="tujuan" rows="3" style="resize:vertical;">{{ old('tujuan') }}</textarea>
+            </div>
+
+            <div class="form-row">
+                <label>Justifikasi</label>
+                <textarea name="justifikasi" rows="3" style="resize:vertical;">{{ old('justifikasi') }}</textarea>
+            </div>
+
+            <div class="form-row">
+                <label>Target Kompetensi</label>
+                <textarea name="target_kompetensi" rows="3" style="resize:vertical;">{{ old('target_kompetensi') }}</textarea>
+            </div>
+
+            <div class="form-row">
+                <label>Sumber Dana</label>
+                <select name="fund_source_id">
+                    <option value="">-PILIH-</option>
+                    @foreach ($fund_sources as $fs)
+                    <option value="{{ $fs->id }}" {{ old('fund_source_id') == $fs->id ? 'selected' : '' }}>
+                        {{ $fs->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Target Peserta</label>
+                <select name="target_participant_id">
+                    <option value="">-PILIH-</option>
+                    @foreach ($target_participants as $target)
+                    <option value="{{ $target->id }}"
+                        {{ old('target_participant_id') == $target->id ? 'selected' : '' }}>{{ $target->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row" style="margin-bottom: 24px;">
+                <label>Kuota Peserta (Orang)</label>
+                <div style="position: relative;">
+                    <input type="number" name="quota_participant" value="{{ old('quota_participant') }}" min="1">
+                    <small style="color:#888; margin-top:3px; display:block; position: absolute; left: 0; top: 100%;">*Masukan Angka</small>
+                </div>
+            </div>
+
+            <div class="form-row two">
+                <label>Tgl Mulai / Selesai</label>
+                <input type="date" name="start_date" id="act_start_date" value="{{ old('start_date') }}">
+                <input type="date" name="end_date" id="act_end_date" value="{{ old('end_date') }}">
+            </div>
+
+            <div class="form-row" style="margin-bottom: 24px;">
+                <label>Anggaran (Rp)</label>
+                <div style="position: relative;">
+                    <input type="text" id="budget_amount_display" inputmode="numeric"
+                        value="{{ old('budget_amount') ? number_format(old('budget_amount'), 0, ',', '.') : '' }}"
+                        placeholder="Contoh: 15.000.000"
+                        autocomplete="off">
+                    <input type="hidden" name="budget_amount" id="budget_amount_hidden"
+                        value="{{ old('budget_amount') }}">
+                    <small style="color:#888; margin-top:3px; display:block; position: absolute; left: 0; top: 100%;">*Masukan Angka</small>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label>Pagu</label>
+                <select name="budget_id">
+                    <option value="">-PILIH PAGU-</option>
+                    @foreach ($budgets as $bg)
+                    @php $sisa = $bg->total_amount - ($bg->activities_sum_budget_amount ?? 0); @endphp
+                    <option value="{{ $bg->id }}" {{ old('budget_id') == $bg->id ? 'selected' : '' }}>
+                        {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Sisa: Rp {{ number_format($sisa, 0, ',', '.') }})
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Unit Pengusul</label>
+                <select name="work_unit_id">
+                    <option value="">-PILIH-</option>
+                    @foreach ($work_units as $unit)
+                    <option value="{{ $unit->id }}" {{ old('work_unit_id') == $unit->id ? 'selected' : '' }}>
+                        {{ $unit->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Nama PIC</label>
+                <select name="pic_user_id" id="pic_user_id" onchange="updateWaPic(this)">
+                    <option value="" data-phone="">-PILIH PEGAWAI (PIC)-</option>
+                    @foreach ($picCandidates as $pic)
+                    <option value="{{ $pic->id }}" data-phone="{{ $pic->phone_number ?? '-' }}"
+                        {{ old('pic_user_id') == $pic->id ? 'selected' : '' }}>
+                        {{ $pic->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>WA PIC</label>
+                <input type="text" id="wa_pic_temp" disabled placeholder="Pilih Nama PIC di atas untuk melihat WA"
+                    class="bg-gray-100 font-bold text-gray-700">
+            </div>
+
+            <div class="form-action">
+                <button type="submit" id="btnSave" class="btn-save" style="cursor:pointer;">💾 SIMPAN</button>
+                <a href="{{ route('kegiatan.index') }}" id="btnCancel" class="btn-cancel"
+                    style="cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">✖
+                    BATAL</a>
+            </div>
+
+        </div>
+    </form>
+</div>
 @endsection
 
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const select = document.getElementById('activity_name_select');
+        // === Auto-fill tanggal dari nama kegiatan ===
+        const actNameSelect = document.getElementById('activity_name_select');
         const startDateInput = document.getElementById('act_start_date');
         const endDateInput = document.getElementById('act_end_date');
 
-        if (select && startDateInput && endDateInput) {
-            select.addEventListener('change', function() {
-                const selectedOption = select.options[select.selectedIndex];
+        if (actNameSelect && startDateInput && endDateInput) {
+            actNameSelect.addEventListener('change', function() {
+                const selectedOption = actNameSelect.options[actNameSelect.selectedIndex];
                 const start = selectedOption.getAttribute('data-start');
                 const end = selectedOption.getAttribute('data-end');
-
                 if (start) {
                     startDateInput.value = start;
                 }
@@ -270,31 +307,72 @@
                 }
             });
         }
+
+        // === Disable Institusi Kerjasama jika Bentuk = Mandiri ===
+        const formatSelect = document.getElementById('activity_format_select');
+        const collabInput = document.getElementById('collaboration_inst');
+
+        function toggleCollabField() {
+            if (!formatSelect || !collabInput) {
+                return;
+            }
+            const selectedName = formatSelect.options[formatSelect.selectedIndex]
+                ?.getAttribute('data-name') ?? '';
+            const isMandiri = selectedName.toLowerCase() === 'mandiri';
+            collabInput.disabled = isMandiri;
+            collabInput.readOnly = isMandiri;
+            collabInput.style.backgroundColor = isMandiri ? '#f0f0f0' : '';
+            collabInput.style.cursor = isMandiri ? 'not-allowed' : '';
+            if (isMandiri) {
+                collabInput.value = '';
+            }
+        }
+
+        if (formatSelect) {
+            formatSelect.addEventListener('change', toggleCollabField);
+            toggleCollabField(); // jalankan saat load untuk old() value
+        }
+
+        // === Format ribuan otomatis untuk Anggaran ===
+        const budgetDisplay = document.getElementById('budget_amount_display');
+        const budgetHidden = document.getElementById('budget_amount_hidden');
+
+        function formatRibuan(val) {
+            const num = val.replace(/\D/g, '');
+            return num.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        if (budgetDisplay && budgetHidden) {
+            budgetDisplay.addEventListener('input', function() {
+                const raw = budgetDisplay.value.replace(/\D/g, '');
+                budgetDisplay.value = raw ? formatRibuan(raw) : '';
+                budgetHidden.value = raw;
+            });
+        }
     });
 </script>
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
-    <script src="{{ asset('assets/js/tambahdata.js') }}"></script>
-    <script>
-        function updateWaPic(selectElement) {
-            const selectedOption = selectElement.options[selectElement.selectedIndex];
-            const phoneNumber = selectedOption.getAttribute('data-phone');
-            const waInput = document.getElementById('wa_pic_temp');
+<script src="{{ asset('assets/js/tambahdata.js') }}"></script>
+<script>
+    function updateWaPic(selectElement) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const phoneNumber = selectedOption.getAttribute('data-phone');
+        const waInput = document.getElementById('wa_pic_temp');
 
-            if (phoneNumber && phoneNumber !== '-') {
-                waInput.value = phoneNumber;
-            } else if (selectElement.value) {
-                waInput.value = "(Nomor WA tidak terdaftar)";
-            } else {
-                waInput.value = "";
-            }
+        if (phoneNumber && phoneNumber !== '-') {
+            waInput.value = phoneNumber;
+        } else if (selectElement.value) {
+            waInput.value = "(Nomor WA tidak terdaftar)";
+        } else {
+            waInput.value = "";
         }
+    }
 
-        // Run on load in case of old() input
-        document.addEventListener('DOMContentLoaded', function() {
-            updateWaPic(document.getElementById('pic_user_id'));
-        });
-    </script>
+    // Run on load in case of old() input
+    document.addEventListener('DOMContentLoaded', function() {
+        updateWaPic(document.getElementById('pic_user_id'));
+    });
+</script>
 @endpush

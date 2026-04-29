@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
+
+<head>
   <meta charset="UTF-8">
   <title>@yield('title', 'siPELATIH')</title>
 
@@ -12,76 +13,51 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="{{ asset('assets/css/LayoutPengusul.css') }}">
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
   @stack('styles')
 </head>
-<body>
-<div class="wrapper">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <div class="logo">
-      <img src="{{ asset('assets/images/logo-sipelatih.png') }}" width="180">
+<body x-data="{ sidebarOpen: true }">
+  <div class="wrapper">
 
-      <small>RSUPN Dr. Cipto Mangunkusumo</small>
-    </div>
+    <!-- SIDEBAR -->
+    <x-layouts.sidebar />
 
-    <div class="menu">
-      <a href="{{ url('/') }}">
-        <i class="fa fa-home"></i> Dashboard
-      </a>
+    <!-- MAIN -->
+    <div class="main">
 
-      <a href="{{ url('/usulan-diklat') }}">
-        <i class="fa fa-folder"></i> Usulan Diklat
-      </a>
+      <!-- TOPBAR -->
+      <div class="topbar" id="topbar">
+        <i class="fa fa-bars" onclick="toggleSidebar()" @click="sidebarOpen = !sidebarOpen"></i>
 
-      <a href="{{ url('/monitoring-jpl') }}">
-        <i class="fa fa-chart-line"></i> Monitoring JPL
-      </a>
+        <div class="profile-area">
+          <i class="fa fa-bell"></i>
 
-       <a href="{{ route('users.index') }}">
-        <i class="fa-solid fa-id-card"></i>Management Pegawai
-      </a>
+          <span class="user-badge" onclick="toggleProfileMenu()">
+            <i class="fa fa-user"></i> Diklat
+          </span>
 
-       <a href="{{ url('/manajemen-sasaran-profesi') }}">
-        <i class="fa-solid fa-briefcase"></i>Management Sasaran profesi
-      </a>
-    </div>
-  </div>
-
-  <!-- MAIN -->
-  <div class="main">
-
-    <!-- TOPBAR -->
-    <div class="topbar" id="topbar">
-      <i class="fa fa-bars" onclick="toggleSidebar()"></i>
-
-      <div class="profile-area">
-        <i class="fa fa-bell"></i>
-
-        <span class="user-badge" onclick="toggleProfileMenu()">
-          <i class="fa fa-user"></i> Diklat
-        </span>
-
-        <div class="profile-menu" id="profileMenu">
-          <a href="#" onclick="showPage('password');return false;">🔑 Ubah Password</a>
-          <a href="#" onclick="logout();return false;">🚪 Log Out</a>
+          <div class="profile-menu" id="profileMenu">
+            <a href="#" onclick="showPage('password');return false;">🔑 Ubah Password</a>
+            <a href="#" onclick="logout();return false;">🚪 Log Out</a>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- CONTENT -->
-    <div class="content" id="pageArea">
-       @yield('content')
+      <!-- CONTENT -->
+      <div class="content" id="pageArea">
+        @yield('content')
+      </div>
+
     </div>
 
   </div>
-
-</div>
-<footer class="footer">
+  <footer class="footer">
     © 2026 — Saskya • Nina • Sandra • Hilman
-</footer>
+  </footer>
 
- <script src="{{ asset('assets/js/LayoutPengusul.js') }}"></script>
- @stack('scripts')
- </body>
+  <script src="{{ asset('assets/js/LayoutPengusul.js') }}"></script>
+  @stack('scripts')
+</body>
+
 </html>

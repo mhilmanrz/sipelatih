@@ -1,5 +1,5 @@
 <div class="topbar" id="topbar">
-  <i class="fa fa-bars" onclick="toggleSidebar()"></i>
+  <i class="fa fa-bars" onclick="toggleSidebar()" @click="sidebarOpen = !sidebarOpen"></i>
 
   <div class="profile-area">
     <i class="fa fa-bell"></i>
@@ -10,9 +10,9 @@
 
     <div class="profile-menu" id="profileMenu">
       <a href="#" onclick="showPage('password');return false;">🔑 Ubah Password</a>
-      
+
       <form method="POST" action="{{ url('/logout') }}" id="logout-form" style="display: none;">
-          @csrf
+        @csrf
       </form>
       <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">🚪 Log Out</a>
     </div>

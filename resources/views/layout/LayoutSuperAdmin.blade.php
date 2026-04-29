@@ -17,7 +17,7 @@
     @stack('styles')
 </head>
 
-<body>
+<body x-data="{ sidebarOpen: true }">
     <div class="wrapper">
 
         <!-- SIDEBAR -->

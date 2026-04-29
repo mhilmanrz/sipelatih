@@ -3,112 +3,131 @@
 @section('title', 'Manajemen Kategori Profesi')
 
 @push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .tw-wrap p,
-        .tw-wrap h1,
-        .tw-wrap h2,
-        .tw-wrap h3,
-        .tw-wrap h4,
-        .tw-wrap h5,
-        .tw-wrap h6,
-        .tw-wrap span,
-        .tw-wrap div,
-        .tw-wrap a,
-        .tw-wrap button,
-        .tw-wrap table,
-        .tw-wrap th,
-        .tw-wrap td,
-        .tw-wrap tr,
-        .tw-wrap thead,
-        .tw-wrap tbody {
-            font-family: inherit;
-        }
-    </style>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    .tw-wrap p,
+    .tw-wrap h1,
+    .tw-wrap h2,
+    .tw-wrap h3,
+    .tw-wrap h4,
+    .tw-wrap h5,
+    .tw-wrap h6,
+    .tw-wrap span,
+    .tw-wrap div,
+    .tw-wrap a,
+    .tw-wrap button,
+    .tw-wrap table,
+    .tw-wrap th,
+    .tw-wrap td,
+    .tw-wrap tr,
+    .tw-wrap thead,
+    .tw-wrap tbody {
+        font-family: inherit;
+    }
+</style>
 @endpush
 
 @section('content')
-    <div class="tw-wrap p-6">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-white">MANAJEMEN KATEGORI PROFESI</h1>
-            <a href="{{ route('profession-categories.create') }}"
-                class="bg-[#1A5555] hover:bg-[#1A5555] text-white font-semibold py-2 px-4 rounded shadow">
-                + Tambah Kategori
-            </a>
-        </div>
+<div class="tw-wrap p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-white">MANAJEMEN KATEGORI PROFESI</h1>
+        <a href="{{ route('profession-categories.create') }}"
+            class="inline-flex items-center justify-center bg-[#1A5555] hover:opacity-85 text-white font-bold px-5 py-2.5 rounded-full shadow transition">
+            + Tambah Kategori
+        </a>
+    </div>
 
-        @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <span class="block sm:inline">{{ session('success') }}</span>
+    @if (session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline">{{ session('success') }}</span>
+    </div>
+    @endif
+
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <!-- Table Control Bar -->
+        <form method="GET" action="{{ route('profession-categories.index') }}"
+            class="flex flex-wrap justify-between items-center p-6 gap-4 text-white" style="background-color:#205252;">
+            <div class="flex items-center gap-2">
+                <span>Show</span>
+                <select name="entries" onchange="this.form.submit()"
+                    class="bg-transparent border border-white text-white rounded px-2 py-1 outline-none">
+                    <option value="10" class="text-black" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
+                    <option value="25" class="text-black" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                    <option value="50" class="text-black" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                </select>
+                <span>entries</span>
             </div>
-        @endif
-
-        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="flex items-center gap-2">
+                <input type="text" name="q" value="{{ request('q') }}"
+                    placeholder="Cari Kategori Profesi..."
+                    class="bg-transparent border border-white text-white placeholder-gray-300 rounded-full px-4 py-1.5 outline-none text-sm">
+                <button type="submit" style="background-color:#D6DE20; color:black;"
+                    class="px-4 py-1.5 rounded-full font-bold hover:opacity-90 transition text-sm">Search</button>
+            </div>
+        </form>
+        <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-teal-600">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
                         <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider w-16">
+                            class="text-left w-16 border border-white py-3 px-4 font-semibold">
                             No.
                         </th>
                         <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                            class="text-left border border-white py-3 px-4 font-semibold">
                             Nama Kategori
                         </th>
                         <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                            class="text-left border border-white py-3 px-4 font-semibold">
                             Target JPL
                         </th>
                         <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-48">
+                            class="text-center w-48 border border-white py-3 px-4 font-semibold">
                             Aksi
                         </th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($categories as $index => $category)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $categories->firstItem() + $index }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ $category->name }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ $category->jpl_target }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center space-x-2">
-                                <a href="{{ route('profession-categories.edit', $category->id) }}"
-                                    class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 rounded text-sm font-medium transition-colors">
-                                    Edit
-                                </a>
-                                <form action="{{ route('profession-categories.destroy', $category->id) }}" method="POST"
-                                    class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded text-sm font-medium transition-colors"
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus kategori profesi ini?')">
-                                        Hapus
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="whitespace-nowrap text-sm text-gray-500 border border-gray-200 py-3 px-4">
+                            {{ $categories->firstItem() + $index }}
+                        </td>
+                        <td class="whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200 py-3 px-4">
+                            {{ $category->name }}
+                        </td>
+                        <td class="whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200 py-3 px-4">
+                            {{ $category->jpl_target }}
+                        </td>
+                        <td class="whitespace-nowrap text-sm font-medium text-center space-x-2 border border-gray-200 py-3 px-4">
+                            <a href="{{ route('profession-categories.edit', $category->id) }}"
+                                class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 rounded text-sm font-medium transition-colors">
+                                Edit
+                            </a>
+                            <form action="{{ route('profession-categories.destroy', $category->id) }}" method="POST"
+                                class="inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus kategori profesi ini?')" style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                     @empty
-                        <tr>
-                            <td colspan="4" class="px-6 py-10 text-center text-gray-500 text-sm">
-                                Belum ada data kategori profesi.
-                            </td>
-                        </tr>
+                    <tr>
+                        <td colspan="4" class="text-center text-gray-500 text-sm border border-gray-200 py-3 px-4">
+                            Belum ada data kategori profesi.
+                        </td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>
-
-            @if ($categories->hasPages())
-                <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                    {{ $categories->links() }}
-                </div>
-            @endif
         </div>
+
+        <x-table-footer :paginator="$categories->appends(request()->query())" />
     </div>
+</div>
 @endsection

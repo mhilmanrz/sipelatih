@@ -32,35 +32,35 @@
     <!-- TABLE -->
     <section class="mx-8 mt-6 bg-white rounded-[20px] overflow-hidden shadow">
         <table class="w-full border-collapse">
-            <thead class="bg-[#007a7a] text-white">
+            <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                 <tr>
-                    <th class="border border-gray-400 p-4">NO.</th>
-                    <th class="border border-gray-400 p-4">Nama Pegawai</th>
-                    <th class="border border-gray-400 p-4">Jabatan</th>
-                    <th class="border border-gray-400 p-4">NIP/NIPS</th>
-                    <th class="border border-gray-400 p-4">Unit Kerja</th>
+                    <th class="-400 border border-white py-3 px-4 font-semibold">NO.</th>
+                    <th class="-400 border border-white py-3 px-4 font-semibold">Nama Pegawai</th>
+                    <th class="-400 border border-white py-3 px-4 font-semibold">Jabatan</th>
+                    <th class="-400 border border-white py-3 px-4 font-semibold">NIP/NIPS</th>
+                    <th class="-400 border border-white py-3 px-4 font-semibold">Unit Kerja</th>
                 </tr>
             </thead>
 
             <tbody>
                 <tr class="text-center">
-                    <td class="border border-gray-400 p-4">1</td>
-                    <td class="border border-gray-400 p-4 text-[#007a7a] font-semibold">
+                    <td class="-400 border border-gray-200 py-3 px-4">1</td>
+                    <td class="-400 text-[#007a7a] font-semibold border border-gray-200 py-3 px-4">
                         Nina Persik
                     </td>
-                    <td class="border border-gray-400 p-4">Administrasi</td>
-                    <td class="border border-gray-400 p-4">11116482655488234</td>
-                    <td class="border border-gray-400 p-4">TK Diklat</td>
+                    <td class="-400 border border-gray-200 py-3 px-4">Administrasi</td>
+                    <td class="-400 border border-gray-200 py-3 px-4">11116482655488234</td>
+                    <td class="-400 border border-gray-200 py-3 px-4">TK Diklat</td>
                 </tr>
 
                 <tr class="text-center">
-                    <td class="border border-gray-400 p-4">2</td>
-                    <td class="border border-gray-400 p-4 text-[#007a7a] font-semibold">
+                    <td class="-400 border border-gray-200 py-3 px-4">2</td>
+                    <td class="-400 text-[#007a7a] font-semibold border border-gray-200 py-3 px-4">
                         Saskya Gotik
                     </td>
-                    <td class="border border-gray-400 p-4">Administrasi</td>
-                    <td class="border border-gray-400 p-4">11116482655462584</td>
-                    <td class="border border-gray-400 p-4">TK Diklat</td>
+                    <td class="-400 border border-gray-200 py-3 px-4">Administrasi</td>
+                    <td class="-400 border border-gray-200 py-3 px-4">11116482655462584</td>
+                    <td class="-400 border border-gray-200 py-3 px-4">TK Diklat</td>
                 </tr>
             </tbody>
         </table>

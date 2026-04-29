@@ -27,35 +27,35 @@
 
         <div class="overflow-x-auto">
             <table class="w-full text-sm border-collapse border border-gray-200">
-                <thead class="bg-gray-100">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-16">NO.</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Materi</th>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-24">JPL</th>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-24">JPL / 45 Menit</th>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-32">Aksi</th>
+                        <th class="-300 text-center w-16 border border-white py-3 px-4 font-semibold">NO.</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Materi</th>
+                        <th class="-300 text-center w-24 border border-white py-3 px-4 font-semibold">JPL</th>
+                        <th class="-300 text-center w-24 border border-white py-3 px-4 font-semibold">JPL / 45 Menit</th>
+                        <th class="-300 text-center w-32 border border-white py-3 px-4 font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="materiTableBody" class="bg-white">
                     @forelse ($kegiatan->activityMaterials as $index => $item)
                         <tr>
-                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $index + 1 }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $item->name }}</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $item->value }}</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">{{ round($item->value / 45, 2) }}</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $item->name }}</td>
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $item->value }}</td>
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">{{ round($item->value / 45, 2) }}</td>
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">
                                 <form action="{{ route('kegiatan.materi.destroy', ['kegiatan' => $kegiatan->id, 'id' => $item->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus materi ini?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #ef4444; color: white;">
-                                        HAPUS
+                                    <button type="submit"   style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">
+                                        Hapus
                                     </button>
                                 </form>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="border border-gray-300 px-4 py-2 text-center text-gray-500 py-4">Belum ada materi yang ditambahkan.</td>
+                            <td colspan="4" class="-300 text-center text-gray-500 border border-gray-200 py-3 px-4">Belum ada materi yang ditambahkan.</td>
                         </tr>
                     @endforelse
                 </tbody>

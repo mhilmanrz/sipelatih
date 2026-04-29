@@ -89,46 +89,46 @@
         <!-- TABLE 2 -->
         <div class="bg-white rounded-2xl shadow overflow-x-auto">
             <table class="w-full text-sm text-gray-700">
-                <thead class="bg-teal-700 text-white">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th class="px-4 py-3">No.</th>
-                        <th class="px-4 py-3">Nama Pegawai</th>
-                        <th class="px-4 py-3">NIP</th>
-                        <th class="px-4 py-3">Unit Kerja</th>
-                        <th class="px-4 py-3">Nama Kegiatan</th>
-                        <th class="px-4 py-3">Waktu Kegiatan</th>
-                        <th class="px-4 py-3">Cakupan Kegiatan</th>
-                        <th class="px-4 py-3">Jabatan</th>
-                        <th class="px-4 py-3">Tenaga</th>
-                        <th class="px-4 py-3">4 Besar</th>
-                        <th class="px-4 py-3">Target</th>
-                        <th class="px-4 py-3">Capaian</th>
-                        <th class="px-4 py-3">Keterangan</th>
+                        <th class="border border-white py-3 px-4 font-semibold">No.</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Nama Pegawai</th>
+                        <th class="border border-white py-3 px-4 font-semibold">NIP</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Unit Kerja</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Nama Kegiatan</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Waktu Kegiatan</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Cakupan Kegiatan</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Jabatan</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Tenaga</th>
+                        <th class="border border-white py-3 px-4 font-semibold">4 Besar</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Target</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Capaian</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Keterangan</th>
                     </tr>
                 </thead>
                 <tbody class="bg-gray-50">
                     @forelse($detailedActivities as $index => $participant)
                         <tr class="border-b">
-                            <td class="px-4 py-3 text-center">{{ $index + 1 }}</td>
-                            <td class="px-4 py-3 text-teal-700 font-medium whitespace-nowrap">
+                            <td class="text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
+                            <td class="text-teal-700 font-medium whitespace-nowrap border border-gray-200 py-3 px-4">
                                 {{ $participant->user->name }}</td>
-                            <td class="px-4 py-3 font-mono text-sm">{{ $participant->user->employee_id ?? '-' }}</td>
-                            <td class="px-4 py-3 min-w-[12rem]">{{ $participant->user->workUnit->name ?? '-' }}</td>
-                            <td class="px-4 py-3 font-medium min-w-[12rem]">
+                            <td class="font-mono text-sm border border-gray-200 py-3 px-4">{{ $participant->user->employee_id ?? '-' }}</td>
+                            <td class="min-w-[12rem] border border-gray-200 py-3 px-4">{{ $participant->user->workUnit->name ?? '-' }}</td>
+                            <td class="font-medium min-w-[12rem] border border-gray-200 py-3 px-4">
                                 {{ $participant->activity->activityName->name ?? ($participant->activity->name ?? 'N/A') }}
                             </td>
-                            <td class="px-4 py-3 text-xs min-w-[10rem]">
+                            <td class="text-xs min-w-[10rem] border border-gray-200 py-3 px-4">
                                 {{ \Carbon\Carbon::parse($participant->activity->start_date)->format('d M') }} -
                                 {{ \Carbon\Carbon::parse($participant->activity->end_date)->format('d M Y') }}
                             </td>
-                            <td class="px-4 py-3">{{ $participant->activity->activityScope->name ?? '-' }}</td>
-                            <td class="px-4 py-3">{{ $participant->user->position->name ?? '-' }}</td>
-                            <td class="px-4 py-3">{{ $participant->user->profession->name ?? '-' }}</td>
-                            <td class="px-4 py-3">{{ $participant->user->employmentType->name ?? '-' }}</td>
-                            <td class="px-4 py-3 text-center font-bold text-gray-600">{{ $participant->target_jpl }}</td>
-                            <td class="px-4 py-3 text-center font-bold text-teal-600">
+                            <td class="border border-gray-200 py-3 px-4">{{ $participant->activity->activityScope->name ?? '-' }}</td>
+                            <td class="border border-gray-200 py-3 px-4">{{ $participant->user->position->name ?? '-' }}</td>
+                            <td class="border border-gray-200 py-3 px-4">{{ $participant->user->profession->name ?? '-' }}</td>
+                            <td class="border border-gray-200 py-3 px-4">{{ $participant->user->employmentType->name ?? '-' }}</td>
+                            <td class="text-center font-bold text-gray-600 border border-gray-200 py-3 px-4">{{ $participant->target_jpl }}</td>
+                            <td class="text-center font-bold text-teal-600 border border-gray-200 py-3 px-4">
                                 {{ number_format($participant->capaian_jpl, 1) }}</td>
-                            <td class="px-4 py-3 text-center">
+                            <td class="text-center border border-gray-200 py-3 px-4">
                                 @if ($participant->capaian_jpl >= $participant->target_jpl)
                                     <span class="bg-green-500 text-white px-4 py-1 rounded-full text-xs">
                                         Tercapai
@@ -142,7 +142,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="13" class="px-4 py-8 text-center text-gray-500">
+                            <td colspan="13" class="text-center text-gray-500 border border-gray-200 py-3 px-4">
                                 Tidak ada data histori detail partisipan yang telah lulus.
                             </td>
                         </tr>

@@ -28,19 +28,19 @@
         <!-- TABLE -->
         <div class="overflow-x-auto">
             <table class="w-full text-sm border-collapse border border-gray-200" style="min-width: 1000px;">
-                <thead class="bg-gray-100">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th class="border border-gray-300 px-2 py-2 text-center text-gray-700 w-12">NO.</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Nama Peserta</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">NIP/NPS</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Unit Kerja</th>
-                        <th class="border border-gray-300 px-2 py-2 text-center text-gray-700 w-20">Pre Test</th>
-                        <th class="border border-gray-300 px-2 py-2 text-center text-gray-700 w-20">Post Test</th>
-                        <th class="border border-gray-300 px-2 py-2 text-center text-gray-700 w-20">Praktik</th>
-                        <th class="border border-gray-300 px-2 py-2 text-center text-gray-700 w-24">Akumulasi</th>
-                        <th class="border border-gray-300 px-2 py-2 text-center text-gray-700 w-24">Batas Lulus</th>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-24">Status</th>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-20">Aksi</th>
+                        <th class="-300 text-center w-12 border border-white py-3 px-4 font-semibold">NO.</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Nama Peserta</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">NIP/NPS</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Unit Kerja</th>
+                        <th class="-300 text-center w-20 border border-white py-3 px-4 font-semibold">Pre Test</th>
+                        <th class="-300 text-center w-20 border border-white py-3 px-4 font-semibold">Post Test</th>
+                        <th class="-300 text-center w-20 border border-white py-3 px-4 font-semibold">Praktik</th>
+                        <th class="-300 text-center w-24 border border-white py-3 px-4 font-semibold">Akumulasi</th>
+                        <th class="-300 text-center w-24 border border-white py-3 px-4 font-semibold">Batas Lulus</th>
+                        <th class="-300 text-center w-24 border border-white py-3 px-4 font-semibold">Status</th>
+                        <th class="-300 text-center w-20 border border-white py-3 px-4 font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
@@ -53,23 +53,23 @@
                             $average = round(($pre + $post + $praktik) / 3, 2);
                         @endphp
                         <tr>
-                            <td class="border border-gray-300 px-2 py-2 text-center">{{ $index + 1 }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->name ?? '-' }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->nip ?? '-' }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->workUnit->name ?? '-' }}</td>
-                            <td class="border border-gray-300 px-2 py-2 text-center font-semibold">{{ $pre }}</td>
-                            <td class="border border-gray-300 px-2 py-2 text-center font-semibold">{{ $post }}</td>
-                            <td class="border border-gray-300 px-2 py-2 text-center font-semibold">{{ $praktik }}</td>
-                            <td class="border border-gray-300 px-2 py-2 text-center font-bold {{ $average >= 80 ? 'text-green-600' : 'text-red-600' }}">{{ $average }}</td>
-                            <td class="border border-gray-300 px-2 py-2 text-center font-semibold text-gray-600">80</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $participant->user->name ?? '-' }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $participant->user->nip ?? '-' }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $participant->user->workUnit->name ?? '-' }}</td>
+                            <td class="-300 text-center font-semibold border border-gray-200 py-3 px-4">{{ $pre }}</td>
+                            <td class="-300 text-center font-semibold border border-gray-200 py-3 px-4">{{ $post }}</td>
+                            <td class="-300 text-center font-semibold border border-gray-200 py-3 px-4">{{ $praktik }}</td>
+                            <td class="-300 text-center font-bold {{ $average >= 80 ? 'text-green-600' : 'text-red-600' }} border border-gray-200 py-3 px-4">{{ $average }}</td>
+                            <td class="-300 text-center font-semibold text-gray-600 border border-gray-200 py-3 px-4">80</td>
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">
                                 @if($participant->is_passed)
                                     <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 px-1 rounded border border-green-400">Lulus</span>
                                 @else
                                     <span class="bg-red-100 text-red-800 text-xs font-semibold px-2 px-1 rounded border border-red-400">Tidak Lulus</span>
                                 @endif
                             </td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">
                                 <button type="button" 
                                     onclick="openScoreModal({{ $participant->id }}, '{{ addslashes($participant->user->name ?? '-') }}', {{ $pre }}, {{ $post }}, {{ $praktik }}, {{ $participant->is_passed ? 'true' : 'false' }})" 
                                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs transition-colors font-semibold">
@@ -79,7 +79,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="11" class="border border-gray-300 px-4 py-4 text-center text-gray-500">Belum ada peserta di kegiatan ini.</td>
+                            <td colspan="11" class="-300 text-center text-gray-500 border border-gray-200 py-3 px-4">Belum ada peserta di kegiatan ini.</td>
                         </tr>
                     @endforelse
                 </tbody>

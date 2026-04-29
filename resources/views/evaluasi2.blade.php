@@ -36,37 +36,37 @@
         <!-- TABLE -->
         <div class="bg-white rounded-xl overflow-hidden shadow">
             <table class="w-full border-collapse">
-                <thead class="bg-header text-white text-sm">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th class="p-3 border">No.</th>
-                        <th class="p-3 border">Nama Peserta</th>
-                        <th class="p-3 border">NIP/NPS</th>
-                        <th class="p-3 border">Unit Kerja</th>
-                        <th class="p-3 border">Pre Test</th>
-                        <th class="p-3 border">Post Test</th>
-                        <th class="p-3 border">Nilai Praktik</th>
+                        <th class="border border-white py-3 px-4 font-semibold">No.</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Nama Peserta</th>
+                        <th class="border border-white py-3 px-4 font-semibold">NIP/NPS</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Unit Kerja</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Pre Test</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Post Test</th>
+                        <th class="border border-white py-3 px-4 font-semibold">Nilai Praktik</th>
                     </tr>
                 </thead>
                 <tbody class="text-center text-sm">
 
                     <tr class="border-t">
-                        <td class="p-3 border">1</td>
-                        <td class="p-3 border">Andi Ade Wijaya</td>
-                        <td class="p-3 border">nps1233521</td>
-                        <td class="p-3 border">TK Diklat</td>
-                        <td class="p-3 border">80</td>
-                        <td class="p-3 border">90</td>
-                        <td class="p-3 border">-</td>
+                        <td class="border border-gray-200 py-3 px-4">1</td>
+                        <td class="border border-gray-200 py-3 px-4">Andi Ade Wijaya</td>
+                        <td class="border border-gray-200 py-3 px-4">nps1233521</td>
+                        <td class="border border-gray-200 py-3 px-4">TK Diklat</td>
+                        <td class="border border-gray-200 py-3 px-4">80</td>
+                        <td class="border border-gray-200 py-3 px-4">90</td>
+                        <td class="border border-gray-200 py-3 px-4">-</td>
                     </tr>
 
                     <tr class="border-t">
-                        <td class="p-3 border">2</td>
-                        <td class="p-3 border">Rangga Moela</td>
-                        <td class="p-3 border">23153769357368</td>
-                        <td class="p-3 border">ICTEC</td>
-                        <td class="p-3 border">55</td>
-                        <td class="p-3 border">75</td>
-                        <td class="p-3 border">-</td>
+                        <td class="border border-gray-200 py-3 px-4">2</td>
+                        <td class="border border-gray-200 py-3 px-4">Rangga Moela</td>
+                        <td class="border border-gray-200 py-3 px-4">23153769357368</td>
+                        <td class="border border-gray-200 py-3 px-4">ICTEC</td>
+                        <td class="border border-gray-200 py-3 px-4">55</td>
+                        <td class="border border-gray-200 py-3 px-4">75</td>
+                        <td class="border border-gray-200 py-3 px-4">-</td>
                     </tr>
 
                 </tbody>

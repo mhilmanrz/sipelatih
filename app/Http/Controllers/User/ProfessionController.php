@@ -12,7 +12,7 @@ class ProfessionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $professions = Profession::with('category')->paginate(10);
 

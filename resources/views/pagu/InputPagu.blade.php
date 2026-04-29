@@ -23,7 +23,7 @@
             </div>
 
             <table id="paguTable">
-                <thead>
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
                         <th>No.</th>
                         <th>No. RKAKL</th>

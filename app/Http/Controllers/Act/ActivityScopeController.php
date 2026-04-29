@@ -11,9 +11,14 @@ class ActivityScopeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $activityScopes = ActivityScope::paginate(10);
+        $query = ActivityScope::query();
+        if ($request->has('q') && $request->q != '') {
+            $query->where('name', 'like', '%' . $request->q . '%');
+        }
+        $perPage = $request->input('entries', $request->input('per_page', 10));
+        $activityScopes = $query->paginate($perPage)->appends($request->all());
 
         return view('activity_scope.index', compact('activityScopes'));
     }
