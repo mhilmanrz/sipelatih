@@ -12,23 +12,39 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            BatchSeeder::class,
-            ActivityFormatSeeder::class,
-            ActivityTypeSeeder::class,
-            ActivityScopeSeeder::class,
-            MaterialTypeSeeder::class,
-            WorkUnitSeeder::class,
-            PositionSeeder::class,
-            TargetParticipantSeeder::class,
+            // === Referensi Dasar ===
+            RolePermissionSeeder::class,
+            SuperAdminSeeder::class,
+
+            // === Master Profesi ===
+            ProfessionCategorySeeder::class,
             ProfessionSeeder::class,
             EmploymentTypeSeeder::class,
+            PositionSeeder::class,
+            WorkUnitSeeder::class,
+
+            // === Master Kegiatan ===
+            ActivityTypeSeeder::class,
+            ActivityFormatSeeder::class,
+            ActivityScopeSeeder::class,
+            ActivityMethodSeeder::class,
+            ActivityCategorySeeder::class,
+            ActivityNameSeeder::class,
+            MaterialTypeSeeder::class,
+            TargetParticipantSeeder::class,
+            BatchSeeder::class,
+
+            // === Anggaran ===
+            FundSourceSeeder::class,
             BudgetCategorySeeder::class,
             BudgetSeeder::class,
+
+            // === Data Kegiatan & Peserta ===
+            UserSeeder::class,
             ActivitySeeder::class,
             ActivityProfessionSeeder::class,
             ActivityKakFileSeeder::class,
             ActivityMaterialSeeder::class,
-            UserSeeder::class,
             ActivitySpeakerSeeder::class,
             ActivityModeratorSeeder::class,
             ActivityParticipantSeeder::class,

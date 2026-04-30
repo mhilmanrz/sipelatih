@@ -89,31 +89,31 @@
         <!-- TABLE NARASUMBER -->
         <div class="overflow-x-auto mb-8">
             <table class="w-full text-sm border-collapse border border-gray-200">
-                <thead class="bg-gray-100">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-16">NO.</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Nama Narasumber</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Materi</th>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-32">Aksi</th>
+                        <th class="-300 text-center w-16 border border-white py-3 px-4 font-semibold">NO.</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Nama Narasumber</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Materi</th>
+                        <th class="-300 text-center w-32 border border-white py-3 px-4 font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
                     @forelse ($allSpeakers as $index => $speaker)
                         <tr>
-                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $index + 1 }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $speaker->name }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $speaker->material_name }}</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $speaker->name }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $speaker->material_name }}</td>
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">
                                 <form action="{{ route('kegiatan.narasumber.destroy', ['kegiatan' => $kegiatan->id, 'id' => $speaker->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus narasumber ini?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #ef4444; color: white;">HAPUS</button>
+                                    <button type="submit"   style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">Hapus</button>
                                 </form>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="border border-gray-300 text-center py-4 text-gray-500 text-sm">Belum ada data narasumber. Pastikan Anda mendaftarkan materi ajar terlebih dahulu di tab Materi.</td>
+                            <td colspan="4" class="-300 text-center text-gray-500 text-sm border border-gray-200 py-3 px-4">Belum ada data narasumber. Pastikan Anda mendaftarkan materi ajar terlebih dahulu di tab Materi.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -157,35 +157,35 @@
         <!-- TABLE MODERATOR -->
         <div class="overflow-x-auto">
             <table class="w-full text-sm border-collapse border border-gray-200">
-                <thead class="bg-gray-100">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-16">NO.</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">NIP</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Nama Moderator</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Materi</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Unit Kerja</th>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-32">Aksi</th>
+                        <th class="-300 text-center w-16 border border-white py-3 px-4 font-semibold">NO.</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">NIP</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Nama Moderator</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Materi</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Unit Kerja</th>
+                        <th class="-300 text-center w-32 border border-white py-3 px-4 font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
                     @forelse ($allModerators as $index => $moderator)
                         <tr>
-                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $index + 1 }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $moderator->nip }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $moderator->name }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $moderator->material_name }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $moderator->unit_kerja }}</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $moderator->nip }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $moderator->name }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $moderator->material_name }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $moderator->unit_kerja }}</td>
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">
                                 <form action="{{ route('kegiatan.moderator.destroy', ['kegiatan' => $kegiatan->id, 'id' => $moderator->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus moderator ini?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #ef4444; color: white;">HAPUS</button>
+                                    <button type="submit"   style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">Hapus</button>
                                 </form>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="border border-gray-300 text-center py-4 text-gray-500 text-sm">Belum ada data moderator.</td>
+                            <td colspan="6" class="-300 text-center text-gray-500 text-sm border border-gray-200 py-3 px-4">Belum ada data moderator.</td>
                         </tr>
                     @endforelse
                 </tbody>

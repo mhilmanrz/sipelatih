@@ -45,21 +45,21 @@
 
         <div class="overflow-x-auto">
             <table class="w-full text-sm border-collapse border border-gray-200">
-                <thead class="bg-gray-100">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-28">Target</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Deskripsi</th>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-36">Aksi</th>
+                        <th class="-300 text-center w-28 border border-white py-3 px-4 font-semibold">Target</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Deskripsi</th>
+                        <th class="-300 text-center w-36 border border-white py-3 px-4 font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
                     @forelse ($kegiatan->activityTargets as $target)
                         <tr>
-                            <td class="border border-gray-300 px-4 py-2 text-center font-semibold">
+                            <td class="-300 text-center font-semibold border border-gray-200 py-3 px-4">
                                 Target {{ $target->target_number }}
                             </td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $target->description }}</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $target->description }}</td>
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">
                                 <button onclick="openEditModal({{ $target->id }}, {{ $target->target_number }}, {{ json_encode($target->description) }})"
                                     style="background-color: #3b82f6; color: white; padding: 0.25rem 0.75rem; border-radius: 4px; border: none; cursor: pointer; font-size: 0.75rem; margin-right: 4px;">
                                     EDIT
@@ -78,7 +78,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="border border-gray-300 px-4 py-4 text-center text-gray-500">
+                            <td colspan="3" class="-300 text-center text-gray-500 border border-gray-200 py-3 px-4">
                                 Belum ada target yang ditambahkan.
                             </td>
                         </tr>

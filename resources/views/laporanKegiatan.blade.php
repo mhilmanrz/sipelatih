@@ -105,18 +105,18 @@
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-sm">
-                    <thead>
+                    <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                         <tr class="bg-gray-100 text-gray-700">
-                            <th class="border px-3 py-2 border-gray-300 text-center w-10">NO.</th>
-                            <th class="border px-3 py-2 border-gray-300">Nama Kegiatan</th>
-                            <th class="border px-3 py-2 border-gray-300 text-center">Tgl Mulai</th>
-                            <th class="border px-3 py-2 border-gray-300 text-center">Tgl Selesai</th>
-                            <th class="border px-3 py-2 border-gray-300 text-center">Jml Peserta</th>
-                            <th class="border px-3 py-2 border-gray-300 text-center">Cakupan Kegiatan</th>
-                            <th class="border px-3 py-2 border-gray-300 text-center">JP Total Materi</th>
-                            <th class="border px-3 py-2 border-gray-300 text-center">Kategori Diklat</th>
-                            <th class="border px-3 py-2 border-gray-300 text-center">Status</th>
-                            <th class="border px-3 py-2 border-gray-300 text-center">Laporan</th>
+                            <th class="-300 text-center w-10 border border-white py-3 px-4 font-semibold">NO.</th>
+                            <th class="-300 border border-white py-3 px-4 font-semibold">Nama Kegiatan</th>
+                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Tgl Mulai</th>
+                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Tgl Selesai</th>
+                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Jml Peserta</th>
+                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Cakupan Kegiatan</th>
+                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">JP Total Materi</th>
+                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Kategori Diklat</th>
+                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Status</th>
+                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Laporan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -132,25 +132,25 @@
                                 $badge = $statusMap[$status] ?? ['label' => ucfirst($status), 'class' => 'bg-gray-100 text-gray-600'];
                             @endphp
                             <tr class="hover:bg-gray-50">
-                                <td class="border px-3 py-2 border-gray-300 text-center">{{ $index + 1 }}</td>
-                                <td class="border px-3 py-2 border-gray-300 font-medium">
+                                <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
+                                <td class="-300 font-medium border border-gray-200 py-3 px-4">
                                     {{ $item->activityName->name ?? ($item->reference_number ?? '-') }}</td>
-                                <td class="border px-3 py-2 border-gray-300 text-center">{{ $item->start_date ?? '-' }}</td>
-                                <td class="border px-3 py-2 border-gray-300 text-center">{{ $item->end_date ?? '-' }}</td>
-                                <td class="border px-3 py-2 border-gray-300 text-center font-semibold">
+                                <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $item->start_date ?? '-' }}</td>
+                                <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $item->end_date ?? '-' }}</td>
+                                <td class="-300 text-center font-semibold border border-gray-200 py-3 px-4">
                                     {{ $item->activityParticipants->count() }}</td>
-                                <td class="border px-3 py-2 border-gray-300 text-center">
+                                <td class="-300 text-center border border-gray-200 py-3 px-4">
                                     {{ $item->activityScope->name ?? '-' }}</td>
-                                <td class="border px-3 py-2 border-gray-300 text-center font-semibold">
+                                <td class="-300 text-center font-semibold border border-gray-200 py-3 px-4">
                                     {{ $item->activityMaterials->sum('value') }} JP</td>
-                                <td class="border px-3 py-2 border-gray-300 text-center">
+                                <td class="-300 text-center border border-gray-200 py-3 px-4">
                                     {{ $item->activityCategory->name ?? '-' }}</td>
-                                <td class="border px-3 py-2 border-gray-300 text-center">
+                                <td class="-300 text-center border border-gray-200 py-3 px-4">
                                     <span class="px-2 py-1 rounded-full text-xs font-semibold {{ $badge['class'] }}">
                                         {{ $badge['label'] }}
                                     </span>
                                 </td>
-                                <td class="border px-3 py-2 border-gray-300 text-center whitespace-nowrap">
+                                <td class="-300 text-center whitespace-nowrap border border-gray-200 py-3 px-4">
                                     @if ($item->report)
                                         <button
                                             onclick="openModal({{ $item->id }}, {{ $item->report->id }}, '{{ addslashes($item->activityName->name ?? ($item->reference_number ?? '-')) }}')"
@@ -172,7 +172,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="border px-4 py-4 border-gray-300 text-center text-gray-500">
+                                <td colspan="10" class="-300 text-center text-gray-500 border border-gray-200 py-3 px-4">
                                     Tidak ada data kegiatan.</td>
                             </tr>
                         @endforelse

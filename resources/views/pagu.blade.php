@@ -102,16 +102,16 @@
 
         <div class="bg-white rounded-lg shadow overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200" style="min-width:700px;">
-                <thead class="bg-teal-600">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-16">No.</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">No. RKAKL</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Tahun</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kategori Pagu</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Submark</th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">Pagu</th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">Sisa Pagu</th>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-48">Aksi</th>
+                        <th scope="col" class="text-center w-16 border border-white py-3 px-4 font-semibold">No.</th>
+                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">No. RKAKL</th>
+                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">Tahun</th>
+                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">Kategori Pagu</th>
+                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">Submark</th>
+                        <th scope="col" class="text-right border border-white py-3 px-4 font-semibold">Pagu</th>
+                        <th scope="col" class="text-right border border-white py-3 px-4 font-semibold">Sisa Pagu</th>
+                        <th scope="col" class="text-center w-48 border border-white py-3 px-4 font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -119,28 +119,28 @@
                     @forelse($budgets as $index => $budget)
                         @php $sum += $budget->total_amount; @endphp
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
+                            <td class="whitespace-nowrap text-sm text-center text-gray-500 border border-gray-200 py-3 px-4">
                                 {{ $index + 1 }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td class="whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ $budget->rkkal_code }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="whitespace-nowrap text-sm text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ $budget->year }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="whitespace-nowrap text-sm text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ $budget->budgetCategory->name ?? '-' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="whitespace-nowrap text-sm text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ $budget->submark }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                            <td class="whitespace-nowrap text-sm text-right text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ number_format($budget->total_amount, 0, ',', '.') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                            <td class="whitespace-nowrap text-sm text-right text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ number_format($budget->remaining_amount, 0, ',', '.') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center space-x-2 flex justify-center">
+                            <td class="whitespace-nowrap text-sm font-medium text-center space-x-2 flex justify-center border border-gray-200 py-3 px-4">
                                 <a href="{{ route('pagu.show', $budget->id) }}" class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 border border-green-200 rounded text-sm font-medium transition-colors" style="text-decoration:none;">
                                     Detail
                                 </a>
@@ -156,8 +156,8 @@
                                 <form action="{{ route('pagu.destroy', $budget->id) }}" method="POST" class="inline-block m-0 h-full">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded text-sm font-medium transition-colors"
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus pagu ini?')">
+                                    <button type="submit" 
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus pagu ini?')" style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">
                                         Hapus
                                     </button>
                                 </form>
@@ -165,7 +165,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-10 text-center text-gray-500 text-sm">
+                            <td colspan="7" class="text-center text-gray-500 text-sm border border-gray-200 py-3 px-4">
                                 Belum ada data Pagu.
                             </td>
                         </tr>
@@ -173,10 +173,10 @@
                 </tbody>
                 <tfoot class="bg-gray-100 font-bold border-t-2 border-gray-300">
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-right text-sm text-gray-800 uppercase">
+                        <td colspan="5" class="text-right text-sm text-gray-800 uppercase border border-gray-200 py-3 px-4">
                             Total Pagu
                         </td>
-                        <td class="px-6 py-4 text-right text-sm text-gray-800">
+                        <td class="text-right text-sm text-gray-800 border border-gray-200 py-3 px-4">
                             {{ number_format($sum, 0, ',', '.') }}
                         </td>
                         <td colspan="2"></td>
