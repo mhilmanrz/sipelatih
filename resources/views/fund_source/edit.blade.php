@@ -1,12 +1,10 @@
-@extends('layout.LayoutSuperAdmin')
+<x-layouts.app>
+    <x-slot:title>Edit Sumber Dana</x-slot>
 
-@section('title', 'Edit Sumber Dana')
+    @push('styles')
+        <script src="https://cdn.tailwindcss.com"></script>
+    @endpush
 
-@push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-@endpush
-
-@section('content')
     <div class="tw-wrap p-6">
         <div class="max-w-xl bg-white rounded-lg shadow p-6">
             <h1 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Edit Data Sumber Dana</h1>
@@ -41,4 +39,4 @@
             </form>
         </div>
     </div>
-@endsection
+</x-layouts.app>

@@ -1,39 +1,37 @@
-@extends('layout.LayoutSuperAdmin')
+<x-layouts.app>
+    <x-slot:title>Detail Pagu Anggaran</x-slot>
 
-@section('title', 'Detail Pagu Anggaran')
+    @push('styles')
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            .tw-wrap p,
+            .tw-wrap h1,
+            .tw-wrap h2,
+            .tw-wrap h3,
+            .tw-wrap h4,
+            .tw-wrap h5,
+            .tw-wrap h6,
+            .tw-wrap span,
+            .tw-wrap div,
+            .tw-wrap a,
+            .tw-wrap button,
+            .tw-wrap table,
+            .tw-wrap th,
+            .tw-wrap td,
+            .tw-wrap tr,
+            .tw-wrap thead,
+            .tw-wrap tbody,
+            .tw-wrap form,
+            .tw-wrap input,
+            .tw-wrap label,
+            .tw-wrap select {
+                font-family: inherit;
+            }
+        </style>
+    @endpush
 
-@push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .tw-wrap p,
-        .tw-wrap h1,
-        .tw-wrap h2,
-        .tw-wrap h3,
-        .tw-wrap h4,
-        .tw-wrap h5,
-        .tw-wrap h6,
-        .tw-wrap span,
-        .tw-wrap div,
-        .tw-wrap a,
-        .tw-wrap button,
-        .tw-wrap table,
-        .tw-wrap th,
-        .tw-wrap td,
-        .tw-wrap tr,
-        .tw-wrap thead,
-        .tw-wrap tbody,
-        .tw-wrap form,
-        .tw-wrap input,
-        .tw-wrap label,
-        .tw-wrap select {
-            font-family: inherit;
-        }
-    </style>
-@endpush
-
-@section('content')
     <div class="tw-wrap p-6 mt-4">
-        
+
         <!-- HEADER / NAVIGATION -->
         <div class="flex items-center justify-between mb-6">
             <x-page-title>Detail Pagu Anggaran</x-page-title>
@@ -76,7 +74,7 @@
 
         <!-- ACTIVITIES TABLE -->
         <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Daftar Kegiatan Menggunakan Pagu Ini</h2>
-        
+
         <div class="bg-white rounded-lg shadow overflow-hidden">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-100">
@@ -136,4 +134,4 @@
         </div>
 
     </div>
-@endsection
+</x-layouts.app>

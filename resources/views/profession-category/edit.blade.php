@@ -1,6 +1,5 @@
-@extends('layout.LayoutSuperAdmin')
-
-@section('title', 'Edit Kategori Profesi')
+<x-layouts.app>
+    <x-slot:title>Edit Kategori Profesi</x-slot>
 
 @push('styles')
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,7 +22,7 @@
     </style>
 @endpush
 
-@section('content')
+
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Edit Kategori Profesi</h1>
@@ -56,7 +55,7 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-                
+
                 <div class="mb-4">
                     <label for="jpl_target" class="block text-gray-700 font-semibold mb-2">Target JPL <span
                             class="text-red-500">*</span></label>
@@ -81,4 +80,4 @@
             </form>
         </div>
     </div>
-@endsection
+</x-layouts.app>

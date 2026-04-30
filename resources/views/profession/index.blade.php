@@ -1,6 +1,5 @@
-@extends('layout.LayoutSuperAdmin')
-
-@section('title', 'Manajemen Profesi')
+<x-layouts.app>
+    <x-slot:title>Manajemen Profesi</x-slot>
 
 @push('styles')
     <!-- Using Tailwind via CDN just for this page if not globally installed,
@@ -32,7 +31,7 @@
     </style>
 @endpush
 
-@section('content')
+
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white">MANAJEMEN PROFESI</h1>
@@ -116,4 +115,4 @@
             @endif
         </div>
     </div>
-@endsection
+</x-layouts.app>

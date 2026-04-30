@@ -1,6 +1,5 @@
-@extends('layout.LayoutSuperAdmin')
-
-@section('title', 'Tambah Role')
+<x-layouts.app>
+    <x-slot:title>Tambah Role</x-slot>
 
 @push('styles')
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,7 +11,7 @@
     </style>
 @endpush
 
-@section('content')
+
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="flex items-center mb-6">
             <a href="{{ route('roles.index') }}" class="text-gray-500 hover:text-gray-700 mr-4">
@@ -35,7 +34,7 @@
         <div class="bg-white rounded-lg shadow p-6">
             <form action="{{ route('roles.store') }}" method="POST">
                 @csrf
-                
+
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Role</label>
                     <input type="text" name="name" id="name" value="{{ old('name') }}" required
@@ -54,4 +53,4 @@
             </form>
         </div>
     </div>
-@endsection
+</x-layouts.app>

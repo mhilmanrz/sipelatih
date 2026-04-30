@@ -1,52 +1,50 @@
-@extends('layout.LayoutSuperAdmin')
+    <x-layouts.app>
+        <x-slot:title>Laporan Kegiatan</x-slot>
 
-@section('title', 'Laporan Kegiatan')
+    @push('styles')
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <style>
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
 
-@push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
+            .modal-content {
+                background-color: #fefefe;
+                margin: 10% auto;
+                padding: 24px;
+                border: 1px solid #888;
+                width: 90%;
+                max-width: 500px;
+                border-radius: 8px;
+                position: relative;
+            }
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 24px;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 8px;
-            position: relative;
-        }
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+            }
+        </style>
+    @endpush
 
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-        }
-    </style>
-@endpush
-
-@section('content')
     <div class="p-8">
         <div class="mb-6 flex justify-between items-center">
             <x-page-title>LAPORAN KEGIATAN</x-page-title>
@@ -222,111 +220,111 @@
             </form>
         </div>
     </div>
-@endsection
 
-@push('scripts')
-    <script>
-        function openModal(activityId, reportId, activityName) {
-            document.getElementById('activity_id').value = activityId;
-            document.getElementById('activity_name').value = activityName;
+    @push('scripts')
+        <script>
+            function openModal(activityId, reportId, activityName) {
+                document.getElementById('activity_id').value = activityId;
+                document.getElementById('activity_name').value = activityName;
 
-            let form = document.getElementById('laporanForm');
-            let methodContainer = document.getElementById('methodContainer');
-            let modalTitle = document.getElementById('modalTitle');
+                let form = document.getElementById('laporanForm');
+                let methodContainer = document.getElementById('methodContainer');
+                let modalTitle = document.getElementById('modalTitle');
 
-            if (reportId) {
-                // Edit mode
-                modalTitle.innerText = "Ubah Laporan";
-                form.action = "{{ url('laporan-kegiatan') }}/" + reportId;
-                methodContainer.innerHTML = '<input type="hidden" name="_method" value="PUT">';
-            } else {
-                // Upload mode
-                modalTitle.innerText = "Upload Laporan";
-                form.action = "{{ route('kegiatan.laporan.store') }}";
-                methodContainer.innerHTML = '';
+                if (reportId) {
+                    // Edit mode
+                    modalTitle.innerText = "Ubah Laporan";
+                    form.action = "{{ url('laporan-kegiatan') }}/" + reportId;
+                    methodContainer.innerHTML = '<input type="hidden" name="_method" value="PUT">';
+                } else {
+                    // Upload mode
+                    modalTitle.innerText = "Upload Laporan";
+                    form.action = "{{ route('kegiatan.laporan.store') }}";
+                    methodContainer.innerHTML = '';
+                }
+
+                document.getElementById('laporanModal').style.display = 'block';
             }
 
-            document.getElementById('laporanModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('laporanModal').style.display = 'none';
-            document.getElementById('laporanForm').reset();
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            let modal = document.getElementById('laporanModal');
-            if (event.target == modal) {
-                closeModal();
+            function closeModal() {
+                document.getElementById('laporanModal').style.display = 'none';
+                document.getElementById('laporanForm').reset();
             }
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('statusPieChart').getContext('2d');
 
-            const data = {
-                labels: ['Draft', 'Submitted', 'Revision', 'Accepted'],
-                datasets: [{
-                    label: 'Jumlah Kegiatan',
-                    data: [
-                        {{ $statusCounts['draft'] ?? 0 }},
-                        {{ $statusCounts['submitted'] ?? 0 }},
-                        {{ $statusCounts['revision'] ?? 0 }},
-                        {{ $statusCounts['accepted'] ?? 0 }}
-                    ],
-                    backgroundColor: [
-                        '#e5e7eb', // gray-200 for draft
-                        '#dbeafe', // blue-100 for submitted
-                        '#fef08a', // yellow-200 for revision
-                        '#bbf7d0' // green-200 for accepted
-                    ],
-                    borderColor: [
-                        '#9ca3af', // gray-400
-                        '#3b82f6', // blue-500
-                        '#eab308', // yellow-500
-                        '#22c55e' // green-500
-                    ],
-                    borderWidth: 1
-                }]
-            };
+            // Close modal when clicking outside
+            window.onclick = function(event) {
+                let modal = document.getElementById('laporanModal');
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('statusPieChart').getContext('2d');
 
-            new Chart(ctx, {
-                type: 'pie',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
+                const data = {
+                    labels: ['Draft', 'Submitted', 'Revision', 'Accepted'],
+                    datasets: [{
+                        label: 'Jumlah Kegiatan',
+                        data: [
+                            {{ $statusCounts['draft'] ?? 0 }},
+                            {{ $statusCounts['submitted'] ?? 0 }},
+                            {{ $statusCounts['revision'] ?? 0 }},
+                            {{ $statusCounts['accepted'] ?? 0 }}
+                        ],
+                        backgroundColor: [
+                            '#e5e7eb', // gray-200 for draft
+                            '#dbeafe', // blue-100 for submitted
+                            '#fef08a', // yellow-200 for revision
+                            '#bbf7d0' // green-200 for accepted
+                        ],
+                        borderColor: [
+                            '#9ca3af', // gray-400
+                            '#3b82f6', // blue-500
+                            '#eab308', // yellow-500
+                            '#22c55e' // green-500
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    font: {
+                                        size: 14
                                     }
-                                    let value = context.raw;
-                                    let total = context.chart._metasets[context.datasetIndex].total;
-                                    let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-                                    label += value + ' (' + percentage + '%)';
-                                    return label;
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        let value = context.raw;
+                                        let total = context.chart._metasets[context.datasetIndex].total;
+                                        let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                        label += value + ' (' + percentage + '%)';
+                                        return label;
+                                    }
                                 }
                             }
                         }
                     }
-                }
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+</x-layouts.app>

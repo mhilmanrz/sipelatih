@@ -1,13 +1,5 @@
-@extends('layout.LayoutSuperAdmin')
-
+<x-layouts.app>
 @section('title', 'Import Kegiatan Per Peserta')
-
-@push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-@endpush
-
-@section('content')
     <div class="p-8">
         <div class="mb-6 flex justify-between items-center">
             <h1 class="text-2xl font-bold uppercase" style="color: white; font-size: 1.5rem; padding: 1rem 2rem; border-radius: 8px; display: inline-block;">IMPORT KEGIATAN PER PESERTA</h1>
@@ -85,4 +77,4 @@
             
         </div>
     </div>
-@endsection
+</x-layouts.app>

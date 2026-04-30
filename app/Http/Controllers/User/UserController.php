@@ -11,7 +11,6 @@ use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -20,7 +19,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'roles']);
+        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'roles'])->doesntHave('roles');
 
         if ($request->has('q') && $request->q != '') {
             $search = $request->q;
@@ -60,9 +59,8 @@ class UserController extends Controller
         $professions = Profession::all();
         $positions = Positions::all();
         $employmentTypes = EmploymentType::all();
-        $roles = Role::all();
 
-        return view('user.tambah', compact('workUnits', 'professions', 'positions', 'employmentTypes', 'roles'));
+        return view('user.tambah', compact('workUnits', 'professions', 'positions', 'employmentTypes'));
     }
 
     /**
@@ -80,19 +78,14 @@ class UserController extends Controller
             'profession_id' => 'nullable|exists:professions,id',
             'position_id' => 'nullable|exists:positions,id',
             'employment_type_id' => 'nullable|exists:employment_types,id',
-            'role' => 'nullable|string|exists:roles,name',
         ]);
 
-        $data = $request->except('role');
+        $data = $request->all();
         $data['password'] = bcrypt($data['password']);
 
         $user = User::create($data);
 
-        if ($request->filled('role')) {
-            $user->assignRole($request->role);
-        }
-
-        return redirect('/users')->with('success', 'User berhasil ditambahkan.');
+        return redirect('/users')->with('success', 'Pegawai berhasil ditambahkan.');
     }
 
     /**
@@ -114,9 +107,8 @@ class UserController extends Controller
         $professions = Profession::all();
         $positions = Positions::all();
         $employmentTypes = EmploymentType::all();
-        $roles = Role::all();
 
-        return view('user.edit', compact('user', 'workUnits', 'professions', 'positions', 'employmentTypes', 'roles'));
+        return view('user.edit', compact('user', 'workUnits', 'professions', 'positions', 'employmentTypes'));
     }
 
     /**
@@ -135,10 +127,9 @@ class UserController extends Controller
             'profession_id' => 'nullable|exists:professions,id',
             'position_id' => 'nullable|exists:positions,id',
             'employment_type_id' => 'nullable|exists:employment_types,id',
-            'role' => 'nullable|string|exists:roles,name',
         ]);
 
-        $data = $request->except('role');
+        $data = $request->all();
         if ($request->filled('password')) {
             $data['password'] = bcrypt($data['password']);
         } else {
@@ -147,11 +138,7 @@ class UserController extends Controller
 
         $user->update($data);
 
-        if ($request->filled('role')) {
-            $user->syncRoles([$request->role]);
-        }
-
-        return redirect('/users')->with('success', 'User berhasil diperbarui.');
+        return redirect('/users')->with('success', 'Pegawai berhasil diperbarui.');
     }
 
     /**
@@ -162,7 +149,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect('/users')->with('success', 'User berhasil dihapus.');
+        return redirect('/users')->with('success', 'Pegawai berhasil dihapus.');
     }
 
     /**

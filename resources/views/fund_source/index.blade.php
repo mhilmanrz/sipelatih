@@ -1,12 +1,10 @@
-@extends('layout.LayoutSuperAdmin')
+<x-layouts.app>
+    <x-slot:title>Manajemen Sumber Dana</x-slot>
 
-@section('title', 'Manajemen Sumber Dana')
+    @push('styles')
+        <script src="https://cdn.tailwindcss.com"></script>
+    @endpush
 
-@push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-@endpush
-
-@section('content')
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white">MANAJEMEN SUMBER DANA</h1>
@@ -82,4 +80,4 @@
             @endif
         </div>
     </div>
-@endsection
+</x-layouts.app>

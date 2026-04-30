@@ -1,6 +1,5 @@
-@extends('layout.LayoutSuperAdmin')
-
-@section('title', 'Edit Pegawai')
+<x-layouts.app>
+    <x-slot:title>Edit Pegawai</x-slot>
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
@@ -46,7 +45,7 @@
     </style>
 @endpush
 
-@section('content')
+
     <h1 style="color:#007A7F; margin-bottom: 20px;">Edit Pegawai</h1>
 
     <div style="background:white; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); max-width: 800px;">
@@ -122,18 +121,7 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label>Role Sistem <span style="color:red;">*</span></label>
-                <select name="role" required>
-                    <option value="">-- Pilih Role --</option>
-                    @php $currentRole = $user->roles->first()->name ?? ''; @endphp
-                    @foreach ($roles as $role)
-                        <option value="{{ $role->name }}"
-                            {{ old('role', $currentRole) == $role->name ? 'selected' : '' }}>{{ $role->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+
 
             <hr style="margin: 30px 0;">
             <p style="text-align:center; color:#666; font-size:12px;">Abaikan form di bawah jika tidak ingin mengganti
@@ -150,8 +138,7 @@
             </div>
         </form>
     </div>
-@endsection
-
-@push('scripts')
-    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
-@endpush
+    @push('scripts')
+        <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
+    @endpush
+</x-layouts.app>

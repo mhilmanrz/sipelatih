@@ -1,6 +1,5 @@
-@extends('layout.LayoutSuperAdmin')
-
-@section('title', 'Tambah Profesi')
+<x-layouts.app>
+    <x-slot:title>Tambah Profesi</x-slot>
 
 @push('styles')
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,7 +22,7 @@
     </style>
 @endpush
 
-@section('content')
+
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-white">TAMBAH PROFESI BARU</h1>
@@ -87,4 +86,4 @@
             </form>
         </div>
     </div>
-@endsection
+</x-layouts.app>

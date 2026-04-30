@@ -2,12 +2,12 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Login | siPELATIH</title>
+    <title>Login | {{ $settings->get('app_name', 'siPELATIH') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ asset('assets/css/login.css') }}">
 </head>
 
-<body>
+<body @if($settings->get('login_image')) style="background-image: url('{{ asset('storage/' . $settings->get('login_image')) }}'); background-size: cover; background-position: center;" @endif>
 <header class="slogan-bar">
     <div class="slogan-wrapper">
         <div class="slogan-text">
@@ -21,7 +21,7 @@
 <main class="page-wrapper">
     <div class="login-card">
 
-        <img src="{{ asset('assets/images/logo-sipelatih.png') }}" class="logo">
+        <img src="{{ $settings->get('app_logo') ? asset('storage/' . $settings->get('app_logo')) : asset('assets/images/logo-sipelatih.png') }}" class="logo">
 
         <!-- LOGIN FORM -->
         <form method="POST" action="{{ route('login') }}">

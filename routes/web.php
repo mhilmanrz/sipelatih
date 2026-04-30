@@ -6,7 +6,6 @@ use App\Http\Controllers\Act\ActivityFormatController;
 use App\Http\Controllers\Act\ActivityMaterialController;
 use App\Http\Controllers\Act\ActivityMethodController;
 use App\Http\Controllers\Act\ActivityModeratorController;
-use App\Http\Controllers\Act\ActivityTargetController;
 use App\Http\Controllers\Act\ActivityParticipantController;
 use App\Http\Controllers\Act\ActivityProfessionController;
 use App\Http\Controllers\Act\ActivityReportController;
@@ -14,6 +13,7 @@ use App\Http\Controllers\Act\ActivityScopeController;
 use App\Http\Controllers\Act\ActivityScoreController;
 use App\Http\Controllers\Act\ActivitySpeakerController;
 use App\Http\Controllers\Act\ActivityStatusController;
+use App\Http\Controllers\Act\ActivityTargetController;
 use App\Http\Controllers\Act\ActivityTypeController;
 use App\Http\Controllers\Act\BatchController;
 use App\Http\Controllers\Act\BudgetCategoryController;
@@ -21,6 +21,7 @@ use App\Http\Controllers\Act\FundSourceController;
 use App\Http\Controllers\Act\MaterialTypeController;
 use App\Http\Controllers\Act\TargetParticipantController; // Added ProfileController
 use App\Http\Controllers\ActivityNameController;
+use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndikatorKinerjaController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\MonitoringJplController;
 use App\Http\Controllers\PaguController;
 use App\Http\Controllers\ProfessionCategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\EmploymentTypeController;
 use App\Http\Controllers\User\PositionController;
 use App\Http\Controllers\User\ProfessionController;
@@ -35,11 +37,14 @@ use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\WorkUnitController;
 use App\Http\Controllers\UsulanDiklatController;
+use App\Models\AppSetting;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
 Route::get('/login', function () {
-    return view('login');
+    $settings = AppSetting::pluck('value', 'key');
+
+    return view('login', compact('settings'));
 })->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -85,6 +90,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('users/import', [UserController::class, 'importView'])->name('users.import.view');
     Route::post('users/import', [UserController::class, 'import'])->name('users.import');
     Route::resource('users', UserController::class);
+    Route::resource('accounts', AccountController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('kegiatan', ActivityController::class);
     Route::post('kegiatan/{kegiatan}/sasaran-profesi', [ActivityProfessionController::class, 'store'])->name('kegiatan.sasaran-profesi.store');
@@ -137,4 +143,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('dictionaries/activity-names', ActivityNameController::class);
     Route::resource('dictionaries/budget-categories', BudgetCategoryController::class);
     Route::resource('employment-types', EmploymentTypeController::class);
+
+    // Pengaturan Aplikasi (SuperAdmin)
+    Route::get('/settings', [AppSettingController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [AppSettingController::class, 'update'])->name('settings.update');
+    Route::delete('/settings/logo', [AppSettingController::class, 'deleteLogo'])->name('settings.delete-logo');
+    Route::delete('/settings/login-image', [AppSettingController::class, 'deleteLoginImage'])->name('settings.delete-login-image');
 });

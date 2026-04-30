@@ -1,6 +1,4 @@
-@extends('layout.LayoutSuperAdmin')
-
-@section('content')
+<x-layouts.app>
     <div class="bg-[#13b9c6] min-h-screen font-sans pb-8">
 
         <!-- TITLE & BUTTON -->
@@ -91,4 +89,4 @@
         </section>
 
     </div>
-@endsection
+</x-layouts.app>

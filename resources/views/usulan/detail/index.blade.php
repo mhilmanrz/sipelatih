@@ -1,134 +1,134 @@
-@extends('layout.LayoutSuperAdmin', ['title' => 'Detail Usulan Diklat'])
+<x-layouts.app>
+    <x-slot:title>Detail Usulan Diklat</x-slot>
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-    <style>
-        .page-header {
-            background-color: #007a7a;
-            color: white;
-            padding: 1.5rem 2rem;
-            border-radius: 12px 12px 0 0;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+        <style>
+            .page-header {
+                background-color: #007a7a;
+                color: white;
+                padding: 1.5rem 2rem;
+                border-radius: 12px 12px 0 0;
+                font-size: 1.5rem;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
 
-        .info-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 0 0 12px 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            margin-bottom: 2rem;
-        }
+            .info-card {
+                background: white;
+                padding: 2rem;
+                border-radius: 0 0 12px 12px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+                margin-bottom: 2rem;
+            }
 
-        .info-grid {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 1rem 0;
-            font-size: 1rem;
-            color: #374151;
-        }
+            .info-grid {
+                display: grid;
+                grid-template-columns: 200px 1fr;
+                gap: 1rem 0;
+                font-size: 1rem;
+                color: #374151;
+            }
 
-        .info-grid .label {
-            font-weight: 600;
-            color: #4b5563;
-        }
+            .info-grid .label {
+                font-weight: 600;
+                color: #4b5563;
+            }
 
-        .info-grid .value {
-            font-weight: 500;
-        }
+            .info-grid .value {
+                font-weight: 500;
+            }
 
-        .tab-navigation {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: nowrap;
-            /* Tahan agar tidak turun baris */
-            overflow-x: auto;
-            /* Munculkan scroll horizontal jika mentok */
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 0px;
+            .tab-navigation {
+                display: flex;
+                gap: 0.5rem;
+                margin-bottom: 1.5rem;
+                flex-wrap: nowrap;
+                /* Tahan agar tidak turun baris */
+                overflow-x: auto;
+                /* Munculkan scroll horizontal jika mentok */
+                border-bottom: 2px solid #e5e7eb;
+                padding-bottom: 0px;
 
-            /* Sembunyikan garis scrollbar agar lebih estetis (terutama di Chrome/Safari) */
-            -ms-overflow-style: none;
-            /* IE and Edge */
-            scrollbar-width: none;
-            /* Firefox */
-        }
+                /* Sembunyikan garis scrollbar agar lebih estetis (terutama di Chrome/Safari) */
+                -ms-overflow-style: none;
+                /* IE and Edge */
+                scrollbar-width: none;
+                /* Firefox */
+            }
 
-        .tab-navigation::-webkit-scrollbar {
-            display: none;
-            /* Sembunyikan scrollbar di Chrome/Safari/Opera */
-        }
+            .tab-navigation::-webkit-scrollbar {
+                display: none;
+                /* Sembunyikan scrollbar di Chrome/Safari/Opera */
+            }
 
-        .tab-link {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px 8px 0 0;
-            font-weight: 600;
-            color: #6b7280;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            background: #f3f4f6;
-            border: 1px solid transparent;
-            border-bottom: none;
-            cursor: pointer;
-            white-space: nowrap;
-            /* Mencegah teks di dalam tab terpotong/turun baris */
-        }
+            .tab-link {
+                padding: 0.75rem 1.5rem;
+                border-radius: 8px 8px 0 0;
+                font-weight: 600;
+                color: #6b7280;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                background: #f3f4f6;
+                border: 1px solid transparent;
+                border-bottom: none;
+                cursor: pointer;
+                white-space: nowrap;
+                /* Mencegah teks di dalam tab terpotong/turun baris */
+            }
 
-        .tab-link:hover {
-            background: #e5e7eb;
-            color: #374151;
-        }
+            .tab-link:hover {
+                background: #e5e7eb;
+                color: #374151;
+            }
 
-        .tab-link.active {
-            background: #007a7a;
-            color: white;
-        }
+            .tab-link.active {
+                background: #007a7a;
+                color: white;
+            }
 
-        .tab-content-area {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            min-height: 400px;
-            padding: 2rem;
-            /* Tambahan padding di sekeliling content/tab */
-        }
+            .tab-content-area {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+                overflow: hidden;
+                min-height: 400px;
+                padding: 2rem;
+                /* Tambahan padding di sekeliling content/tab */
+            }
 
-        /* Status Badges */
-        .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
+            /* Status Badges */
+            .status-badge {
+                display: inline-block;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                text-transform: capitalize;
+            }
 
-        .status-draft {
-            background-color: #e5e7eb;
-            color: #374151;
-        }
+            .status-draft {
+                background-color: #e5e7eb;
+                color: #374151;
+            }
 
-        .status-submitted {
-            background-color: #dbeafe;
-            color: #1d4ed8;
-        }
+            .status-submitted {
+                background-color: #dbeafe;
+                color: #1d4ed8;
+            }
 
-        .status-revision {
-            background-color: #fef08a;
-            color: #a16207;
-        }
+            .status-revision {
+                background-color: #fef08a;
+                color: #a16207;
+            }
 
-        .status-accepted {
-            background-color: #dcfce3;
-            color: #15803d;
-        }
-    </style>
-@endpush
+            .status-accepted {
+                background-color: #dcfce3;
+                color: #15803d;
+            }
+        </style>
+    @endpush
 
-@section('content')
     <div class="px-8 py-6">
 
         <!-- HEADER & BASIC INFO -->
@@ -258,8 +258,8 @@
         </div>
 
     </div>
-@endsection
 
-@push('scripts')
-    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
-@endpush
+    @push('scripts')
+        <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
+    @endpush
+</x-layouts.app>
