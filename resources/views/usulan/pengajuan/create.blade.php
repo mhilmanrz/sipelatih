@@ -2,7 +2,8 @@
 @section('title', 'Tambah Data Kegiatan')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
 @endpush
     <div class="input-page" style="padding: 15px;">
         <h3 class="title">Data Kegiatan</h3>
@@ -33,12 +34,23 @@
                 </div>
 
                 <div class="form-row">
+                    <label>Tahun</label>
+                    <select id="year_filter">
+                        <option value="">-PILIH TAHUN-</option>
+                        @foreach ($years as $year)
+                            <option value="{{ $year }}">{{ $year }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-row">
                     <label>Nama Kegiatan</label>
                     <select name="activity_name_id" id="activity_name_select" required>
-                        <option value="" data-start="" data-end="">-PILIH-</option>
+                        <option value="" data-start="" data-end="" data-year="">-PILIH-</option>
                         @foreach ($activity_names as $actName)
                             <option value="{{ $actName->id }}"
                                 data-start="{{ $actName->start_date }}" data-end="{{ $actName->end_date }}"
+                                data-year="{{ $actName->year }}"
                                 {{ old('activity_name_id') == $actName->id ? 'selected' : '' }}>{{ $actName->name }}
                             </option>
                         @endforeach
@@ -192,11 +204,11 @@
 
                 <div class="form-row">
                     <label>Pagu</label>
-                    <select name="budget_id">
-                        <option value="">-PILIH PAGU-</option>
+                    <select name="budget_id" id="budget_select">
+                        <option value="" data-year="">-PILIH PAGU-</option>
                         @foreach ($budgets as $bg)
                             @php $sisa = $bg->total_amount - ($bg->activities_sum_budget_amount ?? 0); @endphp
-                            <option value="{{ $bg->id }}" {{ old('budget_id') == $bg->id ? 'selected' : '' }}>
+                            <option value="{{ $bg->id }}" data-year="{{ $bg->year }}" {{ old('budget_id') == $bg->id ? 'selected' : '' }}>
                                 {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Sisa: Rp {{ number_format($sisa, 0, ',', '.') }})
                             </option>
                         @endforeach
@@ -244,23 +256,67 @@
         </form>
     </div>
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
     <script src="{{ asset('assets/js/tambahdata.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const select = document.getElementById('activity_name_select');
+            new TomSelect('select[name="fund_source_id"]', {
+                create: true,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                }
+            });
+
+            const yearFilter = document.getElementById('year_filter');
+            const actNameSelect = document.getElementById('activity_name_select');
+            const budgetSelect = document.getElementById('budget_select');
             const startDateInput = document.getElementById('act_start_date');
             const endDateInput = document.getElementById('act_end_date');
 
-            if (select && startDateInput && endDateInput) {
-                select.addEventListener('change', function() {
-                    const selectedOption = select.options[select.selectedIndex];
-                    const start = selectedOption.getAttribute('data-start');
-                    const end = selectedOption.getAttribute('data-end');
+            // Simpan semua opsi asli
+            const allActivityOptions = Array.from(actNameSelect.options).slice(1);
+            const allBudgetOptions = Array.from(budgetSelect.options).slice(1);
 
-                    if (start) startDateInput.value = start;
-                    if (end) endDateInput.value = end;
+            function filterByYear(year) {
+                // Reset Nama Kegiatan
+                actNameSelect.innerHTML = '<option value="" data-start="" data-end="" data-year="">-PILIH-</option>';
+                startDateInput.value = '';
+                endDateInput.value = '';
+
+                // Reset Pagu
+                budgetSelect.innerHTML = '<option value="" data-year="">-PILIH PAGU-</option>';
+
+                if (!year) return;
+
+                allActivityOptions.forEach(opt => {
+                    if (opt.dataset.year == year) {
+                        actNameSelect.appendChild(opt.cloneNode(true));
+                    }
+                });
+
+                allBudgetOptions.forEach(opt => {
+                    if (opt.dataset.year == year) {
+                        budgetSelect.appendChild(opt.cloneNode(true));
+                    }
                 });
             }
+
+            // Kosongkan saat pertama load
+            filterByYear('');
+
+            yearFilter.addEventListener('change', function() {
+                filterByYear(this.value);
+            });
+
+            actNameSelect.addEventListener('change', function() {
+                const selectedOption = actNameSelect.options[actNameSelect.selectedIndex];
+                const start = selectedOption.getAttribute('data-start');
+                const end = selectedOption.getAttribute('data-end');
+
+                if (start) startDateInput.value = start;
+                if (end) endDateInput.value = end;
+            });
 
             updateWaPic(document.getElementById('pic_user_id'));
         });

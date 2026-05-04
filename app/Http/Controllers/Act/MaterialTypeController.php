@@ -15,7 +15,7 @@ class MaterialTypeController extends Controller
     {
         $query = MaterialType::query();
         if ($request->has('q') && $request->q != '') {
-            $query->where('name', 'like', '%' . $request->q . '%');
+            $query->where('name', 'like', '%'.$request->q.'%');
         }
         $perPage = $request->input('entries', $request->input('per_page', 10));
         $materialTypes = $query->paginate($perPage)->appends($request->all());

@@ -1,6 +1,6 @@
 <aside
     class="w-[240px] h-[calc(100vh-60px)] lg:h-screen bg-[#1A5555] text-white fixed top-[60px] lg:top-0 transition-all duration-300 overflow-y-auto z-[1000]"
-    :class="sidebarOpen ? 'left-0' : '-left-[240px]'"
+    :style="sidebarOpen ? 'left: 0' : 'left: -240px'"
 >
     <div class="p-4 text-center bg-[#113a3a]">
         <img src="{{ $appSettings->get('app_logo') ? asset('storage/' . $appSettings->get('app_logo')) : asset('assets/images/logo-sipelatih.png') }}" class="w-44 mx-auto mb-2">
@@ -10,72 +10,27 @@
     <div class="flex flex-col mt-4 space-y-1">
 
         <!-- MENU UTAMA -->
-        <a href="{{ url('/') }}"
+        <a href="{{ route('dashboard') }}"
             class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('/') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
             <i class="fa-solid fa-house w-6 text-center mr-2"></i>
             <span>Dashboard</span>
         </a>
 
-        <a href="{{ url('/usulan-diklat') }}"
+        <a href="{{ route('usulan-diklat') }}"
             class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('usulan-diklat*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
             <i class="fa-solid fa-folder w-6 text-center mr-2"></i>
             <span>Usulan Diklat</span>
         </a>
 
-        <!-- DROPDOWN: MONITORING -->
-        @php $isMonitoringOpen = request()->is('monitoring-jpl*') || request()->is('indikator-kinerja*'); @endphp
-        <details class="group" {{ $isMonitoringOpen ? 'open' : '' }}>
-            <summary class="flex items-center justify-between px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                <span class="flex items-center">
-                    <i class="fa-solid fa-chart-line w-6 text-center mr-2"></i>
-                    <span>Monitoring</span>
-                </span>
-                <i class="fa-solid fa-chevron-down text-xs transform group-open:rotate-180 transition-transform"></i>
-            </summary>
-            <div class="flex flex-col bg-[#113a3a] pb-1">
-                <a href="{{ url('/monitoring-jpl') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('monitoring-jpl*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-chart-line w-6 text-center mr-2 text-sm"></i>
-                    <span>Monitoring JPL</span>
-                </a>
-                <a href="{{ url('/indikator-kinerja') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('indikator-kinerja*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-chart-bar w-6 text-center mr-2 text-sm"></i>
-                    <span>Indikator Kinerja</span>
-                </a>
-            </div>
-        </details>
-
-        <!-- DROPDOWN: MANAJEMEN (PENGUSUL) -->
-        @hasrole('Pengusul')
-        @php $isManajemenOpen = request()->is('users*') || request()->is('manajemen-sasaran-profesi*'); @endphp
-        <details class="group" {{ $isManajemenOpen ? 'open' : '' }}>
-            <summary class="flex items-center justify-between px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                <span class="flex items-center">
-                    <i class="fa-solid fa-users-gear w-6 text-center mr-2"></i>
-                    <span>Manajemen</span>
-                </span>
-                <i class="fa-solid fa-chevron-down text-xs transform group-open:rotate-180 transition-transform"></i>
-            </summary>
-            <div class="flex flex-col bg-[#113a3a] pb-1">
-                <a href="{{ route('users.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('users*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-users w-6 text-center mr-2 text-sm"></i>
-                    <span>Data Pegawai</span>
-                </a>
-                <a href="{{ url('/manajemen-sasaran-profesi') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('manajemen-sasaran-profesi*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-briefcase w-6 text-center mr-2 text-sm"></i>
-                    <span>Sasaran Profesi</span>
-                </a>
-            </div>
-        </details>
-        @endhasrole
-
-        <!-- SUPERADMIN MENUS -->
-        @hasrole('SuperAdmin')
+        <!-- MONITORING JPL -->
+        <a href="{{ route('monitoring.jpl.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('monitoring-jpl*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+            <i class="fa-solid fa-chart-line w-6 text-center mr-2"></i>
+            <span>Monitoring JPL</span>
+        </a>
 
         <!-- DROPDOWN: EVALUASI & LAPORAN -->
+        @hasanyrole('perencanaan|penyelenggara|evaluasi|superadmin')
         @php
             $isEvaluasiOpen = request()->is('pagu*') || request()->is('laporan-kegiatan*')
                 || request()->is('evaluasi1*') || request()->is('evaluasi2*') || request()->is('evaluasi3*');
@@ -89,37 +44,49 @@
                 <i class="fa-solid fa-chevron-down text-xs transform group-open:rotate-180 transition-transform"></i>
             </summary>
             <div class="flex flex-col bg-[#113a3a] pb-1">
+                @hasanyrole('perencanaan|superadmin')
                 <a href="{{ route('pagu.index') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('pagu*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                     <i class="fa-solid fa-money-bill w-6 text-center mr-2 text-sm"></i>
                     <span>Pagu</span>
                 </a>
+                @endhasanyrole
+
+                @hasanyrole('perencanaan|penyelenggara|evaluasi|superadmin')
                 <a href="{{ route('kegiatan.laporan.index') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('laporan-kegiatan*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                     <i class="fa-solid fa-file-invoice w-6 text-center mr-2 text-sm"></i>
                     <span>Laporan Kegiatan</span>
                 </a>
-                <a href="{{ url('/evaluasi1') }}"
+                @endhasanyrole
+
+                @hasanyrole('evaluasi|superadmin')
+                <a href="{{ route('evaluasi1') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluasi1*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                     <i class="fa-solid fa-clipboard-check w-6 text-center mr-2 text-sm"></i>
                     <span>Evaluasi I</span>
                 </a>
-                <a href="{{ url('/evaluasi2') }}"
+                <a href="{{ route('evaluasi2') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluasi2*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                     <i class="fa-solid fa-clipboard-check w-6 text-center mr-2 text-sm"></i>
                     <span>Evaluasi II</span>
                 </a>
-                <a href="{{ url('/evaluasi3') }}"
+                <a href="{{ route('evaluasi3') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluasi3*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                     <i class="fa-solid fa-clipboard-check w-6 text-center mr-2 text-sm"></i>
                     <span>Evaluasi III</span>
                 </a>
+                @endhasanyrole
             </div>
         </details>
+        @endhasanyrole
+
+        <!-- SUPERADMIN MENUS -->
+        @hasrole('superadmin')
 
         <!-- DROPDOWN: MASTER DATA -->
         @php
-            $isMasterDataOpen = request()->is('users*') || request()->is('professions*') || request()->is('profession-categories*') ||
+            $isMasterDataOpen = request()->is('users*') || request()->is('accounts*') || request()->is('professions*') || request()->is('profession-categories*') ||
                 request()->is('roles*') || request()->is('positions*') || request()->is('work-units*') ||
                 request()->is('dictionaries/activity-types*') || request()->is('dictionaries/activity-categories*') ||
                 request()->is('dictionaries/activity-scopes*') || request()->is('dictionaries/material-types*') ||
@@ -224,10 +191,7 @@
             </div>
         </details>
 
-        @endhasrole
-
         <!-- PENGATURAN (SUPERADMIN) -->
-        @hasrole('SuperAdmin')
         <a href="{{ route('settings.index') }}"
             class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('settings*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
             <i class="fa-solid fa-gear w-6 text-center mr-2"></i>

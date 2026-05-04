@@ -64,6 +64,31 @@
     outline:none;
 }
 
+/* ================= TOM SELECT CUSTOMIZATION ================= */
+.form-row .ts-control {
+    width: 100%;
+    padding: 7px 12px; /* Slight adjustment because TomSelect has internal padding/margin */
+    border: 2px solid #00B8A5;
+    border-radius: 12px;
+    font-size: 14px;
+    background: #f9f9f9;
+    box-sizing: border-box;
+    font-family: inherit;
+    min-height: unset;
+    box-shadow: none;
+}
+
+.form-row .ts-wrapper.focus .ts-control {
+    border-color: #007a7f;
+    box-shadow: 0 0 0 3px rgba(0,184,165,.15);
+    background: #fff;
+}
+
+.form-row .ts-control input {
+    font-size: 14px;
+    font-family: inherit;
+}
+
 /* ================= BUTTON ================= */
 
 .form-action{

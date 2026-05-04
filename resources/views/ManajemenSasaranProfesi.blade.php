@@ -2,7 +2,7 @@
     <x-slot:title>Sasaran Profesi</x-slot>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/ManajemenSasaranProfesi.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/ManajemenSasaranProfesi.css') }}">
     @endpush
 
     <main class="input-page">

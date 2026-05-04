@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Imports\UsersImport;
+use App\Jobs\ImportUsersJob;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
 class AccountController extends Controller
@@ -164,9 +163,14 @@ class AccountController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            Excel::import(new UsersImport, $request->file('file'));
+            try {
+                $path = $request->file('file')->store('imports', 'local');
+                ImportUsersJob::dispatch($path);
 
-            return redirect('/accounts')->with('success', 'File berhasil diunggah. Proses import sedang berjalan di latar belakang.');
+                return redirect('/accounts')->with('success', 'File berhasil diunggah. Proses import sedang berjalan di antrean (background). Harap periksa beberapa saat lagi.');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Terjadi kesalahan saat upload untuk import: '.$e->getMessage());
+            }
         }
 
         return redirect()->back()->with('error', 'Gagal mengunggah file.');

@@ -2,7 +2,7 @@
 @section('title', 'Tambah Data Kegiatan')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
 @endpush
     <div class="content input-page">
         <h3 class="title">Data Kegiatan</h3>

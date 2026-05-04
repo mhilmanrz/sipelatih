@@ -2,11 +2,9 @@
     <x-slot:title>Manajemen Profesi</x-slot>
 
 @push('styles')
-    <!-- Using Tailwind via CDN just for this page if not globally installed,
+        <!-- Using Tailwind via CDN just for this page if not globally installed,
          but assuming it's available or we can use standard Tailwind classes.
-         If the project uses Vite+Tailwind, the classes will work. -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+         If the project uses Vite+Tailwind, the classes will work. -->    <style>
         /* Prevent conflict with existing layout styles where possible,
            but use Tailwind for the main content area */
         .tw-wrap p,
@@ -30,7 +28,6 @@
         }
     </style>
 @endpush
-
 
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">

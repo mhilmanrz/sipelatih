@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\ActivityNameImport;
+use App\Jobs\ImportActivityNameJob;
 use App\Models\Act\ActivityName;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -15,7 +15,7 @@ class ActivityNameController extends Controller
     {
         $query = ActivityName::query();
         if ($request->has('q') && $request->q != '') {
-            $query->where('name', 'like', '%' . $request->q . '%');
+            $query->where('name', 'like', '%'.$request->q.'%');
         }
         $perPage = $request->input('entries', $request->input('per_page', 10));
         $activityNames = $query->paginate($perPage)->appends($request->all());
@@ -30,11 +30,12 @@ class ActivityNameController extends Controller
         ]);
 
         try {
-            Excel::import(new ActivityNameImport, $request->file('file'));
+            $path = $request->file('file')->store('imports', 'local');
+            ImportActivityNameJob::dispatch($path);
 
-            return redirect()->route('activity-names.index')->with('success', 'Nama Kegiatan berhasil diimpor.');
+            return redirect()->route('activity-names.index')->with('success', 'Nama Kegiatan sedang diimpor di antrean (background). Harap periksa beberapa saat lagi.');
         } catch (\Exception $e) {
-            return redirect()->route('activity-names.index')->with('error', 'Gagal mengimpor Nama Kegiatan. Pastikan format file benar.');
+            return redirect()->route('activity-names.index')->with('error', 'Gagal mengupload file untuk impor: '.$e->getMessage());
         }
     }
 

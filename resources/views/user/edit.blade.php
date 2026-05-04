@@ -2,7 +2,7 @@
     <x-slot:title>Edit Pegawai</x-slot>
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
     <style>
         .form-group {

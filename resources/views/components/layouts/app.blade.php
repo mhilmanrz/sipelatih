@@ -38,15 +38,15 @@
 
         <!-- MAIN CONTENT WRAPPER -->
         <div
-            class="flex flex-col w-full transition-all duration-300 ease-in-out"
-            :class="sidebarOpen && !isMobile ? 'ml-[240px]' : 'ml-0'"
+            class="flex flex-col transition-all duration-300 ease-in-out min-w-0"
+            :style="sidebarOpen && !isMobile ? 'margin-left: 240px; width: calc(100% - 240px)' : 'width: 100%'"
         >
 
             <!-- TOPBAR -->
             <x-layouts.topbar />
 
             <!-- CONTENT -->
-            <main class="flex-1 p-6 mt-[60px] transition-all duration-300 ease-in-out" @resize.window="$dispatch('resize')">
+            <main class="flex-1 p-6 mt-[60px] transition-all duration-300 ease-in-out">
                 {{ $slot }}
             </main>
 

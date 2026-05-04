@@ -2,7 +2,6 @@
     <x-slot:title>Import Pagu Anggaran</x-slot:title>
 
     @push('styles')
-        <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
     @endpush
 

@@ -2,8 +2,7 @@
     <x-slot:title>Tambah Kategori Profesi</x-slot>
 
 @push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+        <style>
         .tw-wrap p,
         .tw-wrap h1,
         .tw-wrap h2,

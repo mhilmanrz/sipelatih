@@ -2,7 +2,7 @@
     <x-slot:title>Nilai Pre Test & Post Test</x-slot:title>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/evaluasi2.css') }}">
     @endpush
 

@@ -2,7 +2,7 @@
     <x-slot:title>Evaluasi III</x-slot>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/evaluasi3.css') }}">
     @endpush
 

@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Imports\UsersImport;
+use App\Jobs\ImportUsersJob;
 use App\Models\User\EmploymentType;
 use App\Models\User\Positions;
 use App\Models\User\Profession;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -19,7 +18,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'roles'])->doesntHave('roles');
+        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'roles'])->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
 
         if ($request->has('q') && $request->q != '') {
             $search = $request->q;
@@ -174,9 +173,14 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            Excel::import(new UsersImport, $request->file('file'));
+            try {
+                $path = $request->file('file')->store('imports', 'local');
+                ImportUsersJob::dispatch($path);
 
-            return redirect('/users')->with('success', 'File berhasil diunggah. Proses import sedang berjalan di latar belakang.');
+                return redirect('/users')->with('success', 'File berhasil diunggah. Proses import sedang berjalan di antrean (background). Harap periksa beberapa saat lagi.');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Terjadi kesalahan saat upload untuk import: '.$e->getMessage());
+            }
         }
 
         return redirect()->back()->with('error', 'Gagal mengunggah file.');

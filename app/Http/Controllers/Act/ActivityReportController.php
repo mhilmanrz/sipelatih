@@ -48,7 +48,7 @@ class ActivityReportController extends Controller
         ]);
 
         $file = $request->file('file');
-        $filename = time() . '_' . $file->getClientOriginalName();
+        $filename = time().'_'.$file->getClientOriginalName();
         $path = $file->storeAs('reports', $filename, 'public');
 
         ActivityReport::create([
@@ -73,7 +73,7 @@ class ActivityReportController extends Controller
         }
 
         $file = $request->file('file');
-        $filename = time() . '_' . $file->getClientOriginalName();
+        $filename = time().'_'.$file->getClientOriginalName();
         $path = $file->storeAs('reports', $filename, 'public');
 
         $report->update([

@@ -2,7 +2,6 @@
     <x-slot:title>Manajemen Ruang Lingkup Kegiatan</x-slot>
 
     @push('styles')
-        <script src="https://cdn.tailwindcss.com"></script>
         <style>
             .tw-wrap p,
             .tw-wrap h1,

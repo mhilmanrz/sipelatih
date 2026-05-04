@@ -2,50 +2,7 @@
     <x-slot:title>Monitoring Capaian JPL</x-slot>
 
     @push('styles')
-        <!-- Tailwind via CDN for this specific page as requested by user's raw HTML -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            primary: '#0DBBCB'
-                        }
-                    }
-                }
-            }
-        </script>
-
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <style>
-            .custom-filter {
-                background-color: #f8fafc;
-                border: 1px solid #e2e8f0;
-                border-radius: 0.5rem;
-                padding: 1rem;
-                margin-bottom: 2rem;
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-            }
-
-            .chart-container {
-                position: relative;
-                height: 400px;
-                width: 100%;
-                background: white;
-                border-radius: 0.5rem;
-                padding: 1rem;
-                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            }
-        </style>
-
-        <link rel="stylesheet" href="{{ asset('CSS/LayoutPengusul.css') }}">
-        <link rel="stylesheet" href="{{ asset('CSS/monitoringJpl.css') }}">
     @endpush
 
     <!-- CONTENT -->
@@ -152,7 +109,7 @@
         <!-- CHART -->
         <div class="bg-white rounded shadow p-6">
             <h3 class="text-lg font-semibold mb-4 text-gray-700">
-                Grafik Capaian JPL Tahun {{ $year }}
+                Capaian JPL per Kategori Profesi Tahun {{ $year }}
             </h3>
             <canvas id="jplChart"></canvas>
         </div>
@@ -194,7 +151,7 @@
             </div>
         </div>
 
-        <div class="chart-container">
+        <div class="relative bg-white rounded-lg shadow p-4" style="height: 400px;">
             <canvas id="kpiChart"></canvas>
         </div>
     </div>
@@ -263,7 +220,6 @@
                 });
             });
         </script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             const ctx = document.getElementById('jplChart');
             if (ctx) {
@@ -288,7 +244,5 @@
                 });
             }
         </script>
-        <script src="{{ asset('JS/LayoutPengusul.js') }}"></script>
-        <script src="{{ asset('JS/monitoringJpl.js') }}"></script>
     @endpush
 </x-layouts.app>

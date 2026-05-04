@@ -2,7 +2,6 @@
     <x-slot:title>Tambah Kategori Pagu</x-slot>
 
     @push('styles')
-        <script src="https://cdn.tailwindcss.com"></script>
         <style>
             .tw-wrap p, .tw-wrap h1, .tw-wrap h2, .tw-wrap h3, .tw-wrap h4, .tw-wrap h5, .tw-wrap h6, .tw-wrap span, .tw-wrap div, .tw-wrap a, .tw-wrap button, .tw-wrap form, .tw-wrap input, .tw-wrap label {
                 font-family: inherit;

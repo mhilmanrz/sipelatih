@@ -1,9 +1,7 @@
 <x-layouts.app>
     <x-slot:title>Manajemen Pagu Anggaran</x-slot:title>
 
-    @push('styles')
-        <script src="https://cdn.tailwindcss.com"></script>
-        <style>
+    @push('styles')        <style>
             .tw-wrap p,
             .tw-wrap h1,
             .tw-wrap h2,

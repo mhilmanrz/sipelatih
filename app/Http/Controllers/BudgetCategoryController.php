@@ -14,7 +14,7 @@ class BudgetCategoryController extends Controller
     {
         $query = BudgetCategory::query();
         if ($request->has('q') && $request->q != '') {
-            $query->where('name', 'like', '%' . $request->q . '%');
+            $query->where('name', 'like', '%'.$request->q.'%');
         }
         $perPage = $request->input('entries', $request->input('per_page', 10));
         $budgetCategories = $query->paginate($perPage)->appends($request->all());

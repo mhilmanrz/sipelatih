@@ -13,8 +13,8 @@ use App\Models\Act\ActivityName;
 use App\Models\Act\ActivityScope;
 use App\Models\Act\ActivityType;
 use App\Models\Act\Batch;
-use App\Models\Act\MaterialType;
 use App\Models\Act\FundSource;
+use App\Models\Act\MaterialType;
 use App\Models\Act\TargetParticipant;
 use App\Models\Budget;
 use App\Models\User\Profession;
@@ -41,7 +41,7 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        $picCandidates = User::all();
+        $picCandidates = User::doesntHave('roles')->where('email', '!=', 'admin@mail.com')->get();
         $activity_names = ActivityName::whereDoesntHave('activities')->get();
         $activity_categories = ActivityCategory::all();
         $activity_types = ActivityType::all();
@@ -54,6 +54,11 @@ class ActivityController extends Controller
         $work_units = WorkUnit::all();
         $budgets = Budget::withSum('activities', 'budget_amount')->get();
         $fund_sources = FundSource::all();
+        $years = ActivityName::whereDoesntHave('activities')
+            ->whereNotNull('year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
 
         return view('usulan.pengajuan.create', compact(
             'picCandidates',
@@ -68,7 +73,8 @@ class ActivityController extends Controller
             'target_participants',
             'work_units',
             'budgets',
-            'fund_sources'
+            'fund_sources',
+            'years'
         ));
     }
 
@@ -117,12 +123,15 @@ class ActivityController extends Controller
                 }
             },
             'activityParticipants.score',
+            'activityParticipants.componentScores',
             'activityParticipants.user.workUnit',
             'activityTargets',
+            'scoreSetting',
+            'scoreComponents',
         ])->findOrFail($id);
 
         $professions = Profession::all();
-        $users = User::all();
+        $users = User::doesntHave('roles')->where('email', '!=', 'admin@mail.com')->get();
 
         return view('usulan.detail.index', compact('kegiatan', 'professions', 'users'));
     }
@@ -134,7 +143,7 @@ class ActivityController extends Controller
     {
         $kegiatan = Activity::findOrFail($id);
 
-        $picCandidates = User::all();
+        $picCandidates = User::doesntHave('roles')->where('email', '!=', 'admin@mail.com')->get();
         $activity_names = ActivityName::all();
         $activity_categories = ActivityCategory::all();
         $activity_types = ActivityType::all();

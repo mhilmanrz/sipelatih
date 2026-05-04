@@ -1,5 +1,5 @@
 <header class="h-[60px] bg-white flex items-center justify-between px-6 fixed top-0 right-0 z-[9000] shadow-sm transition-all duration-300"
-    :class="sidebarOpen && !isMobile ? 'left-[240px]' : 'left-0'"
+    :style="sidebarOpen && !isMobile ? 'left: 240px' : 'left: 0'"
 >
     <!-- Toggle Sidebar Button -->
     <button @click="sidebarOpen = !sidebarOpen; setTimeout(() => window.dispatchEvent(new Event('resize')), 300)" class="text-gray-600 hover:text-black focus:outline-none">

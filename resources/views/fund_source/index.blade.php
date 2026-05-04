@@ -2,8 +2,7 @@
     <x-slot:title>Manajemen Sumber Dana</x-slot>
 
     @push('styles')
-        <script src="https://cdn.tailwindcss.com"></script>
-    @endpush
+        @endpush
 
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">

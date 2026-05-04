@@ -12,7 +12,7 @@ class AppSettingController extends Controller
 {
     public function index(): View
     {
-        abort_unless(auth()->user()->hasRole('SuperAdmin'), 403);
+        abort_unless(auth()->user()->hasRole('superadmin'), 403);
 
         $settings = AppSetting::pluck('value', 'key');
 
@@ -21,12 +21,13 @@ class AppSettingController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        abort_unless(auth()->user()->hasRole('SuperAdmin'), 403);
+        abort_unless(auth()->user()->hasRole('superadmin'), 403);
 
         $request->validate([
             'app_name' => 'required|string|max:100',
             'app_logo' => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
             'login_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:4096',
+            'kemenkes_logo' => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
         ]);
 
         AppSetting::set('app_name', $request->app_name);
@@ -51,12 +52,22 @@ class AppSettingController extends Controller
             AppSetting::set('login_image', $path);
         }
 
+        if ($request->hasFile('kemenkes_logo')) {
+            $old = AppSetting::get('kemenkes_logo');
+            if ($old) {
+                Storage::disk('public')->delete($old);
+            }
+
+            $path = $request->file('kemenkes_logo')->store('settings', 'public');
+            AppSetting::set('kemenkes_logo', $path);
+        }
+
         return back()->with('success', 'Pengaturan berhasil disimpan.');
     }
 
     public function deleteLogo(): RedirectResponse
     {
-        abort_unless(auth()->user()->hasRole('SuperAdmin'), 403);
+        abort_unless(auth()->user()->hasRole('superadmin'), 403);
 
         $old = AppSetting::get('app_logo');
         if ($old) {
@@ -69,7 +80,7 @@ class AppSettingController extends Controller
 
     public function deleteLoginImage(): RedirectResponse
     {
-        abort_unless(auth()->user()->hasRole('SuperAdmin'), 403);
+        abort_unless(auth()->user()->hasRole('superadmin'), 403);
 
         $old = AppSetting::get('login_image');
         if ($old) {
@@ -78,5 +89,18 @@ class AppSettingController extends Controller
         AppSetting::set('login_image', null);
 
         return back()->with('success', 'Gambar login berhasil dihapus.');
+    }
+
+    public function deleteKemenkesLogo(): RedirectResponse
+    {
+        abort_unless(auth()->user()->hasRole('superadmin'), 403);
+
+        $old = AppSetting::get('kemenkes_logo');
+        if ($old) {
+            Storage::disk('public')->delete($old);
+        }
+        AppSetting::set('kemenkes_logo', null);
+
+        return back()->with('success', 'Logo Kemenkes berhasil dihapus.');
     }
 }

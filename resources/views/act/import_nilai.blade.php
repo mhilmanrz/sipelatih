@@ -2,7 +2,6 @@
     <x-slot:title>Import Nilai Peserta</x-slot>
 
     @push('styles')
-        <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
     @endpush
 

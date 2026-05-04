@@ -2,8 +2,7 @@
     <x-slot:title>Tambah Profesi</x-slot>
 
 @push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+        <style>
         .tw-wrap p,
         .tw-wrap h1,
         .tw-wrap h2,
@@ -21,7 +20,6 @@
         }
     </style>
 @endpush
-
 
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">

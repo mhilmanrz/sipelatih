@@ -15,7 +15,7 @@ class ActivityScopeController extends Controller
     {
         $query = ActivityScope::query();
         if ($request->has('q') && $request->q != '') {
-            $query->where('name', 'like', '%' . $request->q . '%');
+            $query->where('name', 'like', '%'.$request->q.'%');
         }
         $perPage = $request->input('entries', $request->input('per_page', 10));
         $activityScopes = $query->paginate($perPage)->appends($request->all());

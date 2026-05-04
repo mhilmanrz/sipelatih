@@ -15,7 +15,7 @@ class FundSourceController extends Controller
     {
         $query = FundSource::query();
         if ($request->has('q') && $request->q != '') {
-            $query->where('name', 'like', '%' . $request->q . '%');
+            $query->where('name', 'like', '%'.$request->q.'%');
         }
         $perPage = $request->input('entries', $request->input('per_page', 10));
         $fundSources = $query->paginate($perPage)->appends($request->all());

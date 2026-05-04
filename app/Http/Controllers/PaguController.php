@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Exports\BudgetTemplateExport;
 use App\Jobs\ImportBudgetJob;
+use App\Models\Act\Activity;
 use App\Models\Budget;
 use App\Models\BudgetCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -29,7 +31,7 @@ class PaguController extends Controller
 
         $totalDana = $budgets->sum('total_amount');
         $budgetIds = $budgets->pluck('id');
-        $totalTerserap = \App\Models\Act\Activity::whereIn('budget_id', $budgetIds)->sum('budget_amount');
+        $totalTerserap = Activity::whereIn('budget_id', $budgetIds)->sum('budget_amount');
         $totalSisa = $totalDana - $totalTerserap;
 
         $availableYears = Budget::select('year')
@@ -49,27 +51,27 @@ class PaguController extends Controller
         // Data for Bar Chart Per RKAKL
         $chartYear = $selectedYear ?: (empty($availableYears) ? date('Y') : max($availableYears));
         $budgetsForChart = Budget::with('activities')->where('year', $chartYear)->get();
-        
+
         $rkaklLabels = [];
         $rkaklDigunakan = [];
         $rkaklSisa = [];
-        
+
         foreach ($budgetsForChart as $b) {
             $used = $b->activities->sum('budget_amount');
             $sisa = $b->total_amount - $used;
-            
+
             $label = $b->rkkal_code;
             if ($b->submark) {
-                $label .= ' - ' . \Illuminate\Support\Str::limit($b->submark, 20);
+                $label .= ' - '.Str::limit($b->submark, 20);
             }
-            
+
             $rkaklLabels[] = $label;
             $rkaklDigunakan[] = $used;
             $rkaklSisa[] = $sisa < 0 ? 0 : $sisa;
         }
 
         return view('pagu', compact(
-            'budgets', 'categories', 'selectedYear', 'availableYears', 
+            'budgets', 'categories', 'selectedYear', 'availableYears',
             'totalDana', 'totalTerserap', 'totalSisa',
             'chartYear', 'rkaklLabels', 'rkaklDigunakan', 'rkaklSisa'
         ));

@@ -2,7 +2,8 @@
 @section('title', 'Edit Data Kegiatan')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
 @endpush
     <div class="input-page" style="padding: 15px;">
         <h3 class="title">Edit Data Kegiatan</h3>
@@ -254,9 +255,18 @@
         </form>
     </div>
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
     <script src="{{ asset('assets/js/tambahdata.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            new TomSelect('select[name="fund_source_id"]', {
+                create: true,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                }
+            });
+
             const select = document.getElementById('activity_name_select');
             const startDateInput = document.getElementById('act_start_date');
             const endDateInput = document.getElementById('act_end_date');

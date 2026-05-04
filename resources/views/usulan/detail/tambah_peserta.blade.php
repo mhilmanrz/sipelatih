@@ -1,9 +1,7 @@
 <x-layouts.app>
     <x-slot:title>Tambah Peserta</x-slot>
 
-    @push('styles')
-        <script src="https://cdn.tailwindcss.com"></script>
-        <style>
+    @push('styles')        <style>
             .custom-pane {
                 border: 2px solid #e5e7eb;
                 border-radius: 12px;

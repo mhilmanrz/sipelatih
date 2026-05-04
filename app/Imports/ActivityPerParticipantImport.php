@@ -3,11 +3,14 @@
 namespace App\Imports;
 
 use App\Models\Act\Activity;
+use App\Models\Act\ActivityComponentScore;
 use App\Models\Act\ActivityFormat;
 use App\Models\Act\ActivityMaterial;
 use App\Models\Act\ActivityMethod;
 use App\Models\Act\ActivityName;
 use App\Models\Act\ActivityParticipant;
+use App\Models\Act\ActivityScoreComponent;
+use App\Models\Act\ActivityScoreSetting;
 use App\Models\Act\ActivityType;
 use App\Models\Act\MaterialType;
 use App\Models\User\User;
@@ -85,13 +88,41 @@ class ActivityPerParticipantImport implements ToCollection, WithHeadingRow
             }
 
             // Assign user
-            ActivityParticipant::updateOrCreate([
+            $participant = ActivityParticipant::updateOrCreate([
                 'activity_id' => $activity->id,
                 'user_id' => $user->id,
             ], [
                 'certificate_number' => isset($row['no_sertifikat']) ? trim($row['no_sertifikat']) : null,
-                'is_passed' => isset($row['no_sertifikat']) && trim($row['no_sertifikat']) != '' ? true : false,
+                'is_passed' => true, // Default lulus sesuai perubahan sistem penilaian
             ]);
+
+            // Handle default scoring (Post Test 100% and Threshold 0)
+            ActivityScoreSetting::firstOrCreate(
+                ['activity_id' => $activity->id],
+                ['passing_threshold' => 0]
+            );
+
+            $scoreComponent = ActivityScoreComponent::firstOrCreate(
+                ['activity_id' => $activity->id, 'name' => 'Post Test'],
+                [
+                    'type' => 'post_test',
+                    'percentage' => 100,
+                    'order' => 1,
+                ]
+            );
+
+            // Save Nilai (default to 100 automatically since they are considered passed)
+            $nilai = 100;
+
+            ActivityComponentScore::updateOrCreate(
+                [
+                    'activity_participant_id' => $participant->id,
+                    'activity_score_component_id' => $scoreComponent->id,
+                ],
+                [
+                    'score' => $nilai,
+                ]
+            );
         }
     }
 }

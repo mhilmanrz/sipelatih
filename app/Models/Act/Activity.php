@@ -144,4 +144,14 @@ class Activity extends Model
     {
         return $this->hasMany(ActivityTarget::class)->orderBy('target_number');
     }
+
+    public function scoreSetting()
+    {
+        return $this->hasOne(ActivityScoreSetting::class);
+    }
+
+    public function scoreComponents()
+    {
+        return $this->hasMany(ActivityScoreComponent::class)->orderBy('order');
+    }
 }

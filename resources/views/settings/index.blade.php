@@ -118,6 +118,48 @@
                 </div>
             </div>
 
+            {{-- LOGO KEMENKES --}}
+            <div class="bg-white rounded-xl shadow-sm p-6 lg:col-span-2">
+                <h2 class="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-hospital text-teal-600"></i>
+                    Logo Kemenkes / RSCM (Untuk Form Kegiatan)
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    <div>
+                        {{-- Preview logo kemenkes saat ini --}}
+                        @if($settings->get('kemenkes_logo'))
+                            <div class="mb-3">
+                                <p class="text-xs text-gray-500 mb-2">Logo saat ini</p>
+                                <img src="{{ asset('storage/' . $settings->get('kemenkes_logo')) }}"
+                                    alt="Logo Kemenkes" class="w-full max-h-48 object-contain rounded-lg border border-gray-200 bg-gray-50 p-2">
+                                <a href="{{ route('settings.delete-kemenkes-logo') }}"
+                                    onclick="return confirm('Hapus logo ini?')"
+                                    class="inline-block mt-2 text-xs text-red-500 hover:underline">
+                                    <i class="fa-solid fa-trash mr-1"></i>Hapus Logo
+                                </a>
+                            </div>
+                        @else
+                            <div class="mb-3 flex items-center justify-center h-32 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                <p class="text-xs text-gray-400">Belum ada logo Kemenkes/RSCM</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Upload Logo Baru</label>
+                        <input type="file" name="kemenkes_logo" accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                            class="w-full text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100"
+                            onchange="previewImage(this, 'kemenkes-preview')">
+                        <img id="kemenkes-preview" src="#" alt="Preview" class="hidden mt-3 w-full max-h-48 object-contain rounded-lg border border-gray-200 bg-gray-50 p-2">
+                        @error('kemenkes_logo')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                        <p class="text-xs text-gray-400 mt-2">Format: PNG, JPG, SVG, WebP. Maks 2MB. Logo ini akan ditampilkan pada header Formulir Permintaan Kegiatan.</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="mt-6 flex justify-end">

@@ -2,8 +2,7 @@
     <x-slot:title>Import Peserta</x-slot>
 
     @push('styles')
-        <script src="https://cdn.tailwindcss.com"></script>
-    @endpush
+        @endpush
 
     <div class="p-8">
         <div class="mb-6 flex justify-between items-center">
