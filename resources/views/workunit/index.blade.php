@@ -1,10 +1,8 @@
-@extends('layout.LayoutSuperAdmin')
-
-@section('title', 'Manajemen Unit Kerja')
+<x-layouts.app>
+    <x-slot:title>Manajemen Unit Kerja</x-slot>
 
 @push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+        <style>
         .tw-wrap p,
         .tw-wrap h1,
         .tw-wrap h2,
@@ -27,7 +25,6 @@
     </style>
 @endpush
 
-@section('content')
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white">MANAJEMEN UNIT KERJA</h1>
@@ -104,4 +101,4 @@
             @endif
         </div>
     </div>
-@endsection
+</x-layouts.app>

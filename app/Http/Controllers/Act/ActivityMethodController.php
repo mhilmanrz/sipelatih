@@ -11,9 +11,14 @@ class ActivityMethodController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $activityMethods = ActivityMethod::paginate(10);
+        $query = ActivityMethod::query();
+        if ($request->has('q') && $request->q != '') {
+            $query->where('name', 'like', '%'.$request->q.'%');
+        }
+        $perPage = $request->input('entries', $request->input('per_page', 10));
+        $activityMethods = $query->paginate($perPage)->appends($request->all());
 
         return view('activity_method.index', compact('activityMethods'));
     }

@@ -1,55 +1,54 @@
-@extends('layout.LayoutSuperAdmin')
+<x-layouts.app>
+    <x-slot:title>Tambah Pegawai</x-slot>
 
-@section('title', 'Tambah Pegawai')
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+        <style>
+            .form-group {
+                margin-bottom: 15px;
+            }
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
-    <style>
-        .form-group {
-            margin-bottom: 15px;
-        }
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                color: #007A7F;
+                font-weight: 500;
+            }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #007A7F;
-            font-weight: 500;
-        }
+            .form-group input,
+            .form-group select {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
 
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+            .btn-save {
+                background: #00B8A5;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
 
-        .btn-save {
-            background: #00B8A5;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+            .btn-reset {
+                background: #ccc;
+                color: black;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                text-decoration: none;
+            }
+        </style>
+    @endpush
 
-        .btn-reset {
-            background: #ccc;
-            color: black;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-    </style>
-@endpush
-
-@section('content')
     <h1 style="color:#007A7F; margin-bottom: 20px;">Tambah Pegawai</h1>
 
-    <div style="background:white; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); max-width: 800px;">
+    <div
+        style="background:white; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); max-width: 800px;">
         <form method="POST" action="{{ route('users.store') }}">
             @csrf
 
@@ -122,25 +121,14 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label>Role Sistem <span style="color:red;">*</span></label>
-                <select name="role" required>
-                    <option value="">-- Pilih Role --</option>
-                    @foreach ($roles as $role)
-                        <option value="{{ $role->name }}" {{ old('role') == $role->name ? 'selected' : '' }}>
-                            {{ $role->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
             <div style="margin-top: 30px;">
                 <button type="submit" class="btn-save">💾 Simpan</button>
                 <a href="{{ url('/users') }}" class="btn-reset">BATAL</a>
             </div>
         </form>
     </div>
-@endsection
 
-@push('scripts')
-    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
-@endpush
+    @push('scripts')
+        <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
+    @endpush
+</x-layouts.app>

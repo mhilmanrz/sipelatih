@@ -1,13 +1,11 @@
-@extends('layout.LayoutSuperAdmin')
+<x-layouts.app>
+    <x-slot:title>Manajemen Pegawai</x-slot>
 
-@section('title', 'Manajemen Pegawai')
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/manajemenPegawai.css') }}">
+    @endpush
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/manajemenPegawai.css') }}">
-@endpush
-
-@section('content')
     <div class="page-wrap">
 
         <!-- TOP BAR -->
@@ -108,9 +106,9 @@
             </div>
         </div>
     </div>
-@endsection
 
-@push('scripts')
-    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
-    <script src="{{ asset('assets/js/manajemenPegawai.js') }}"></script>
-@endpush
+    @push('scripts')
+        <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
+        <script src="{{ asset('assets/js/manajemenPegawai.js') }}"></script>
+    @endpush
+</x-layouts.app>

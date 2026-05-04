@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Imports\UsersImport;
+use App\Jobs\ImportUsersJob;
 use App\Models\User\EmploymentType;
 use App\Models\User\Positions;
 use App\Models\User\Profession;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
-use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -20,7 +18,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'roles']);
+        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'roles'])->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
 
         if ($request->has('q') && $request->q != '') {
             $search = $request->q;
@@ -60,9 +58,8 @@ class UserController extends Controller
         $professions = Profession::all();
         $positions = Positions::all();
         $employmentTypes = EmploymentType::all();
-        $roles = Role::all();
 
-        return view('user.tambah', compact('workUnits', 'professions', 'positions', 'employmentTypes', 'roles'));
+        return view('user.tambah', compact('workUnits', 'professions', 'positions', 'employmentTypes'));
     }
 
     /**
@@ -80,19 +77,14 @@ class UserController extends Controller
             'profession_id' => 'nullable|exists:professions,id',
             'position_id' => 'nullable|exists:positions,id',
             'employment_type_id' => 'nullable|exists:employment_types,id',
-            'role' => 'nullable|string|exists:roles,name',
         ]);
 
-        $data = $request->except('role');
+        $data = $request->all();
         $data['password'] = bcrypt($data['password']);
 
         $user = User::create($data);
 
-        if ($request->filled('role')) {
-            $user->assignRole($request->role);
-        }
-
-        return redirect('/users')->with('success', 'User berhasil ditambahkan.');
+        return redirect('/users')->with('success', 'Pegawai berhasil ditambahkan.');
     }
 
     /**
@@ -114,9 +106,8 @@ class UserController extends Controller
         $professions = Profession::all();
         $positions = Positions::all();
         $employmentTypes = EmploymentType::all();
-        $roles = Role::all();
 
-        return view('user.edit', compact('user', 'workUnits', 'professions', 'positions', 'employmentTypes', 'roles'));
+        return view('user.edit', compact('user', 'workUnits', 'professions', 'positions', 'employmentTypes'));
     }
 
     /**
@@ -135,10 +126,9 @@ class UserController extends Controller
             'profession_id' => 'nullable|exists:professions,id',
             'position_id' => 'nullable|exists:positions,id',
             'employment_type_id' => 'nullable|exists:employment_types,id',
-            'role' => 'nullable|string|exists:roles,name',
         ]);
 
-        $data = $request->except('role');
+        $data = $request->all();
         if ($request->filled('password')) {
             $data['password'] = bcrypt($data['password']);
         } else {
@@ -147,11 +137,7 @@ class UserController extends Controller
 
         $user->update($data);
 
-        if ($request->filled('role')) {
-            $user->syncRoles([$request->role]);
-        }
-
-        return redirect('/users')->with('success', 'User berhasil diperbarui.');
+        return redirect('/users')->with('success', 'Pegawai berhasil diperbarui.');
     }
 
     /**
@@ -162,7 +148,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect('/users')->with('success', 'User berhasil dihapus.');
+        return redirect('/users')->with('success', 'Pegawai berhasil dihapus.');
     }
 
     /**
@@ -187,9 +173,14 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            Excel::import(new UsersImport, $request->file('file'));
+            try {
+                $path = $request->file('file')->store('imports', 'local');
+                ImportUsersJob::dispatch($path);
 
-            return redirect('/users')->with('success', 'File berhasil diunggah. Proses import sedang berjalan di latar belakang.');
+                return redirect('/users')->with('success', 'File berhasil diunggah. Proses import sedang berjalan di antrean (background). Harap periksa beberapa saat lagi.');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Terjadi kesalahan saat upload untuk import: '.$e->getMessage());
+            }
         }
 
         return redirect()->back()->with('error', 'Gagal mengunggah file.');

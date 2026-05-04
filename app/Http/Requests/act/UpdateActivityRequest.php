@@ -16,6 +16,22 @@ class UpdateActivityRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation()
+    {
+        if ($this->fund_source_id && !is_numeric($this->fund_source_id)) {
+            $fundSource = \App\Models\Act\FundSource::firstOrCreate([
+                'name' => $this->fund_source_id
+            ]);
+            
+            $this->merge([
+                'fund_source_id' => $fundSource->id
+            ]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, ValidationRule|array<mixed>|string>

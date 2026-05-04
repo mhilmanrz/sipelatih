@@ -10,9 +10,14 @@ class ProfessionCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = ProfessionCategory::paginate(10);
+        $query = ProfessionCategory::query();
+        if ($request->has('q') && $request->q != '') {
+            $query->where('name', 'like', '%'.$request->q.'%');
+        }
+        $perPage = $request->input('entries', $request->input('per_page', 10));
+        $categories = $query->paginate($perPage)->appends($request->all());
 
         return view('profession-category.index', compact('categories'));
     }

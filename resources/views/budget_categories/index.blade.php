@@ -1,33 +1,30 @@
-@extends('layout.LayoutSuperAdmin')
+<x-layouts.app>
+    <x-slot:title>Manajemen Kategori Pagu</x-slot>
 
-@section('title', 'Manajemen Kategori Pagu')
+    @push('styles')
+        <style>
+            .tw-wrap p,
+            .tw-wrap h1,
+            .tw-wrap h2,
+            .tw-wrap h3,
+            .tw-wrap h4,
+            .tw-wrap h5,
+            .tw-wrap h6,
+            .tw-wrap span,
+            .tw-wrap div,
+            .tw-wrap a,
+            .tw-wrap button,
+            .tw-wrap table,
+            .tw-wrap th,
+            .tw-wrap td,
+            .tw-wrap tr,
+            .tw-wrap thead,
+            .tw-wrap tbody {
+                font-family: inherit;
+            }
+        </style>
+    @endpush
 
-@push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .tw-wrap p,
-        .tw-wrap h1,
-        .tw-wrap h2,
-        .tw-wrap h3,
-        .tw-wrap h4,
-        .tw-wrap h5,
-        .tw-wrap h6,
-        .tw-wrap span,
-        .tw-wrap div,
-        .tw-wrap a,
-        .tw-wrap button,
-        .tw-wrap table,
-        .tw-wrap th,
-        .tw-wrap td,
-        .tw-wrap tr,
-        .tw-wrap thead,
-        .tw-wrap tbody {
-            font-family: inherit;
-        }
-    </style>
-@endpush
-
-@section('content')
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white">MANAJEMEN KATEGORI PAGU</h1>
@@ -104,4 +101,4 @@
             @endif
         </div>
     </div>
-@endsection
+</x-layouts.app>

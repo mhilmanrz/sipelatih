@@ -1,13 +1,9 @@
-@extends('layout.LayoutSuperAdmin')
-
+<x-layouts.app>
 @section('title', 'Tambah Data Kegiatan')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
 @endpush
-
-@section('content')
     <div class="content input-page">
         <h3 class="title">Data Kegiatan</h3>
 
@@ -116,9 +112,7 @@
 
         </div>
     </div>
-@endsection
-
 @push('scripts')
-    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
     <script src="{{ asset('assets/js/tambahdata.js') }}"></script>
 @endpush
+</x-layouts.app>

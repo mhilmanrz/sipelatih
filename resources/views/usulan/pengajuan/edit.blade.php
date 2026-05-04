@@ -1,13 +1,10 @@
-@extends('layout.LayoutSuperAdmin')
-
+<x-layouts.app>
 @section('title', 'Edit Data Kegiatan')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/tambahdata.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
 @endpush
-
-@section('content')
     <div class="input-page" style="padding: 15px;">
         <h3 class="title">Edit Data Kegiatan</h3>
 
@@ -257,37 +254,37 @@
             </div>
         </form>
     </div>
-@endsection
-
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const select = document.getElementById('activity_name_select');
-        const startDateInput = document.getElementById('act_start_date');
-        const endDateInput = document.getElementById('act_end_date');
-
-        if (select && startDateInput && endDateInput) {
-            select.addEventListener('change', function() {
-                const selectedOption = select.options[select.selectedIndex];
-                const start = selectedOption.getAttribute('data-start');
-                const end = selectedOption.getAttribute('data-end');
-
-                if (start) {
-                    startDateInput.value = start;
-                }
-                if (end) {
-                    endDateInput.value = end;
-                }
-            });
-        }
-    });
-</script>
-@endpush
-
-@push('scripts')
-    <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
     <script src="{{ asset('assets/js/tambahdata.js') }}"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new TomSelect('select[name="fund_source_id"]', {
+                create: true,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                }
+            });
+
+            const select = document.getElementById('activity_name_select');
+            const startDateInput = document.getElementById('act_start_date');
+            const endDateInput = document.getElementById('act_end_date');
+
+            if (select && startDateInput && endDateInput) {
+                select.addEventListener('change', function() {
+                    const selectedOption = select.options[select.selectedIndex];
+                    const start = selectedOption.getAttribute('data-start');
+                    const end = selectedOption.getAttribute('data-end');
+
+                    if (start) startDateInput.value = start;
+                    if (end) endDateInput.value = end;
+                });
+            }
+
+            updateWaPic(document.getElementById('pic_user_id'));
+        });
+
         function updateWaPic(selectElement) {
             const selectedOption = selectElement.options[selectElement.selectedIndex];
             const phoneNumber = selectedOption.getAttribute('data-phone');
@@ -301,10 +298,6 @@
                 waInput.value = "";
             }
         }
-
-        // Run on load to pre-fill the WA PIC based on the initially selected Kegiatan PIC
-        document.addEventListener('DOMContentLoaded', function() {
-            updateWaPic(document.getElementById('pic_user_id'));
-        });
     </script>
 @endpush
+</x-layouts.app>

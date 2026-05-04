@@ -11,9 +11,14 @@ class EmploymentTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $employmentTypes = EmploymentType::paginate(10);
+        $query = EmploymentType::query();
+        if ($request->has('q') && $request->q != '') {
+            $query->where('name', 'like', '%'.$request->q.'%');
+        }
+        $perPage = $request->input('entries', $request->input('per_page', 10));
+        $employmentTypes = $query->paginate($perPage)->appends($request->all());
 
         return view('employment_type.index', compact('employmentTypes'));
     }

@@ -11,9 +11,14 @@ class TargetParticipantController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $targetParticipants = TargetParticipant::paginate(10);
+        $query = TargetParticipant::query();
+        if ($request->has('q') && $request->q != '') {
+            $query->where('name', 'like', '%'.$request->q.'%');
+        }
+        $perPage = $request->input('entries', $request->input('per_page', 10));
+        $targetParticipants = $query->paginate($perPage)->appends($request->all());
 
         return response()->json($targetParticipants);
     }

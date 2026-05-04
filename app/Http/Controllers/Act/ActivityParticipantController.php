@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Act;
 
 use App\Exports\ParticipantTemplateExport;
 use App\Http\Controllers\Controller;
-use App\Imports\ParticipantImport;
+use App\Jobs\ImportParticipantJob;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityParticipant;
 use App\Models\User\User;
@@ -24,7 +24,7 @@ class ActivityParticipantController extends Controller
         $existingUserIds = ActivityParticipant::where('activity_id', $kegiatanId)->pluck('user_id')->toArray();
 
         // Query pengguna yang BUKAN peserta
-        $query = User::whereNotIn('id', $existingUserIds);
+        $query = User::whereNotIn('id', $existingUserIds)->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
 
         if (! empty($search)) {
             $query->where(function ($q) use ($search) {
@@ -136,12 +136,13 @@ class ActivityParticipantController extends Controller
         $activity = Activity::findOrFail($kegiatanId);
 
         try {
-            Excel::import(new ParticipantImport($activity->id), $request->file('file'));
+            $path = $request->file('file')->store('imports', 'local');
+            ImportParticipantJob::dispatch($path, $activity->id);
 
             return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'peserta'])
-                ->with('success', 'Import peserta berhasil. Data NIP tidak terdaftar telah diabaikan.');
+                ->with('success', 'Data peserta sedang diimpor di antrean (background). Harap periksa beberapa saat lagi.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan saat meng-import data: '.$e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat upload untuk impor: '.$e->getMessage());
         }
     }
 

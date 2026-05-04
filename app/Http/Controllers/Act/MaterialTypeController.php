@@ -11,9 +11,14 @@ class MaterialTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $materialTypes = MaterialType::paginate(10);
+        $query = MaterialType::query();
+        if ($request->has('q') && $request->q != '') {
+            $query->where('name', 'like', '%'.$request->q.'%');
+        }
+        $perPage = $request->input('entries', $request->input('per_page', 10));
+        $materialTypes = $query->paginate($perPage)->appends($request->all());
 
         return view('material_type.index', compact('materialTypes'));
     }

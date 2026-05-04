@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ActivityPerParticipantTemplateExport;
 use App\Exports\ActivityTemplateExport;
-use App\Imports\ActivityImport;
+use App\Jobs\ImportActivityJob;
 use App\Jobs\ImportActivityParticipantJob;
 use App\Models\Act\Activity;
 use Illuminate\Http\Request;
@@ -23,10 +23,10 @@ class UsulanDiklatController extends Controller
 
         if ($search) {
             $query->whereHas('activityName', function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%');
+                $q->where('name', 'like', '%'.$search.'%');
             })
                 ->orWhereHas('workUnit', function ($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%');
+                    $q->where('name', 'like', '%'.$search.'%');
                 });
         }
 
@@ -65,11 +65,12 @@ class UsulanDiklatController extends Controller
         ]);
 
         try {
-            Excel::import(new ActivityImport, $request->file('file'));
+            $path = $request->file('file')->store('imports', 'local');
+            ImportActivityJob::dispatch($path);
 
-            return redirect()->route('usulan-diklat')->with('success', 'Data kegiatan berhasil diimport');
+            return redirect()->route('usulan-diklat')->with('success', 'Data kegiatan sedang diimport di antrean (background). Harap periksa beberapa saat lagi.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat import: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat upload untuk import: '.$e->getMessage());
         }
     }
 
@@ -95,7 +96,7 @@ class UsulanDiklatController extends Controller
 
             return redirect()->route('usulan-diklat')->with('success', 'Data kegiatan per peserta sedang diimport di antrean (background). Harap periksa beberapa saat lagi.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat upload untuk import: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat upload untuk import: '.$e->getMessage());
         }
     }
 

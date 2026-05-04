@@ -9,12 +9,7 @@
     align-items:center;
     margin-bottom:15px;
 }
-/* CONTENT */
-.content{
-    padding:90px 25px 25px;
-    background:#14b8c4;
-    min-height:100vh;
-}
+/* CONTENT — removed global .content override to avoid conflicting with layout */
 
 h2{color:white;margin-bottom:15px}
 
@@ -68,23 +63,10 @@ h2{color:white;margin-bottom:15px}
 }
 
 
-table{
+/* Scoped to #monitorTable only — avoid global table rules leaking */
+#monitorTable{
     width:100%;
     border-collapse:collapse;
-}
-
-thead{
-    background:#0fa5a5;
-    color:white;
-}
-
-th,td{
-    padding:10px;
-    border-bottom:1px solid #ddd;
-}
-
-tbody tr:nth-child(odd){
-    background:#e9fbff;
 }
 .btn-add{
     background:#d6de20;

@@ -1,10 +1,8 @@
-@extends('layout.LayoutSuperAdmin')
-
-@section('title', 'Manajemen Role')
+<x-layouts.app>
+    <x-slot:title>Manajemen Role</x-slot>
 
 @push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+        <style>
         .tw-wrap p,
         .tw-wrap h1,
         .tw-wrap h2,
@@ -27,7 +25,6 @@
     </style>
 @endpush
 
-@section('content')
     <div class="tw-wrap p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white">MANAJEMEN ROLE</h1>
@@ -45,7 +42,7 @@
 
         <div class="bg-white rounded-lg shadow overflow-hidden">
             <form method="GET" action="{{ route('roles.index') }}" class="p-4 border-b border-gray-200 flex gap-4">
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari Nama Role..." 
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari Nama Role..."
                     class="border border-gray-300 rounded-md px-4 py-2 w-full max-w-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
                 <button type="submit" class="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700">Cari</button>
                 <a href="{{ route('roles.index') }}" class="bg-gray-100 border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-200">Reset</a>
@@ -110,4 +107,4 @@
             @endif
         </div>
     </div>
-@endsection
+</x-layouts.app>

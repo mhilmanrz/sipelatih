@@ -37,4 +37,33 @@ class ActivityParticipant extends Model
     {
         return $this->hasOne(ActivityScore::class);
     }
+
+    public function componentScores()
+    {
+        return $this->hasMany(ActivityComponentScore::class);
+    }
+
+    /**
+     * Hitung nilai akhir berdasarkan komponen berpersentase (non pre-test).
+     * Mengembalikan null jika belum ada komponen yang dikonfigurasi.
+     */
+    public function calculateFinalScore(): ?float
+    {
+        $components = $this->activity->scoreComponents ?? collect();
+        $graded = $components->filter(fn ($c) => $c->type !== 'pre_test');
+
+        if ($graded->isEmpty()) {
+            return null;
+        }
+
+        $total = 0;
+        foreach ($graded as $component) {
+            $componentScore = $this->componentScores
+                ->firstWhere('activity_score_component_id', $component->id);
+            $score = $componentScore?->score ?? 0;
+            $total += ($score * $component->percentage) / 100;
+        }
+
+        return round($total, 2);
+    }
 }

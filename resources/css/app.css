@@ -13,3 +13,22 @@
 /* body {
     background-color: #115293;
 } */
+
+@layer base {
+    table {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        border: 5px solid #007A7F !important;
+        border-radius: 20px !important;
+        overflow: hidden !important;
+    }
+    
+    table thead, table thead tr, table thead th {
+        background-color: #007A7F !important;
+        color: #FFFFFF !important;
+    }
+    
+    table tbody, table tbody tr, table tbody td {
+        background-color: #FFFFFF !important;
+    }
+}

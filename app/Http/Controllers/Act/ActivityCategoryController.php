@@ -11,9 +11,14 @@ class ActivityCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $activityCategories = ActivityCategory::paginate(10);
+        $query = ActivityCategory::query();
+        if ($request->has('q') && $request->q != '') {
+            $query->where('name', 'like', '%'.$request->q.'%');
+        }
+        $perPage = $request->input('entries', $request->input('per_page', 10));
+        $activityCategories = $query->paginate($perPage)->appends($request->all());
 
         return view('activity_category.index', compact('activityCategories'));
     }

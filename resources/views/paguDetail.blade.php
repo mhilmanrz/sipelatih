@@ -1,39 +1,36 @@
-@extends('layout.LayoutSuperAdmin')
+<x-layouts.app>
+    <x-slot:title>Detail Pagu Anggaran</x-slot>
 
-@section('title', 'Detail Pagu Anggaran')
+    @push('styles')
+        <style>
+            .tw-wrap p,
+            .tw-wrap h1,
+            .tw-wrap h2,
+            .tw-wrap h3,
+            .tw-wrap h4,
+            .tw-wrap h5,
+            .tw-wrap h6,
+            .tw-wrap span,
+            .tw-wrap div,
+            .tw-wrap a,
+            .tw-wrap button,
+            .tw-wrap table,
+            .tw-wrap th,
+            .tw-wrap td,
+            .tw-wrap tr,
+            .tw-wrap thead,
+            .tw-wrap tbody,
+            .tw-wrap form,
+            .tw-wrap input,
+            .tw-wrap label,
+            .tw-wrap select {
+                font-family: inherit;
+            }
+        </style>
+    @endpush
 
-@push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .tw-wrap p,
-        .tw-wrap h1,
-        .tw-wrap h2,
-        .tw-wrap h3,
-        .tw-wrap h4,
-        .tw-wrap h5,
-        .tw-wrap h6,
-        .tw-wrap span,
-        .tw-wrap div,
-        .tw-wrap a,
-        .tw-wrap button,
-        .tw-wrap table,
-        .tw-wrap th,
-        .tw-wrap td,
-        .tw-wrap tr,
-        .tw-wrap thead,
-        .tw-wrap tbody,
-        .tw-wrap form,
-        .tw-wrap input,
-        .tw-wrap label,
-        .tw-wrap select {
-            font-family: inherit;
-        }
-    </style>
-@endpush
-
-@section('content')
     <div class="tw-wrap p-6 mt-4">
-        
+
         <!-- HEADER / NAVIGATION -->
         <div class="flex items-center justify-between mb-6">
             <x-page-title>Detail Pagu Anggaran</x-page-title>
@@ -76,45 +73,45 @@
 
         <!-- ACTIVITIES TABLE -->
         <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Daftar Kegiatan Menggunakan Pagu Ini</h2>
-        
+
         <div class="bg-white rounded-lg shadow overflow-hidden">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-100">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-16">No.</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Nama Kegiatan</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Tanggal</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Unit Pengusul</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">PIC</th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">Penggunaan Anggaran</th>
+                        <th scope="col" class="text-center font-bold w-16 border border-white py-3 px-4 font-semibold">No.</th>
+                        <th scope="col" class="text-left font-bold border border-white py-3 px-4 font-semibold">Nama Kegiatan</th>
+                        <th scope="col" class="text-left font-bold border border-white py-3 px-4 font-semibold">Tanggal</th>
+                        <th scope="col" class="text-left font-bold border border-white py-3 px-4 font-semibold">Unit Pengusul</th>
+                        <th scope="col" class="text-left font-bold border border-white py-3 px-4 font-semibold">PIC</th>
+                        <th scope="col" class="text-right font-bold border border-white py-3 px-4 font-semibold">Penggunaan Anggaran</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($pagu->activities as $index => $activity)
                         <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
+                            <td class="whitespace-nowrap text-sm text-center text-gray-500 border border-gray-200 py-3 px-4">
                                 {{ $index + 1 }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td class="whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ $activity->activityName->name ?? ($activity->name ?? 'N/A') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td class="whitespace-nowrap text-sm text-gray-600 border border-gray-200 py-3 px-4">
                                 {{ \Carbon\Carbon::parse($activity->start_date)->format('d M Y') }} s.d.<br>
                                 {{ \Carbon\Carbon::parse($activity->end_date)->format('d M Y') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td class="whitespace-nowrap text-sm text-gray-600 border border-gray-200 py-3 px-4">
                                 {{ $activity->workUnit->name ?? '-' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td class="whitespace-nowrap text-sm text-gray-600 border border-gray-200 py-3 px-4">
                                 {{ $activity->picUser->name ?? '-' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-right text-orange-600">
+                            <td class="whitespace-nowrap text-sm font-bold text-right text-orange-600 border border-gray-200 py-3 px-4">
                                 Rp {{ number_format($activity->budget_amount, 0, ',', '.') }}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-10 text-center text-gray-500 text-sm">
+                            <td colspan="6" class="text-center text-gray-500 text-sm border border-gray-200 py-3 px-4">
                                 Belum ada kegiatan yang menggunakan pagu ini.
                             </td>
                         </tr>
@@ -123,10 +120,10 @@
                 @if($pagu->activities->count() > 0)
                 <tfoot class="bg-gray-50 border-t-2 border-gray-300">
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-right text-sm font-bold text-gray-700 uppercase">
+                        <td colspan="5" class="text-right text-sm font-bold text-gray-700 uppercase border border-gray-200 py-3 px-4">
                             Total Penggunaan
                         </td>
-                        <td class="px-6 py-4 text-right text-sm font-bold text-orange-700">
+                        <td class="text-right text-sm font-bold text-orange-700 border border-gray-200 py-3 px-4">
                             Rp {{ number_format($pagu->activities->sum('budget_amount'), 0, ',', '.') }}
                         </td>
                     </tr>
@@ -136,4 +133,4 @@
         </div>
 
     </div>
-@endsection
+</x-layouts.app>

@@ -2,10 +2,13 @@
 
 namespace App\Imports;
 
+use App\Models\Act\Activity;
+use App\Models\Act\ActivityComponentScore;
 use App\Models\Act\ActivityParticipant;
-use App\Models\Act\ActivityScore;
+use App\Models\Act\ActivityScoreComponent;
 use App\Models\User\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -20,6 +23,14 @@ class ActivityScoreImport implements ToCollection, WithHeadingRow
 
     public function collection(Collection $rows)
     {
+        $activity = Activity::with('scoreSetting')->find($this->activityId);
+        if (! $activity) {
+            return;
+        }
+
+        $threshold = $activity->scoreSetting?->passing_threshold ?? 70;
+        $components = ActivityScoreComponent::where('activity_id', $this->activityId)->get();
+
         foreach ($rows as $row) {
             if (! isset($row['nip'])) {
                 continue;
@@ -42,29 +53,32 @@ class ActivityScoreImport implements ToCollection, WithHeadingRow
                 continue; // Skip if they are not participants of this activity
             }
 
-            // Extract is_passed
-            $isPassedStr = isset($row['lulus_yatidak']) ? strtolower(trim($row['lulus_yatidak'])) : '';
-            $isPassed = ($isPassedStr === 'ya' || $isPassedStr === 'y' || $isPassedStr === 'true' || $isPassedStr === '1');
+            // Save component scores
+            foreach ($components as $component) {
+                $headerKey = Str::slug($component->name, '_');
 
-            // Update participant passed status
+                if (isset($row[$headerKey]) && $row[$headerKey] !== '') {
+                    $scoreValue = (float) $row[$headerKey];
+
+                    ActivityComponentScore::updateOrCreate(
+                        [
+                            'activity_participant_id' => $participant->id,
+                            'activity_score_component_id' => $component->id,
+                        ],
+                        [
+                            'score' => $scoreValue,
+                        ]
+                    );
+                }
+            }
+
+            // Recalculate final score and update is_passed
+            $participant->load('componentScores');
+            $finalScore = $participant->calculateFinalScore();
+
             $participant->update([
-                'is_passed' => $isPassed,
+                'is_passed' => $finalScore !== null && $finalScore >= $threshold,
             ]);
-
-            // Safely parse scores or null
-            $preTest = isset($row['pre_test']) && $row['pre_test'] !== '' ? (int) $row['pre_test'] : null;
-            $postTest = isset($row['post_test']) && $row['post_test'] !== '' ? (int) $row['post_test'] : null;
-            $praktik = isset($row['praktik']) && $row['praktik'] !== '' ? (int) $row['praktik'] : null;
-
-            // Update or Create score
-            ActivityScore::updateOrCreate(
-                ['activity_participant_id' => $participant->id],
-                [
-                    'pre_test_score' => $preTest,
-                    'post_test_score' => $postTest,
-                    'practice_score' => $praktik,
-                ]
-            );
         }
     }
 }

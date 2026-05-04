@@ -48,38 +48,38 @@
         <!-- TABLE -->
         <div class="overflow-x-auto">
             <table class="w-full text-sm border-collapse border border-gray-200">
-                <thead class="bg-gray-100">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700 w-16">NO.</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">NIP/NPS</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Nama Peserta</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Unit Kerja</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Sertifikat</th>
-                        <th class="border border-gray-300 px-4 py-2 text-center text-gray-700">Aksi</th>
+                        <th class="-300 text-center w-16 border border-white py-3 px-4 font-semibold">NO.</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">NIP/NPS</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Nama Peserta</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Unit Kerja</th>
+                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Sertifikat</th>
+                        <th class="-300 text-center border border-white py-3 px-4 font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
                     @forelse ($kegiatan->activityParticipants as $index => $participant)
                         <tr>
-                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $index + 1 }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->nip ?? '-' }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->name ?? '-' }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $participant->user->workUnit->name ?? '-' }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $participant->certificate_number ?? '-' }}</td>
-                            <td class="border border-gray-300 px-4 py-2 text-center">
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $participant->user->nip ?? '-' }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $participant->user->name ?? '-' }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $participant->user->workUnit->name ?? '-' }}</td>
+                            <td class="-300 border border-gray-200 py-3 px-4">{{ $participant->certificate_number ?? '-' }}</td>
+                            <td class="-300 text-center border border-gray-200 py-3 px-4">
                                 <div style="display: flex; justify-content: center; gap: 0.5rem;">
                                     <button type="button" onclick="openModalSertifikat('{{ route('kegiatan.peserta.update_certificate', ['kegiatan' => $kegiatan->id, 'id' => $participant->id]) }}', '{{ $participant->certificate_number }}')" class="hover:bg-blue-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #3b82f6; color: white; border: none; cursor: pointer;">EDIT</button>
                                     <form action="{{ route('kegiatan.peserta.destroy', ['kegiatan' => $kegiatan->id, 'id' => $participant->id]) }}" method="POST" onsubmit="return confirm('Hapus peserta ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors" style="background-color: #ef4444; color: white; border: none; cursor: pointer;">HAPUS</button>
+                                        <button type="submit"   style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">Hapus</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="border border-gray-300 px-4 py-4 text-center text-gray-500">Belum ada peserta yang didaftarkan.</td>
+                            <td colspan="5" class="-300 text-center text-gray-500 border border-gray-200 py-3 px-4">Belum ada peserta yang didaftarkan.</td>
                         </tr>
                     @endforelse
                 </tbody>

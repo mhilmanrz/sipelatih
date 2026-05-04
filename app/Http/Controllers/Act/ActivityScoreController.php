@@ -6,8 +6,8 @@ use App\Exports\ActivityScoreTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Jobs\ImportActivityScoreJob;
 use App\Models\Act\Activity;
+use App\Models\Act\ActivityComponentScore;
 use App\Models\Act\ActivityParticipant;
-use App\Models\Act\ActivityScore;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -15,35 +15,49 @@ class ActivityScoreController extends Controller
 {
     public function update(Request $request, $kegiatan_id, $participant_id)
     {
-        $request->validate([
-            'pre_test_score' => 'nullable|integer|min:0|max:100',
-            'post_test_score' => 'nullable|integer|min:0|max:100',
-            'practice_score' => 'nullable|integer|min:0|max:100',
-            'is_passed' => 'required|boolean',
-        ]);
+        $kegiatan = Activity::with('scoreComponents', 'scoreSetting')->findOrFail($kegiatan_id);
+        $participant = ActivityParticipant::where('activity_id', $kegiatan_id)->findOrFail($participant_id);
 
-        $participant = ActivityParticipant::where('activity_id', $kegiatan_id)
-            ->findOrFail($participant_id);
+        $components = $kegiatan->scoreComponents;
+
+        if ($components->isEmpty()) {
+            return back()->withErrors(['score' => 'Pengaturan komponen penilaian belum dikonfigurasi.']);
+        }
+
+        // Validasi dinamis per komponen
+        $rules = [];
+        foreach ($components as $component) {
+            $rules["score_{$component->id}"] = 'nullable|numeric|min:0|max:100';
+        }
+        $validated = $request->validate($rules);
+
+        // Simpan nilai per komponen
+        foreach ($components as $component) {
+            $scoreValue = $validated["score_{$component->id}"] ?? null;
+            ActivityComponentScore::updateOrCreate(
+                [
+                    'activity_participant_id' => $participant->id,
+                    'activity_score_component_id' => $component->id,
+                ],
+                ['score' => $scoreValue]
+            );
+        }
+
+        // Hitung nilai akhir dan update is_passed
+        $participant->load('componentScores');
+        $finalScore = $participant->calculateFinalScore();
+        $threshold = $kegiatan->scoreSetting?->passing_threshold ?? 70;
 
         $participant->update([
-            'is_passed' => $request->is_passed,
+            'is_passed' => $finalScore !== null && $finalScore >= $threshold,
         ]);
-
-        ActivityScore::updateOrCreate(
-            ['activity_participant_id' => $participant->id],
-            [
-                'pre_test_score' => $request->pre_test_score,
-                'post_test_score' => $request->post_test_score,
-                'practice_score' => $request->practice_score,
-            ]
-        );
 
         return back()->with('success', 'Nilai peserta berhasil diperbarui.');
     }
 
     public function downloadTemplate($kegiatan_id)
     {
-        return Excel::download(new ActivityScoreTemplateExport, 'Template_Import_Nilai.xlsx');
+        return Excel::download(new ActivityScoreTemplateExport($kegiatan_id), 'Template_Import_Nilai.xlsx');
     }
 
     public function importPage($kegiatan_id)

@@ -14,18 +14,20 @@ class MonitoringJplController extends Controller
         $searchNama = $request->input('nama');
         $year = $request->input('year', date('Y'));
 
-        $usersQuery = User::with(['workUnit', 'profession.category', 'activityParticipants' => function ($q) use ($year) {
-            $q->where('is_passed', true)
-                ->whereHas('activity', function ($qa) use ($year) {
-                    $qa->whereYear('end_date', $year)
-                        ->orWhereYear('start_date', $year);
-                })
-                ->with('activity.activityMaterials');
-        }])->when($searchNip, function ($q, $nip) {
-            $q->where('employee_id', 'like', '%' . $nip . '%');
-        })->when($searchNama, function ($q, $nama) {
-            $q->where('name', 'like', '%' . $nama . '%');
-        });
+        $usersQuery = User::doesntHave('roles')
+            ->where('email', '!=', 'admin@mail.com')
+            ->with(['workUnit', 'profession.category', 'activityParticipants' => function ($q) use ($year) {
+                $q->where('is_passed', true)
+                    ->whereHas('activity', function ($qa) use ($year) {
+                        $qa->whereYear('end_date', $year)
+                            ->orWhereYear('start_date', $year);
+                    })
+                    ->with('activity.activityMaterials');
+            }])->when($searchNip, function ($q, $nip) {
+                $q->where('employee_id', 'like', '%'.$nip.'%');
+            })->when($searchNama, function ($q, $nama) {
+                $q->where('name', 'like', '%'.$nama.'%');
+            });
 
         // Get users and format them
         $users = $usersQuery->get()->map(function ($user) {
@@ -57,17 +59,18 @@ class MonitoringJplController extends Controller
                     ->orWhereYear('start_date', $year);
             })
             ->whereHas('user', function ($q) use ($searchNip, $searchNama) {
+                $q->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
                 if ($searchNip) {
-                    $q->where('employee_id', 'like', '%' . $searchNip . '%');
+                    $q->where('employee_id', 'like', '%'.$searchNip.'%');
                 }
                 if ($searchNama) {
-                    $q->where('name', 'like', '%' . $searchNama . '%');
+                    $q->where('name', 'like', '%'.$searchNama.'%');
                 }
             });
 
         $detailedActivities = $detailedQuery->get()
             ->unique(function ($participant) {
-                return $participant->user_id . '-' . $participant->activity_id;
+                return $participant->user_id.'-'.$participant->activity_id;
             })
             ->map(function ($participant) {
                 $participant->capaian_jpl = $participant->activity ? $participant->activity->activityMaterials->sum('value') : 0;
@@ -76,22 +79,40 @@ class MonitoringJplController extends Controller
                 return $participant;
             });
 
-        // CHART DATA: Sort by capaian descending, top 10
-        $topUsers = $users->sortByDesc('capaian_jpl')->take(10)->values();
-        $chartLabels = $topUsers->pluck('name');
-        $chartData = $topUsers->pluck('capaian_jpl');
+        // CHART DATA: JPL per kategori profesi
+        $jplPerCategory = ActivityParticipant::with([
+            'user.profession.category',
+            'activity.activityMaterials',
+        ])->where('is_passed', true)
+            ->whereHas('activity', function ($qa) use ($year) {
+                $qa->whereYear('end_date', $year)
+                    ->orWhereYear('start_date', $year);
+            })
+            ->whereHas('user', function ($q) {
+                $q->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
+            })
+            ->get()
+            ->groupBy(fn ($p) => $p->user?->profession?->category?->name ?? 'Tidak Berkategori')
+            ->map(fn ($group) => round(
+                $group->sum(fn ($p) => $p->activity?->activityMaterials?->sum('value') ?? 0) / 45,
+                2
+            ))
+            ->sortKeys();
 
-        // INDIKATOR KINERJA — semua pegawai kecuali SuperAdmin, difilter per tahun
-        $allUsers = User::whereDoesntHave('roles', function ($q) {
-            $q->where('name', 'SuperAdmin');
-        })->with(['profession.category', 'activityParticipants' => function ($q) use ($year) {
-            $q->where('is_passed', true)
-                ->whereHas('activity', function ($qa) use ($year) {
-                    $qa->whereYear('end_date', $year)
-                        ->orWhereYear('start_date', $year);
-                })
-                ->with('activity.activityMaterials');
-        }])->get();
+        $chartLabels = $jplPerCategory->keys();
+        $chartData = $jplPerCategory->values();
+
+        // INDIKATOR KINERJA — semua pegawai
+        $allUsers = User::doesntHave('roles')
+            ->where('email', '!=', 'admin@mail.com')
+            ->with(['profession.category', 'activityParticipants' => function ($q) use ($year) {
+                $q->where('is_passed', true)
+                    ->whereHas('activity', function ($qa) use ($year) {
+                        $qa->whereYear('end_date', $year)
+                            ->orWhereYear('start_date', $year);
+                    })
+                    ->with('activity.activityMaterials');
+            }])->get();
 
         $numerator1 = 0; // Capaian >= 40 for target == 40
         $denominator1 = 0; // Target == 40

@@ -1,10 +1,8 @@
-@extends('layout.LayoutSuperAdmin')
-
-@section('title', 'Edit Unit Kerja')
+<x-layouts.app>
+    <x-slot:title>Edit Unit Kerja</x-slot>
 
 @push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+        <style>
         .tw-wrap p,
         .tw-wrap h1,
         .tw-wrap h2,
@@ -23,7 +21,6 @@
     </style>
 @endpush
 
-@section('content')
     <div class="tw-wrap p-6 max-w-2xl mx-auto">
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Edit Data Unit Kerja</h1>
@@ -70,4 +67,4 @@
             </form>
         </div>
     </div>
-@endsection
+</x-layouts.app>

@@ -1,45 +1,41 @@
-@extends('layout.LayoutSuperAdmin')
+<x-layouts.app>
+    <x-slot:title>Manajemen Pagu Anggaran</x-slot:title>
 
-@section('title', 'Manajemen Pagu Anggaran')
+    @push('styles')        <style>
+            .tw-wrap p,
+            .tw-wrap h1,
+            .tw-wrap h2,
+            .tw-wrap h3,
+            .tw-wrap h4,
+            .tw-wrap h5,
+            .tw-wrap h6,
+            .tw-wrap span,
+            .tw-wrap div,
+            .tw-wrap a,
+            .tw-wrap button,
+            .tw-wrap table,
+            .tw-wrap th,
+            .tw-wrap td,
+            .tw-wrap tr,
+            .tw-wrap thead,
+            .tw-wrap tbody,
+            .tw-wrap form,
+            .tw-wrap input,
+            .tw-wrap label,
+            .tw-wrap select {
+                font-family: inherit;
+            }
+        </style>
+    @endpush
 
-@push('styles')
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .tw-wrap p,
-        .tw-wrap h1,
-        .tw-wrap h2,
-        .tw-wrap h3,
-        .tw-wrap h4,
-        .tw-wrap h5,
-        .tw-wrap h6,
-        .tw-wrap span,
-        .tw-wrap div,
-        .tw-wrap a,
-        .tw-wrap button,
-        .tw-wrap table,
-        .tw-wrap th,
-        .tw-wrap td,
-        .tw-wrap tr,
-        .tw-wrap thead,
-        .tw-wrap tbody,
-        .tw-wrap form,
-        .tw-wrap input,
-        .tw-wrap label,
-        .tw-wrap select {
-            font-family: inherit;
-        }
-    </style>
-@endpush
-
-@section('content')
     <div class="tw-wrap p-6">
         <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
             <x-page-title>Manajemen Pagu Anggaran</x-page-title>
-            
+
             <div class="flex items-center gap-4">
                 <form action="{{ route('pagu.index') }}" method="GET" class="flex items-center gap-2">
                     <label for="filterYear" class="text-sm font-medium text-gray-700">Filter Tahun:</label>
-                    <select name="year" id="filterYear" onchange="this.form.submit()" 
+                    <select name="year" id="filterYear" onchange="this.form.submit()"
                             class="border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-teal-500 focus:border-teal-500 shadow-sm w-36">
                         <option value="">-- Semua --</option>
                         @foreach($availableYears as $y)
@@ -104,16 +100,16 @@
 
         <div class="bg-white rounded-lg shadow overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200" style="min-width:700px;">
-                <thead class="bg-teal-600">
+                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-16">No.</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">No. RKAKL</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Tahun</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kategori Pagu</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Submark</th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">Pagu</th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">Sisa Pagu</th>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-48">Aksi</th>
+                        <th scope="col" class="text-center w-16 border border-white py-3 px-4 font-semibold">No.</th>
+                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">No. RKAKL</th>
+                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">Tahun</th>
+                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">Kategori Pagu</th>
+                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">Submark</th>
+                        <th scope="col" class="text-right border border-white py-3 px-4 font-semibold">Pagu</th>
+                        <th scope="col" class="text-right border border-white py-3 px-4 font-semibold">Sisa Pagu</th>
+                        <th scope="col" class="text-center w-48 border border-white py-3 px-4 font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -121,28 +117,28 @@
                     @forelse($budgets as $index => $budget)
                         @php $sum += $budget->total_amount; @endphp
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
+                            <td class="whitespace-nowrap text-sm text-center text-gray-500 border border-gray-200 py-3 px-4">
                                 {{ $index + 1 }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td class="whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ $budget->rkkal_code }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="whitespace-nowrap text-sm text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ $budget->year }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="whitespace-nowrap text-sm text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ $budget->budgetCategory->name ?? '-' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="whitespace-nowrap text-sm text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ $budget->submark }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                            <td class="whitespace-nowrap text-sm text-right text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ number_format($budget->total_amount, 0, ',', '.') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900">
+                            <td class="whitespace-nowrap text-sm text-right text-gray-900 border border-gray-200 py-3 px-4">
                                 {{ number_format($budget->remaining_amount, 0, ',', '.') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center space-x-2 flex justify-center">
+                            <td class="whitespace-nowrap text-sm font-medium text-center space-x-2 flex justify-center border border-gray-200 py-3 px-4">
                                 <a href="{{ route('pagu.show', $budget->id) }}" class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 border border-green-200 rounded text-sm font-medium transition-colors" style="text-decoration:none;">
                                     Detail
                                 </a>
@@ -158,8 +154,8 @@
                                 <form action="{{ route('pagu.destroy', $budget->id) }}" method="POST" class="inline-block m-0 h-full">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded text-sm font-medium transition-colors"
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus pagu ini?')">
+                                    <button type="submit" 
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus pagu ini?')" style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">
                                         Hapus
                                     </button>
                                 </form>
@@ -167,7 +163,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-10 text-center text-gray-500 text-sm">
+                            <td colspan="7" class="text-center text-gray-500 text-sm border border-gray-200 py-3 px-4">
                                 Belum ada data Pagu.
                             </td>
                         </tr>
@@ -175,10 +171,10 @@
                 </tbody>
                 <tfoot class="bg-gray-100 font-bold border-t-2 border-gray-300">
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-right text-sm text-gray-800 uppercase">
+                        <td colspan="5" class="text-right text-sm text-gray-800 uppercase border border-gray-200 py-3 px-4">
                             Total Pagu
                         </td>
-                        <td class="px-6 py-4 text-right text-sm text-gray-800">
+                        <td class="text-right text-sm text-gray-800 border border-gray-200 py-3 px-4">
                             {{ number_format($sum, 0, ',', '.') }}
                         </td>
                         <td colspan="2"></td>
@@ -195,7 +191,7 @@
             <form id="formPagu" method="POST" action="{{ route('pagu.store') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formMethod" value="POST">
-                
+
                 <div class="bg-teal-600 px-6 py-4 flex justify-between items-center text-white">
                     <h2 id="modalTitle" class="text-lg font-bold">PENGATURAN PAGU ANGGARAN</h2>
                     <button type="button" class="text-white hover:text-gray-200 focus:outline-none text-2xl" id="closeModal">&times;</button>
@@ -217,7 +213,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Pagu <span class="text-red-500">*</span></label>
-                        <select name="budget_category_id" id="inputCategory" required 
+                        <select name="budget_category_id" id="inputCategory" required
                                 class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm">
                             <option value="">-- Pilih Kategori Pagu --</option>
                             @foreach($categories as $cat)
@@ -246,223 +242,223 @@
             </form>
         </div>
     </div>
-@endsection
 
-@push('scripts')
-    <!-- Inline Javascript for Modal Logic -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const modal = document.getElementById('modalPagu');
-            const btnTambah = document.getElementById('btnTambahPagu');
-            const btnClose = document.getElementById('closeModal');
-            const btnCancel = document.getElementById('btnCancel');
-            const formPagu = document.getElementById('formPagu');
-            const formMethod = document.getElementById('formMethod');
-            const modalTitle = document.getElementById('modalTitle');
-            
-            // Form Inputs
-            const inputRkkal = document.getElementById('inputRkkal');
-            const inputYear = document.getElementById('inputYear');
-            const inputCategory = document.getElementById('inputCategory');
-            const inputSubmark = document.getElementById('inputSubmark');
-            const inputAmount = document.getElementById('inputAmount');
+    @push('scripts')
+        <!-- Inline Javascript for Modal Logic -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const modal = document.getElementById('modalPagu');
+                const btnTambah = document.getElementById('btnTambahPagu');
+                const btnClose = document.getElementById('closeModal');
+                const btnCancel = document.getElementById('btnCancel');
+                const formPagu = document.getElementById('formPagu');
+                const formMethod = document.getElementById('formMethod');
+                const modalTitle = document.getElementById('modalTitle');
 
-            // Function to close modal
-            function hideModal() {
-                modal.classList.add('hidden');
-            }
+                // Form Inputs
+                const inputRkkal = document.getElementById('inputRkkal');
+                const inputYear = document.getElementById('inputYear');
+                const inputCategory = document.getElementById('inputCategory');
+                const inputSubmark = document.getElementById('inputSubmark');
+                const inputAmount = document.getElementById('inputAmount');
 
-            // Function to open modal
-            function showModal() {
-                modal.classList.remove('hidden');
-            }
+                // Function to close modal
+                function hideModal() {
+                    modal.classList.add('hidden');
+                }
 
-            // Open Modal for Tambah
-            btnTambah.addEventListener('click', () => {
-                showModal();
-                modalTitle.innerText = "TAMBAH PAGU ANGGARAN";
-                formPagu.action = "{{ route('pagu.store') }}";
-                formMethod.value = "POST";
-                
-                // Reset fields
-                inputRkkal.value = '';
-                inputYear.value = new Date().getFullYear();
-                inputCategory.value = '';
-                inputSubmark.value = '';
-                inputAmount.value = '';
-            });
+                // Function to open modal
+                function showModal() {
+                    modal.classList.remove('hidden');
+                }
 
-            // Close Modal bindings
-            btnClose.addEventListener('click', hideModal);
-            btnCancel.addEventListener('click', hideModal);
-
-            // Open Modal for Edit
-            document.querySelectorAll('.btn-edit').forEach(btn => {
-                btn.addEventListener('click', function() {
+                // Open Modal for Tambah
+                btnTambah.addEventListener('click', () => {
                     showModal();
-                    modalTitle.innerText = "EDIT PAGU ANGGARAN";
-                    
-                    // Get data from data-* attributes
-                    const id = this.getAttribute('data-id');
-                    const rkkal = this.getAttribute('data-rkkal');
-                    const year = this.getAttribute('data-year');
-                    const category = this.getAttribute('data-category');
-                    const submark = this.getAttribute('data-submark');
-                    const amount = this.getAttribute('data-amount');
+                    modalTitle.innerText = "TAMBAH PAGU ANGGARAN";
+                    formPagu.action = "{{ route('pagu.store') }}";
+                    formMethod.value = "POST";
 
-                    // Set form action dynamically & add method spoofing for PUT
-                    formPagu.action = `/pagu/${id}`;
-                    formMethod.value = "PUT";
+                    // Reset fields
+                    inputRkkal.value = '';
+                    inputYear.value = new Date().getFullYear();
+                    inputCategory.value = '';
+                    inputSubmark.value = '';
+                    inputAmount.value = '';
+                });
 
-                    // Set input values
-                    inputRkkal.value = rkkal;
-                    inputYear.value = year;
-                    inputCategory.value = category;
-                    inputSubmark.value = submark;
-                    inputAmount.value = amount;
+                // Close Modal bindings
+                btnClose.addEventListener('click', hideModal);
+                btnCancel.addEventListener('click', hideModal);
+
+                // Open Modal for Edit
+                document.querySelectorAll('.btn-edit').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        showModal();
+                        modalTitle.innerText = "EDIT PAGU ANGGARAN";
+
+                        // Get data from data-* attributes
+                        const id = this.getAttribute('data-id');
+                        const rkkal = this.getAttribute('data-rkkal');
+                        const year = this.getAttribute('data-year');
+                        const category = this.getAttribute('data-category');
+                        const submark = this.getAttribute('data-submark');
+                        const amount = this.getAttribute('data-amount');
+
+                        // Set form action dynamically & add method spoofing for PUT
+                        formPagu.action = `/pagu/${id}`;
+                        formMethod.value = "PUT";
+
+                        // Set input values
+                        inputRkkal.value = rkkal;
+                        inputYear.value = year;
+                        inputCategory.value = category;
+                        inputSubmark.value = submark;
+                        inputAmount.value = amount;
+                    });
+                });
+
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        hideModal();
+                    }
+                }
+            });
+        </script>
+
+        @if($totalDana > 0)
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('paguPieChart').getContext('2d');
+
+                const data = {
+                    labels: ['Dana Digunakan', 'Dana Tersisa'],
+                    datasets: [{
+                        label: 'Serapan Pagu',
+                        data: [
+                            {{ $totalTerserap ?? 0 }},
+                            {{ $totalSisa < 0 ? 0 : $totalSisa }}
+                        ],
+                        backgroundColor: [
+                            '#3b82f6', // blue-500
+                            '#10b981'  // emerald-500
+                        ],
+                        borderColor: [
+                            '#2563eb', // blue-600
+                            '#059669'  // emerald-600
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        let value = context.raw;
+                                        let total = context.chart._metasets[context.datasetIndex].total;
+                                        let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                        label += percentage + '% (Rp ' + new Intl.NumberFormat('id-ID').format(value) + ')';
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 });
             });
+        </script>
+        @endif
 
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    hideModal();
-                }
-            }
-        });
-    </script>
-    
-    @if($totalDana > 0)
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('paguPieChart').getContext('2d');
-            
-            const data = {
-                labels: ['Dana Digunakan', 'Dana Tersisa'],
-                datasets: [{
-                    label: 'Serapan Pagu',
-                    data: [
-                        {{ $totalTerserap ?? 0 }},
-                        {{ $totalSisa < 0 ? 0 : $totalSisa }}
-                    ],
-                    backgroundColor: [
-                        '#3b82f6', // blue-500
-                        '#10b981'  // emerald-500
-                    ],
-                    borderColor: [
-                        '#2563eb', // blue-600
-                        '#059669'  // emerald-600
-                    ],
-                    borderWidth: 1
-                }]
-            };
+        @if(count($rkaklLabels) > 0)
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const barCtx = document.getElementById('paguBarChart').getContext('2d');
 
-            new Chart(ctx, {
-                type: 'pie',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                font: {
-                                    size: 14
+                const barData = {
+                    labels: {!! json_encode($rkaklLabels) !!},
+                    datasets: [
+                        {
+                            label: 'Dana Digunakan',
+                            data: {!! json_encode($rkaklDigunakan) !!},
+                            backgroundColor: '#3b82f6', // blue-500
+                            borderColor: '#2563eb', // blue-600
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Dana Tersisa',
+                            data: {!! json_encode($rkaklSisa) !!},
+                            backgroundColor: '#10b981', // emerald-500
+                            borderColor: '#059669', // emerald-600
+                            borderWidth: 1
+                        }
+                    ]
+                };
+
+                new Chart(barCtx, {
+                    type: 'bar',
+                    data: barData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value, index, values) {
+                                        if (value >= 1000000000) {
+                                            return (value / 1000000000) + ' M';
+                                        } else if (value >= 1000000) {
+                                            return (value / 1000000) + ' Jt';
+                                        }
+                                        return new Intl.NumberFormat('id-ID').format(value);
+                                    }
                                 }
                             }
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        let value = context.raw;
+                                        label += 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+                                        return label;
                                     }
-                                    let value = context.raw;
-                                    let total = context.chart._metasets[context.datasetIndex].total;
-                                    let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-                                    label += percentage + '% (Rp ' + new Intl.NumberFormat('id-ID').format(value) + ')';
-                                    return label;
                                 }
                             }
                         }
                     }
-                }
+                });
             });
-        });
-    </script>
-    @endif
-
-    @if(count($rkaklLabels) > 0)
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const barCtx = document.getElementById('paguBarChart').getContext('2d');
-            
-            const barData = {
-                labels: {!! json_encode($rkaklLabels) !!},
-                datasets: [
-                    {
-                        label: 'Dana Digunakan',
-                        data: {!! json_encode($rkaklDigunakan) !!},
-                        backgroundColor: '#3b82f6', // blue-500
-                        borderColor: '#2563eb', // blue-600
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Dana Tersisa',
-                        data: {!! json_encode($rkaklSisa) !!},
-                        backgroundColor: '#10b981', // emerald-500
-                        borderColor: '#059669', // emerald-600
-                        borderWidth: 1
-                    }
-                ]
-            };
-
-            new Chart(barCtx, {
-                type: 'bar',
-                data: barData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            stacked: true,
-                        },
-                        y: {
-                            stacked: true,
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value, index, values) {
-                                    if (value >= 1000000000) {
-                                        return (value / 1000000000) + ' M';
-                                    } else if (value >= 1000000) {
-                                        return (value / 1000000) + ' Jt';
-                                    }
-                                    return new Intl.NumberFormat('id-ID').format(value);
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    let value = context.raw;
-                                    label += 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-    @endif
-@endpush
+        </script>
+        @endif
+    @endpush
+</x-layouts.app>

@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User\User;
 use Illuminate\Http\Request;
 
 class IndikatorKinerjaController extends Controller
 {
     public function index(Request $request)
     {
-
 
         return view('indikatorKinerja', compact(
             'year',
