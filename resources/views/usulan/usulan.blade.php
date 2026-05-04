@@ -35,7 +35,7 @@
     </div>
 
     <!-- AREA TABLE -->
-    <div class="bg-white rounded-[20px] shadow overflow-hidden">
+    <div>
 
         <!-- Table Control -->
         <form method="GET" action="{{ route('usulan-diklat') }}"
@@ -86,82 +86,72 @@
 
         <div class="overflow-x-auto">
             <table class="w-full border-collapse" id="monitorTable" style="min-width:900px;">
-                <thead class="bg-[#007a7a] text-white">
+                <thead class="bg-[#007a7a] text-white text-xs">
                     <tr>
-                        <th class="border border-gray-400 py-3 px-4 font-semibold text-center w-16">No</th>
-                        <th class="border border-gray-400 py-3 px-4 font-semibold text-center">Aksi</th>
-                        <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Judul Kegiatan</th>
-                        <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Pengusul</th>
-                        <th class="border border-gray-400 py-3 px-4 font-semibold text-center">JPL</th>
-                        <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Jenis Kegiatan</th>
-                        <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Waktu</th>
-                        <th class="border border-gray-400 py-3 px-4 font-semibold text-left">Materi</th>
-                        <th class="border border-gray-400 py-3 px-4 font-semibold text-center">Status</th>
+                        <th class="border-b border-gray-400 py-2 px-2 font-semibold text-center w-12">No</th>
+                        <th class="border-b border-gray-400 py-2 px-2 font-semibold text-center w-16">Tahun</th>
+                        <th class="border-b border-gray-400 py-2 px-2 font-semibold text-left">Unit Pengusul</th>
+                        <th class="border-b border-gray-400 py-2 px-2 font-semibold text-left">Nama Kegiatan</th>
+                        <th class="border-b border-gray-400 py-2 px-2 font-semibold text-left">Jenis</th>
+                        <th class="border-b border-gray-400 py-2 px-2 font-semibold text-left">Pelaksanaan</th>
+                        <th class="border-b border-gray-400 py-2 px-2 font-semibold text-center w-40">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($kegiatan as $key => $item)
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="border border-gray-300 py-3 px-4 text-center">
+                        <tr class="hover:bg-gray-50 transition text-sm">
+                            <td class="border-b border-gray-300 py-2 px-2 text-center">
                                 {{ $kegiatan->firstItem() + $key }}
                             </td>
-                            <td class="border border-gray-300 py-3 px-4 text-center">
-                                <div class="flex justify-center gap-2 items-center">
-                                    <!-- Detail Button -->
+                            <td class="border-b border-gray-300 py-2 px-2 text-center">
+                                {{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('Y') : '-' }}
+                            </td>
+                            <td class="border-b border-gray-300 py-2 px-2 text-sm">{{ $item->workUnit->name ?? '-' }}</td>
+                            <td class="border-b border-gray-300 py-2 px-2 text-sm">{{ $item->activityName->name ?? '-' }}</td>
+                            <td class="border-b border-gray-300 py-2 px-2 text-sm">{{ $item->activityType->name ?? '-' }}</td>
+                            <td class="border-b border-gray-300 py-2 px-2 text-sm">
+                                @if ($item->start_date && $item->end_date)
+                                    {{ \Carbon\Carbon::parse($item->start_date)->format('d-m-Y') }}
+                                    s/d
+                                    {{ \Carbon\Carbon::parse($item->end_date)->format('d-m-Y') }}
+                                    @if ($item->start_time && $item->end_time)
+                                        <br>{{ $item->start_time }} – {{ $item->end_time }}
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td class="border-b border-gray-300 py-2 px-2 text-center">
+                                <div class="flex justify-center gap-1 items-center">
                                     <a href="{{ route('kegiatan.show', $item->id) }}"
                                         style="background-color: #3b82f6;"
-                                        class="text-white px-3 py-1.5 rounded hover:bg-[#2563eb] text-sm font-semibold transition"
+                                        class="text-white px-2 py-1 rounded hover:bg-[#2563eb] text-xs font-semibold transition"
                                         title="Detail">
                                         Detail
                                     </a>
-                                    <!-- Edit Button -->
                                     <a href="{{ route('kegiatan.edit', $item->id) }}"
                                         style="background-color: #eab308;"
-                                        class="text-white px-3 py-1.5 rounded hover:bg-[#ca8a04] text-sm font-semibold transition"
+                                        class="text-white px-2 py-1 rounded hover:bg-[#ca8a04] text-xs font-semibold transition"
                                         title="Edit">
                                         Edit
                                     </a>
-                                    <!-- Delete Button -->
                                     <form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST"
                                         class="inline m-0"
                                         onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" style="background-color: #ef4444;"
-                                            class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition"
+                                            class="text-white px-2 py-1 rounded hover:bg-[#dc2626] text-xs font-semibold transition"
                                             title="Hapus">
                                             Hapus
                                         </button>
                                     </form>
                                 </div>
                             </td>
-                            <td class="border border-gray-300 py-3 px-4">{{ $item->activityName->name ?? '-' }}</td>
-                            <td class="border border-gray-300 py-3 px-4">{{ $item->workUnit->name ?? '-' }}</td>
-                            <td class="border border-gray-300 py-3 px-4 text-center">-</td>
-                            <td class="border border-gray-300 py-3 px-4">{{ $item->activityType->name ?? '-' }}</td>
-                            <td class="border border-gray-300 py-3 px-4">
-                                {{ \Carbon\Carbon::parse($item->start_date)->format('d-m-Y') }} <br>s/d<br>
-                                {{ \Carbon\Carbon::parse($item->end_date)->format('d-m-Y') }}
-                            </td>
-                            <td class="border border-gray-300 py-3 px-4">{{ $item->materialType->name ?? '-' }}</td>
-                            <td class="border border-gray-300 py-3 px-4 text-center">
-                                @php
-                                    $status = $item->latestStatus->status ?? 'draft';
-                                    $bgClass = match ($status) {
-                                        'draft' => 'bg-gray-200 text-gray-700',
-                                        'submitted' => 'bg-blue-100 text-blue-700',
-                                        'revision' => 'bg-yellow-100 text-yellow-700',
-                                        'accepted' => 'bg-green-100 text-green-700',
-                                        default => 'bg-gray-200 text-gray-700',
-                                    };
-                                @endphp
-                                <span
-                                    class="{{ $bgClass }} px-3 py-1 rounded-full text-xs font-semibold">{{ ucfirst($status) }}</span>
-                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="border border-gray-300 py-4 text-center text-gray-500">Tidak ada
+                            <td colspan="7" class="border-b border-gray-300 py-4 text-center text-gray-500 text-sm">Tidak ada
                                 data kegiatan.</td>
                         </tr>
                     @endforelse

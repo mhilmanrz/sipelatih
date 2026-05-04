@@ -35,6 +35,7 @@ use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\EmploymentTypeController;
 use App\Http\Controllers\User\PositionController;
 use App\Http\Controllers\User\ProfessionController;
+use App\Http\Controllers\User\RankController;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\WorkUnitController;
@@ -132,6 +133,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('profession-categories', ProfessionCategoryController::class);
     Route::resource('work-units', WorkUnitController::class);
     Route::resource('positions', PositionController::class);
+    Route::resource('ranks', RankController::class);
     // Kegiatan Master Data
     Route::resource('dictionaries/activity-types', ActivityTypeController::class);
     Route::resource('dictionaries/activity-categories', ActivityCategoryController::class);

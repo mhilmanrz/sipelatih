@@ -109,6 +109,7 @@ class ActivityController extends Controller
             'targetParticipant',
             'workUnit',
             'picUser',
+            'organizerPic',
             'latestStatus',
             'fundSource',
             'activityMaterials.speakers.user',
@@ -128,6 +129,7 @@ class ActivityController extends Controller
             'activityTargets',
             'scoreSetting',
             'scoreComponents',
+            'gradeCategories',
         ])->findOrFail($id);
 
         $professions = Profession::all();

@@ -17,11 +17,13 @@ $files = [
     'app/Http/Controllers/Act/ActivityScopeController.php',
     'app/Http/Controllers/Act/ActivityMethodController.php',
     'app/Http/Controllers/Act/ActivityFormatController.php',
-    'app/Http/Controllers/Act/ActivityCategoryController.php'
+    'app/Http/Controllers/Act/ActivityCategoryController.php',
 ];
 
 foreach ($files as $file) {
-    if (!file_exists($file)) continue;
+    if (! file_exists($file)) {
+        continue;
+    }
 
     $content = file_get_contents($file);
 
@@ -41,12 +43,12 @@ foreach ($files as $file) {
         $varName = $matches[1];
         $modelName = $matches[2];
 
-        $replacement = '        $query = ' . $modelName . '::query();
+        $replacement = '        $query = '.$modelName.'::query();
         if ($request->has(\'q\') && $request->q != \'\') {
             $query->where(\'name\', \'like\', \'%\' . $request->q . \'%\');
         }
         $perPage = $request->input(\'entries\', $request->input(\'per_page\', 10));
-        $' . $varName . ' = $query->paginate($perPage)->appends($request->all());';
+        $'.$varName.' = $query->paginate($perPage)->appends($request->all());';
 
         $content = str_replace($matches[0], ltrim($replacement), $content);
     }

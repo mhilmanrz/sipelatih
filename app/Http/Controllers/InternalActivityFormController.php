@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Act\Activity;
 use App\Models\AppSetting;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class InternalActivityFormController extends Controller
      */
     public function streamPdf(Request $request, $id): Response
     {
-        $kegiatan = \App\Models\Act\Activity::with([
+        $kegiatan = Activity::with([
             'activityName',
             'workUnit',
             'picUser',
@@ -39,7 +40,7 @@ class InternalActivityFormController extends Controller
 
         $pdf = Pdf::loadView('pdf.internal-activity-form', [
             'logoBase64' => $logoBase64,
-            'kegiatan'   => $kegiatan,
+            'kegiatan' => $kegiatan,
         ]);
 
         // You can set paper size and orientation

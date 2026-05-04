@@ -24,7 +24,7 @@
 
             <div class="form-card">
                 <div class="form-row">
-                    <label>Tanggal Usulan</label>
+                    <label>Tanggal Surat</label>
                     <input type="date" name="date" value="{{ old('date') }}">
                 </div>
 
@@ -243,6 +243,25 @@
                     <label>WA PIC</label>
                     <input type="text" id="wa_pic_temp" disabled placeholder="Pilih Nama PIC di atas untuk melihat WA"
                         class="bg-gray-100 font-bold text-gray-700">
+                </div>
+
+                <div class="form-row two">
+                    <label>Jam Mulai / Selesai</label>
+                    <input type="time" name="start_time" value="{{ old('start_time') }}">
+                    <input type="time" name="end_time" value="{{ old('end_time') }}">
+                </div>
+
+                <div class="form-row">
+                    <label>PIC Penyelenggara</label>
+                    <select name="organizer_pic_id">
+                        <option value="">-PILIH PEGAWAI-</option>
+                        @foreach ($picCandidates as $pic)
+                            <option value="{{ $pic->id }}"
+                                {{ old('organizer_pic_id') == $pic->id ? 'selected' : '' }}>
+                                {{ $pic->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-action">

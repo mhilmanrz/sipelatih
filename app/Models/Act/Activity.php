@@ -31,10 +31,13 @@ class Activity extends Model
         'target_participant_id',
         'start_date',
         'end_date',
+        'start_time',
+        'end_time',
         'budget_amount',
         'work_unit_id',
         'user_id',
         'pic_user_id',
+        'organizer_pic_id',
         'quota_participant',
         'fund_source_id',
         'budget_id',
@@ -43,6 +46,11 @@ class Activity extends Model
     public function picUser()
     {
         return $this->belongsTo(User::class, 'pic_user_id');
+    }
+
+    public function organizerPic()
+    {
+        return $this->belongsTo(User::class, 'organizer_pic_id');
     }
 
     public function activityName()
@@ -153,5 +161,10 @@ class Activity extends Model
     public function scoreComponents()
     {
         return $this->hasMany(ActivityScoreComponent::class)->orderBy('order');
+    }
+
+    public function gradeCategories()
+    {
+        return $this->hasMany(ActivityGradeCategory::class)->orderBy('order');
     }
 }

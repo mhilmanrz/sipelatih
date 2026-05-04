@@ -21,6 +21,7 @@ use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\User\EmploymentTypeController;
 use App\Http\Controllers\User\PositionsController;
 use App\Http\Controllers\User\ProfessionController;
+use App\Http\Controllers\User\RankController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\WorkUnitController;
 use Illuminate\Support\Facades\Route;
@@ -96,6 +97,12 @@ Route::post('/target-participants', [TargetParticipantController::class, 'store'
 Route::get('/target-participants/{id}', [TargetParticipantController::class, 'show']);
 Route::put('/target-participants/{id}', [TargetParticipantController::class, 'update']);
 Route::delete('/target-participants/{id}', [TargetParticipantController::class, 'destroy']);
+
+Route::get('/ranks', [RankController::class, 'index']);
+Route::post('/ranks', [RankController::class, 'store']);
+Route::get('/ranks/{id}', [RankController::class, 'show']);
+Route::put('/ranks/{id}', [RankController::class, 'update']);
+Route::delete('/ranks/{id}', [RankController::class, 'destroy']);
 
 Route::get('/employment-types', [EmploymentTypeController::class, 'index']);
 Route::post('/employment-types', [EmploymentTypeController::class, 'store']);

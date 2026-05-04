@@ -5,6 +5,7 @@ namespace App\Models\User;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityParticipant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -22,6 +23,7 @@ class User extends Authenticatable
         'position_id',
         'employment_type_id',
         'profession_id',
+        'rank_id',
         'employee_id',
         'phone_number',
     ];
@@ -43,6 +45,11 @@ class User extends Authenticatable
     public function employmentType()
     {
         return $this->belongsTo(EmploymentType::class);
+    }
+
+    public function rank(): BelongsTo
+    {
+        return $this->belongsTo(Rank::class);
     }
 
     public function profession()

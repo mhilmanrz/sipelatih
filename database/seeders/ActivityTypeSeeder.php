@@ -1,5 +1,6 @@
 <?php
-// Form Jenis Kegiatan 
+
+// Form Jenis Kegiatan
 
 namespace Database\Seeders;
 

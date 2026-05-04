@@ -110,6 +110,18 @@
             </div>
 
             <div class="form-group">
+                <label>Pangkat</label>
+                <select name="rank_id">
+                    <option value="">-- Pilih Pangkat --</option>
+                    @foreach ($ranks as $rank)
+                        <option value="{{ $rank->id }}"
+                            {{ old('rank_id', $user->rank_id) == $rank->id ? 'selected' : '' }}>
+                            {{ $rank->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label>Jenis Tenaga</label>
                 <select name="employment_type_id">
                     <option value="">-- Pilih Jenis Tenaga --</option>

@@ -7,6 +7,7 @@ use App\Jobs\ImportUsersJob;
 use App\Models\User\EmploymentType;
 use App\Models\User\Positions;
 use App\Models\User\Profession;
+use App\Models\User\Rank;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'roles'])->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
+        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'rank', 'roles'])->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
 
         if ($request->has('q') && $request->q != '') {
             $search = $request->q;
@@ -58,8 +59,9 @@ class UserController extends Controller
         $professions = Profession::all();
         $positions = Positions::all();
         $employmentTypes = EmploymentType::all();
+        $ranks = Rank::all();
 
-        return view('user.tambah', compact('workUnits', 'professions', 'positions', 'employmentTypes'));
+        return view('user.tambah', compact('workUnits', 'professions', 'positions', 'employmentTypes', 'ranks'));
     }
 
     /**
@@ -77,6 +79,7 @@ class UserController extends Controller
             'profession_id' => 'nullable|exists:professions,id',
             'position_id' => 'nullable|exists:positions,id',
             'employment_type_id' => 'nullable|exists:employment_types,id',
+            'rank_id' => 'nullable|exists:ranks,id',
         ]);
 
         $data = $request->all();
@@ -106,8 +109,9 @@ class UserController extends Controller
         $professions = Profession::all();
         $positions = Positions::all();
         $employmentTypes = EmploymentType::all();
+        $ranks = Rank::all();
 
-        return view('user.edit', compact('user', 'workUnits', 'professions', 'positions', 'employmentTypes'));
+        return view('user.edit', compact('user', 'workUnits', 'professions', 'positions', 'employmentTypes', 'ranks'));
     }
 
     /**
@@ -126,6 +130,7 @@ class UserController extends Controller
             'profession_id' => 'nullable|exists:professions,id',
             'position_id' => 'nullable|exists:positions,id',
             'employment_type_id' => 'nullable|exists:employment_types,id',
+            'rank_id' => 'nullable|exists:ranks,id',
         ]);
 
         $data = $request->all();

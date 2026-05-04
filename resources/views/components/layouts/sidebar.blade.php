@@ -87,7 +87,7 @@
         <!-- DROPDOWN: MASTER DATA -->
         @php
             $isMasterDataOpen = request()->is('users*') || request()->is('accounts*') || request()->is('professions*') || request()->is('profession-categories*') ||
-                request()->is('roles*') || request()->is('positions*') || request()->is('work-units*') ||
+                request()->is('roles*') || request()->is('positions*') || request()->is('ranks*') || request()->is('work-units*') ||
                 request()->is('dictionaries/activity-types*') || request()->is('dictionaries/activity-categories*') ||
                 request()->is('dictionaries/activity-scopes*') || request()->is('dictionaries/material-types*') ||
                 request()->is('dictionaries/activity-formats*') || request()->is('dictionaries/activity-methods*') ||
@@ -132,6 +132,11 @@
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('positions*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                     <i class="fa-solid fa-user-tie w-6 text-center mr-2 text-sm"></i>
                     <span>Data Jabatan</span>
+                </a>
+                <a href="{{ route('ranks.index') }}"
+                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('ranks*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+                    <i class="fa-solid fa-star w-6 text-center mr-2 text-sm"></i>
+                    <span>Data Pangkat</span>
                 </a>
                 <a href="{{ route('work-units.index') }}"
                     class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('work-units*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">

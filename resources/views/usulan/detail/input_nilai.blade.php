@@ -21,6 +21,21 @@
         $passingThreshold = $scoreSetting?->passing_threshold ?? 70;
         $isConfigured = $scoreComponents->isNotEmpty();
         $gradedComponents = $scoreComponents->filter(fn($c) => $c->type !== 'pre_test');
+        $gradeCategories = $kegiatan->gradeCategories ?? collect();
+        $hasCategories = $gradeCategories->isNotEmpty();
+
+        $colorOptions = ['green', 'blue', 'amber', 'red', 'purple', 'orange', 'gray', 'pink'];
+
+        $colorMap = [
+            'green' => 'bg-green-100 text-green-800 border-green-400',
+            'blue' => 'bg-blue-100 text-blue-800 border-blue-400',
+            'amber' => 'bg-amber-100 text-amber-800 border-amber-400',
+            'red' => 'bg-red-100 text-red-800 border-red-400',
+            'purple' => 'bg-purple-100 text-purple-800 border-purple-400',
+            'orange' => 'bg-orange-100 text-orange-800 border-orange-400',
+            'gray' => 'bg-gray-100 text-gray-800 border-gray-400',
+            'pink' => 'bg-pink-100 text-pink-800 border-pink-400',
+        ];
     @endphp
 
     <!-- CARD: PENGATURAN PENILAIAN -->
@@ -99,6 +114,7 @@
             <form method="POST" action="{{ route('kegiatan.pengaturan-penilaian.update', $kegiatan->id) }}" id="scoreSettingForm">
                 @csrf
                 @method('PUT')
+                <input type="hidden" name="has_grade_categories" value="1">
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
@@ -132,12 +148,82 @@
                     </div>
                 </div>
 
-                <div class="flex gap-3 justify-end">
+                <div style="border-top: 2px solid #e5e7eb; padding-top: 1.5rem; margin-top: 1.5rem;">
+                    <div class="flex justify-between items-center mb-3">
+                        <label class="block text-sm font-bold text-gray-700">Kategori Nilai <span class="text-xs text-gray-400 font-normal">(opsional)</span></label>
+                        <button type="button" onclick="addGradeCategory()"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded text-xs font-bold transition-colors">
+                            + Tambah Kategori
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-3">Tentukan kategori berdasarkan rentang nilai akhir. Jika dikosongkan, status menampilkan Lulus/Tidak Lulus.</p>
+
+                    <div id="gradeCategoriesContainer" class="space-y-2">
+                    </div>
+
+                    <div id="gradeCategoriesValidationNote" class="text-xs text-amber-600 mt-2 hidden">
+                        <i class="fas fa-exclamation-circle"></i> <span id="gradeCategoriesValidationMsg"></span>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 justify-end mt-4">
                     <button type="button" onclick="toggleSettingForm()" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded text-sm font-bold">Batal</button>
                     <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded text-sm font-bold">Simpan Pengaturan</button>
                 </div>
             </form>
         </div>
+    </div>
+
+    <!-- CARD: KATEGORI NILAI -->
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem;">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Kategori Nilai</h2>
+        </div>
+
+        @if ($hasCategories)
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm border-collapse border border-gray-200">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="text-left border border-gray-200 py-2 px-3">Label</th>
+                            <th class="text-center border border-gray-200 py-2 px-3 w-32">Rentang Nilai</th>
+                            <th class="text-center border border-gray-200 py-2 px-3 w-32">Warna</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($gradeCategories as $cat)
+                            @php $badgeColor = $colorMap[$cat->color] ?? 'bg-gray-100 text-gray-800 border-gray-400'; @endphp
+                            <tr>
+                                <td class="border border-gray-200 py-2 px-3">
+                                    <span class="inline-block px-2 py-1 rounded text-xs font-semibold border {{ $badgeColor }}">
+                                        {{ $cat->label }}
+                                    </span>
+                                </td>
+                                <td class="border border-gray-200 py-2 px-3 text-center font-medium">
+                                    {{ number_format($cat->min_score, 0) }} - {{ number_format($cat->max_score, 0) }}
+                                </td>
+                                <td class="border border-gray-200 py-2 px-3 text-center">
+                                    <span class="inline-block w-6 h-6 rounded-full border border-gray-300"
+                                        style="background-color: {{ match($cat->color) {
+                                            'green' => '#16a34a', 'blue' => '#2563eb', 'amber' => '#d97706',
+                                            'red' => '#dc2626', 'purple' => '#9333ea', 'orange' => '#ea580c',
+                                            'gray' => '#6b7280', 'pink' => '#db2777',
+                                            default => '#9ca3af'
+                                        } }};"></span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-xs text-gray-500 mt-3">Kategori dapat diubah melalui tombol <strong class="text-gray-700">Edit Pengaturan</strong> di atas.</p>
+        @else
+            <div class="text-center py-6 text-gray-500">
+                <i class="fas fa-tags text-3xl mb-2 block text-gray-300"></i>
+                Kategori nilai belum ditentukan. Status akan menampilkan <strong>Lulus</strong> / <strong>Tidak Lulus</strong> berdasarkan batas nilai.
+                <p class="text-xs mt-1">Kategori dapat ditambahkan melalui tombol <strong class="text-gray-600">Edit Pengaturan</strong> di atas.</p>
+            </div>
+        @endif
     </div>
 
     <!-- CARD: INPUT NILAI -->
@@ -187,10 +273,11 @@
                     </thead>
                     <tbody class="bg-white">
                         @forelse ($kegiatan->activityParticipants as $index => $participant)
-                            @php
-                                $finalScore = $participant->calculateFinalScore();
-                                $isPassed = $finalScore !== null && $finalScore >= $passingThreshold;
-                            @endphp
+                @php
+                    $finalScore = $participant->calculateFinalScore();
+                    $isPassed = $finalScore !== null && $finalScore >= $passingThreshold;
+                    $gradeCat = $participant->getGradeCategory($gradeCategories);
+                @endphp
                             <tr>
                                 <td class="text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
                                 <td class="border border-gray-200 py-3 px-4">{{ $participant->user->name ?? '-' }}</td>
@@ -209,13 +296,18 @@
                                     {{ $finalScore !== null ? number_format($finalScore, 2) : '-' }}
                                 </td>
                                 <td class="text-center font-semibold text-gray-600 border border-gray-200 py-3 px-4">{{ number_format($passingThreshold, 0) }}</td>
-                                <td class="text-center border border-gray-200 py-3 px-4">
-                                    @if ($participant->is_passed)
-                                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded border border-green-400">Lulus</span>
-                                    @else
-                                        <span class="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded border border-red-400">Tidak Lulus</span>
-                                    @endif
-                                </td>
+                            <td class="text-center border border-gray-200 py-3 px-4">
+                                @if ($hasCategories && $gradeCat)
+                                    @php $gcBadge = $colorMap[$gradeCat->color] ?? 'bg-gray-100 text-gray-800 border-gray-400'; @endphp
+                                    <span class="inline-block px-2 py-1 rounded text-xs font-semibold border {{ $gcBadge }}">
+                                        {{ $gradeCat->label }}
+                                    </span>
+                                @elseif ($participant->is_passed)
+                                    <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded border border-green-400">Lulus</span>
+                                @else
+                                    <span class="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded border border-red-400">Tidak Lulus</span>
+                                @endif
+                            </td>
                                 <td class="text-center border border-gray-200 py-3 px-4">
                                     <button type="button"
                                         onclick="openScoreModal({{ $participant->id }}, '{{ addslashes($participant->user->name ?? '-') }}', {{ $participant->componentScores->toJson() }})"
@@ -326,6 +418,14 @@
         'type' => $c->type,
         'percentage' => $c->percentage,
     ]);
+    $jsExistingCategories = $gradeCategories->values()->map(fn($c) => [
+        'label' => $c->label,
+        'min_score' => $c->min_score,
+        'max_score' => $c->max_score,
+        'color' => $c->color,
+        'order' => $c->order,
+    ]);
+    $jsColorOptions = $colorOptions;
     $jsScoreUpdateUrl = route('kegiatan.input-nilai.update', [
         'kegiatan' => $kegiatan->id,
         'participant_id' => '__ID__',
@@ -335,6 +435,8 @@
 <script>
     const scoreComponents = @json($jsComponents);
     const existingComponents = @json($jsExistingComponents);
+    const existingCategories = @json($jsExistingCategories);
+    const colorOptions = @json($jsColorOptions);
     const isConfigured = @json($isConfigured);
     const scoreUpdateBaseUrl = @json($jsScoreUpdateUrl);
 
@@ -356,6 +458,7 @@
         const container = document.getElementById('componentsContainer');
         container.innerHTML = '';
         componentIndex = 0;
+        gradeCatIndex = 0;
 
         if (existingComponents.length > 0) {
             existingComponents.forEach(comp => addComponentRow(comp.name, comp.type, comp.percentage));
@@ -364,6 +467,7 @@
             addComponentRow('Post Test', 'post_test', 100);
         }
         updateTotalPercentage();
+        initGradeCategories();
     }
 
     function addComponentRow(name = '', type = 'custom', percentage = null) {
@@ -469,5 +573,123 @@
 
     function closeScoreModal() {
         document.getElementById('scoreModal').classList.remove('active');
+    }
+
+    // Grade Categories Management
+    let gradeCatIndex = 0;
+
+    function initGradeCategories() {
+        const container = document.getElementById('gradeCategoriesContainer');
+        container.innerHTML = '';
+        gradeCatIndex = 0;
+
+        if (existingCategories.length > 0) {
+            existingCategories.forEach(cat => addGradeCategoryRow(cat.label, cat.min_score, cat.max_score, cat.color));
+        }
+    }
+
+    function addGradeCategory() {
+        addGradeCategoryRow('', '', '', 'blue');
+    }
+
+    function addGradeCategoryRow(label = '', minScore = '', maxScore = '', color = 'blue') {
+        const container = document.getElementById('gradeCategoriesContainer');
+        const idx = gradeCatIndex;
+
+        const colorOptionsHtml = colorOptions.map(c =>
+            `<option value="${c}" ${c === color ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`
+        ).join('');
+
+        const row = document.createElement('div');
+        row.className = 'flex gap-2 items-center p-2 bg-gray-50 rounded border border-gray-200';
+        row.dataset.gradeIndex = idx;
+
+        row.innerHTML = `
+            <div class="flex-1">
+                <input type="text" name="grade_categories[${idx}][label]" value="${escapeHtml(label)}"
+                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm"
+                    placeholder="Nama label (contoh: Sangat Baik)" required>
+            </div>
+            <div class="w-24">
+                <input type="number" name="grade_categories[${idx}][min_score]" value="${minScore}"
+                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm"
+                    min="0" max="100" step="0.01" placeholder="Min" required onchange="validateGradeRanges()">
+            </div>
+            <div class="text-sm text-gray-400">-</div>
+            <div class="w-24">
+                <input type="number" name="grade_categories[${idx}][max_score]" value="${maxScore}"
+                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm"
+                    min="0" max="100" step="0.01" placeholder="Max" required onchange="validateGradeRanges()">
+            </div>
+            <div class="w-28">
+                <select name="grade_categories[${idx}][color]"
+                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm">
+                    ${colorOptionsHtml}
+                </select>
+            </div>
+            <input type="hidden" name="grade_categories[${idx}][order]" value="${idx + 1}">
+            <div class="w-8 text-center">
+                <button type="button" onclick="removeGradeCategory(this)" class="text-red-500 hover:text-red-700 font-bold text-lg leading-none">&times;</button>
+            </div>
+        `;
+
+        container.appendChild(row);
+        gradeCatIndex++;
+    }
+
+    function removeGradeCategory(btn) {
+        btn.closest('[data-grade-index]').remove();
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    function validateGradeRanges() {
+        const rows = document.querySelectorAll('#gradeCategoriesContainer [data-grade-index]');
+        let valid = true;
+        let msg = '';
+
+        const ranges = [];
+        rows.forEach(row => {
+            const minInp = row.querySelector('input[name*="[min_score]"]');
+            const maxInp = row.querySelector('input[name*="[max_score]"]');
+            const labelInp = row.querySelector('input[name*="[label]"]');
+
+            const min = parseFloat(minInp?.value) || 0;
+            const max = parseFloat(maxInp?.value) || 0;
+            const label = labelInp?.value || '?';
+
+            if (min >= max && maxInp?.value !== '') {
+                valid = false;
+                msg = `"${label}": nilai minimal harus < nilai maksimal.`;
+            }
+
+            ranges.push({ min, max, label });
+        });
+
+        if (valid) {
+            ranges.sort((a, b) => a.min - b.min);
+            for (let i = 0; i < ranges.length - 1; i++) {
+                if (ranges[i].max >= ranges[i + 1].min) {
+                    valid = false;
+                    msg = `"${ranges[i].label}" (${ranges[i].min}-${ranges[i].max}) tumpang tindih dengan "${ranges[i + 1].label}" (${ranges[i + 1].min}-${ranges[i + 1].max}).`;
+                    break;
+                }
+            }
+        }
+
+        const note = document.getElementById('gradeCategoriesValidationNote');
+        const msgEl = document.getElementById('gradeCategoriesValidationMsg');
+        if (note && msgEl) {
+            if (!valid) {
+                note.classList.remove('hidden');
+                msgEl.textContent = msg;
+            } else {
+                note.classList.add('hidden');
+            }
+        }
     }
 </script>

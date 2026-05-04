@@ -1,6 +1,12 @@
 @php
     $currentStatus = $kegiatan->latestStatus ? $kegiatan->latestStatus->status : 'draft';
-    
+
+    $canSubmit = false;
+    if ($kegiatan->start_date) {
+        $submitWindow = \Carbon\Carbon::parse($kegiatan->start_date)->subDays(40)->startOfDay();
+        $canSubmit = now()->startOfDay()->greaterThanOrEqualTo($submitWindow);
+    }
+
     // Warna untuk badge status
     $statusColor = match($currentStatus) {
         'draft' => 'bg-gray-200 text-gray-800',
@@ -38,13 +44,26 @@
             </h3>
 
             @if($currentStatus === 'draft' || $currentStatus === 'revision')
-                <p style="color: #6b7280; margin-bottom: 2rem; max-width: 80%; line-height: 1.6;">
-                    Sebelum menekan tombol Kirim, pastikan Anda telah memeriksa ulang kelengkapan Data Kegiatan, KAK, Materi, Sasaran Profesi, Narasumber, dan Peserta dengan saksama.
-                </p>
+                @if(! $kegiatan->start_date)
+                    <p style="color: #6b7280; margin-bottom: 2rem; max-width: 80%; line-height: 1.6;">
+                        Silakan lengkapi <strong class="text-gray-800">Tgl Mulai</strong> pada Data Kegiatan terlebih dahulu sebelum mengirim usulan.
+                    </p>
+                @elseif(! $canSubmit)
+                    <p style="color: #6b7280; margin-bottom: 2rem; max-width: 80%; line-height: 1.6;">
+                        Pengiriman usulan hanya dapat dilakukan maksimal <strong class="text-gray-800">40 hari</strong> sebelum tanggal mulai
+                        (<strong>{{ \Carbon\Carbon::parse($kegiatan->start_date)->format('d M Y') }}</strong>).
+                        Anda dapat mengirim mulai tanggal <strong>{{ \Carbon\Carbon::parse($kegiatan->start_date)->subDays(40)->format('d M Y') }}</strong>.
+                    </p>
+                @else
+                    <p style="color: #6b7280; margin-bottom: 2rem; max-width: 80%; line-height: 1.6;">
+                        Sebelum menekan tombol Kirim, pastikan Anda telah memeriksa ulang kelengkapan Data Kegiatan, KAK, Materi, Sasaran Profesi, Narasumber, dan Peserta dengan saksama.
+                    </p>
+                @endif
 
                 <button onclick="document.getElementById('modalKirim').style.display='flex';"
                     class="font-semibold py-3 px-8 text-lg rounded-full shadow-lg transition-colors"
-                    style="cursor: pointer; background-color: #0d9488; color: white; border: none;">
+                    style="cursor: {{ $canSubmit ? 'pointer' : 'not-allowed' }}; background-color: {{ $canSubmit ? '#0d9488' : '#9ca3af' }}; color: white; border: none;"
+                    {{ ! $canSubmit ? 'disabled' : '' }}>
                     🚀 Kirim Usulan
                 </button>
             @elseif($currentStatus === 'submitted')

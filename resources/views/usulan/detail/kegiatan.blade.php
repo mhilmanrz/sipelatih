@@ -40,7 +40,17 @@
                 -
             @endif
         </div>
+        <div style="font-weight: 600; color: #4b5563;">Jam Mulai / Selesai</div>
+        <div>
+            @if ($kegiatan->start_time && $kegiatan->end_time)
+                {{ $kegiatan->start_time }} – {{ $kegiatan->end_time }}
+            @else
+                -
+            @endif
+        </div>
         <div style="font-weight: 600; color: #4b5563;">Anggaran</div>
         <div>Rp {{ number_format($kegiatan->budget_amount, 0, ',', '.') }}</div>
+        <div style="font-weight: 600; color: #4b5563;">PIC Penyelenggara</div>
+        <div>{{ $kegiatan->organizerPic->name ?? '-' }}</div>
     </div>
 </section>

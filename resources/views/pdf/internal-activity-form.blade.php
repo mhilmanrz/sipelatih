@@ -31,8 +31,8 @@
         }
         
         .header-logo img {
-            max-height: 60px;
-            max-width: 120px;
+            max-height: 90px;
+            max-width: 150px;
         }
         
         .header-title {
@@ -313,26 +313,26 @@
             <tr>
                 <td>
                     <div class="signature-line">
-                        Dr. Siti Nurlaelah, Kep., Ners., M.Kep., Sp.KMB<br>
-                        <span style="font-weight: normal;">NIP197712092010122001</span>
+                        ${nama_pengirim1}<br>
+                        <span style="font-weight: normal;">NIP ${nip_pengirim1}</span>
                     </div>
                 </td>
                 <td>
                     <div class="signature-line">
-                        Risna Budy Astuti, SKM,MK<br>
-                        <span style="font-weight: normal;">NIP197904061999032001</span>
+                        ${nama_pengirim2}<br>
+                        <span style="font-weight: normal;">NIP ${nip_pengirim2}</span>
                     </div>
                 </td>
                 <td>
                     <div class="signature-line">
-                        dr. Renan Sukmawan, ST, Sp.JP(K), Ph.D., FIHA FACC<br>
-                        <span style="font-weight: normal;">NIP196908172009121001</span>
+                        ${nama_pengirim3}<br>
+                        <span style="font-weight: normal;">NIP ${nip_pengirim3}</span>
                     </div>
                 </td>
                 <td>
                     <div class="signature-line">
-                        Ir. Edhie Sarwono, MT<br>
-                        <span style="font-weight: normal;">NP8147725</span>
+                        ${nama_pengirim4}<br>
+                        <span style="font-weight: normal;">NIP ${nip_pengirim4}</span>
                     </div>
                 </td>
             </tr>

@@ -5,6 +5,7 @@ namespace App\Models\Act;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class ActivityParticipant extends Model
 {
@@ -65,5 +66,30 @@ class ActivityParticipant extends Model
         }
 
         return round($total, 2);
+    }
+
+    /**
+     * Get the matching grade category based on final score.
+     * Returns null if no categories configured or final score is null.
+     *
+     * @param  Collection|null  $categories
+     */
+    public function getGradeCategory($categories = null): ?ActivityGradeCategory
+    {
+        $finalScore = $this->calculateFinalScore();
+
+        if ($finalScore === null) {
+            return null;
+        }
+
+        $categories = $categories ?? $this->activity->gradeCategories ?? collect();
+
+        foreach ($categories as $category) {
+            if ($category->matches($finalScore)) {
+                return $category;
+            }
+        }
+
+        return null;
     }
 }

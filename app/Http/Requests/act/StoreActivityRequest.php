@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Act;
 
+use App\Models\Act\FundSource;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -20,13 +21,13 @@ class StoreActivityRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        if ($this->fund_source_id && !is_numeric($this->fund_source_id)) {
-            $fundSource = \App\Models\Act\FundSource::firstOrCreate([
-                'name' => $this->fund_source_id
+        if ($this->fund_source_id && ! is_numeric($this->fund_source_id)) {
+            $fundSource = FundSource::firstOrCreate([
+                'name' => $this->fund_source_id,
             ]);
-            
+
             $this->merge([
-                'fund_source_id' => $fundSource->id
+                'fund_source_id' => $fundSource->id,
             ]);
         }
     }
@@ -58,9 +59,12 @@ class StoreActivityRequest extends FormRequest
             'target_participant_id' => 'nullable|exists:target_participants,id',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
+            'start_time' => 'nullable|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i',
             'budget_amount' => 'nullable|numeric',
             'work_unit_id' => 'nullable|exists:work_units,id',
             'pic_user_id' => 'nullable|exists:users,id',
+            'organizer_pic_id' => 'nullable|exists:users,id',
             'quota_participant' => 'nullable|integer|min:1',
             'budget_id' => 'nullable|exists:budgets,id',
         ];

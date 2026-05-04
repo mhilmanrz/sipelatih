@@ -34,7 +34,7 @@
                 style="display:flex; gap:10px; margin-bottom:15px; align-items:center;">
                 <div class="search" style="flex-grow: 1; max-width: 400px;">
                     <input type="text" name="q" value="{{ request('q') }}"
-                        placeholder="Cari NIP, Nama, Unit Kerja, Jenis Tenaga..."
+                        placeholder="Cari Nama, Unit Kerja, Profesi..."
                         style="width: 100%; padding:8px; border:1px solid #ccc; border-radius:5px;">
                 </div>
 
@@ -47,11 +47,12 @@
             <table style="width:100%; border-collapse:collapse;">
                 <thead>
                     <tr style="background:#007A7F; color:white; text-align:left;">
-                        <th style="padding:10px;">NO.</th>
-                        <th style="padding:10px;">NIP/NPS</th>
-                        <th style="padding:10px;">Nama Pegawai</th>
+                        <th style="padding:10px;">No.</th>
+                        <th style="padding:10px;">Nama</th>
                         <th style="padding:10px;">Unit Kerja</th>
-                        <th style="padding:10px;">Tenaga</th>
+                        <th style="padding:10px;">Profesi</th>
+                        <th style="padding:10px;">Pangkat</th>
+                        <th style="padding:10px;">Golongan</th>
                         <th style="padding:10px;">Aksi</th>
                     </tr>
                 </thead>
@@ -59,12 +60,13 @@
                     @forelse($users as $index => $u)
                         <tr style="border-bottom:1px solid #ddd;">
                             <td style="padding:10px;">{{ $users->firstItem() + $index }}</td>
-                            <td style="padding:10px;">{{ $u->employee_id ?? '-' }}</td>
                             <td style="padding:10px;"><a href="{{ route('users.edit', $u->id) }}"
                                     style="text-decoration:none; color:#007A7F; font-weight:bold;">{{ $u->name }}</a>
                             </td>
                             <td style="padding:10px;">{{ $u->workUnit->name ?? '-' }}</td>
                             <td style="padding:10px;">{{ $u->profession->name ?? '-' }}</td>
+                            <td style="padding:10px;">{{ $u->rank->name ?? '-' }}</td>
+                            <td style="padding:10px;">{{ $u->rank->code ?? '-' }}</td>
                             <td style="padding:10px;">
                                 <div style="display:flex; gap:5px; align-items:center;">
                                     <a href="{{ route('users.edit', $u->id) }}"
@@ -86,7 +88,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" style="text-align:center; padding:20px;">Belum ada data pegawai.</td>
+                            <td colspan="7" style="text-align:center; padding:20px;">Belum ada data pegawai.</td>
                         </tr>
                     @endforelse
                 </tbody>
