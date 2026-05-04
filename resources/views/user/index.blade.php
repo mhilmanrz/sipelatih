@@ -1,11 +1,6 @@
 <x-layouts.app>
     <x-slot:title>Manajemen Pegawai</x-slot>
 
-    @push('styles')
-        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/manajemenPegawai.css') }}">
-    @endpush
-
     <div class="page-wrap">
 
         <!-- TOP BAR -->
@@ -76,7 +71,8 @@
                                         style="background:#007A7F; border:none; color:white; padding:5px 10px; border-radius:5px; cursor:pointer; text-decoration:none; font-size:14px;">
                                         Edit
                                     </a>
-                                    <form action="{{ route('users.destroy', $u->id) }}" method="POST" style="margin:0;">
+                                    <form action="{{ route('users.destroy', $u->id) }}" method="POST"
+                                        style="margin:0;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
@@ -98,7 +94,8 @@
 
             <div class="table-footer"
                 style="display:flex; justify-content:space-between; margin-top:20px; align-items:center;">
-                <span>Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ $users->total() }}
+                <span>Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of
+                    {{ $users->total() }}
                     entries</span>
                 <div class="pagination">
                     {{ $users->links('pagination::bootstrap-4') }} <!-- Keeping standard pagination links -->
