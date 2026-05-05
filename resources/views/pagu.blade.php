@@ -1,88 +1,61 @@
 <x-layouts.app>
-    <x-slot:title>Manajemen Pagu Anggaran</x-slot:title>
+    <x-slot:title>Manajemen Pagu Anggaran</x-slot>
 
-    @push('styles')        <style>
-            .tw-wrap p,
-            .tw-wrap h1,
-            .tw-wrap h2,
-            .tw-wrap h3,
-            .tw-wrap h4,
-            .tw-wrap h5,
-            .tw-wrap h6,
-            .tw-wrap span,
-            .tw-wrap div,
-            .tw-wrap a,
-            .tw-wrap button,
-            .tw-wrap table,
-            .tw-wrap th,
-            .tw-wrap td,
-            .tw-wrap tr,
-            .tw-wrap thead,
-            .tw-wrap tbody,
-            .tw-wrap form,
-            .tw-wrap input,
-            .tw-wrap label,
-            .tw-wrap select {
-                font-family: inherit;
-            }
-        </style>
-    @endpush
+    <div class="px-8 py-6">
 
-    <div class="tw-wrap p-6">
-        <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+        {{-- TITLE & BUTTONS --}}
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
             <x-page-title>Manajemen Pagu Anggaran</x-page-title>
-
-            <div class="flex items-center gap-4">
-                <form action="{{ route('pagu.index') }}" method="GET" class="flex items-center gap-2">
-                    <label for="filterYear" class="text-sm font-medium text-gray-700">Filter Tahun:</label>
-                    <select name="year" id="filterYear" onchange="this.form.submit()"
-                            class="border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-teal-500 focus:border-teal-500 shadow-sm w-36">
-                        <option value="">-- Semua --</option>
-                        @foreach($availableYears as $y)
-                            <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
-                        @endforeach
-                    </select>
-                </form>
-
-                <a href="{{ route('pagu.import.page') }}" id="btnImportPagu"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded shadow whitespace-nowrap text-sm"
-                    style="text-decoration:none;">
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('pagu.import.page') }}"
+                    class="inline-flex items-center justify-center gap-2 bg-white border border-[#007a7a] text-[#007a7a] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#007a7a] hover:text-white transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
+                    </svg>
                     Import Pagu
                 </a>
                 <button type="button" id="btnTambahPagu"
-                    class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow whitespace-nowrap text-sm">
-                    + Tambah Pagu
+                    class="inline-flex items-center justify-center gap-2 bg-[#007a7a] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#005f5f] active:bg-[#004d4d] transition shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Tambah Pagu
                 </button>
             </div>
         </div>
 
-        <!-- CHART AREA -->
-        @if($totalDana > 0)
-        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center mb-6">
-            <h2 class="text-xl font-bold text-gray-700 mb-4 text-center">Persentase Penyerapan Dana Pagu</h2>
-            <div class="relative w-full max-w-md" style="height: 250px;">
-                <canvas id="paguPieChart"></canvas>
-            </div>
-            <div class="mt-4 text-center text-sm text-gray-600">
-                <p>Total Pagu: Rp {{ number_format($totalDana, 0, ',', '.') }}</p>
-                <p>Pagu Digunakan: Rp {{ number_format($totalTerserap, 0, ',', '.') }}</p>
-                <p>Pagu Tersisa: Rp {{ number_format($totalSisa, 0, ',', '.') }}</p>
-            </div>
-        </div>
-        @endif
+        {{-- FILTER BAR --}}
+        <form method="GET" action="{{ route('pagu.index') }}"
+            class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="flex flex-wrap items-center gap-3 px-5 py-4 border-b border-gray-200">
 
-        @if(count($rkaklLabels) > 0)
-        <!-- BAR CHART AREA per RKAKL -->
-        <div class="bg-white rounded-lg shadow p-6 mb-6">
-            <h2 class="text-xl font-bold text-gray-700 mb-4 text-center">Penyerapan Pagu per RKAKL (Tahun {{ $chartYear }})</h2>
-            <div class="relative w-full" style="height: 350px;">
-                <canvas id="paguBarChart"></canvas>
-            </div>
-        </div>
-        @endif
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <span>Tampilkan</span>
+                    <select name="entries" onchange="this.form.submit()"
+                        class="bg-gray-50 border border-gray-300 rounded-lg px-2.5 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
+                        <option value="5" {{ request('entries') == 5 ? 'selected' : '' }}>5</option>
+                        <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                    </select>
+                    <span>data</span>
+                </div>
 
+                <div class="h-6 w-px bg-gray-200 hidden sm:block"></div>
+
+                <select name="year" onchange="this.form.submit()"
+                    class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition appearance-none pr-8 bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%236b7280%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.23%207.21a.75.75%200%20011.06.02L10%2011.168l3.71-3.938a.75.75%200%20111.08%201.04l-4.25%204.5a.75.75%200%2001-1.08%200l-4.25-4.5a.75.75%200%2001.02-1.06z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat">
+                    <option value="">Semua Tahun</option>
+                    @foreach($availableYears as $y)
+                        <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </form>
+
+        {{-- ALERTS --}}
         @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
                 <strong>Terdapat kesalahan:</strong>
                 <ul class="mt-2 list-disc list-inside">
                     @foreach ($errors->all() as $error)
@@ -93,128 +66,156 @@
         @endif
 
         @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6" role="alert">
                 <span class="block sm:inline">{{ session('success') }}</span>
             </div>
         @endif
 
-        <div class="bg-white rounded-lg shadow overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200" style="min-width:700px;">
-                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
-                    <tr>
-                        <th scope="col" class="text-center w-16 border border-white py-3 px-4 font-semibold">No.</th>
-                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">No. RKAKL</th>
-                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">Tahun</th>
-                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">Kategori Pagu</th>
-                        <th scope="col" class="text-left border border-white py-3 px-4 font-semibold">Submark</th>
-                        <th scope="col" class="text-right border border-white py-3 px-4 font-semibold">Pagu</th>
-                        <th scope="col" class="text-right border border-white py-3 px-4 font-semibold">Sisa Pagu</th>
-                        <th scope="col" class="text-center w-48 border border-white py-3 px-4 font-semibold">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @php $sum = 0; @endphp
-                    @forelse($budgets as $index => $budget)
-                        @php $sum += $budget->total_amount; @endphp
-                        <tr class="hover:bg-gray-50">
-                            <td class="whitespace-nowrap text-sm text-center text-gray-500 border border-gray-200 py-3 px-4">
-                                {{ $index + 1 }}
-                            </td>
-                            <td class="whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-200 py-3 px-4">
-                                {{ $budget->rkkal_code }}
-                            </td>
-                            <td class="whitespace-nowrap text-sm text-gray-900 border border-gray-200 py-3 px-4">
-                                {{ $budget->year }}
-                            </td>
-                            <td class="whitespace-nowrap text-sm text-gray-900 border border-gray-200 py-3 px-4">
-                                {{ $budget->budgetCategory->name ?? '-' }}
-                            </td>
-                            <td class="whitespace-nowrap text-sm text-gray-900 border border-gray-200 py-3 px-4">
-                                {{ $budget->submark }}
-                            </td>
-                            <td class="whitespace-nowrap text-sm text-right text-gray-900 border border-gray-200 py-3 px-4">
-                                {{ number_format($budget->total_amount, 0, ',', '.') }}
-                            </td>
-                            <td class="whitespace-nowrap text-sm text-right text-gray-900 border border-gray-200 py-3 px-4">
-                                {{ number_format($budget->remaining_amount, 0, ',', '.') }}
-                            </td>
-                            <td class="whitespace-nowrap text-sm font-medium text-center space-x-2 flex justify-center border border-gray-200 py-3 px-4">
-                                <a href="{{ route('pagu.show', $budget->id) }}" class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 border border-green-200 rounded text-sm font-medium transition-colors" style="text-decoration:none;">
-                                    Detail
-                                </a>
-                                <button type="button" class="btn-edit inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 rounded text-sm font-medium transition-colors"
-                                        data-id="{{ $budget->id }}"
-                                        data-rkkal="{{ $budget->rkkal_code }}"
-                                        data-year="{{ $budget->year }}"
-                                        data-category="{{ $budget->budget_category_id }}"
-                                        data-submark="{{ $budget->submark }}"
-                                        data-amount="{{ $budget->total_amount }}">
-                                    Edit
-                                </button>
-                                <form action="{{ route('pagu.destroy', $budget->id) }}" method="POST" class="inline-block m-0 h-full">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" 
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus pagu ini?')" style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">
-                                        Hapus
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
+        {{-- CHART AREA --}}
+        @if($totalDana > 0)
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-base font-semibold text-gray-800">Persentase Penyerapan Dana Pagu</h3>
+            </div>
+            <div class="p-6 flex flex-col items-center">
+                <div class="relative w-full max-w-md" style="height: 250px;">
+                    <canvas id="paguPieChart"></canvas>
+                </div>
+                <div class="mt-4 text-center text-sm text-gray-600">
+                    <p>Total Pagu: <span class="font-semibold">Rp {{ number_format($totalDana, 0, ',', '.') }}</span></p>
+                    <p>Pagu Digunakan: <span class="font-semibold">Rp {{ number_format($totalTerserap, 0, ',', '.') }}</span></p>
+                    <p>Pagu Tersisa: <span class="font-semibold">Rp {{ number_format($totalSisa, 0, ',', '.') }}</span></p>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @if(count($rkaklLabels) > 0)
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-base font-semibold text-gray-800">Penyerapan Pagu per RKAKL (Tahun {{ $chartYear }})</h3>
+            </div>
+            <div class="p-6" style="height: 350px;">
+                <canvas id="paguBarChart"></canvas>
+            </div>
+        </div>
+        @endif
+
+        {{-- TABLE --}}
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm border-collapse" style="min-width: 700px;">
+                    <thead class="bg-[#007a7a] text-white">
                         <tr>
-                            <td colspan="7" class="text-center text-gray-500 text-sm border border-gray-200 py-3 px-4">
-                                Belum ada data Pagu.
-                            </td>
+                            <th class="text-center w-12 py-3 px-4 font-semibold text-sm">No.</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">No. RKAKL</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Tahun</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Kategori Pagu</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Submark</th>
+                            <th class="text-right py-3 px-4 font-semibold text-sm">Pagu</th>
+                            <th class="text-right py-3 px-4 font-semibold text-sm">Sisa Pagu</th>
+                            <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
                         </tr>
-                    @endforelse
-                </tbody>
-                <tfoot class="bg-gray-100 font-bold border-t-2 border-gray-300">
-                    <tr>
-                        <td colspan="5" class="text-right text-sm text-gray-800 uppercase border border-gray-200 py-3 px-4">
-                            Total Pagu
-                        </td>
-                        <td class="text-right text-sm text-gray-800 border border-gray-200 py-3 px-4">
-                            {{ number_format($sum, 0, ',', '.') }}
-                        </td>
-                        <td colspan="2"></td>
-                    </tr>
-                </tfoot>
-            </table>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @php $sum = 0; @endphp
+                        @forelse($paginatedBudgets as $index => $budget)
+                            @php $sum += $budget->total_amount; @endphp
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="text-center py-3 px-4">{{ $paginatedBudgets->firstItem() + $index }}</td>
+                                <td class="font-medium py-3 px-4">{{ $budget->rkkal_code }}</td>
+                                <td class="py-3 px-4">{{ $budget->year }}</td>
+                                <td class="py-3 px-4">{{ $budget->budgetCategory->name ?? '-' }}</td>
+                                <td class="py-3 px-4">{{ $budget->submark }}</td>
+                                <td class="text-right font-medium py-3 px-4">{{ number_format($budget->total_amount, 0, ',', '.') }}</td>
+                                <td class="text-right py-3 px-4">{{ number_format($budget->remaining_amount, 0, ',', '.') }}</td>
+                                <td class="text-center py-3 px-4">
+                                    <div class="flex justify-center gap-1.5">
+                                        <a href="{{ route('pagu.show', $budget->id) }}"
+                                            class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-semibold transition">
+                                            Detail
+                                        </a>
+                                        <button type="button" class="btn-edit inline-flex items-center px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-xs font-semibold transition"
+                                                data-id="{{ $budget->id }}"
+                                                data-rkkal="{{ $budget->rkkal_code }}"
+                                                data-year="{{ $budget->year }}"
+                                                data-category="{{ $budget->budget_category_id }}"
+                                                data-submark="{{ $budget->submark }}"
+                                                data-amount="{{ $budget->total_amount }}">
+                                            Edit
+                                        </button>
+                                        <form action="{{ route('pagu.destroy', $budget->id) }}" method="POST" class="inline-block m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus pagu ini?')"
+                                                class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-semibold transition">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center text-gray-500 py-6 px-4">
+                                    Belum ada data Pagu.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                    @if($paginatedBudgets->total() > 0)
+                    <tfoot class="bg-gray-50">
+                        <tr>
+                            <td colspan="5" class="text-right text-sm font-semibold text-gray-800 py-3 px-4 uppercase">
+                                Total Pagu
+                            </td>
+                            <td class="text-right text-sm font-semibold text-gray-800 py-3 px-4">
+                                {{ number_format($budgets->sum('total_amount'), 0, ',', '.') }}
+                            </td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tfoot>
+                    @endif
+                </table>
+            </div>
+
+            {{-- PAGINATION --}}
+            <div class="px-5 py-4 border-t border-gray-200">
+                {{ $paginatedBudgets->links('components.pagination') }}
+            </div>
         </div>
     </div>
 
-    <!-- TAILWIND MODAL OVERLAY -->
-    <div id="modalPagu" class="tw-wrap fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
-        <!-- MODAL BOX -->
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden transform transition-all">
+    {{-- MODAL --}}
+    <div id="modalPagu" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black/50">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 overflow-hidden">
             <form id="formPagu" method="POST" action="{{ route('pagu.store') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formMethod" value="POST">
 
-                <div class="bg-teal-600 px-6 py-4 flex justify-between items-center text-white">
-                    <h2 id="modalTitle" class="text-lg font-bold">PENGATURAN PAGU ANGGARAN</h2>
+                <div class="bg-[#007a7a] px-6 py-4 flex justify-between items-center">
+                    <h2 id="modalTitle" class="text-lg font-bold text-white">Pengaturan Pagu Anggaran</h2>
                     <button type="button" class="text-white hover:text-gray-200 focus:outline-none text-2xl" id="closeModal">&times;</button>
                 </div>
 
-                <div class="p-6 space-y-4 text-left">
+                <div class="p-6 space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">No. RKAKL <span class="text-red-500">*</span></label>
                         <input type="text" name="rkkal_code" id="inputRkkal" required
-                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm">
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tahun Anggaran <span class="text-red-500">*</span></label>
                         <input type="number" name="year" id="inputYear" required min="2000"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition"
                                placeholder="Contoh: {{ date('Y') }}">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Pagu <span class="text-red-500">*</span></label>
                         <select name="budget_category_id" id="inputCategory" required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm">
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
                             <option value="">-- Pilih Kategori Pagu --</option>
                             @foreach($categories as $cat)
                                 <option value="{{ $cat->id }}">{{ $cat->name }}</option>
@@ -225,26 +226,25 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Submark</label>
                         <input type="text" name="submark" id="inputSubmark"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm">
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Pagu <span class="text-red-500">*</span></label>
                         <input type="number" name="total_amount" id="inputAmount" required
-                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm">
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
                     </div>
                 </div>
 
-                <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-3 border-t border-gray-200">
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-medium" id="btnCancel">BATAL</button>
-                    <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 font-medium shadow">SIMPAN</button>
+                <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3 border-t border-gray-200">
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium text-sm transition" id="btnCancel">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-[#007a7a] text-white rounded-lg hover:bg-[#005f5f] font-medium text-sm transition">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
     @push('scripts')
-        <!-- Inline Javascript for Modal Logic -->
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const modal = document.getElementById('modalPagu');
@@ -255,31 +255,26 @@
                 const formMethod = document.getElementById('formMethod');
                 const modalTitle = document.getElementById('modalTitle');
 
-                // Form Inputs
                 const inputRkkal = document.getElementById('inputRkkal');
                 const inputYear = document.getElementById('inputYear');
                 const inputCategory = document.getElementById('inputCategory');
                 const inputSubmark = document.getElementById('inputSubmark');
                 const inputAmount = document.getElementById('inputAmount');
 
-                // Function to close modal
                 function hideModal() {
                     modal.classList.add('hidden');
                 }
 
-                // Function to open modal
                 function showModal() {
                     modal.classList.remove('hidden');
                 }
 
-                // Open Modal for Tambah
                 btnTambah.addEventListener('click', () => {
                     showModal();
                     modalTitle.innerText = "TAMBAH PAGU ANGGARAN";
                     formPagu.action = "{{ route('pagu.store') }}";
                     formMethod.value = "POST";
 
-                    // Reset fields
                     inputRkkal.value = '';
                     inputYear.value = new Date().getFullYear();
                     inputCategory.value = '';
@@ -287,17 +282,14 @@
                     inputAmount.value = '';
                 });
 
-                // Close Modal bindings
                 btnClose.addEventListener('click', hideModal);
                 btnCancel.addEventListener('click', hideModal);
 
-                // Open Modal for Edit
                 document.querySelectorAll('.btn-edit').forEach(btn => {
                     btn.addEventListener('click', function() {
                         showModal();
                         modalTitle.innerText = "EDIT PAGU ANGGARAN";
 
-                        // Get data from data-* attributes
                         const id = this.getAttribute('data-id');
                         const rkkal = this.getAttribute('data-rkkal');
                         const year = this.getAttribute('data-year');
@@ -305,11 +297,9 @@
                         const submark = this.getAttribute('data-submark');
                         const amount = this.getAttribute('data-amount');
 
-                        // Set form action dynamically & add method spoofing for PUT
                         formPagu.action = `/pagu/${id}`;
                         formMethod.value = "PUT";
 
-                        // Set input values
                         inputRkkal.value = rkkal;
                         inputYear.value = year;
                         inputCategory.value = category;
@@ -341,12 +331,12 @@
                             {{ $totalSisa < 0 ? 0 : $totalSisa }}
                         ],
                         backgroundColor: [
-                            '#3b82f6', // blue-500
-                            '#10b981'  // emerald-500
+                            'rgba(0, 122, 122, 0.7)',
+                            'rgba(107, 114, 128, 0.5)'
                         ],
                         borderColor: [
-                            '#2563eb', // blue-600
-                            '#059669'  // emerald-600
+                            'rgba(0, 122, 122, 1)',
+                            'rgba(107, 114, 128, 1)'
                         ],
                         borderWidth: 1
                     }]
@@ -363,18 +353,14 @@
                                 position: 'bottom',
                                 labels: {
                                     padding: 20,
-                                    font: {
-                                        size: 14
-                                    }
+                                    font: { size: 14 }
                                 }
                             },
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
                                         let label = context.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
+                                        if (label) { label += ': '; }
                                         let value = context.raw;
                                         let total = context.chart._metasets[context.datasetIndex].total;
                                         let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
@@ -401,16 +387,18 @@
                         {
                             label: 'Dana Digunakan',
                             data: {!! json_encode($rkaklDigunakan) !!},
-                            backgroundColor: '#3b82f6', // blue-500
-                            borderColor: '#2563eb', // blue-600
-                            borderWidth: 1
+                            backgroundColor: 'rgba(0, 122, 122, 0.7)',
+                            borderColor: 'rgba(0, 122, 122, 1)',
+                            borderWidth: 1,
+                            borderRadius: 4
                         },
                         {
                             label: 'Dana Tersisa',
                             data: {!! json_encode($rkaklSisa) !!},
-                            backgroundColor: '#10b981', // emerald-500
-                            borderColor: '#059669', // emerald-600
-                            borderWidth: 1
+                            backgroundColor: 'rgba(107, 114, 128, 0.5)',
+                            borderColor: 'rgba(107, 114, 128, 1)',
+                            borderWidth: 1,
+                            borderRadius: 4
                         }
                     ]
                 };
@@ -422,19 +410,14 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            x: {
-                                stacked: true,
-                            },
+                            x: { stacked: true },
                             y: {
                                 stacked: true,
                                 beginAtZero: true,
                                 ticks: {
-                                    callback: function(value, index, values) {
-                                        if (value >= 1000000000) {
-                                            return (value / 1000000000) + ' M';
-                                        } else if (value >= 1000000) {
-                                            return (value / 1000000) + ' Jt';
-                                        }
+                                    callback: function(value) {
+                                        if (value >= 1000000000) return (value / 1000000000) + ' M';
+                                        if (value >= 1000000) return (value / 1000000) + ' Jt';
                                         return new Intl.NumberFormat('id-ID').format(value);
                                     }
                                 }
@@ -445,11 +428,8 @@
                                 callbacks: {
                                     label: function(context) {
                                         let label = context.dataset.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        let value = context.raw;
-                                        label += 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+                                        if (label) { label += ': '; }
+                                        label += 'Rp ' + new Intl.NumberFormat('id-ID').format(context.raw);
                                         return label;
                                     }
                                 }

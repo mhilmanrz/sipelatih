@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Act\ActivityParticipant;
 use App\Models\User\User;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class MonitoringJplController extends Controller
 {
@@ -29,9 +30,8 @@ class MonitoringJplController extends Controller
                 $q->where('name', 'like', '%'.$nama.'%');
             });
 
-        // Get users and format them
+        // Get users and calculate JPL
         $users = $usersQuery->get()->map(function ($user) {
-            // Filter out duplicate participants for the same activity
             $uniqueParticipants = $user->activityParticipants->unique('activity_id');
             $capaian = $uniqueParticipants->sum(function ($participant) {
                 return $participant->activity ? $participant->activity->activityMaterials->sum('value') : 0;
@@ -39,45 +39,22 @@ class MonitoringJplController extends Controller
 
             $user->capaian_jpl = round($capaian / 45, 2);
             $user->target_jpl = $user->profession?->category?->jpl_target ?? 24;
+            $user->category_name = $user->profession?->category?->name ?? '-';
             $user->unique_activities_count = $uniqueParticipants->count();
 
             return $user;
-        });
+        })->values();
 
-        // TABLE 2: Detailed Activities
-        $detailedQuery = ActivityParticipant::with([
-            'user.workUnit',
-            'user.profession.category',
-            'user.employmentType',
-            'activity.activityName',
-            'activity.activityScope',
-            'activity.activityMaterials',
-            'activity.activityProfessions.profession',
-        ])->where('is_passed', true)
-            ->whereHas('activity', function ($qa) use ($year) {
-                $qa->whereYear('end_date', $year)
-                    ->orWhereYear('start_date', $year);
-            })
-            ->whereHas('user', function ($q) use ($searchNip, $searchNama) {
-                $q->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
-                if ($searchNip) {
-                    $q->where('employee_id', 'like', '%'.$searchNip.'%');
-                }
-                if ($searchNama) {
-                    $q->where('name', 'like', '%'.$searchNama.'%');
-                }
-            });
-
-        $detailedActivities = $detailedQuery->get()
-            ->unique(function ($participant) {
-                return $participant->user_id.'-'.$participant->activity_id;
-            })
-            ->map(function ($participant) {
-                $participant->capaian_jpl = $participant->activity ? $participant->activity->activityMaterials->sum('value') : 0;
-                $participant->target_jpl = $participant->user?->profession?->category?->jpl_target ?? 24;
-
-                return $participant;
-            });
+        // Paginate users
+        $perPage = $request->input('entries', 10);
+        $page = $request->input('page', 1);
+        $paginatedUsers = new LengthAwarePaginator(
+            $users->forPage($page, $perPage),
+            $users->count(),
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
 
         // CHART DATA: JPL per kategori profesi
         $jplPerCategory = ActivityParticipant::with([
@@ -114,10 +91,10 @@ class MonitoringJplController extends Controller
                     ->with('activity.activityMaterials');
             }])->get();
 
-        $numerator1 = 0; // Capaian >= 40 for target == 40
-        $denominator1 = 0; // Target == 40
-        $numerator2 = 0; // Capaian >= 24 for target == 24
-        $denominator2 = 0; // Target == 24
+        $numerator1 = 0;
+        $denominator1 = 0;
+        $numerator2 = 0;
+        $denominator2 = 0;
 
         foreach ($allUsers as $u) {
             $targetJpl = $u->profession?->category?->jpl_target ?? 24;
@@ -146,7 +123,7 @@ class MonitoringJplController extends Controller
         $cgPercentage = $denominator2 > 0 ? round(($numerator2 / $denominator2) * 100, 2) : 0;
 
         return view('monitoringJpl', compact(
-            'users', 'detailedActivities', 'chartLabels', 'chartData', 'year',
+            'users', 'paginatedUsers', 'chartLabels', 'chartData', 'year',
             'numerator1', 'denominator1', 'teiPercentage',
             'numerator2', 'denominator2', 'cgPercentage'
         ));

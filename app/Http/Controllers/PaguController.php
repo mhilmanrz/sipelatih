@@ -8,6 +8,7 @@ use App\Models\Act\Activity;
 use App\Models\Budget;
 use App\Models\BudgetCategory;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
@@ -33,6 +34,17 @@ class PaguController extends Controller
         $budgetIds = $budgets->pluck('id');
         $totalTerserap = Activity::whereIn('budget_id', $budgetIds)->sum('budget_amount');
         $totalSisa = $totalDana - $totalTerserap;
+
+        // Paginate budgets
+        $perPage = $request->input('entries', 10);
+        $page = $request->input('page', 1);
+        $paginatedBudgets = new LengthAwarePaginator(
+            $budgets->forPage($page, $perPage),
+            $budgets->count(),
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
 
         $availableYears = Budget::select('year')
             ->whereNotNull('year')
@@ -71,7 +83,7 @@ class PaguController extends Controller
         }
 
         return view('pagu', compact(
-            'budgets', 'categories', 'selectedYear', 'availableYears',
+            'budgets', 'paginatedBudgets', 'categories', 'selectedYear', 'availableYears',
             'totalDana', 'totalTerserap', 'totalSisa',
             'chartYear', 'rkaklLabels', 'rkaklDigunakan', 'rkaklSisa'
         ));

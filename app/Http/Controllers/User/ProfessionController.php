@@ -14,7 +14,8 @@ class ProfessionController extends Controller
      */
     public function index(Request $request)
     {
-        $professions = Profession::with('category')->paginate(10);
+        $perPage = $request->input('entries', 10);
+        $professions = Profession::with('category')->paginate($perPage)->appends($request->all());
 
         return view('profession.index', compact('professions'));
     }

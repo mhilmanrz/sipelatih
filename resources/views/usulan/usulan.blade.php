@@ -4,57 +4,55 @@
     <!-- TITLE & BUTTON -->
     <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
         <x-page-title>Usulan Diklat</x-page-title>
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2">
             <a href="{{ route('kegiatan.import.page') }}"
-                class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition"
-                style="background-color:#D6DE20;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"
+                class="inline-flex items-center justify-center gap-2 bg-white border border-[#007a7a] text-[#007a7a] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#007a7a] hover:text-white transition"
                 title="Import Usulan Kegiatan dari Excel" id="btnImport">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
                 </svg>
                 Import Kegiatan
             </a>
             <a href="{{ route('kegiatan.import-per-peserta.page') }}"
-                class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition"
-                style="background-color:#D6DE20;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"
+                class="inline-flex items-center justify-center gap-2 bg-white border border-[#007a7a] text-[#007a7a] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#007a7a] hover:text-white transition"
                 title="Import Kegiatan beserta Peserta dari Excel" id="btnImportPeserta">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
                 </svg>
-                Import Kegiatan per Peserta
+                Import per Peserta
             </a>
             <a href="{{ route('kegiatan.create') }}"
-                class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition"
-                style="background-color:#D6DE20;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"
+                class="inline-flex items-center justify-center gap-2 bg-[#007a7a] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#005f5f] active:bg-[#004d4d] transition shadow-sm"
                 id="btnTambah">
-                ➕ Tambah Data
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Tambah Data
             </a>
         </div>
     </div>
 
     <!-- AREA TABLE -->
-    <div>
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
 
         <!-- Table Control -->
         <form method="GET" action="{{ route('usulan-diklat') }}"
-            class="flex flex-wrap justify-between items-center p-6 border-b border-gray-200 gap-4">
+            class="flex flex-wrap justify-between items-center gap-4 bg-white rounded-t-xl px-5 py-4 border-b border-gray-200">
 
-            <div class="flex items-center gap-2 text-gray-700">
-                <span>Show</span>
+            <div class="flex items-center gap-2 text-sm text-gray-600">
+                <span>Tampilkan</span>
                 <select name="entries" onchange="this.form.submit()"
-                    class="border rounded px-2 py-1 outline-none focus:ring-1 focus:ring-[#007a7a]">
+                    class="bg-gray-50 border border-gray-300 rounded-lg px-2.5 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
                     <option value="5" {{ request('entries') == 5 ? 'selected' : '' }}>5</option>
                     <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
                     <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
                 </select>
-                <span>entries</span>
+                <span>data</span>
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
                 <select name="year" onchange="this.form.submit()"
-                    class="border rounded-full px-3 py-1.5 outline-none focus:ring-1 focus:ring-[#007a7a] text-sm text-gray-700">
+                    class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition appearance-none pr-8 bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%236b7280%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.23%207.21a.75.75%200%20011.06.02L10%2011.168l3.71-3.938a.75.75%200%20111.08%201.04l-4.25%204.5a.75.75%200%2001-1.08%200l-4.25-4.5a.75.75%200%2001.02-1.06z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat">
                     <option value="">Semua Tahun</option>
                     @php
                         $currentYear = date('Y');
@@ -66,20 +64,24 @@
                 </select>
 
                 <select name="status" onchange="this.form.submit()"
-                    class="border rounded-full px-3 py-1.5 outline-none focus:ring-1 focus:ring-[#007a7a] text-sm text-gray-700">
+                    class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition appearance-none pr-8 bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%236b7280%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.23%207.21a.75.75%200%20011.06.02L10%2011.168l3.71-3.938a.75.75%200%20111.08%201.04l-4.25%204.5a.75.75%200%2001-1.08%200l-4.25-4.5a.75.75%200%2001.02-1.06z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat">
                     <option value="">Semua Status</option>
                     <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="submitted" {{ request('status') === 'submitted' ? 'selected' : '' }}>Submitted
-                    </option>
+                    <option value="submitted" {{ request('status') === 'submitted' ? 'selected' : '' }}>Submitted</option>
                     <option value="revision" {{ request('status') === 'revision' ? 'selected' : '' }}>Revision</option>
                     <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>Accepted</option>
                 </select>
 
-                <div class="flex items-center gap-2">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search..."
-                        class="border rounded-full px-4 py-1.5 outline-none focus:ring-1 focus:ring-[#007a7a] text-sm">
+                <div class="relative flex items-center">
+                    <svg class="absolute left-3 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kegiatan..."
+                        class="bg-gray-50 border border-gray-300 rounded-lg pl-9 pr-4 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition w-48">
                     <button type="submit"
-                        class="bg-[#007a7a] text-white px-4 py-1.5 rounded-full hover:bg-[#006bd6] transition text-sm">Search</button>
+                        class="bg-[#007a7a] text-white px-4 py-1.5 rounded-lg hover:bg-[#006666] active:bg-[#005555] transition text-sm font-medium ml-2">
+                        Cari
+                    </button>
                 </div>
             </div>
         </form>
@@ -160,8 +162,8 @@
         </div>
 
         <!-- PAGINATION -->
-        <div class="mt-4 px-6 pb-6">
-            {{ $kegiatan->appends(request()->query())->links('pagination::tailwind') }}
+        <div class="px-5 py-4 border-t border-gray-200">
+            {{ $kegiatan->appends(request()->query())->links('components.pagination') }}
         </div>
     </div>
 

@@ -1,104 +1,74 @@
 <x-layouts.app>
     <x-slot:title>Manajemen Jenis Kegiatan</x-slot>
 
-    @push('styles')
-        <style>
-            .tw-wrap p,
-            .tw-wrap h1,
-            .tw-wrap h2,
-            .tw-wrap h3,
-            .tw-wrap h4,
-            .tw-wrap h5,
-            .tw-wrap h6,
-            .tw-wrap span,
-            .tw-wrap div,
-            .tw-wrap a,
-            .tw-wrap button,
-            .tw-wrap table,
-            .tw-wrap th,
-            .tw-wrap td,
-            .tw-wrap tr,
-            .tw-wrap thead,
-            .tw-wrap tbody {
-                font-family: inherit;
-            }
-        </style>
-    @endpush
-
-    <div class="tw-wrap p-6">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-white">MANAJEMEN JENIS KEGIATAN</h1>
-            <a href="{{ route('activity-types.create') }}"
-                class="bg-[#1A5555] hover:bg-[#1A5555] text-white font-semibold py-2 px-4 rounded shadow">
-                + Tambah Jenis Kegiatan
-            </a>
+    <div class="px-8 py-6">
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+            <x-page-title>Manajemen Jenis Kegiatan</x-page-title>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('activity-types.create') }}"
+                    class="inline-flex items-center justify-center gap-2 bg-[#007a7a] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#005f5f] active:bg-[#004d4d] transition shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Tambah Jenis Kegiatan
+                </a>
+            </div>
         </div>
 
         @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6" role="alert">
                 <span class="block sm:inline">{{ session('success') }}</span>
             </div>
         @endif
 
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-teal-600">
-                    <tr>
-                        <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider w-16">
-                            No.
-                        </th>
-                        <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                            Jenis Kegiatan
-                        </th>
-                        <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-48">
-                            Aksi
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($activityTypes as $index => $activityType)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $activityTypes->firstItem() + $index }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ $activityType->name }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center space-x-2">
-                                <a href="{{ route('activity-types.edit', $activityType->id) }}"
-                                    class="inline-flex items-center px-3 py-1.5 bg-[#1A5555] text-white hover:bg-[#1A5555] border border-[#1A5555] rounded text-sm font-medium transition-colors">
-                                    Edit
-                                </a>
-                                <form action="{{ route('activity-types.destroy', $activityType->id) }}" method="POST"
-                                    class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="inline-flex items-center px-3 py-1.5 bg-[#FF0000] text-white hover:bg-red-100 border border-red-200 rounded text-sm font-medium transition-colors"
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus Jenis Kegiatan ini?')">
-                                        Hapus
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm border-collapse" style="min-width: 400px;">
+                    <thead class="bg-[#007a7a] text-white">
                         <tr>
-                            <td colspan="3" class="px-6 py-10 text-center text-gray-500 text-sm">
-                                Belum ada data Jenis Kegiatan.
-                            </td>
+                            <th class="text-center w-12 py-3 px-4 font-semibold text-sm">No.</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Jenis Kegiatan</th>
+                            <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse($activityTypes as $index => $activityType)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="text-center py-3 px-4">{{ $activityTypes->firstItem() + $index }}</td>
+                                <td class="font-medium py-3 px-4">{{ $activityType->name }}</td>
+                                <td class="py-3 px-4 text-center">
+                                    <div class="flex justify-center gap-1.5">
+                                        <a href="{{ route('activity-types.edit', $activityType->id) }}"
+                                            class="inline-flex items-center px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-xs font-semibold transition">
+                                            Edit
+                                        </a>
+                                        <form action="{{ route('activity-types.destroy', $activityType->id) }}" method="POST"
+                                            class="inline-block m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-semibold transition"
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus Jenis Kegiatan ini?')">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="py-6 px-4 text-center text-gray-500">
+                                    Belum ada data Jenis Kegiatan.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
 
-            @if ($activityTypes->hasPages())
-                <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                    {{ $activityTypes->links() }}
-                </div>
-            @endif
+            <div class="px-5 py-4 border-t border-gray-200">
+                {{ $activityTypes->links('components.pagination') }}
+            </div>
         </div>
     </div>
 </x-layouts.app>

@@ -1,117 +1,128 @@
 <x-layouts.app>
     <x-slot:title>Manajemen Akun</x-slot>
 
-    @push('styles')
-        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/manajemenPegawai.css') }}">
-    @endpush
+    <div class="px-8 py-6">
 
-    <div class="page-wrap">
-
-        <!-- TOP BAR -->
-        <div class="table-top" style="display:flex; justify-content:space-between; margin-bottom:15px;">
-            <div class="left" style="display:flex; align-items:center; gap:8px; color:#000000; font-size:14px;">
-                Show
-                <select
-                    style="padding:6px 12px; border:1px solid #ddd; border-radius:4px; font-size:14px; outline:none; background-color:white; cursor:pointer;"
-                    onchange="window.location.href='?per_page='+this.value">
-                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
-                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                </select>
-                entries
-            </div>
-
-            <div class="right">
-                <a href="{{ url('accounts/create') }}" class="btn green"
-                    style="background:#1A5555; padding:8px 15px; border-radius:5px; text-decoration:none; color:white;">＋
-                    Tambah</a>
+        {{-- TITLE & BUTTONS --}}
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+            <x-page-title>Manajemen Akun</x-page-title>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('accounts.create') }}"
+                    class="inline-flex items-center justify-center gap-2 bg-[#007a7a] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#005f5f] active:bg-[#004d4d] transition shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Tambah
+                </a>
             </div>
         </div>
 
-        <!-- CARD -->
-        <div class="card-table"
-            style="background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);">
-            <form method="GET" action="{{ route('accounts.index') }}" class="filter-bar"
-                style="display:flex; gap:10px; margin-bottom:15px; align-items:center;">
-                <div class="search" style="flex-grow: 1; max-width: 400px;">
-                    <input type="text" name="q" value="{{ request('q') }}"
-                        placeholder="Cari NIP, Nama, Unit Kerja, Jenis Tenaga..."
-                        style="width: 100%; padding:8px; border:1px solid #ccc; border-radius:5px;">
+        {{-- ALERTS --}}
+        @if ($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+                <strong>Terdapat kesalahan:</strong>
+                <ul class="mt-2 list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6" role="alert">
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+        @endif
+
+        {{-- FILTER BAR --}}
+        <form method="GET" action="{{ route('accounts.index') }}" class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="flex flex-wrap items-center gap-3 px-5 py-4 border-b border-gray-200">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <span>Tampilkan</span>
+                    <select name="entries" onchange="this.form.submit()"
+                        class="bg-gray-50 border border-gray-300 rounded-lg px-2.5 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
+                        <option value="5" {{ request('entries') == 5 ? 'selected' : '' }}>5</option>
+                        <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                    </select>
+                    <span>data</span>
                 </div>
 
-                <button type="submit" class="btn text-white"
-                    style="padding:8px 15px; background:#007A7F; border:none; border-radius:5px; cursor:pointer;">Cari</button>
-                <a href="{{ route('accounts.index') }}" class="btn reset"
-                    style="padding:8px 15px; background:#f4f4f4; border:1px solid #ccc; border-radius:5px; cursor:pointer; text-decoration:none; color:black;">⟳
-                    Reset</a>
-            </form>
-            <table style="width:100%; border-collapse:collapse;">
-                <thead>
-                    <tr style="background:#007A7F; color:white; text-align:left;">
-                        <th style="padding:10px;">NO.</th>
-                        <th style="padding:10px;">Nama Akun</th>
-                        <th style="padding:10px;">Email</th>
-                        <th style="padding:10px;">Role</th>
-                        <th style="padding:10px;">Scope Unit</th>
-                        <th style="padding:10px;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($users as $index => $u)
-                        <tr style="border-bottom:1px solid #ddd;">
-                            <td style="padding:10px;">{{ $users->firstItem() + $index }}</td>
-                            <td style="padding:10px;"><a href="{{ route('accounts.edit', $u->id) }}"
-                                    style="text-decoration:none; color:#007A7F; font-weight:bold;">{{ $u->name }}</a>
-                            </td>
-                            <td style="padding:10px;">{{ $u->email }}</td>
-                            <td style="padding:10px;">{{ $u->roles->pluck('name')->join(', ') }}</td>
-                            <td style="padding:10px;">
-                                @if($u->work_unit_id)
-                                    {{ $u->workUnit->name }}
-                                @else
-                                    <span style="background:#ddd; padding:2px 6px; border-radius:4px; font-size:12px;">Semua Unit</span>
-                                @endif
-                            </td>
-                            <td style="padding:10px;">
-                                <div style="display:flex; gap:5px; align-items:center;">
-                                    <a href="{{ route('accounts.edit', $u->id) }}"
-                                        style="background:#007A7F; border:none; color:white; padding:5px 10px; border-radius:5px; cursor:pointer; text-decoration:none; font-size:14px;">
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('accounts.destroy', $u->id) }}" method="POST" style="margin:0;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            style="background:red; border:none; color:white; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:14px;"
-                                            onclick="return confirm('Hapus pegawai ini?')">
-                                            Hapus
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
+                <div class="h-6 w-px bg-gray-200 hidden sm:block"></div>
+
+                <div class="flex items-center gap-2">
+                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari NIP, Nama, Unit Kerja, Jenis Tenaga..."
+                        class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
+                    <button type="submit" class="bg-[#007a7a] text-white px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-[#005f5f] transition">Cari</button>
+                    <a href="{{ route('accounts.index') }}" class="bg-gray-100 text-gray-700 px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-gray-200 transition">Reset</a>
+                </div>
+            </div>
+        </form>
+
+        {{-- TABLE --}}
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm border-collapse" style="min-width: 700px;">
+                    <thead class="bg-[#007a7a] text-white">
                         <tr>
-                            <td colspan="6" style="text-align:center; padding:20px;">Belum ada data akun.</td>
+                            <th class="text-center w-12 py-3 px-4 font-semibold text-sm">No.</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Nama Akun</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Email</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Role</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Scope Unit</th>
+                            <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse($users as $index => $u)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="text-center py-3 px-4">{{ $users->firstItem() + $index }}</td>
+                                <td class="py-3 px-4">
+                                    <a href="{{ route('accounts.edit', $u->id) }}" class="text-[#007a7a] hover:underline font-medium">{{ $u->name }}</a>
+                                </td>
+                                <td class="py-3 px-4">{{ $u->email }}</td>
+                                <td class="py-3 px-4">{{ $u->roles->pluck('name')->join(', ') }}</td>
+                                <td class="py-3 px-4">
+                                    @if($u->work_unit_id)
+                                        {{ $u->workUnit->name }}
+                                    @else
+                                        <span class="bg-gray-200 px-2 py-0.5 rounded text-xs">Semua Unit</span>
+                                    @endif
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <div class="flex justify-center gap-1.5">
+                                        <a href="{{ route('accounts.edit', $u->id) }}"
+                                            class="inline-flex items-center px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-xs font-semibold transition">
+                                            Edit
+                                        </a>
+                                        <form action="{{ route('accounts.destroy', $u->id) }}" method="POST" class="inline-block m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="return confirm('Hapus akun ini?')"
+                                                class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-semibold transition">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center text-gray-500 py-6 px-4">
+                                    Belum ada data akun.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
 
-            <div class="table-footer"
-                style="display:flex; justify-content:space-between; margin-top:20px; align-items:center;">
-                <span>Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ $users->total() }}
-                    entries</span>
-                <div class="pagination">
-                    {{ $users->links('pagination::bootstrap-4') }} <!-- Keeping standard pagination links -->
-                </div>
+            {{-- PAGINATION --}}
+            <div class="px-5 py-4 border-t border-gray-200">
+                {{ $users->links('components.pagination') }}
             </div>
         </div>
     </div>
-
-    @push('scripts')
-        <script src="{{ asset('assets/js/LayoutSuperAdmin.js') }}"></script>
-        <script src="{{ asset('assets/js/manajemenPegawai.js') }}"></script>
-    @endpush
 </x-layouts.app>

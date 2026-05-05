@@ -1,4 +1,4 @@
-<section style="margin-top: 2rem;">
+<section>
 
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -18,32 +18,32 @@
     @endif
 
     <!-- TABLE CARD -->
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 2rem;">
-        <div style="display: flex; justify-content: flex-start; margin-bottom: 1rem;">
-            <button id="openModal" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded shadow transition-colors" style="background-color: #14b8a6; color: white;">
+    <div class="mb-6">
+        <div class="flex justify-start mb-4">
+            <button id="openModal" class="bg-[#007a7a] hover:bg-[#005f5f] text-white font-semibold px-4 py-2 rounded-lg text-sm transition">
                 + Tambah Sasaran Profesi
             </button>
         </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-sm border-collapse border border-gray-200">
-                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
+                <thead class="bg-[#007a7a] text-white py-3 px-4 font-semibold text-sm">
                     <tr>
-                        <th class="-300 text-center w-16 border border-white py-3 px-4 font-semibold">NO.</th>
-                        <th class="-300 text-left border border-white py-3 px-4 font-semibold">Profesi</th>
-                        <th class="-300 text-center w-32 border border-white py-3 px-4 font-semibold">Aksi</th>
+                        <th class="text-center w-16 border border-white py-3 px-4 font-semibold">NO.</th>
+                        <th class="text-left border border-white py-3 px-4 font-semibold">Profesi</th>
+                        <th class="text-center w-32 border border-white py-3 px-4 font-semibold">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="profesiTableBody" class="bg-white">
                     @forelse ($kegiatan->activityProfessions as $index => $item)
                         <tr>
-                            <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
-                            <td class="-300 border border-gray-200 py-3 px-4">{{ $item->profession->name ?? 'Profesi Tidak Ditemukan' }}</td>
-                            <td class="-300 text-center border border-gray-200 py-3 px-4">
+                            <td class="text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
+                            <td class="border border-gray-200 py-3 px-4">{{ $item->profession->name ?? 'Profesi Tidak Ditemukan' }}</td>
+                            <td class="text-center border border-gray-200 py-3 px-4">
                                 <form action="{{ route('kegiatan.sasaran-profesi.destroy', ['kegiatan' => $kegiatan->id, 'id' => $item->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus profesi ini dari sasaran?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"   style="background-color: #ef4444;" class="text-white px-3 py-1.5 rounded hover:bg-[#dc2626] text-sm font-semibold transition inline-block">
+                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition inline-block">
                                         Hapus
                                     </button>
                                 </form>
@@ -51,7 +51,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="-300 text-center text-gray-500 border border-gray-200 py-3 px-4">Belum ada sasaran profesi yang ditambahkan.</td>
+                            <td colspan="3" class="text-center text-gray-500 border border-gray-200 py-3 px-4">Belum ada sasaran profesi yang ditambahkan.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -61,17 +61,17 @@
 </section>
 
 <!-- MODAL TAMBAH -->
-<div id="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center;">
-    <div style="background: white; border-radius: 8px; padding: 2rem; width: 500px; max-width: 90%;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h2 style="font-size: 1.25rem; font-weight: bold; margin: 0;">Tambah Sasaran Profesi</h2>
-            <button id="closeModal" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280;">✖</button>
+<div id="modal" style="display: none;" class="fixed inset-0 bg-black/50 z-50 items-center justify-center">
+    <div class="bg-white rounded-lg p-8 w-[500px] max-w-[90%]">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold m-0">Tambah Sasaran Profesi</h2>
+            <button id="closeModal" class="bg-transparent border-none text-2xl cursor-pointer text-gray-500">✖</button>
         </div>
 
         <form action="{{ route('kegiatan.sasaran-profesi.store', $kegiatan->id) }}" method="POST">
             @csrf
-            <div style="margin-bottom: 1rem;">
-                <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: #374151;">*Sasaran Profesi</label>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2 text-gray-700">*Sasaran Profesi</label>
                 <select name="profession_id" id="professionSelect" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
                     <option value="">- PILIH PROFESI -</option>
                     @foreach ($professions as $prof)
@@ -80,11 +80,11 @@
                 </select>
             </div>
 
-            <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">
-                <button type="button" id="cancelBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded transition-colors" style="background-color: #d1d5db; color: #1f2937; cursor: pointer;">
+            <div class="flex justify-end gap-2 mt-6">
+                <button type="button" id="cancelBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition">
                     Batal
                 </button>
-                <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow transition-colors" style="background-color: #0d9488; color: white; cursor: pointer;">
+                <button type="submit" class="bg-[#007a7a] hover:bg-[#005f5f] text-white font-semibold px-4 py-2 rounded-lg text-sm transition">
                     Simpan
                 </button>
             </div>

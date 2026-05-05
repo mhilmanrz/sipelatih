@@ -22,7 +22,8 @@ class PositionController extends Controller
                 ->orWhere('code', 'like', '%'.$search.'%');
         }
 
-        $positions = $query->paginate(10);
+        $perPage = $request->input('entries', 10);
+        $positions = $query->paginate($perPage)->appends($request->all());
 
         return view('user.position.index', compact('positions'));
     }

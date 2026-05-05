@@ -5,155 +5,185 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @endpush
 
-    <!-- CONTENT -->
-    <div class="p-6 space-y-6">
+    <div class="px-8 py-6">
 
-        <!-- TITLE -->
-        <x-page-title>MONITORING CAPAIAN JPL</x-page-title>
+        {{-- TITLE --}}
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+            <x-page-title>Monitoring Capaian JPL</x-page-title>
+        </div>
 
-        <!-- FILTER -->
-        <form action="{{ route('monitoring.jpl.index') }}" method="GET"
-            class="bg-white p-4 rounded shadow flex flex-col md:flex-row gap-4 md:items-center flex-wrap">
-            <div class="flex items-center gap-2">
-                <label for="year" class="font-semibold text-gray-700 whitespace-nowrap">Tahun:</label>
-                <select name="year" id="year"
-                    class="border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-primary/40">
+        {{-- FILTER BAR --}}
+        <form method="GET" action="{{ route('monitoring.jpl.index') }}"
+            class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="flex flex-wrap items-center gap-3 px-5 py-4 border-b border-gray-200">
+
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <span>Tampilkan</span>
+                    <select name="entries" onchange="this.form.submit()"
+                        class="bg-gray-50 border border-gray-300 rounded-lg px-2.5 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
+                        <option value="5" {{ request('entries') == 5 ? 'selected' : '' }}>5</option>
+                        <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                    </select>
+                    <span>data</span>
+                </div>
+
+                <div class="h-6 w-px bg-gray-200 hidden sm:block"></div>
+
+                <select name="year" onchange="this.form.submit()"
+                    class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition appearance-none pr-8 bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%236b7280%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.23%207.21a.75.75%200%20011.06.02L10%2011.168l3.71-3.938a.75.75%200%20111.08%201.04l-4.25%204.5a.75.75%200%2001-1.08%200l-4.25-4.5a.75.75%200%2001.02-1.06z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat">
                     @php
                         $currentYear = date('Y');
-                        $startYear = 2020;
                     @endphp
-                    @for ($y = $currentYear + 1; $y >= $startYear; $y--)
+                    @for ($y = $currentYear + 1; $y >= 2020; $y--)
                         <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                     @endfor
                 </select>
+
+                <div class="relative flex items-center">
+                    <svg class="absolute left-3 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" name="nip" value="{{ request('nip') }}" placeholder="Cari NIP..."
+                        class="bg-gray-50 border border-gray-300 rounded-lg pl-9 pr-4 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition w-40">
+                </div>
+
+                <div class="relative flex items-center">
+                    <svg class="absolute left-3 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" name="nama" value="{{ request('nama') }}" placeholder="Cari Nama..."
+                        class="bg-gray-50 border border-gray-300 rounded-lg pl-9 pr-4 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition w-40">
+                </div>
+
+                <button type="submit"
+                    class="bg-[#007a7a] text-white px-4 py-1.5 rounded-lg hover:bg-[#006666] active:bg-[#005555] transition text-sm font-medium">
+                    Cari
+                </button>
+
+                <a href="{{ route('monitoring.jpl.index') }}"
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-1.5 rounded-lg text-sm font-medium transition no-underline">
+                    Reset
+                </a>
             </div>
-            <input type="text" name="nip" value="{{ request('nip') }}" placeholder="Cari NIP Pegawai"
-                class="border rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
-            <input type="text" name="nama" value="{{ request('nama') }}" placeholder="Cari Nama Pegawai"
-                class="border rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
-            <button type="submit" class="bg-[#007A7F] hover:bg-teal-700 text-white px-6 py-2 rounded w-full md:w-auto">
-                Cari
-            </button>
-            <a href="{{ route('monitoring.jpl.index') }}"
-                class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded w-full md:w-auto text-center"
-                style="text-decoration: none;">
-                Reset
-            </a>
         </form>
 
-        <!-- TABLE 2 -->
-        <div class="bg-white rounded-2xl shadow overflow-x-auto">
-            <table class="w-full text-sm text-gray-700">
-                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
-                    <tr>
-                        <th class="border border-white py-3 px-4 font-semibold">No.</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Nama Pegawai</th>
-                        <th class="border border-white py-3 px-4 font-semibold">NIP</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Unit Kerja</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Nama Kegiatan</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Waktu Kegiatan</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Cakupan Kegiatan</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Jabatan</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Tenaga</th>
-                        <th class="border border-white py-3 px-4 font-semibold">4 Besar</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Target</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Capaian</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Keterangan</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-gray-50">
-                    @forelse($detailedActivities as $index => $participant)
-                        <tr class="border-b">
-                            <td class="text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
-                            <td class="text-teal-700 font-medium whitespace-nowrap border border-gray-200 py-3 px-4">
-                                {{ $participant->user->name }}</td>
-                            <td class="font-mono text-sm border border-gray-200 py-3 px-4">{{ $participant->user->employee_id ?? '-' }}</td>
-                            <td class="min-w-[12rem] border border-gray-200 py-3 px-4">{{ $participant->user->workUnit->name ?? '-' }}</td>
-                            <td class="font-medium min-w-[12rem] border border-gray-200 py-3 px-4">
-                                {{ $participant->activity->activityName->name ?? ($participant->activity->name ?? 'N/A') }}
-                            </td>
-                            <td class="text-xs min-w-[10rem] border border-gray-200 py-3 px-4">
-                                {{ \Carbon\Carbon::parse($participant->activity->start_date)->format('d M') }} -
-                                {{ \Carbon\Carbon::parse($participant->activity->end_date)->format('d M Y') }}
-                            </td>
-                            <td class="border border-gray-200 py-3 px-4">{{ $participant->activity->activityScope->name ?? '-' }}</td>
-                            <td class="border border-gray-200 py-3 px-4">{{ $participant->user->position->name ?? '-' }}</td>
-                            <td class="border border-gray-200 py-3 px-4">{{ $participant->user->profession->name ?? '-' }}</td>
-                            <td class="border border-gray-200 py-3 px-4">{{ $participant->user->employmentType->name ?? '-' }}</td>
-                            <td class="text-center font-bold text-gray-600 border border-gray-200 py-3 px-4">{{ $participant->target_jpl }}</td>
-                            <td class="text-center font-bold text-teal-600 border border-gray-200 py-3 px-4">
-                                {{ number_format($participant->capaian_jpl, 1) }}</td>
-                            <td class="text-center border border-gray-200 py-3 px-4">
-                                @if ($participant->capaian_jpl >= $participant->target_jpl)
-                                    <span class="bg-green-500 text-white px-4 py-1 rounded-full text-xs">
-                                        Tercapai
-                                    </span>
-                                @else
-                                    <span class="bg-red-500 text-white px-4 py-1 rounded-full text-xs">
-                                        Belum Tercapai
-                                    </span>
-                                @endif
-                            </td>
-                        </tr>
-                    @empty
+        {{-- TABLE --}}
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-[#007a7a] text-white">
                         <tr>
-                            <td colspan="13" class="text-center text-gray-500 border border-gray-200 py-3 px-4">
-                                Tidak ada data histori detail partisipan yang telah lulus.
-                            </td>
+                            <th class="text-center w-12 py-3 px-4 font-semibold text-sm">No.</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Unit Kerja</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Kategori</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">NIP</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Nama Pegawai</th>
+                            <th class="text-center py-3 px-4 font-semibold text-sm w-16">Target</th>
+                            <th class="text-center py-3 px-4 font-semibold text-sm w-16">Capaian</th>
+                            <th class="text-center py-3 px-4 font-semibold text-sm w-24">Status</th>
+                            <th class="text-center py-3 px-4 font-semibold text-sm w-28">Keterangan</th>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <!-- CHART -->
-        <div class="bg-white rounded shadow p-6">
-            <h3 class="text-lg font-semibold mb-4 text-gray-700">
-                Capaian JPL per Kategori Profesi Tahun {{ $year }}
-            </h3>
-            <canvas id="jplChart"></canvas>
-        </div>
-
-        <!-- INDIKATOR KINERJA -->
-        <h2 class="text-2xl font-bold text-[#007A7F] text-left">
-            INDIKATOR KINERJA TAHUN {{ $year }}
-        </h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <!-- Summary Value 1 -->
-            <div class="bg-white rounded-lg shadow p-6 border-t-4 border-teal-500">
-                <h3 class="text-lg font-bold text-gray-700 mb-2">Training Effectiveness Index (40 JPL)</h3>
-                <div class="flex items-end justify-between">
-                    <div>
-                        <p class="text-3xl font-extrabold text-teal-600">{{ $teiPercentage }}%</p>
-                        <p class="text-sm text-gray-500 mt-1">Mencapai Target : {{ $numerator1 }} dari
-                            {{ $denominator1 }} Pegawai</p>
-                    </div>
-                    <div class="text-teal-200">
-                        <i class="fas fa-users fa-3x"></i>
-                    </div>
-                </div>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse($paginatedUsers as $index => $user)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="text-center py-3 px-4">{{ $paginatedUsers->firstItem() + $index }}</td>
+                                <td class="py-3 px-4">{{ $user->workUnit->name ?? '-' }}</td>
+                                <td class="py-3 px-4">{{ $user->category_name }}</td>
+                                <td class="font-mono text-sm py-3 px-4">{{ $user->employee_id ?? '-' }}</td>
+                                <td class="font-medium text-[#007a7a] py-3 px-4">{{ $user->name }}</td>
+                                <td class="text-center font-bold text-gray-600 py-3 px-4">{{ $user->target_jpl }}</td>
+                                <td class="text-center font-bold text-[#007a7a] py-3 px-4">{{ number_format($user->capaian_jpl, 1) }}</td>
+                                <td class="text-center py-3 px-4">
+                                    @if($user->capaian_jpl >= $user->target_jpl)
+                                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-green-300">
+                                            Tercapai
+                                        </span>
+                                    @else
+                                        <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-red-300">
+                                            Belum
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="text-center py-3 px-4 text-xs text-gray-500">
+                                    {{ $user->unique_activities_count }} kegiatan
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="text-center text-gray-500 py-6 px-4">
+                                    Tidak ada data pegawai yang ditemukan.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
 
-            <!-- Summary Value 2 -->
-            <div class="bg-white rounded-lg shadow p-6 border-t-4 border-blue-500">
-                <h3 class="text-lg font-bold text-gray-700 mb-2">Clinical & Governance (24 JPL)</h3>
-                <div class="flex items-end justify-between">
-                    <div>
-                        <p class="text-3xl font-extrabold text-blue-600">{{ $cgPercentage }}%</p>
-                        <p class="text-sm text-gray-500 mt-1">Mencapai Target : {{ $numerator2 }} dari
-                            {{ $denominator2 }} Pegawai</p>
-                    </div>
-                    <div class="text-blue-200">
-                        <i class="fas fa-stethoscope fa-3x"></i>
-                    </div>
-                </div>
+            {{-- PAGINATION --}}
+            <div class="px-5 py-4 border-t border-gray-200">
+                {{ $paginatedUsers->links('components.pagination') }}
             </div>
         </div>
 
-        <div class="relative bg-white rounded-lg shadow p-4" style="height: 400px;">
-            <canvas id="kpiChart"></canvas>
+        {{-- CHART: Capaian JPL per Kategori --}}
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-base font-semibold text-gray-800">Capaian JPL per Kategori Profesi Tahun {{ $year }}</h3>
+            </div>
+            <div class="p-6">
+                <canvas id="jplChart"></canvas>
+            </div>
         </div>
+
+        {{-- INDIKATOR KINERJA --}}
+        <div class="mb-6">
+            <h2 class="text-lg font-bold text-white mb-4">Indikator Kinerja Tahun {{ $year }}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border-t-4 border-[#007a7a]">
+                    <div class="p-6">
+                        <h3 class="text-base font-bold text-gray-700 mb-2">Training Effectiveness Index (40 JPL)</h3>
+                        <div class="flex items-end justify-between">
+                            <div>
+                                <p class="text-3xl font-extrabold text-[#007a7a]">{{ $teiPercentage }}%</p>
+                                <p class="text-sm text-gray-500 mt-1">Mencapai Target: {{ $numerator1 }} dari {{ $denominator1 }} Pegawai</p>
+                            </div>
+                            <div class="text-[#007a7a]/20">
+                                <i class="fas fa-users fa-3x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border-t-4 border-blue-500">
+                    <div class="p-6">
+                        <h3 class="text-base font-bold text-gray-700 mb-2">Clinical & Governance (24 JPL)</h3>
+                        <div class="flex items-end justify-between">
+                            <div>
+                                <p class="text-3xl font-extrabold text-blue-600">{{ $cgPercentage }}%</p>
+                                <p class="text-sm text-gray-500 mt-1">Mencapai Target: {{ $numerator2 }} dari {{ $denominator2 }} Pegawai</p>
+                            </div>
+                            <div class="text-blue-200">
+                                <i class="fas fa-stethoscope fa-3x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- KPI CHART --}}
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-base font-semibold text-gray-800">Capaian Indikator Kinerja Pegawai (Tahun {{ $year }})</h3>
+            </div>
+            <div class="p-6" style="height: 400px;">
+                <canvas id="kpiChart"></canvas>
+            </div>
+        </div>
+
     </div>
 
     @push('scripts')
@@ -172,11 +202,11 @@
                             label: 'Persentase Capaian (%)',
                             data: [teiValue, cgValue],
                             backgroundColor: [
-                                'rgba(20, 184, 166, 0.7)', // Teal
-                                'rgba(59, 130, 246, 0.7)' // Blue
+                                'rgba(0, 122, 122, 0.7)',
+                                'rgba(59, 130, 246, 0.7)'
                             ],
                             borderColor: [
-                                'rgba(20, 184, 166, 1)',
+                                'rgba(0, 122, 122, 1)',
                                 'rgba(59, 130, 246, 1)'
                             ],
                             borderWidth: 1,
@@ -201,13 +231,6 @@
                             legend: {
                                 display: false
                             },
-                            title: {
-                                display: true,
-                                text: 'Capaian Indikator Kinerja Pegawai (Tahun {{ $year }})',
-                                font: {
-                                    size: 16
-                                }
-                            },
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
@@ -221,16 +244,19 @@
             });
         </script>
         <script>
-            const ctx = document.getElementById('jplChart');
-            if (ctx) {
-                new Chart(ctx, {
+            const jplCtx = document.getElementById('jplChart');
+            if (jplCtx) {
+                new Chart(jplCtx, {
                     type: 'bar',
                     data: {
                         labels: {!! json_encode($chartLabels) !!},
                         datasets: [{
                             label: 'Capaian JPL',
                             data: {!! json_encode($chartData) !!},
-                            backgroundColor: '#11b9c6'
+                            backgroundColor: 'rgba(0, 122, 122, 0.7)',
+                            borderColor: 'rgba(0, 122, 122, 1)',
+                            borderWidth: 1,
+                            borderRadius: 4
                         }]
                     },
                     options: {
@@ -238,6 +264,15 @@
                         plugins: {
                             legend: {
                                 display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'JPL'
+                                }
                             }
                         }
                     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityReport;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 
 class ActivityReportController extends Controller
@@ -22,6 +23,33 @@ class ActivityReportController extends Controller
                 ->orWhereYear('end_date', $year);
         })->get();
 
+        // Paginate activities
+        $perPage = $request->input('entries', 10);
+        $page = $request->input('page', 1);
+        $paginatedActivities = new LengthAwarePaginator(
+            $activities->forPage($page, $perPage),
+            $activities->count(),
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
+        // Available years for filter
+        $availableYears = Activity::selectRaw('YEAR(start_date) as year')
+            ->whereNotNull('start_date')
+            ->union(Activity::selectRaw('YEAR(end_date) as year')->whereNotNull('end_date'))
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year')
+            ->toArray();
+
+        if (empty($availableYears)) {
+            $availableYears = [date('Y')];
+        } elseif (! in_array(date('Y'), $availableYears)) {
+            $availableYears[] = date('Y');
+            rsort($availableYears);
+        }
+
         // Fetch data for Pie Chart (tidak difilter tahun agar tetap akurat)
         $totalActivities = Activity::count();
         $statusCounts = [
@@ -37,7 +65,7 @@ class ActivityReportController extends Controller
             })->count(),
         ];
 
-        return view('laporanKegiatan', compact('activities', 'totalActivities', 'statusCounts', 'year'));
+        return view('laporanKegiatan', compact('activities', 'paginatedActivities', 'totalActivities', 'statusCounts', 'year', 'availableYears'));
     }
 
     public function store(Request $request)

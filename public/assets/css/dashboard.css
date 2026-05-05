@@ -57,27 +57,7 @@ body{
 
 #calendar{
     width:100%;
-    height: 100%;
     min-height:320px;
-}
-.fc{
-    height:100% !important;
-}
-
-.fc-view-harness{
-    min-height:260px;
-}
-
-.fc-scrollgrid{
-    border-radius:10px;
-}
-.fc .fc-toolbar-title{
-    font-size: 22px !important;
-    font-weight: 800;
-}
-.fc .fc-button{
-    font-size: 16px !important;
-    padding: 3px 6px !important;
 }
 .event-list{
     list-style:none;

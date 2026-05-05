@@ -15,20 +15,160 @@
 } */
 
 @layer base {
-    table {
-        border-collapse: separate !important;
-        border-spacing: 0 !important;
-        border: 5px solid #007A7F !important;
-        border-radius: 20px !important;
-        overflow: hidden !important;
-    }
-    
-    table thead, table thead tr, table thead th {
-        background-color: #007A7F !important;
-        color: #FFFFFF !important;
-    }
-    
-    table tbody, table tbody tr, table tbody td {
-        background-color: #FFFFFF !important;
-    }
+}
+
+/* FullCalendar overrides — UNLAYERED so they beat FullCalendar CDN styles */
+.fc { font-family: 'Poppins', sans-serif; }
+
+/* Reset: undo @layer base table styles inside .fc */
+.fc table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+}
+.fc table thead,
+.fc table thead tr,
+.fc table thead th {
+    background-color: transparent;
+    color: inherit;
+}
+.fc table tbody,
+.fc table tbody tr,
+.fc table tbody td {
+    background-color: transparent;
+    color: inherit;
+}
+
+/* Toolbar / Header */
+.fc .fc-toolbar {
+    background: #00B8A5;
+    border-radius: 0.5rem 0.5rem 0 0;
+    padding: 0.5rem 0.75rem;
+    margin: 0;
+}
+/* Remove gap between header and calendar grid */
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 0;
+}
+.fc .fc-toolbar-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+/* Nav arrows (prev/next) — subtle on green */
+.fc .fc-prev-button,
+.fc .fc-next-button {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.375rem;
+    box-shadow: none;
+    text-shadow: none;
+}
+.fc .fc-prev-button:hover,
+.fc .fc-next-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Today button — prominent pill style */
+.fc .fc-today-button {
+    background: #ffffff;
+    color: #00B8A5;
+    border: 2px solid #ffffff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.3rem 0.85rem;
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    text-shadow: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.fc .fc-today-button:hover {
+    background: transparent;
+    color: #ffffff;
+}
+.fc .fc-today-button:active,
+.fc .fc-today-button.fc-button-active {
+    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Button group (prev/next) */
+.fc .fc-button-group .fc-button {
+    border: none;
+    border-radius: 0.375rem;
+}
+
+/* Remove all borders */
+.fc-scrollgrid,
+.fc-scrollgrid td,
+.fc-scrollgrid th,
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border: none;
+}
+
+/* Day-of-week header */
+.fc .fc-col-header-cell {
+    background: #00B8A5;
+    border: none;
+}
+.fc-col-header-cell-cushion {
+    color: #ffffff;
+    padding: 0.4rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.7rem;
+}
+
+/* Day numbers — centered vertically & horizontally */
+.fc-daygrid-day-number {
+    color: #374151;
+    padding: 0.25rem;
+    text-decoration: none;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.fc-daygrid-day-frame {
+    display: flex;
+    flex-direction: column;
+}
+.fc-daygrid-day-events {
+    flex: 1;
+}
+.fc-daygrid-day-bg {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.fc-daygrid-day:hover {
+    background: #f0fdfa;
+}
+
+/* Today */
+.fc .fc-day-today {
+    background: #ccfbf1;
+    border-radius: 0.25rem;
+}
+
+/* Grid */
+.fc-scrollgrid {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: none;
+}
+.fc-daygrid-body {
+    border: none;
 }

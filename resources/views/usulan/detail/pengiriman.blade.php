@@ -26,98 +26,92 @@
     };
 @endphp
 
-<section style="margin-top: 2rem;">
+<section class="mb-6">
 
-    <div class="max-w-3xl mx-auto">
+    <!-- CARD: Aksi Pengiriman -->
+    <div class="mb-6 text-center flex flex-col items-center justify-center min-h-[400px]">
+        <div class="text-5xl mb-2 {{ $currentStatus === 'draft' || $currentStatus === 'revision' ? 'text-teal-500' : 'text-gray-400' }}">
+            ✈
+        </div>
+
         
-        <!-- CARD: Aksi Pengiriman -->
-        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 3rem; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 400px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-            <div style="font-size: 3rem; margin-bottom: 0.5rem; color: {{ $currentStatus === 'draft' || $currentStatus === 'revision' ? '#14b8a6' : '#9ca3af' }}">
-                ✈
-            </div>
 
-            <h3 style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">
-                Status Usulan Resmi: 
-                <span class="inline-block px-4 py-1 rounded-full text-sm font-semibold {{ $statusColor }} ml-2 align-middle">
-                    {{ mb_strtoupper($statusLabel) }}
-                </span>
-            </h3>
+        <div class="mb-4">
+            <span class="inline-block px-4 py-1 rounded-full text-sm font-semibold {{ $statusColor }}">
+                {{ mb_strtoupper($statusLabel) }}
+            </span>
+        </div>
 
-            @if($currentStatus === 'draft' || $currentStatus === 'revision')
-                @if(! $kegiatan->start_date)
-                    <p style="color: #6b7280; margin-bottom: 2rem; max-width: 80%; line-height: 1.6;">
-                        Silakan lengkapi <strong class="text-gray-800">Tgl Mulai</strong> pada Data Kegiatan terlebih dahulu sebelum mengirim usulan.
-                    </p>
-                @elseif(! $canSubmit)
-                    <p style="color: #6b7280; margin-bottom: 2rem; max-width: 80%; line-height: 1.6;">
-                        Pengiriman usulan hanya dapat dilakukan maksimal <strong class="text-gray-800">40 hari</strong> sebelum tanggal mulai
-                        (<strong>{{ \Carbon\Carbon::parse($kegiatan->start_date)->format('d M Y') }}</strong>).
-                        Anda dapat mengirim mulai tanggal <strong>{{ \Carbon\Carbon::parse($kegiatan->start_date)->subDays(40)->format('d M Y') }}</strong>.
-                    </p>
-                @else
-                    <p style="color: #6b7280; margin-bottom: 2rem; max-width: 80%; line-height: 1.6;">
-                        Sebelum menekan tombol Kirim, pastikan Anda telah memeriksa ulang kelengkapan Data Kegiatan, KAK, Materi, Sasaran Profesi, Narasumber, dan Peserta dengan saksama.
-                    </p>
-                @endif
-
-                <button onclick="document.getElementById('modalKirim').style.display='flex';"
-                    class="font-semibold py-3 px-8 text-lg rounded-full shadow-lg transition-colors"
-                    style="cursor: {{ $canSubmit ? 'pointer' : 'not-allowed' }}; background-color: {{ $canSubmit ? '#0d9488' : '#9ca3af' }}; color: white; border: none;"
-                    {{ ! $canSubmit ? 'disabled' : '' }}>
-                    🚀 Kirim Usulan
-                </button>
-            @elseif($currentStatus === 'submitted')
-                <p style="color: #6b7280; margin-bottom: 2rem; max-width: 80%; line-height: 1.6;">
-                    Usulan Anda berstatus <strong class="text-gray-800">Menunggu Verifikasi</strong> dan sedang dalam antrean Tim Peninjau. Apabila Anda menyadari ada kesalahan, Anda masih bisa menarik kembali usulan ini selama belum direview.
+        @if($currentStatus === 'draft' || $currentStatus === 'revision')
+            @if(! $kegiatan->start_date)
+                <p class="text-gray-500 mb-8 max-w-[80%] leading-relaxed">
+                    Silakan lengkapi <strong class="text-gray-800">Tgl Mulai</strong> pada Data Kegiatan terlebih dahulu sebelum mengirim usulan.
                 </p>
-
-                <button onclick="document.getElementById('modalBatalKirim').style.display='flex';"
-                    class="font-semibold py-3 px-8 text-lg rounded-full shadow transition-colors"
-                    style="cursor: pointer; background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">
-                    ⮌ Menarik Kembali Usulan
-                </button>
+            @elseif(! $canSubmit)
+                <p class="text-gray-500 mb-8 max-w-[80%] leading-relaxed">
+                    Pengiriman usulan hanya dapat dilakukan maksimal <strong class="text-gray-800">40 hari</strong> sebelum tanggal mulai
+                    (<strong>{{ \Carbon\Carbon::parse($kegiatan->start_date)->format('d M Y') }}</strong>).
+                    Anda dapat mengirim mulai tanggal <strong>{{ \Carbon\Carbon::parse($kegiatan->start_date)->subDays(40)->format('d M Y') }}</strong>.
+                </p>
             @else
-                <p style="color: #6b7280; margin-bottom: 2rem; max-width: 80%; line-height: 1.6;">
-                    Usulan ini sudah ditinjau / disetujui. Silakan cek menu <strong class="text-gray-800">Penilaian</strong> untuk melihat rekam jejak persetujuan.
+                <p class="text-gray-500 mb-8 max-w-[80%] leading-relaxed">
+                    Sebelum menekan tombol Kirim, pastikan Anda telah memeriksa ulang kelengkapan Data Kegiatan, KAK, Materi, Sasaran Profesi, Narasumber, dan Peserta dengan saksama.
                 </p>
             @endif
-        </div>
-        
+
+            <button onclick="document.getElementById('modalKirim').style.display='flex';"
+                class="{{ $canSubmit ? 'bg-[#007a7a] hover:bg-[#005f5f] cursor-pointer' : 'bg-gray-400 cursor-not-allowed' }} text-white font-semibold px-4 py-2 rounded-lg text-sm transition border-0"
+                {{ ! $canSubmit ? 'disabled' : '' }}>
+                🚀 Kirim Usulan
+            </button>
+        @elseif($currentStatus === 'submitted')
+            <p class="text-gray-500 mb-8 max-w-[80%] leading-relaxed">
+                Usulan Anda berstatus <strong class="text-gray-800">Menunggu Verifikasi</strong> dan sedang dalam antrean Tim Peninjau. Apabila Anda menyadari ada kesalahan, Anda masih bisa menarik kembali usulan ini selama belum direview.
+            </p>
+
+            <button onclick="document.getElementById('modalBatalKirim').style.display='flex';"
+                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer border-0">
+                ⮌ Menarik Kembali Usulan
+            </button>
+        @else
+            <p class="text-gray-500 mb-8 max-w-[80%] leading-relaxed">
+                Usulan ini sudah ditinjau / disetujui. Silakan cek menu <strong class="text-gray-800">Penilaian</strong> untuk melihat rekam jejak persetujuan.
+            </p>
+        @endif
     </div>
+
 </section>
 
 <!-- MODAL KIRIM -->
 <div id="modalKirim"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center;">
-    <div style="background: white; border-radius: 8px; padding: 2rem; width: 400px; max-width: 90%; text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+    class="hidden fixed inset-0 w-full h-full bg-black/50 z-50 items-center justify-center">
+    <div class="bg-white rounded-lg p-8 w-[400px] max-w-[90%] text-center shadow-2xl">
 
-        <div style="font-size: 3rem; color: #14b8a6; margin-bottom: 0.5rem;">
+        <div class="text-5xl text-teal-500 mb-2">
             🚀
         </div>
 
-        <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; color: #111827;">Kirim Usulan?</h2>
+        <h2 class="text-2xl font-bold mb-4 text-gray-900">Kirim Usulan?</h2>
 
-        <p style="color: #4b5563; margin-bottom: 2rem; line-height: 1.5;">
+        <p class="text-gray-600 mb-8 leading-normal">
             Data usulan akan diteruskan ke Tim Peninjau. Pastikan semua persyaratan, berkas, dan nama peserta telah lengkap.
         </p>
 
         <form action="{{ route('kegiatan.submit', $kegiatan->id) }}" method="POST">
             @csrf
             
-            <div style="text-align: left; margin-bottom: 1.5rem;">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Catatan Tambahan (Opsional)</label>
+            <div class="text-left mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Catatan Tambahan (Opsional)</label>
                 <textarea name="note" rows="2" class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none" placeholder="Misal: 'Mohon direview urgensinya karena minggu depan acara dimulai...'"></textarea>
             </div>
 
-            <div style="display: flex; justify-content: space-between; gap: 1rem;">
+            <div class="flex justify-between gap-4">
                 <button type="button" onclick="document.getElementById('modalKirim').style.display='none';"
-                    class="font-bold py-3 px-6 rounded-lg transition-colors flex-1"
-                    style="cursor: pointer; border: none; background-color: #f3f4f6; color: #374151;">
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition flex-1 cursor-pointer border-0">
                     BATAL
                 </button>
                 <button type="submit"
-                    class="font-bold py-3 px-6 rounded-lg shadow transition-colors flex-1"
-                    style="cursor: pointer; border: none; background-color: #0d9488; color: white;">
+                    class="bg-[#007a7a] hover:bg-[#005f5f] text-white font-semibold px-4 py-2 rounded-lg text-sm transition flex-1 cursor-pointer border-0">
                     YA, KIRIM
                 </button>
             </div>
@@ -128,30 +122,28 @@
 
 <!-- MODAL BATAL KIRIM -->
 <div id="modalBatalKirim"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center;">
-    <div style="background: white; border-radius: 8px; padding: 2rem; width: 400px; max-width: 90%; text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+    class="hidden fixed inset-0 w-full h-full bg-black/50 z-50 items-center justify-center">
+    <div class="bg-white rounded-lg p-8 w-[400px] max-w-[90%] text-center shadow-2xl">
 
-        <div style="font-size: 3rem; color: #ef4444; margin-bottom: 0.5rem;">
+        <div class="text-5xl text-red-500 mb-2">
             ⚠
         </div>
 
-        <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; color: #111827;">Tarik Usulan?</h2>
+        <h2 class="text-xl font-bold mb-4 text-gray-900">Tarik Usulan?</h2>
 
-        <p style="color: #4b5563; margin-bottom: 2rem;">
+        <p class="text-gray-600 mb-8">
             Anda yakin ingin menarik kembali usulan ini menjadi DRAFT? Hal ini biasanya dilakukan jika ada berkas penting yang terlewat untuk dikoreksi kembali.
         </p>
 
         <form action="{{ route('kegiatan.cancel_submit', $kegiatan->id) }}" method="POST">
             @csrf
-            <div style="display: flex; justify-content: space-between; gap: 1rem;">
+            <div class="flex justify-between gap-4">
                 <button type="button" onclick="document.getElementById('modalBatalKirim').style.display='none';"
-                    class="font-bold py-3 px-6 rounded-lg transition-colors flex-1"
-                    style="cursor: pointer; border: none; background-color: #f3f4f6; color: #374151;">
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition flex-1 cursor-pointer border-0">
                     TUTUP
                 </button>
                 <button type="submit"
-                    class="font-bold py-3 px-6 rounded-lg shadow transition-colors flex-1"
-                    style="cursor: pointer; border: none; background-color: #ef4444; color: white;">
+                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition flex-1 cursor-pointer border-0">
                     BATALKAN PENGIRIMAN
                 </button>
             </div>

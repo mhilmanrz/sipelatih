@@ -19,7 +19,8 @@ class RankController extends Controller
                 ->orWhere('code', 'like', '%'.$search.'%');
         }
 
-        $ranks = $query->paginate(10);
+        $perPage = $request->input('entries', 10);
+        $ranks = $query->paginate($perPage)->appends($request->all());
 
         return view('rank.index', compact('ranks'));
     }

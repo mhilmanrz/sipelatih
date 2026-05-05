@@ -1,4 +1,4 @@
-<section style="margin-top: 2rem;">
+<section>
 
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -38,43 +38,41 @@
         ];
     @endphp
 
-    <!-- CARD: PENGATURAN PENILAIAN -->
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem;">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold text-gray-800">Pengaturan Komponen Penilaian</h2>
+    {{-- CARD: PENGATURAN PENILAIAN --}}
+    <x-detail-section title="Pengaturan Komponen Penilaian" icon="fa-cog">
+        <div class="flex justify-end mb-4">
             <button type="button" onclick="toggleSettingForm()"
-                class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm font-bold shadow transition-colors">
+                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition">
                 <i class="fas fa-cog"></i> <span id="toggleSettingLabel">{{ $isConfigured ? 'Edit Pengaturan' : 'Atur Sekarang' }}</span>
             </button>
         </div>
 
         @if ($isConfigured)
-            <!-- Summary konfigurasi aktif -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                <div class="bg-white border border-blue-200 rounded-lg p-4 text-center">
                     <div class="text-2xl font-bold text-blue-700">{{ $scoreComponents->count() }}</div>
                     <div class="text-sm text-blue-600">Komponen Penilaian</div>
                 </div>
-                <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 text-center">
+                <div class="bg-white border border-amber-200 rounded-lg p-4 text-center">
                     <div class="text-2xl font-bold text-amber-700">{{ number_format($passingThreshold, 0) }}</div>
                     <div class="text-sm text-amber-600">Batas Nilai Lulus</div>
                 </div>
-                <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                <div class="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div class="text-2xl font-bold text-green-700">{{ number_format($gradedComponents->sum('percentage'), 0) }}%</div>
                     <div class="text-sm text-green-600">Total Persentase</div>
                 </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm border-collapse border border-gray-200">
-                    <thead class="bg-gray-100">
+                    <thead class="bg-[#007a7a] text-white">
                         <tr>
-                            <th class="text-left border border-gray-200 py-2 px-3">Komponen</th>
-                            <th class="text-center border border-gray-200 py-2 px-3 w-32">Tipe</th>
-                            <th class="text-center border border-gray-200 py-2 px-3 w-32">Persentase</th>
-                            <th class="text-center border border-gray-200 py-2 px-3 w-32">Masuk Nilai Akhir</th>
+                            <th class="text-left border border-white py-3 px-4 font-semibold text-sm">Komponen</th>
+                            <th class="text-center border border-white py-3 px-4 font-semibold text-sm w-32">Tipe</th>
+                            <th class="text-center border border-white py-3 px-4 font-semibold text-sm w-32">Persentase</th>
+                            <th class="text-center border border-white py-3 px-4 font-semibold text-sm w-32">Masuk Nilai Akhir</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="bg-white">
                         @foreach ($scoreComponents as $comp)
                             <tr class="{{ $comp->type === 'pre_test' ? 'bg-gray-50' : '' }}">
                                 <td class="border border-gray-200 py-2 px-3 font-medium">{{ $comp->name }}</td>
@@ -110,7 +108,7 @@
         @endif
 
         <!-- FORM PENGATURAN (tersembunyi) -->
-        <div id="settingForm" style="display: none; margin-top: 1.5rem; border-top: 1px solid #e5e7eb; padding-top: 1.5rem;">
+        <div id="settingForm" style="display: none;" class="mt-6 border-t border-gray-200 pt-6">
             <form method="POST" action="{{ route('kegiatan.pengaturan-penilaian.update', $kegiatan->id) }}" id="scoreSettingForm">
                 @csrf
                 @method('PUT')
@@ -118,7 +116,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Batas Nilai Lulus <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Batas Nilai Lulus <span class="text-red-500">*</span></label>
                         <input type="number" name="passing_threshold" step="0.01" min="0" max="100"
                             value="{{ old('passing_threshold', $passingThreshold) }}"
                             class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-teal-500"
@@ -136,9 +134,9 @@
 
                 <div class="mb-4">
                     <div class="flex justify-between items-center mb-3">
-                        <label class="block text-sm font-bold text-gray-700">Komponen Penilaian <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium text-gray-700">Komponen Penilaian <span class="text-red-500">*</span></label>
                         <button type="button" onclick="addCustomComponent()"
-                            class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-xs font-bold transition-colors">
+                            class="bg-[#007a7a] hover:bg-[#005f5f] text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">
                             + Tambah Komponen Custom
                         </button>
                     </div>
@@ -148,11 +146,11 @@
                     </div>
                 </div>
 
-                <div style="border-top: 2px solid #e5e7eb; padding-top: 1.5rem; margin-top: 1.5rem;">
+                <div class="border-t-2 border-gray-200 pt-6 mt-6">
                     <div class="flex justify-between items-center mb-3">
-                        <label class="block text-sm font-bold text-gray-700">Kategori Nilai <span class="text-xs text-gray-400 font-normal">(opsional)</span></label>
+                        <label class="block text-sm font-medium text-gray-700">Kategori Nilai <span class="text-xs text-gray-400 font-normal">(opsional)</span></label>
                         <button type="button" onclick="addGradeCategory()"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded text-xs font-bold transition-colors">
+                            class="bg-[#007a7a] hover:bg-[#005f5f] text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">
                             + Tambah Kategori
                         </button>
                     </div>
@@ -167,30 +165,27 @@
                 </div>
 
                 <div class="flex gap-3 justify-end mt-4">
-                    <button type="button" onclick="toggleSettingForm()" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded text-sm font-bold">Batal</button>
-                    <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded text-sm font-bold">Simpan Pengaturan</button>
+                    <button type="button" onclick="toggleSettingForm()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition">Batal</button>
+                    <button type="submit" class="bg-[#007a7a] hover:bg-[#005f5f] text-white font-semibold px-4 py-2 rounded-lg text-sm transition">Simpan Pengaturan</button>
                 </div>
             </form>
         </div>
-    </div>
+    </x-detail-section>
 
-    <!-- CARD: KATEGORI NILAI -->
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem;">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold text-gray-800">Kategori Nilai</h2>
-        </div>
+    {{-- CARD: KATEGORI NILAI --}}
+    <x-detail-section title="Kategori Nilai" icon="fa-tags">
 
         @if ($hasCategories)
             <div class="overflow-x-auto">
                 <table class="w-full text-sm border-collapse border border-gray-200">
-                    <thead class="bg-gray-100">
+                    <thead class="bg-[#007a7a] text-white">
                         <tr>
-                            <th class="text-left border border-gray-200 py-2 px-3">Label</th>
-                            <th class="text-center border border-gray-200 py-2 px-3 w-32">Rentang Nilai</th>
-                            <th class="text-center border border-gray-200 py-2 px-3 w-32">Warna</th>
+                            <th class="text-left border border-white py-3 px-4 font-semibold text-sm">Label</th>
+                            <th class="text-center border border-white py-3 px-4 font-semibold text-sm w-32">Rentang Nilai</th>
+                            <th class="text-center border border-white py-3 px-4 font-semibold text-sm w-32">Warna</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="bg-white">
                         @foreach ($gradeCategories as $cat)
                             @php $badgeColor = $colorMap[$cat->color] ?? 'bg-gray-100 text-gray-800 border-gray-400'; @endphp
                             <tr>
@@ -224,17 +219,14 @@
                 <p class="text-xs mt-1">Kategori dapat ditambahkan melalui tombol <strong class="text-gray-600">Edit Pengaturan</strong> di atas.</p>
             </div>
         @endif
-    </div>
+    </x-detail-section>
 
-    <!-- CARD: INPUT NILAI -->
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 2rem;">
-
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold text-gray-800">Input Nilai Peserta</h2>
+    {{-- CARD: INPUT NILAI --}}
+    <x-detail-section title="Input Nilai Peserta" icon="fa-pen-alt">
+        <div class="flex justify-end mb-4">
             @if ($isConfigured)
                 <a href="{{ route('kegiatan.input-nilai.import.page', $kegiatan->id) }}"
-                    class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded text-sm font-bold shadow flex items-center gap-2 transition-colors"
-                    style="text-decoration:none;">
+                    class="bg-[#007a7a] hover:bg-[#005f5f] text-white font-semibold px-4 py-2 rounded-lg text-sm transition no-underline inline-flex items-center gap-2">
                     Import Nilai
                 </a>
             @endif
@@ -246,9 +238,8 @@
                 <p class="font-medium">Atur komponen penilaian terlebih dahulu sebelum menginput nilai.</p>
             </div>
         @else
-            <!-- TABLE -->
             <div class="overflow-x-auto">
-                <table class="w-full text-sm border-collapse border border-gray-200" style="min-width: 900px;">
+                <table class="w-full text-sm border-collapse border border-gray-200 min-w-[900px]">
                     <thead class="bg-[#007a7a] text-white">
                         <tr>
                             <th class="text-center w-12 border border-white py-3 px-4 font-semibold">NO.</th>
@@ -311,7 +302,7 @@
                                 <td class="text-center border border-gray-200 py-3 px-4">
                                     <button type="button"
                                         onclick="openScoreModal({{ $participant->id }}, '{{ addslashes($participant->user->name ?? '-') }}', {{ $participant->componentScores->toJson() }})"
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs transition-colors font-semibold">
+                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">
                                         <i class="fas fa-edit"></i> Edit
                                     </button>
                                 </td>
@@ -327,7 +318,7 @@
                 </table>
             </div>
         @endif
-    </div>
+    </x-detail-section>
 </section>
 
 <!-- Modal Input Nilai -->
@@ -369,8 +360,6 @@
     .score-form-control { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.95rem; }
     .score-form-control[readonly] { background-color: #f3f4f6; cursor: not-allowed; }
     .score-modal-footer { padding: 15px 20px; border-top: 1px solid #e5e7eb; display: flex; justify-content: flex-end; gap: 10px; }
-    .btn-cancel { background-color: #9ca3af; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-    .btn-save { background-color: #0d9488; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
     .pre-test-note { background-color: #f3f4f6; border-left: 3px solid #9ca3af; padding: 4px 8px; font-size: 0.75rem; color: #6b7280; margin-top: 3px; }
 </style>
 
@@ -395,17 +384,17 @@
                     {{-- Dinamis diisi via JS --}}
                 </div>
 
-                <div class="score-form-group mt-3" style="background:#f0fdfa; border:1px solid #99f6e4; border-radius:6px; padding: 10px 14px;">
-                    <div style="font-size:0.85rem; color:#0f766e;">
+                <div class="score-form-group mt-3 bg-teal-50 border border-teal-200 rounded-lg px-3.5 py-2.5">
+                    <div class="text-sm text-teal-700">
                         <strong>Batas Nilai Lulus:</strong> {{ number_format($passingThreshold, 0) }}<br>
-                        <span style="font-size:0.75rem; color:#6b7280;">Nilai akhir dihitung dari persentase masing-masing komponen (Pre Test tidak dihitung).</span>
+                        <span class="text-xs text-gray-500">Nilai akhir dihitung dari persentase masing-masing komponen (Pre Test tidak dihitung).</span>
                     </div>
                 </div>
             </div>
 
             <div class="score-modal-footer">
-                <button type="button" onclick="closeScoreModal()" class="btn-cancel">Batal</button>
-                <button type="submit" class="btn-save">Simpan</button>
+                <button type="button" onclick="closeScoreModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition">Batal</button>
+                <button type="submit" class="bg-[#007a7a] hover:bg-[#005f5f] text-white font-semibold px-4 py-2 rounded-lg text-sm transition">Simpan</button>
             </div>
         </form>
     </div>
@@ -477,7 +466,7 @@
         const canDelete = !isPreTest && !isPostTest;
 
         const row = document.createElement('div');
-        row.className = 'flex gap-2 items-center p-2 bg-gray-50 rounded border border-gray-200';
+        row.className = 'flex gap-2 items-center p-2 bg-white rounded border border-gray-200';
         row.dataset.index = componentIndex;
 
         row.innerHTML = `
@@ -485,7 +474,7 @@
                 <input type="text" name="components[${componentIndex}][name]" value="${name}"
                     class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm"
                     placeholder="Nama komponen" required
-                    ${isPreTest || isPostTest ? 'readonly style="background:#f3f4f6;"' : ''}>
+                    ${isPreTest || isPostTest ? 'readonly class="bg-gray-100"' : ''}>
             </div>
             <input type="hidden" name="components[${componentIndex}][type]" value="${type}">
             <div class="w-32">
@@ -601,7 +590,7 @@
         ).join('');
 
         const row = document.createElement('div');
-        row.className = 'flex gap-2 items-center p-2 bg-gray-50 rounded border border-gray-200';
+        row.className = 'flex gap-2 items-center p-2 bg-white rounded border border-gray-200';
         row.dataset.gradeIndex = idx;
 
         row.innerHTML = `

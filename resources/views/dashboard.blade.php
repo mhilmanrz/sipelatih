@@ -66,19 +66,8 @@
         </div>
     </div>
 
-    @push('styles')
+@push('styles')
         <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
-        <style>
-            /* Essential FullCalendar Overrides for styling */
-            .fc .fc-toolbar-title { font-size: 1.25rem !important; font-weight: 700; color: #1f2937; }
-            .fc .fc-button { padding: 0.25rem 0.5rem !important; background-color: #6b7280; border-color: #6b7280; }
-            .fc .fc-button:hover { background-color: #4b5563; }
-            .fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active { background-color: #374151; border-color: #374151; }
-            .fc-scrollgrid { border-radius: 0.5rem; overflow: hidden; border-color: #e5e7eb; }
-            .fc-theme-standard td, .fc-theme-standard th { border-color: #e5e7eb; }
-            .fc-col-header-cell-cushion { color: #4b5563; padding: 0.5rem !important; text-decoration: none; }
-            .fc-daygrid-day-number { color: #4b5563; padding: 0.25rem !important; text-decoration: none; }
-        </style>
     @endpush
 
     @push('scripts')

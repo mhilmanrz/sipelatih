@@ -1,22 +1,19 @@
-<section style="margin-top: 2rem;">
+<section>
     <!-- CARD -->
-    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 4rem 2rem; text-align: center;">
+    <div class="text-center">
 
-        <div style="font-size: 3rem; margin-bottom: 1rem;">
+        <div class="text-5xl mb-4">
             📜
         </div>
 
-        <h3 style="font-size: 1.25rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-            E-Sertifikat Kegiatan
-        </h3>
+        
 
-        <p style="color: #6b7280; margin-bottom: 2rem;">
+        <p class="text-gray-500 mb-8">
             Untuk mengunduh e-sertifikat yang telah diterbitkan untuk kegiatan ini, klik tombol di bawah ini.
         </p>
 
         <button onclick="alert('Feature WIP: Unduh Sertifikat')"
-            class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded shadow transition-colors text-lg"
-            style="cursor: pointer;">
+            class="bg-[#007a7a] hover:bg-[#005f5f] text-white font-semibold px-4 py-2 rounded-lg text-sm transition">
             E-SERTIFIKAT
         </button>
 
