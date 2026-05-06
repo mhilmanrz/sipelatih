@@ -10,23 +10,25 @@ class MonitoringJplController extends Controller
 {
     public function index(Request $request)
     {
-        $searchNip = $request->input('nip');
-        $searchNama = $request->input('nama');
+        $q = $request->input('q');
         $year = $request->input('year', date('Y'));
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page', 10);
 
         $usersQuery = User::doesntHave('roles')
             ->where('email', '!=', 'admin@mail.com')
-            ->with(['workUnit', 'profession.category', 'activityParticipants' => function ($q) use ($year) {
-                $q->where('is_passed', true)
+            ->with(['workUnit', 'profession.category', 'activityParticipants' => function ($query) use ($year) {
+                $query->where('is_passed', true)
                     ->whereHas('activity', function ($qa) use ($year) {
                         $qa->whereYear('end_date', $year)
                             ->orWhereYear('start_date', $year);
                     })
                     ->with('activity.activityMaterials');
-            }])->when($searchNip, function ($q, $nip) {
-                $q->where('employee_id', 'like', '%'.$nip.'%');
-            })->when($searchNama, function ($q, $nama) {
-                $q->where('name', 'like', '%'.$nama.'%');
+            }])->when($q, function ($query, $q) {
+                $query->where(function($sub) use ($q) {
+                    $sub->where('employee_id', 'like', '%'.$q.'%')
+                        ->orWhere('name', 'like', '%'.$q.'%');
+                });
             });
 
         // Get users and format them
@@ -58,13 +60,13 @@ class MonitoringJplController extends Controller
                 $qa->whereYear('end_date', $year)
                     ->orWhereYear('start_date', $year);
             })
-            ->whereHas('user', function ($q) use ($searchNip, $searchNama) {
-                $q->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
-                if ($searchNip) {
-                    $q->where('employee_id', 'like', '%'.$searchNip.'%');
-                }
-                if ($searchNama) {
-                    $q->where('name', 'like', '%'.$searchNama.'%');
+            ->whereHas('user', function ($query) use ($q) {
+                $query->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
+                if ($q) {
+                    $query->where(function($sub) use ($q) {
+                        $sub->where('employee_id', 'like', '%'.$q.'%')
+                            ->orWhere('name', 'like', '%'.$q.'%');
+                    });
                 }
             });
 
@@ -78,6 +80,15 @@ class MonitoringJplController extends Controller
 
                 return $participant;
             });
+
+        $totalDetailed = $detailedActivities->count();
+        $detailedActivitiesPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $detailedActivities->forPage($page, $perPage)->values(),
+            $totalDetailed,
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
 
         // CHART DATA: JPL per kategori profesi
         $jplPerCategory = ActivityParticipant::with([
@@ -146,7 +157,7 @@ class MonitoringJplController extends Controller
         $cgPercentage = $denominator2 > 0 ? round(($numerator2 / $denominator2) * 100, 2) : 0;
 
         return view('monitoringJpl', compact(
-            'users', 'detailedActivities', 'chartLabels', 'chartData', 'year',
+            'users', 'detailedActivities', 'detailedActivitiesPaginated', 'chartLabels', 'chartData', 'year',
             'numerator1', 'denominator1', 'teiPercentage',
             'numerator2', 'denominator2', 'cgPercentage'
         ));

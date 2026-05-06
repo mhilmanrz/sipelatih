@@ -11,99 +11,91 @@
         <!-- TITLE -->
         <x-page-title>MONITORING CAPAIAN JPL</x-page-title>
 
-        <!-- FILTER -->
-        <form action="{{ route('monitoring.jpl.index') }}" method="GET"
-            class="bg-white p-4 rounded shadow flex flex-col md:flex-row gap-4 md:items-center flex-wrap">
-            <div class="flex items-center gap-2">
-                <label for="year" class="font-semibold text-gray-700 whitespace-nowrap">Tahun:</label>
-                <select name="year" id="year"
-                    class="border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-primary/40">
-                    @php
-                        $currentYear = date('Y');
-                        $startYear = 2020;
-                    @endphp
-                    @for ($y = $currentYear + 1; $y >= $startYear; $y--)
-                        <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
-                    @endfor
-                </select>
-            </div>
-            <input type="text" name="nip" value="{{ request('nip') }}" placeholder="Cari NIP Pegawai"
-                class="border rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
-            <input type="text" name="nama" value="{{ request('nama') }}" placeholder="Cari Nama Pegawai"
-                class="border rounded px-4 py-2 w-full md:w-64 focus:outline-none focus:ring focus:ring-primary/40">
-            <button type="submit" class="bg-[#007A7F] hover:bg-teal-700 text-white px-6 py-2 rounded w-full md:w-auto">
-                Cari
-            </button>
-            <a href="{{ route('monitoring.jpl.index') }}"
-                class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded w-full md:w-auto text-center"
-                style="text-decoration: none;">
-                Reset
-            </a>
-        </form>
-
         <!-- TABLE 2 -->
-        <div class="bg-white rounded-2xl shadow overflow-x-auto">
-            <table class="w-full text-sm text-gray-700">
-                <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <x-table-toolbar actionUrl="{{ route('monitoring.jpl.index') }}" searchPlaceholder="Cari NIP/Nama Pegawai...">
+                <div class="flex items-center gap-2">
+                    <label for="year" class="text-sm text-white whitespace-nowrap">Tahun:</label>
+                    <select name="year" id="year" onchange="this.form.submit()"
+                        class="bg-transparent border border-white text-white rounded-full px-3 py-1.5 outline-none text-sm">
+                        @php
+                            $currentYear = date('Y');
+                            $startYear = 2020;
+                        @endphp
+                        @for ($y = $currentYear + 1; $y >= $startYear; $y--)
+                            <option value="{{ $y }}" class="text-black" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                        @endfor
+                    </select>
+                </div>
+                <a href="{{ route('monitoring.jpl.index') }}"
+                    class="px-4 py-1.5 text-sm font-bold text-white border border-white rounded-full transition hover:bg-white hover:text-[#205252]"
+                    style="text-decoration: none;">
+                    Reset
+                </a>
+            </x-table-toolbar>
+
+            <x-table>
+                <x-slot name="header">
                     <tr>
-                        <th class="border border-white py-3 px-4 font-semibold">No.</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Nama Pegawai</th>
-                        <th class="border border-white py-3 px-4 font-semibold">NIP</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Unit Kerja</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Nama Kegiatan</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Waktu Kegiatan</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Cakupan Kegiatan</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Jabatan</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Tenaga</th>
-                        <th class="border border-white py-3 px-4 font-semibold">4 Besar</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Target</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Capaian</th>
-                        <th class="border border-white py-3 px-4 font-semibold">Keterangan</th>
+                        <th class="px-4 py-3 text-center">No.</th>
+                        <th class="px-4 py-3">Nama Pegawai</th>
+                        <th class="px-4 py-3">NIP</th>
+                        <th class="px-4 py-3">Unit Kerja</th>
+                        <th class="px-4 py-3">Nama Kegiatan</th>
+                        <th class="px-4 py-3">Waktu Kegiatan</th>
+                        <th class="px-4 py-3">Cakupan Kegiatan</th>
+                        <th class="px-4 py-3">Jabatan</th>
+                        <th class="px-4 py-3">Tenaga</th>
+                        <th class="px-4 py-3">4 Besar</th>
+                        <th class="px-4 py-3 text-center">Target</th>
+                        <th class="px-4 py-3 text-center">Capaian</th>
+                        <th class="px-4 py-3 text-center">Keterangan</th>
                     </tr>
-                </thead>
-                <tbody class="bg-gray-50">
-                    @forelse($detailedActivities as $index => $participant)
-                        <tr class="border-b">
-                            <td class="text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
-                            <td class="text-teal-700 font-medium whitespace-nowrap border border-gray-200 py-3 px-4">
-                                {{ $participant->user->name }}</td>
-                            <td class="font-mono text-sm border border-gray-200 py-3 px-4">{{ $participant->user->employee_id ?? '-' }}</td>
-                            <td class="min-w-[12rem] border border-gray-200 py-3 px-4">{{ $participant->user->workUnit->name ?? '-' }}</td>
-                            <td class="font-medium min-w-[12rem] border border-gray-200 py-3 px-4">
-                                {{ $participant->activity->activityName->name ?? ($participant->activity->name ?? 'N/A') }}
-                            </td>
-                            <td class="text-xs min-w-[10rem] border border-gray-200 py-3 px-4">
-                                {{ \Carbon\Carbon::parse($participant->activity->start_date)->format('d M') }} -
-                                {{ \Carbon\Carbon::parse($participant->activity->end_date)->format('d M Y') }}
-                            </td>
-                            <td class="border border-gray-200 py-3 px-4">{{ $participant->activity->activityScope->name ?? '-' }}</td>
-                            <td class="border border-gray-200 py-3 px-4">{{ $participant->user->position->name ?? '-' }}</td>
-                            <td class="border border-gray-200 py-3 px-4">{{ $participant->user->profession->name ?? '-' }}</td>
-                            <td class="border border-gray-200 py-3 px-4">{{ $participant->user->employmentType->name ?? '-' }}</td>
-                            <td class="text-center font-bold text-gray-600 border border-gray-200 py-3 px-4">{{ $participant->target_jpl }}</td>
-                            <td class="text-center font-bold text-teal-600 border border-gray-200 py-3 px-4">
-                                {{ number_format($participant->capaian_jpl, 1) }}</td>
-                            <td class="text-center border border-gray-200 py-3 px-4">
-                                @if ($participant->capaian_jpl >= $participant->target_jpl)
-                                    <span class="bg-green-500 text-white px-4 py-1 rounded-full text-xs">
-                                        Tercapai
-                                    </span>
-                                @else
-                                    <span class="bg-red-500 text-white px-4 py-1 rounded-full text-xs">
-                                        Belum Tercapai
-                                    </span>
-                                @endif
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="13" class="text-center text-gray-500 border border-gray-200 py-3 px-4">
-                                Tidak ada data histori detail partisipan yang telah lulus.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                </x-slot>
+
+                @forelse($detailedActivitiesPaginated as $index => $participant)
+                    <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                        <td class="text-center px-4 py-3">{{ $detailedActivitiesPaginated->firstItem() + $index }}</td>
+                        <td class="text-teal-700 font-medium whitespace-nowrap px-4 py-3">
+                            {{ $participant->user->name }}</td>
+                        <td class="font-mono text-sm px-4 py-3">{{ $participant->user->employee_id ?? '-' }}</td>
+                        <td class="min-w-[12rem] px-4 py-3">{{ $participant->user->workUnit->name ?? '-' }}</td>
+                        <td class="font-medium min-w-[12rem] px-4 py-3">
+                            {{ $participant->activity->activityName->name ?? ($participant->activity->name ?? 'N/A') }}
+                        </td>
+                        <td class="text-xs min-w-[10rem] px-4 py-3">
+                            {{ \Carbon\Carbon::parse($participant->activity->start_date)->format('d M') }} -
+                            {{ \Carbon\Carbon::parse($participant->activity->end_date)->format('d M Y') }}
+                        </td>
+                        <td class="px-4 py-3">{{ $participant->activity->activityScope->name ?? '-' }}</td>
+                        <td class="px-4 py-3">{{ $participant->user->position->name ?? '-' }}</td>
+                        <td class="px-4 py-3">{{ $participant->user->profession->name ?? '-' }}</td>
+                        <td class="px-4 py-3">{{ $participant->user->employmentType->name ?? '-' }}</td>
+                        <td class="text-center font-bold text-gray-600 px-4 py-3">{{ $participant->target_jpl }}</td>
+                        <td class="text-center font-bold text-teal-600 px-4 py-3">
+                            {{ number_format($participant->capaian_jpl, 1) }}</td>
+                        <td class="text-center px-4 py-3">
+                            @if ($participant->capaian_jpl >= $participant->target_jpl)
+                                <span class="bg-green-500 text-white px-4 py-1 rounded-full text-xs">
+                                    Tercapai
+                                </span>
+                            @else
+                                <span class="bg-red-500 text-white px-4 py-1 rounded-full text-xs">
+                                    Belum Tercapai
+                                </span>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="13" class="text-center text-gray-500 px-4 py-8">
+                            Tidak ada data histori detail partisipan yang telah lulus.
+                        </td>
+                    </tr>
+                @endforelse
+            </x-table>
+
+            <x-table-footer :paginator="$detailedActivitiesPaginated->appends(request()->query())" />
         </div>
 
         <!-- CHART -->
