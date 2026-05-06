@@ -1,84 +1,62 @@
 <x-layouts.app>
-    <x-slot:title>Evaluasi III</x-slot>
+    @section('title', 'Evaluasi III')
 
-    @push('styles')
-        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/evaluasi3.css') }}">
-    @endpush
+    <x-page-title>EVALUASI III</x-page-title>
 
-    <div class="bg-[#13b9c6] min-h-screen font-sans">
+    {{-- CARD DOWNLOAD --}}
+    <div class="bg-white rounded-xl p-5 shadow-sm mb-6">
+        <h3 class="mb-4 border-b border-gray-100 pb-3 text-lg font-semibold text-gray-800">
+            MONITORING
+        </h3>
 
-        <!-- TITLE -->
-        <section class="px-8 py-6">
-            <x-page-title>EVALUASI III</x-page-title>
-        </section>
-
-        <!-- CARD DOWNLOAD -->
-        <section class="bg-white mx-8 p-6 rounded-[25px] shadow">
-            <h2 class="text-[#007a7a] text-xl font-bold mb-4">MONITORING</h2>
-
-            <a
-                href="{{ asset('laporan/laporan-evaluasi-iii.pdf') }}"
-                download
-                class="inline-flex items-center gap-2 bg-[#007a7a] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#006666]"
-            >
-                ⬇ Download Laporan
-            </a>
-        </section>
-
-        <!-- TABLE -->
-        <section class="mx-8 mt-6 bg-white rounded-[20px] overflow-hidden shadow">
-            <table class="w-full border-collapse">
-                <thead class="bg-[#007a7a] text-white">
-                    <tr>
-                        <th class="border border-gray-400 p-4">NO.</th>
-                        <th class="border border-gray-400 p-4">Nama Pegawai</th>
-                        <th class="border border-gray-400 p-4">Jabatan</th>
-                        <th class="border border-gray-400 p-4">NIP/NIPS</th>
-                        <th class="border border-gray-400 p-4">Unit Kerja</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr class="text-center">
-                        <td class="border border-gray-400 p-4">1</td>
-                        <td class="border border-gray-400 p-4 text-[#007a7a] font-semibold">
-                            Nina Persik
-                        </td>
-                        <td class="border border-gray-400 p-4">Administrasi</td>
-                        <td class="border border-gray-400 p-4">11116482655488234</td>
-                        <td class="border border-gray-400 p-4">TK Diklat</td>
-                    </tr>
-
-                    <tr class="text-center">
-                        <td class="border border-gray-400 p-4">2</td>
-                        <td class="border border-gray-400 p-4 text-[#007a7a] font-semibold">
-                            Saskya Gotik
-                        </td>
-                        <td class="border border-gray-400 p-4">Administrasi</td>
-                        <td class="border border-gray-400 p-4">11116482655462584</td>
-                        <td class="border border-gray-400 p-4">TK Diklat</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- FOOTER -->
-            <div class="flex flex-wrap gap-3 justify-between items-center mt-6 px-6 pb-6 text-sm">
-                <span>Showing 1 to 2 of 2 entries</span>
-
-                <div class="flex items-center gap-2">
-                    <button class="bg-white text-[#007C82] px-4 py-2 rounded-lg shadow">Previous</button>
-                    <span class="bg-[#006D73] text-white px-4 py-2 rounded-lg">1</span>
-                    <button class="bg-white text-[#007C82] px-4 py-2 rounded-lg shadow">Next</button>
-                </div>
-            </div>
-
-        </section>
-
+        <a href="{{ asset('laporan/laporan-evaluasi-iii.pdf') }}" download
+            class="bg-[#006D73] text-white px-6 py-3 rounded-full flex items-center gap-2 shadow hover:opacity-90 w-fit">
+            ⬇ Download Laporan
+        </a>
     </div>
 
-    @push('scripts')
-    <script src="{{ asset('js/LayoutSuperAdmin.js') }}"></script>
-    <script src="{{ asset('js/evaluasi3.js') }}"></script>
-    @endpush
+    {{-- TABLE --}}
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <x-table>
+            <x-slot name="header">
+                <tr>
+                    <th class="px-4 py-3 text-center w-16">NO.</th>
+                    <th class="px-4 py-3 text-left">Nama Pegawai</th>
+                    <th class="px-4 py-3 text-left">Jabatan</th>
+                    <th class="px-4 py-3 text-left">NIP/NIPS</th>
+                    <th class="px-4 py-3 text-left">Unit Kerja</th>
+                </tr>
+            </x-slot>
+
+            <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-500">1</td>
+                <td class="border border-gray-200 py-3 px-4 text-sm text-[#007a7a] font-semibold">Nina Persik</td>
+                <td class="border border-gray-200 py-3 px-4 text-sm text-gray-900">Administrasi</td>
+                <td class="border border-gray-200 py-3 px-4 text-sm text-gray-900">11116482655488234</td>
+                <td class="border border-gray-200 py-3 px-4 text-sm text-gray-900">TK Diklat</td>
+            </tr>
+
+            <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-500">2</td>
+                <td class="border border-gray-200 py-3 px-4 text-sm text-[#007a7a] font-semibold">Saskya Gotik</td>
+                <td class="border border-gray-200 py-3 px-4 text-sm text-gray-900">Administrasi</td>
+                <td class="border border-gray-200 py-3 px-4 text-sm text-gray-900">11116482655462584</td>
+                <td class="border border-gray-200 py-3 px-4 text-sm text-gray-900">TK Diklat</td>
+            </tr>
+        </x-table>
+
+        {{-- FOOTER --}}
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 bg-white border-t border-gray-200 rounded-b-[20px]">
+            <div class="text-sm text-gray-500">
+                Showing <span class="font-semibold text-gray-700">1</span> –
+                <span class="font-semibold text-gray-700">2</span> of
+                <span class="font-semibold text-gray-700">2</span> entries
+            </div>
+            <nav class="flex items-center gap-1">
+                <span class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-300 bg-gray-100 rounded-lg cursor-not-allowed">Prev</span>
+                <span class="inline-flex items-center justify-center w-9 h-9 text-sm font-bold text-white bg-[#205252] rounded-lg shadow-sm shadow-[#205252]/30">1</span>
+                <span class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-300 bg-gray-100 rounded-lg cursor-not-allowed">Next</span>
+            </nav>
+        </div>
+    </div>
 </x-layouts.app>

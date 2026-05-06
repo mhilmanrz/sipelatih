@@ -14,8 +14,8 @@ class UsulanDiklatController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->input('entries', 10);
-        $search = $request->input('search');
+        $perPage = $request->input('per_page', 10);
+        $search = $request->input('q');
         $year = $request->input('year');
         $status = $request->input('status');
 

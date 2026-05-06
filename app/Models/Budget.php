@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Act\Activity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,8 +19,16 @@ class Budget extends Model
         'rkkal_code',
         'submark',
         'total_amount',
-        'remaining_amount',
+        'blokir',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'total_amount' => 'integer',
+            'blokir' => 'integer',
+        ];
+    }
 
     public function budgetCategory()
     {
@@ -31,8 +40,41 @@ class Budget extends Model
         return $this->hasMany(Activity::class);
     }
 
-    public function getRemainingAmountAttribute()
+    /**
+     * Pagu Efektif = Pagu Awal - Blokir
+     */
+    protected function efektifAmount(): Attribute
     {
-        return $this->total_amount - $this->activities()->sum('budget_amount');
+        return Attribute::make(
+            get: fn () => $this->total_amount - $this->blokir,
+        );
+    }
+
+    /**
+     * Realisasi Pagu = Akumulasi budget_amount dari seluruh kegiatan yang terikat.
+     */
+    protected function realisasiAmount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->activities()->sum('budget_amount'),
+        );
+    }
+
+    /**
+     * Sisa Pagu = Pagu Efektif - Realisasi Pagu
+     */
+    protected function sisaAmount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->efektif_amount - $this->realisasi_amount,
+        );
+    }
+
+    /**
+     * @deprecated Gunakan sisa_amount. Dipertahankan untuk kompatibilitas mundur.
+     */
+    public function getRemainingAmountAttribute(): int
+    {
+        return $this->sisa_amount;
     }
 }

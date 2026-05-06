@@ -1,202 +1,123 @@
 <aside
-    class="w-[240px] h-[calc(100vh-60px)] lg:h-screen bg-[#1A5555] text-white fixed top-[60px] lg:top-0 transition-all duration-300 overflow-y-auto z-[1000]"
-    :style="sidebarOpen ? 'left: 0' : 'left: -240px'"
+    class="w-[240px] h-[calc(100vh-60px)] lg:h-screen bg-brand-primary text-white fixed top-[60px] lg:top-0 transition-all duration-300 overflow-y-auto z-[1000]
+           [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-thumb]:rounded-full"
+    :class="sidebarOpen ? 'left-0' : '-left-[240px]'"
 >
-    <div class="p-4 text-center bg-[#113a3a]">
+    {{-- LOGO HEADER --}}
+    <div class="p-4 text-center bg-brand-dark">
         <img src="{{ $appSettings->get('app_logo') ? asset('storage/' . $appSettings->get('app_logo')) : asset('assets/images/logo-sipelatih.png') }}" class="w-44 mx-auto mb-2">
         <small class="text-xs block text-gray-300 mt-1">RSUPN Dr. Cipto Mangunkusumo</small>
     </div>
 
-    <div class="flex flex-col mt-4 space-y-1">
+    <div class="flex flex-col mt-4 px-3 space-y-1">
 
-        <!-- MENU UTAMA -->
-        <a href="{{ route('dashboard') }}"
-            class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('/') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-            <i class="fa-solid fa-house w-6 text-center mr-2"></i>
-            <span>Dashboard</span>
-        </a>
+        {{-- MENU UTAMA --}}
+        <x-layouts.sidebar-link href="{{ route('dashboard') }}" icon="fa-house" :active="request()->is('/')">
+            Dashboard
+        </x-layouts.sidebar-link>
 
-        <a href="{{ route('usulan-diklat') }}"
-            class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('usulan-diklat*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-            <i class="fa-solid fa-folder w-6 text-center mr-2"></i>
-            <span>Usulan Diklat</span>
-        </a>
+        <x-layouts.sidebar-link href="{{ route('usulan-diklat') }}" icon="fa-folder" :active="request()->is('usulan-diklat*')">
+            Usulan Diklat
+        </x-layouts.sidebar-link>
 
-        <!-- MONITORING JPL -->
-        <a href="{{ route('monitoring.jpl.index') }}"
-            class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('monitoring-jpl*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-            <i class="fa-solid fa-chart-line w-6 text-center mr-2"></i>
-            <span>Monitoring JPL</span>
-        </a>
+        {{-- MONITORING JPL --}}
+        <x-layouts.sidebar-link href="{{ route('monitoring.jpl.index') }}" icon="fa-chart-line" :active="request()->is('monitoring-jpl*')">
+            Monitoring JPL
+        </x-layouts.sidebar-link>
 
-        <!-- DROPDOWN: EVALUASI & LAPORAN -->
-        @hasanyrole('perencanaan|penyelenggara|evaluasi|superadmin')
+        {{-- DROPDOWN: EVALUASI & LAPORAN --}}
+        @hasanyrole('Perencanaan|Penyelenggara|Evaluasi|SuperAdmin')
         @php
-            $isEvaluasiOpen = request()->is('pagu*') || request()->is('laporan-kegiatan*')
-                || request()->is('evaluasi1*') || request()->is('evaluasi2*') || request()->is('evaluasi3*');
+            $isEvaluasiOpen = request()->is(['pagu*', 'laporan-kegiatan*', 'evaluasi1*', 'evaluasi2*', 'evaluasi3*']);
         @endphp
-        <details class="group" {{ $isEvaluasiOpen ? 'open' : '' }}>
-            <summary class="flex items-center justify-between px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                <span class="flex items-center">
-                    <i class="fa-solid fa-chart-column w-6 text-center mr-2"></i>
+        <details class="group mt-2" {{ $isEvaluasiOpen ? 'open' : '' }}>
+            <summary class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 cursor-pointer list-none [&::-webkit-details-marker]:hidden select-none text-gray-300 hover:bg-white/5 hover:text-white">
+                <span class="flex items-center text-sm">    
+                    <i class="fa-solid fa-chart-column w-6 text-center mr-2 text-gray-400 group-hover:text-gray-200"></i>
                     <span>Evaluasi & Laporan</span>
                 </span>
-                <i class="fa-solid fa-chevron-down text-xs transform group-open:rotate-180 transition-transform"></i>
+                <i class="fa-solid fa-chevron-down text-[10px] transform group-open:rotate-180 transition-transform duration-300 text-gray-400"></i>
             </summary>
-            <div class="flex flex-col bg-[#113a3a] pb-1">
-                @hasanyrole('perencanaan|superadmin')
-                <a href="{{ route('pagu.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('pagu*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-money-bill w-6 text-center mr-2 text-sm"></i>
-                    <span>Pagu</span>
-                </a>
+            <div class="flex flex-col mt-1 mb-2 space-y-1 relative before:content-[''] before:absolute before:left-[23px] before:top-2 before:bottom-2 before:w-[1.5px] before:bg-white/10 before:rounded-full">
+                @hasanyrole('Perencanaan|SuperAdmin')
+                <x-layouts.sidebar-link href="{{ route('pagu.index') }}" icon="fa-money-bill" :active="request()->is('pagu*')" :isSubmenu="true">
+                    Pagu
+                </x-layouts.sidebar-link>
                 @endhasanyrole
 
-                @hasanyrole('perencanaan|penyelenggara|evaluasi|superadmin')
-                <a href="{{ route('kegiatan.laporan.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('laporan-kegiatan*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-file-invoice w-6 text-center mr-2 text-sm"></i>
-                    <span>Laporan Kegiatan</span>
-                </a>
+                @hasanyrole('Perencanaan|Penyelenggara|Evaluasi|SuperAdmin')
+                <x-layouts.sidebar-link href="{{ route('kegiatan.laporan.index') }}" icon="fa-file-invoice" :active="request()->is('laporan-kegiatan*')" :isSubmenu="true">
+                    Laporan Kegiatan
+                </x-layouts.sidebar-link>
                 @endhasanyrole
 
-                @hasanyrole('evaluasi|superadmin')
-                <a href="{{ route('evaluasi1') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluasi1*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-clipboard-check w-6 text-center mr-2 text-sm"></i>
-                    <span>Evaluasi I</span>
-                </a>
-                <a href="{{ route('evaluasi2') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluasi2*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-clipboard-check w-6 text-center mr-2 text-sm"></i>
-                    <span>Evaluasi II</span>
-                </a>
-                <a href="{{ route('evaluasi3') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluasi3*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-clipboard-check w-6 text-center mr-2 text-sm"></i>
-                    <span>Evaluasi III</span>
-                </a>
+                @hasanyrole('Evaluasi|SuperAdmin')
+                <x-layouts.sidebar-link href="{{ route('evaluasi1') }}" icon="fa-clipboard-check" :active="request()->is('evaluasi1*')" :isSubmenu="true">
+                    Evaluasi I
+                </x-layouts.sidebar-link>
+                <x-layouts.sidebar-link href="{{ route('evaluasi2') }}" icon="fa-clipboard-check" :active="request()->is('evaluasi2*')" :isSubmenu="true">
+                    Evaluasi II
+                </x-layouts.sidebar-link>
+                <x-layouts.sidebar-link href="{{ route('evaluasi3') }}" icon="fa-clipboard-check" :active="request()->is('evaluasi3*')" :isSubmenu="true">
+                    Evaluasi III
+                </x-layouts.sidebar-link>
                 @endhasanyrole
             </div>
         </details>
         @endhasanyrole
 
-        <!-- SUPERADMIN MENUS -->
-        @hasrole('superadmin')
+        {{-- SUPERADMIN MENUS --}}
+        @hasrole('SuperAdmin')
 
-        <!-- DROPDOWN: MASTER DATA -->
+        {{-- SECTION DIVIDER --}}
+        <div class="px-3 pb-1 pt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Administrator</div>
+
+        {{-- DROPDOWN: MASTER DATA --}}
         @php
-            $isMasterDataOpen = request()->is('users*') || request()->is('accounts*') || request()->is('professions*') || request()->is('profession-categories*') ||
-                request()->is('roles*') || request()->is('positions*') || request()->is('work-units*') ||
-                request()->is('dictionaries/activity-types*') || request()->is('dictionaries/activity-categories*') ||
-                request()->is('dictionaries/activity-scopes*') || request()->is('dictionaries/material-types*') ||
-                request()->is('dictionaries/activity-formats*') || request()->is('dictionaries/activity-methods*') ||
-                request()->is('employment-types*') || request()->is('dictionaries/batches*') ||
-                request()->is('fund-sources*') || request()->is('dictionaries/activity-names*');
+            $masterItems = [
+                ['route' => 'users.index', 'match' => 'users*', 'icon' => 'fa-users', 'label' => 'Data Pegawai'],
+                ['route' => 'accounts.index', 'match' => 'accounts*', 'icon' => 'fa-user-shield', 'label' => 'Data Akun'],
+                ['route' => 'professions.index', 'match' => 'professions*', 'icon' => 'fa-briefcase', 'label' => 'Data Profesi'],
+                ['route' => 'profession-categories.index', 'match' => 'profession-categories*', 'icon' => 'fa-list', 'label' => 'Kategori Profesi'],
+                ['route' => 'roles.index', 'match' => 'roles*', 'icon' => 'fa-user-shield', 'label' => 'Data Role'],
+                ['route' => 'positions.index', 'match' => 'positions*', 'icon' => 'fa-user-tie', 'label' => 'Data Jabatan'],
+                ['route' => 'work-units.index', 'match' => 'work-units*', 'icon' => 'fa-building', 'label' => 'Unit Kerja'],
+                ['route' => 'activity-types.index', 'match' => 'dictionaries/activity-types*', 'icon' => 'fa-tags', 'label' => 'Jenis Kegiatan'],
+                ['route' => 'activity-categories.index', 'match' => 'dictionaries/activity-categories*', 'icon' => 'fa-list-alt', 'label' => 'Kategori Kegiatan'],
+                ['route' => 'activity-scopes.index', 'match' => 'dictionaries/activity-scopes*', 'icon' => 'fa-globe', 'label' => 'Ruang Lingkup'],
+                ['route' => 'material-types.index', 'match' => 'dictionaries/material-types*', 'icon' => 'fa-book-open', 'label' => 'Jenis Materi'],
+                ['route' => 'activity-formats.index', 'match' => 'dictionaries/activity-formats*', 'icon' => 'fa-shapes', 'label' => 'Bentuk Kegiatan'],
+                ['route' => 'activity-methods.index', 'match' => 'dictionaries/activity-methods*', 'icon' => 'fa-layer-group', 'label' => 'Metode Kegiatan'],
+                ['route' => 'employment-types.index', 'match' => 'employment-types*', 'icon' => 'fa-address-book', 'label' => 'Jenis Kepegawaian'],
+                ['route' => 'batches.index', 'match' => 'dictionaries/batches*', 'icon' => 'fa-layer-group', 'label' => 'Batch'],
+                ['route' => 'fund-sources.index', 'match' => 'fund-sources*', 'icon' => 'fa-coins', 'label' => 'Sumber Dana'],
+                ['route' => 'activity-names.index', 'match' => 'dictionaries/activity-names*', 'icon' => 'fa-signature', 'label' => 'Nama Kegiatan'],
+                ['route' => 'budget-categories.index', 'match' => 'dictionaries/budget-categories*', 'icon' => 'fa-tag', 'label' => 'Kategori Pagu'],
+            ];
+            $masterMatches = array_column($masterItems, 'match');
+            $isMasterDataOpen = request()->is($masterMatches);
         @endphp
         <details class="group" {{ $isMasterDataOpen ? 'open' : '' }}>
-            <summary class="flex items-center justify-between px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                <span class="flex items-center">
-                    <i class="fa-solid fa-database w-6 text-center mr-2"></i>
+            <summary class="flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 cursor-pointer list-none [&::-webkit-details-marker]:hidden select-none text-gray-300 hover:bg-white/5 hover:text-white">
+                <span class="flex items-center text-sm">
+                    <i class="fa-solid fa-database w-6 text-center mr-2 text-gray-400 group-hover:text-gray-200"></i>
                     <span>Master Data</span>
                 </span>
-                <i class="fa-solid fa-chevron-down text-xs transform group-open:rotate-180 transition-transform"></i>
+                <i class="fa-solid fa-chevron-down text-[10px] transform group-open:rotate-180 transition-transform duration-300 text-gray-400"></i>
             </summary>
-            <div class="flex flex-col bg-[#113a3a] pb-1">
-                <a href="{{ route('users.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('users*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-users w-6 text-center mr-2 text-sm"></i>
-                    <span>Data Pegawai</span>
-                </a>
-                <a href="{{ route('accounts.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('accounts*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-user-shield w-6 text-center mr-2 text-sm"></i>
-                    <span>Data Akun</span>
-                </a>
-                <a href="{{ route('professions.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('professions*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-briefcase w-6 text-center mr-2 text-sm"></i>
-                    <span>Data Profesi</span>
-                </a>
-                <a href="{{ route('profession-categories.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('profession-categories*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-list w-6 text-center mr-2 text-sm"></i>
-                    <span>Kategori Profesi</span>
-                </a>
-                <a href="{{ route('roles.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('roles*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-user-shield w-6 text-center mr-2 text-sm"></i>
-                    <span>Data Role</span>
-                </a>
-                <a href="{{ route('positions.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('positions*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-user-tie w-6 text-center mr-2 text-sm"></i>
-                    <span>Data Jabatan</span>
-                </a>
-                <a href="{{ route('work-units.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('work-units*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-building w-6 text-center mr-2 text-sm"></i>
-                    <span>Unit Kerja</span>
-                </a>
-                <a href="{{ route('activity-types.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dictionaries/activity-types*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-tags w-6 text-center mr-2 text-sm"></i>
-                    <span>Jenis Kegiatan</span>
-                </a>
-                <a href="{{ route('activity-categories.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dictionaries/activity-categories*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-list-alt w-6 text-center mr-2 text-sm"></i>
-                    <span>Kategori Kegiatan</span>
-                </a>
-                <a href="{{ route('activity-scopes.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dictionaries/activity-scopes*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-globe w-6 text-center mr-2 text-sm"></i>
-                    <span>Ruang Lingkup</span>
-                </a>
-                <a href="{{ route('material-types.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dictionaries/material-types*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-book-open w-6 text-center mr-2 text-sm"></i>
-                    <span>Jenis Materi</span>
-                </a>
-                <a href="{{ route('activity-formats.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dictionaries/activity-formats*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-shapes w-6 text-center mr-2 text-sm"></i>
-                    <span>Bentuk Kegiatan</span>
-                </a>
-                <a href="{{ route('activity-methods.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dictionaries/activity-methods*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-layer-group w-6 text-center mr-2 text-sm"></i>
-                    <span>Metode Kegiatan</span>
-                </a>
-                <a href="{{ route('employment-types.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('employment-types*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-address-book w-6 text-center mr-2 text-sm"></i>
-                    <span>Jenis Kepegawaian</span>
-                </a>
-                <a href="{{ route('batches.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dictionaries/batches*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-layer-group w-6 text-center mr-2 text-sm"></i>
-                    <span>Batch</span>
-                </a>
-                <a href="{{ route('fund-sources.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('fund-sources*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-coins w-6 text-center mr-2 text-sm"></i>
-                    <span>Sumber Dana</span>
-                </a>
-                <a href="{{ route('activity-names.index') }}"
-                    class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dictionaries/activity-names*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-                    <i class="fa-solid fa-signature w-6 text-center mr-2 text-sm"></i>
-                    <span>Nama Kegiatan</span>
-                </a>
+            <div class="flex flex-col mt-1 mb-2 space-y-1 relative before:content-[''] before:absolute before:left-[23px] before:top-2 before:bottom-2 before:w-[1.5px] before:bg-white/10 before:rounded-full">
+                @foreach($masterItems as $item)
+                <x-layouts.sidebar-link href="{{ route($item['route']) }}" icon="{{ $item['icon'] }}" :active="request()->is($item['match'])" :isSubmenu="true">
+                    {{ $item['label'] }}
+                </x-layouts.sidebar-link>
+                @endforeach
             </div>
         </details>
 
-        <!-- PENGATURAN (SUPERADMIN) -->
-        <a href="{{ route('settings.index') }}"
-            class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('settings*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
-            <i class="fa-solid fa-gear w-6 text-center mr-2"></i>
-            <span>Pengaturan</span>
-        </a>
+        {{-- PENGATURAN (SUPERADMIN) --}}
+        <x-layouts.sidebar-link href="{{ route('settings.index') }}" icon="fa-gear" :active="request()->is('settings*')">
+            Pengaturan
+        </x-layouts.sidebar-link>
         @endhasrole
 
     </div>

@@ -1,54 +1,46 @@
 <x-layouts.app>
-    <x-slot:title>Tambah Role</x-slot>
+    @section('title', 'Tambah Role')
 
-@push('styles')
-        <style>
-        .tw-wrap p, .tw-wrap h1, .tw-wrap h2, .tw-wrap h3, .tw-wrap h4, .tw-wrap h5, .tw-wrap h6,
-        .tw-wrap span, .tw-wrap div, .tw-wrap a, .tw-wrap button, .tw-wrap input, .tw-wrap label {
-            font-family: inherit;
-        }
-    </style>
-@endpush
+    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+        <x-page-title>Tambah Role</x-page-title>
+        <a href="{{ route('roles.index') }}"
+            class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 bg-white border border-gray-300 px-4 py-2 rounded-lg transition">
+            <i class="fa-solid fa-arrow-left"></i> Kembali
+        </a>
+    </div>
 
-    <div class="tw-wrap p-6 max-w-2xl mx-auto">
-        <div class="flex items-center mb-6">
-            <a href="{{ route('roles.index') }}" class="text-gray-500 hover:text-gray-700 mr-4">
-                <i class="fa-solid fa-arrow-left text-xl"></i>
-            </a>
-            <h1 class="text-2xl font-bold text-white">TAMBAH ROLE</h1>
+    @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <strong>Terdapat kesalahan:</strong>
+            <ul class="mt-2 list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
+    @endif
 
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                <strong class="font-bold">Terjadi kesalahan!</strong>
-                <ul class="list-disc pl-5 mt-2">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+    <div class="max-w-xl bg-white rounded-xl shadow-sm p-6">
+        <form action="{{ route('roles.store') }}" method="POST" class="space-y-4">
+            @csrf
+
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Role <span class="text-red-500">*</span></label>
+                <input type="text" name="name" id="name" value="{{ old('name') }}" required
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
+                    placeholder="Contoh: Manajer, IT Support">
             </div>
-        @endif
 
-        <div class="bg-white rounded-lg shadow p-6">
-            <form action="{{ route('roles.store') }}" method="POST">
-                @csrf
-
-                <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Role</label>
-                    <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                        class="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 border"
-                        placeholder="Contoh: Manajer, IT Support">
-                </div>
-
-                <div class="mt-6 flex justify-end gap-3">
-                    <a href="{{ route('roles.index') }}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded shadow hover:bg-gray-300">
-                        Batal
-                    </a>
-                    <button type="submit" class="bg-teal-600 text-white px-4 py-2 rounded shadow hover:bg-teal-700">
-                        Simpan
-                    </button>
-                </div>
-            </form>
-        </div>
+            <div class="flex gap-3 pt-2">
+                <button type="submit"
+                    class="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2 rounded-lg text-sm transition">
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan
+                </button>
+                <a href="{{ route('roles.index') }}"
+                    class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-5 py-2 rounded-lg text-sm transition">
+                    Batal
+                </a>
+            </div>
+        </form>
     </div>
 </x-layouts.app>

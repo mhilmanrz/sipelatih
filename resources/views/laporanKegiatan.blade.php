@@ -1,220 +1,175 @@
-    <x-layouts.app>
-        <x-slot:title>Laporan Kegiatan</x-slot>
+<x-layouts.app>
+    @section('title', 'Laporan Kegiatan')
 
-    @push('styles')
-        <link rel="stylesheet" href="{{ asset('assets/css/LayoutSuperAdmin.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <style>
-            .modal {
-                display: none;
-                position: fixed;
-                z-index: 1000;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                overflow: auto;
-                background-color: rgba(0, 0, 0, 0.5);
-            }
-
-            .modal-content {
-                background-color: #fefefe;
-                margin: 10% auto;
-                padding: 24px;
-                border: 1px solid #888;
-                width: 90%;
-                max-width: 500px;
-                border-radius: 8px;
-                position: relative;
-            }
-
-            .close {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-                cursor: pointer;
-            }
-
-            .close:hover,
-            .close:focus {
-                color: black;
-                text-decoration: none;
-            }
-        </style>
-    @endpush
-
-    <div class="p-8">
-        <div class="mb-6 flex justify-between items-center">
-            <x-page-title>LAPORAN KEGIATAN</x-page-title>
-        </div>
-
-        @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                <ul class="list-disc pl-5">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <section class="bg-white overflow-hidden shadow"
-            style="border-radius: 20px; margin-bottom: 24px; padding: 24px; display: flex; flex-direction: column; align-items: center;">
-            <h2 style="font-size: 1.25rem; font-weight: bold; color: #374151; margin-bottom: 16px; text-align: center;">
-                Persentase Usulan Kegiatan Berdasarkan Status</h2>
-            <div style="position: relative; width: 100%; max-width: 400px; height: 250px;">
-                <canvas id="statusPieChart"></canvas>
-            </div>
-            <p style="font-size: 0.875rem; color: #6b7280; margin-top: 16px;">Total Kegiatan: {{ $totalActivities }}</p>
-        </section>
-
-        <div class="bg-white rounded-xl shadow p-6 mb-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-                <h2 class="text-xl font-semibold text-gray-800">Daftar Laporan Kegiatan</h2>
-                <div class="flex flex-wrap items-center gap-3">
-                    <form action="{{ route('kegiatan.laporan.index') }}" method="GET" class="flex items-center gap-2">
-                        <label for="year" class="font-semibold text-gray-700 whitespace-nowrap text-sm">Tahun:</label>
-                        <select name="year" id="year"
-                            class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-teal-200">
-                            @php
-                                $currentYear = date('Y');
-                                $startYear = 2020;
-                            @endphp
-                            @for ($y = $currentYear + 1; $y >= $startYear; $y--)
-                                <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
-                            @endfor
-                        </select>
-                        <button type="submit"
-                            class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded text-sm transition-colors">
-                            Tampilkan
-                        </button>
-                    </form>
-                    <a href="{{ route('kegiatan.laporan.template') }}"
-                        class="inline-flex py-2 px-4 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded shadow items-center transition-colors text-sm">
-                        <i class="fas fa-download mr-2"></i> Download Template
-                    </a>
-                </div>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-sm">
-                    <thead class="bg-[#007a7a] border border-white py-3 px-4 font-semibold">
-                        <tr class="bg-gray-100 text-gray-700">
-                            <th class="-300 text-center w-10 border border-white py-3 px-4 font-semibold">NO.</th>
-                            <th class="-300 border border-white py-3 px-4 font-semibold">Nama Kegiatan</th>
-                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Tgl Mulai</th>
-                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Tgl Selesai</th>
-                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Jml Peserta</th>
-                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Cakupan Kegiatan</th>
-                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">JP Total Materi</th>
-                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Kategori Diklat</th>
-                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Status</th>
-                            <th class="-300 text-center border border-white py-3 px-4 font-semibold">Laporan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($activities as $index => $item)
-                            @php
-                                $status = $item->latestStatus?->status ?? 'draft';
-                                $statusMap = [
-                                    'draft'     => ['label' => 'Draft',     'class' => 'bg-gray-200 text-gray-700'],
-                                    'submitted' => ['label' => 'Diajukan',  'class' => 'bg-blue-100 text-blue-700'],
-                                    'revision'  => ['label' => 'Revisi',    'class' => 'bg-yellow-100 text-yellow-700'],
-                                    'accepted'  => ['label' => 'Disetujui', 'class' => 'bg-green-100 text-green-700'],
-                                ];
-                                $badge = $statusMap[$status] ?? ['label' => ucfirst($status), 'class' => 'bg-gray-100 text-gray-600'];
-                            @endphp
-                            <tr class="hover:bg-gray-50">
-                                <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
-                                <td class="-300 font-medium border border-gray-200 py-3 px-4">
-                                    {{ $item->activityName->name ?? ($item->reference_number ?? '-') }}</td>
-                                <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $item->start_date ?? '-' }}</td>
-                                <td class="-300 text-center border border-gray-200 py-3 px-4">{{ $item->end_date ?? '-' }}</td>
-                                <td class="-300 text-center font-semibold border border-gray-200 py-3 px-4">
-                                    {{ $item->activityParticipants->count() }}</td>
-                                <td class="-300 text-center border border-gray-200 py-3 px-4">
-                                    {{ $item->activityScope->name ?? '-' }}</td>
-                                <td class="-300 text-center font-semibold border border-gray-200 py-3 px-4">
-                                    {{ $item->activityMaterials->sum('value') }} JP</td>
-                                <td class="-300 text-center border border-gray-200 py-3 px-4">
-                                    {{ $item->activityCategory->name ?? '-' }}</td>
-                                <td class="-300 text-center border border-gray-200 py-3 px-4">
-                                    <span class="px-2 py-1 rounded-full text-xs font-semibold {{ $badge['class'] }}">
-                                        {{ $badge['label'] }}
-                                    </span>
-                                </td>
-                                <td class="-300 text-center whitespace-nowrap border border-gray-200 py-3 px-4">
-                                    @if ($item->report)
-                                        <button
-                                            onclick="openModal({{ $item->id }}, {{ $item->report->id }}, '{{ addslashes($item->activityName->name ?? ($item->reference_number ?? '-')) }}')"
-                                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs mr-1">
-                                            <i class="fas fa-edit"></i> Ubah
-                                        </button>
-                                        <a href="{{ Storage::url($item->report->file_path) }}" target="_blank"
-                                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs inline-block">
-                                            <i class="fas fa-eye"></i> Lihat
-                                        </a>
-                                    @else
-                                        <button
-                                            onclick="openModal({{ $item->id }}, null, '{{ addslashes($item->activityName->name ?? ($item->reference_number ?? '-')) }}')"
-                                            class="bg-teal-500 hover:bg-teal-600 text-white px-3 py-1 rounded text-xs">
-                                            <i class="fas fa-upload"></i> Upload
-                                        </button>
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="10" class="-300 text-center text-gray-500 border border-gray-200 py-3 px-4">
-                                    Tidak ada data kegiatan.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+    {{-- HEADER --}}
+    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+        <x-page-title>LAPORAN KEGIATAN</x-page-title>
+        <div class="flex flex-wrap items-center gap-3">
+            <form action="{{ route('kegiatan.laporan.index') }}" method="GET" class="flex items-center gap-2">
+                <select name="year" id="year" onchange="this.form.submit()"
+                    class="bg-white border border-gray-300 rounded-full px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-teal-200 text-gray-800">
+                    @php
+                        $currentYear = date('Y');
+                        $startYear = 2020;
+                    @endphp
+                    @for ($y = $currentYear + 1; $y >= $startYear; $y--)
+                        <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+            </form>
+            <a href="{{ route('kegiatan.laporan.template') }}"
+                class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition bg-[#D6DE20] hover:opacity-85"
+                id="btnDownloadTemplate">
+                <i class="fas fa-download mr-2"></i> Download Template
+            </a>
         </div>
     </div>
 
-    <!-- Upload/Edit Modal -->
-    <div id="laporanModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle" class="text-xl font-bold mb-4">Upload Laporan</h2>
+    {{-- Flash Messages --}}
+    @if (session('success'))
+        <div class="relative px-4 py-3 mb-4 text-green-700 bg-green-100 border border-green-400 rounded" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <strong>Terdapat kesalahan:</strong>
+            <ul class="mt-2 list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
+    {{-- PIE CHART --}}
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 flex flex-col items-center">
+        <h3 class="mb-4 border-b border-gray-100 pb-3 text-lg font-semibold text-gray-800 w-full text-center">
+            Persentase Usulan Kegiatan Berdasarkan Status
+        </h3>
+        <div class="relative w-full max-w-md" style="height: 250px;">
+            <canvas id="statusPieChart"></canvas>
+        </div>
+        <p class="text-sm text-gray-500 mt-4">Total Kegiatan: {{ $totalActivities }}</p>
+    </div>
+
+    {{-- TABLE --}}
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <x-table>
+            <x-slot name="header">
+                <tr>
+                    <th class="px-4 py-3 text-center w-12">NO.</th>
+                    <th class="px-4 py-3 text-left">Nama Kegiatan</th>
+                    <th class="px-4 py-3 text-center">Tgl Mulai</th>
+                    <th class="px-4 py-3 text-center">Tgl Selesai</th>
+                    <th class="px-4 py-3 text-center">Jml Peserta</th>
+                    <th class="px-4 py-3 text-center">Cakupan Kegiatan</th>
+                    <th class="px-4 py-3 text-center">JP Total Materi</th>
+                    <th class="px-4 py-3 text-center">Kategori Diklat</th>
+                    <th class="px-4 py-3 text-center">Status</th>
+                    <th class="px-4 py-3 text-center">Laporan</th>
+                </tr>
+            </x-slot>
+
+            @forelse($activities as $index => $item)
+                @php
+                    $status = $item->latestStatus?->status ?? 'draft';
+                    $statusMap = [
+                        'draft'     => ['label' => 'Draft',     'class' => 'bg-gray-200 text-gray-700'],
+                        'submitted' => ['label' => 'Diajukan',  'class' => 'bg-blue-100 text-blue-700'],
+                        'revision'  => ['label' => 'Revisi',    'class' => 'bg-yellow-100 text-yellow-700'],
+                        'accepted'  => ['label' => 'Disetujui', 'class' => 'bg-green-100 text-green-700'],
+                    ];
+                    $badge = $statusMap[$status] ?? ['label' => ucfirst($status), 'class' => 'bg-gray-100 text-gray-600'];
+                @endphp
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                    <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-500">{{ $index + 1 }}</td>
+                    <td class="border border-gray-200 py-3 px-4 text-sm text-gray-900 font-medium">
+                        {{ $item->activityName->name ?? ($item->reference_number ?? '-') }}</td>
+                    <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-900">{{ $item->start_date ?? '-' }}</td>
+                    <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-900">{{ $item->end_date ?? '-' }}</td>
+                    <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-900 font-semibold">
+                        {{ $item->activityParticipants->count() }}</td>
+                    <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-900">
+                        {{ $item->activityScope->name ?? '-' }}</td>
+                    <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-900 font-semibold">
+                        {{ $item->activityMaterials->sum('value') }} JP</td>
+                    <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-900">
+                        {{ $item->activityCategory->name ?? '-' }}</td>
+                    <td class="text-center border border-gray-200 py-3 px-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $badge['class'] }}">
+                            {{ $badge['label'] }}
+                        </span>
+                    </td>
+                    <td class="text-center border border-gray-200 py-3 px-4 whitespace-nowrap">
+                        @if ($item->report)
+                            <div class="flex justify-center gap-1">
+                                <button
+                                    onclick="openModal({{ $item->id }}, {{ $item->report->id }}, '{{ addslashes($item->activityName->name ?? ($item->reference_number ?? '-')) }}')"
+                                    class="text-white px-3 py-1.5 rounded text-sm font-semibold transition hover:opacity-85"
+                                    style="background-color: #eab308;">
+                                    <i class="fas fa-edit"></i> Ubah
+                                </button>
+                                <a href="{{ Storage::url($item->report->file_path) }}" target="_blank"
+                                    class="text-white px-3 py-1.5 rounded text-sm font-semibold transition hover:opacity-85"
+                                    style="background-color: #3b82f6;">
+                                    <i class="fas fa-eye"></i> Lihat
+                                </a>
+                            </div>
+                        @else
+                            <button
+                                onclick="openModal({{ $item->id }}, null, '{{ addslashes($item->activityName->name ?? ($item->reference_number ?? '-')) }}')"
+                                class="inline-flex items-center justify-center bg-[#1A5555] hover:opacity-85 text-white font-bold px-3 py-1.5 rounded shadow transition text-sm">
+                                <i class="fas fa-upload mr-1"></i> Upload
+                            </button>
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="10" class="text-center text-gray-500 text-sm border border-gray-200 py-6 px-4">
+                        Tidak ada data kegiatan.
+                    </td>
+                </tr>
+            @endforelse
+        </x-table>
+    </div>
+
+    {{-- UPLOAD/EDIT MODAL (Guide-compliant) --}}
+    <div id="laporanModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black/50">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 overflow-hidden">
             <form id="laporanForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div id="methodContainer"></div>
 
-                <input type="hidden" name="activity_id" id="activity_id">
-
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Kegiatan</label>
-                    <input type="text" id="activity_name"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight bg-gray-100 cursor-not-allowed"
-                        readonly>
+                {{-- Header --}}
+                <div class="bg-teal-600 px-6 py-4 flex justify-between items-center text-white">
+                    <h2 id="modalTitle" class="text-lg font-bold">Upload Laporan</h2>
+                    <button type="button" class="text-white hover:text-gray-200 text-2xl" onclick="closeModal()">&times;</button>
                 </div>
 
-                <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">File Laporan</label>
-                    <input type="file" name="file" accept=".pdf,.doc,.docx,.xls,.xlsx" required
-                        class="w-full text-gray-700 border rounded py-2 px-3">
-                    <p class="text-xs text-gray-500 mt-1">Maksimal ukuran file: 10MB (PDF, DOC/X, XLS/X)</p>
+                {{-- Body --}}
+                <div class="p-6 space-y-4 text-left">
+                    <input type="hidden" name="activity_id" id="activity_id">
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Kegiatan</label>
+                        <input type="text" id="activity_name" readonly
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed shadow-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">File Laporan <span class="text-red-500">*</span></label>
+                        <input type="file" name="file" accept=".pdf,.doc,.docx,.xls,.xlsx" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm text-sm">
+                        <p class="text-xs text-gray-500 mt-1">Maksimal ukuran file: 10MB (PDF, DOC/X, XLS/X)</p>
+                    </div>
                 </div>
 
-                <div class="flex justify-end">
-                    <button type="button" onclick="closeModal()"
-                        class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded mr-2">
-                        Batal
-                    </button>
-                    <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded">
-                        Simpan
-                    </button>
+                {{-- Footer --}}
+                <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-3 border-t border-gray-200">
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-medium" onclick="closeModal()">BATAL</button>
+                    <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 font-medium shadow">SIMPAN</button>
                 </div>
             </form>
         </div>
@@ -231,26 +186,23 @@
                 let modalTitle = document.getElementById('modalTitle');
 
                 if (reportId) {
-                    // Edit mode
                     modalTitle.innerText = "Ubah Laporan";
                     form.action = "{{ url('laporan-kegiatan') }}/" + reportId;
                     methodContainer.innerHTML = '<input type="hidden" name="_method" value="PUT">';
                 } else {
-                    // Upload mode
                     modalTitle.innerText = "Upload Laporan";
                     form.action = "{{ route('kegiatan.laporan.store') }}";
                     methodContainer.innerHTML = '';
                 }
 
-                document.getElementById('laporanModal').style.display = 'block';
+                document.getElementById('laporanModal').classList.remove('hidden');
             }
 
             function closeModal() {
-                document.getElementById('laporanModal').style.display = 'none';
+                document.getElementById('laporanModal').classList.add('hidden');
                 document.getElementById('laporanForm').reset();
             }
 
-            // Close modal when clicking outside
             window.onclick = function(event) {
                 let modal = document.getElementById('laporanModal');
                 if (event.target == modal) {
@@ -277,13 +229,13 @@
                             '#e5e7eb', // gray-200 for draft
                             '#dbeafe', // blue-100 for submitted
                             '#fef08a', // yellow-200 for revision
-                            '#bbf7d0' // green-200 for accepted
+                            '#bbf7d0'  // green-200 for accepted
                         ],
                         borderColor: [
                             '#9ca3af', // gray-400
                             '#3b82f6', // blue-500
                             '#eab308', // yellow-500
-                            '#22c55e' // green-500
+                            '#22c55e'  // green-500
                         ],
                         borderWidth: 1
                     }]

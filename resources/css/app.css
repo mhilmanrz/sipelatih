@@ -8,6 +8,11 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-brand-primary: #1A5555;
+    --color-brand-secondary: #0DBBCB;
+    --color-brand-table: #007A7F;
+    --color-brand-dark: #113a3a;
+    --color-brand-accent: #1fd1d1;
 }
 
 /* body {
@@ -16,19 +21,16 @@
 
 @layer base {
     table {
-        border-collapse: separate !important;
-        border-spacing: 0 !important;
-        border: 5px solid #007A7F !important;
-        border-radius: 20px !important;
-        overflow: hidden !important;
+        border-collapse: collapse;
+        overflow: hidden;
     }
-    
+
     table thead, table thead tr, table thead th {
-        background-color: #007A7F !important;
-        color: #FFFFFF !important;
+        background-color: var(--color-brand-table);
+        color: #FFFFFF;
     }
     
     table tbody, table tbody tr, table tbody td {
-        background-color: #FFFFFF !important;
+        background-color: #FFFFFF;
     }
 }

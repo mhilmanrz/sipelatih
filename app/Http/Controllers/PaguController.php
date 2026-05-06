@@ -20,19 +20,37 @@ class PaguController extends Controller
     public function index(Request $request)
     {
         $selectedYear = $request->input('year');
+        $searchQuery = $request->input('q');
+        $perPage = $request->input('per_page', 10);
 
         $query = Budget::with('budgetCategory');
+
         if ($selectedYear) {
             $query->where('year', $selectedYear);
         }
 
-        $budgets = $query->get();
-        $categories = BudgetCategory::all();
+        if ($searchQuery) {
+            $query->where(function ($q) use ($searchQuery) {
+                $q->where('rkkal_code', 'like', "%{$searchQuery}%")
+                    ->orWhere('submark', 'like', "%{$searchQuery}%")
+                    ->orWhereHas('budgetCategory', function ($qCat) use ($searchQuery) {
+                        $qCat->where('name', 'like', "%{$searchQuery}%");
+                    });
+            });
+        }
 
-        $totalDana = $budgets->sum('total_amount');
-        $budgetIds = $budgets->pluck('id');
+        // Hitung sumari berdasarkan filter sebelum dipaginasi
+        $summaryQuery = clone $query;
+        $allBudgets = $summaryQuery->get();
+
+        $totalDana = $allBudgets->sum('total_amount');
+        $budgetIds = $allBudgets->pluck('id');
         $totalTerserap = Activity::whereIn('budget_id', $budgetIds)->sum('budget_amount');
         $totalSisa = $totalDana - $totalTerserap;
+
+        // Ambil data untuk tabel dengan paginasi
+        $budgets = $query->paginate($perPage)->withQueryString();
+        $categories = BudgetCategory::all();
 
         $availableYears = Budget::select('year')
             ->whereNotNull('year')
@@ -58,7 +76,8 @@ class PaguController extends Controller
 
         foreach ($budgetsForChart as $b) {
             $used = $b->activities->sum('budget_amount');
-            $sisa = $b->total_amount - $used;
+            // Sisa berdasarkan Pagu Efektif (sudah dikurangi Blokir)
+            $sisa = $b->efektif_amount - $used;
 
             $label = $b->rkkal_code;
             if ($b->submark) {
@@ -95,13 +114,12 @@ class PaguController extends Controller
             'budget_category_id' => 'required|exists:budget_categories,id',
             'submark' => 'nullable|string|max:255',
             'total_amount' => 'required|numeric|min:0',
+            'blokir' => 'nullable|numeric|min:0',
         ], [
             'rkkal_code.unique' => 'Pagu dengan kombinasi Kode RKKAL dan Tahun Anggaran tersebut sudah ada.',
         ]);
 
-        $data = $request->all();
-
-        Budget::create($data);
+        Budget::create($request->only(['year', 'rkkal_code', 'budget_category_id', 'submark', 'total_amount', 'blokir']));
 
         return redirect()->route('pagu.index')->with('success', 'Pagu berhasil ditambahkan.');
     }
@@ -139,13 +157,12 @@ class PaguController extends Controller
             'budget_category_id' => 'required|exists:budget_categories,id',
             'submark' => 'nullable|string|max:255',
             'total_amount' => 'required|numeric|min:0',
+            'blokir' => 'nullable|numeric|min:0',
         ], [
             'rkkal_code.unique' => 'Pagu dengan kombinasi Kode RKKAL dan Tahun Anggaran tersebut sudah ada.',
         ]);
 
-        $data = $request->all();
-
-        $pagu->update($data);
+        $pagu->update($request->only(['year', 'rkkal_code', 'budget_category_id', 'submark', 'total_amount', 'blokir']));
 
         return redirect()->route('pagu.index')->with('success', 'Pagu berhasil diperbarui.');
     }
