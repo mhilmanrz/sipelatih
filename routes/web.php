@@ -92,6 +92,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('users/import', [UserController::class, 'importView'])->name('users.import.view');
     Route::post('users/import', [UserController::class, 'import'])->name('users.import');
     Route::resource('users', UserController::class);
+
+    Route::get('accounts/import', [AccountController::class, 'importView'])->name('accounts.import.view');
+    Route::post('accounts/import', [AccountController::class, 'import'])->name('accounts.import');
     Route::resource('accounts', AccountController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('kegiatan', ActivityController::class);

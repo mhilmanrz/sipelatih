@@ -2,21 +2,20 @@
     @section('title', 'Manajemen Akun')
 
     {{-- Header --}}
-    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <x-page-title>Manajemen Akun</x-page-title>
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-white">MANAJEMEN AKUN</h1>
         <div class="flex gap-2">
             <a href="{{ route('accounts.import.view') }}"
-                class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition bg-[#D6DE20] hover:opacity-85"
-                id="btnImportAkun">
+                class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition hover:opacity-85"
+                style="background-color:#D6DE20;">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12" />
                 </svg>
                 Import Akun
             </a>
             <a href="{{ route('accounts.create') }}"
-                class="inline-flex items-center justify-center bg-[#1A5555] hover:opacity-85 text-white font-bold px-5 py-2.5 rounded-full shadow transition"
-                id="btnTambahAkun">
+                class="inline-flex items-center justify-center bg-[#1A5555] hover:opacity-85 text-white font-bold px-5 py-2.5 rounded-full shadow transition">
                 + Tambah Akun
             </a>
         </div>
@@ -44,10 +43,10 @@
             <x-slot name="header">
                 <tr>
                     <th class="px-4 py-3 text-center w-16">No.</th>
-                    <th class="px-4 py-3 text-left">Nama Akun</th>
-                    <th class="px-4 py-3 text-left">Email</th>
-                    <th class="px-4 py-3 text-left">Role</th>
-                    <th class="px-4 py-3 text-left">Scope Unit</th>
+                    <th class="px-4 py-3">Nama Akun</th>
+                    <th class="px-4 py-3">Email</th>
+                    <th class="px-4 py-3">Role</th>
+                    <th class="px-4 py-3">Scope Unit</th>
                     <th class="px-4 py-3 text-center">Aksi</th>
                 </tr>
             </x-slot>
@@ -55,10 +54,7 @@
             @forelse($users as $index => $u)
             <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
                 <td class="px-4 py-3 text-sm text-gray-500 text-center">{{ $users->firstItem() + $index }}</td>
-                <td class="px-4 py-3 text-sm">
-                    <a href="{{ route('accounts.edit', $u->id) }}"
-                        class="text-[#007A7F] font-bold hover:underline">{{ $u->name }}</a>
-                </td>
+                <td class="px-4 py-3 text-sm text-gray-900">{{ $u->name }}</td>
                 <td class="px-4 py-3 text-sm text-gray-900">{{ $u->email }}</td>
                 <td class="px-4 py-3 text-sm text-gray-900">{{ $u->roles->pluck('name')->join(', ') }}</td>
                 <td class="px-4 py-3 text-sm text-gray-900">
@@ -68,7 +64,7 @@
                         <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-semibold">Semua Unit</span>
                     @endif
                 </td>
-                <td class="px-4 py-3 text-center">
+                <td class="px-4 py-3">
                     <div class="flex justify-center gap-2 items-center">
                         <a href="{{ route('accounts.edit', $u->id) }}"
                             class="inline-flex items-center px-3 py-1.5 bg-[#1A5555] text-white rounded text-sm font-medium transition hover:opacity-90">
@@ -76,7 +72,7 @@
                         </a>
                         <form action="{{ route('accounts.destroy', $u->id) }}" method="POST"
                             class="inline m-0"
-                            onsubmit="return confirm('Hapus akun ini?');">
+                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit"

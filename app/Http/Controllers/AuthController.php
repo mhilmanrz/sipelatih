@@ -20,6 +20,23 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+            /**
+             * Guard: hanya user yang memiliki minimal satu role yang diizinkan login.
+             * User pegawai (tanpa role) tidak bisa mengakses aplikasi.
+             *
+             * @var \App\Models\User\User $user
+             */
+            $user = Auth::user();
+            if (! $user->roles()->exists()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()->withErrors([
+                    'email' => 'Akun Anda tidak memiliki akses untuk masuk ke aplikasi.',
+                ])->onlyInput('email');
+            }
+
             return redirect()->intended('/');
         }
 

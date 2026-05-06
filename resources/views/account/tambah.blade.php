@@ -2,7 +2,7 @@
     <x-slot:title>Tambah Akun</x-slot>
 
     <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <x-page-title>Tambah Akun</x-page-title>
+        <h1 class="text-2xl font-bold text-white">TAMBAH AKUN</h1>
         <a href="{{ route('accounts.index') }}"
             class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 bg-white border border-gray-300 px-4 py-2 rounded-lg transition">
             <i class="fa-solid fa-arrow-left"></i> Kembali
