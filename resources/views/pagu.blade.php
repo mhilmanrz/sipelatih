@@ -15,7 +15,10 @@
                 </a>
                 <button type="button" id="btnTambahPagu"
                     class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded shadow whitespace-nowrap text-sm">
-                    + Tambah Pagu
+                    <svg class="w-5 h-5 mr-2 inline-block -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Tambah Pagu
                 </button>
             </div>
         </div>

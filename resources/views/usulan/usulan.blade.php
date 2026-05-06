@@ -15,7 +15,7 @@
                 Import Kegiatan
             </a>
             <a href="{{ route('kegiatan.import-per-peserta.page') }}"
-                class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition bg-[#D6DE20] hover:opacity-85"
+                class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full text-white font-bold shadow transition bg-[#1A5555] hover:opacity-85"
                 title="Import Kegiatan beserta Peserta dari Excel" id="btnImportPeserta">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -24,9 +24,13 @@
                 Import Kegiatan per Peserta
             </a>
             <a href="{{ route('kegiatan.create') }}"
-                class="inline-flex items-center justify-center text-black px-5 py-2.5 rounded-full font-bold shadow transition bg-[#D6DE20] hover:opacity-85"
+                class="inline-flex items-center justify-center text-white px-5 py-2.5 rounded-full font-bold shadow transition bg-[#1A5555] hover:opacity-85"
                 id="btnTambah">
-                ➕ Tambah Data
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4v16m8-8H4"></path>
+                </svg>
+                Tambah Data
             </a>
         </div>
     </div>

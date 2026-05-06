@@ -21,7 +21,10 @@
     <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 2rem;">
         <div style="display: flex; justify-content: flex-start; margin-bottom: 1rem;">
             <button id="openModal" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded shadow transition-colors" style="background-color: #14b8a6; color: white;">
-                + Tambah Sasaran Profesi
+                <svg class="w-5 h-5 mr-2 inline-block -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Tambah Sasaran Profesi
             </button>
         </div>
 

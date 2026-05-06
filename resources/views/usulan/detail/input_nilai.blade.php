@@ -123,7 +123,10 @@
                         <label class="block text-sm font-bold text-gray-700">Komponen Penilaian <span class="text-red-500">*</span></label>
                         <button type="button" onclick="addCustomComponent()"
                             class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-xs font-bold transition-colors">
-                            + Tambah Komponen Custom
+                            <svg class="w-5 h-5 mr-2 inline-block -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Tambah Komponen Custom
                         </button>
                     </div>
 

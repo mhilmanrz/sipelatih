@@ -6,7 +6,10 @@
         <h1 class="text-2xl font-bold text-white">MANAJEMEN ROLE</h1>
         <a href="{{ route('roles.create') }}"
             class="inline-flex items-center justify-center bg-[#1A5555] hover:opacity-85 text-white font-bold px-5 py-2.5 rounded-full shadow transition">
-            + Tambah Role
+            <svg class="w-5 h-5 mr-2 inline-block -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Tambah Role
         </a>
     </div>
 

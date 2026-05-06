@@ -13,7 +13,8 @@ class PositionController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->input('search');
+        $search = $request->input('q');
+        $perPage = $request->input('per_page', 10);
 
         $query = Position::query();
 
@@ -22,7 +23,7 @@ class PositionController extends Controller
                 ->orWhere('code', 'like', '%'.$search.'%');
         }
 
-        $positions = $query->paginate(10);
+        $positions = $query->paginate($perPage)->appends($request->all());
 
         return view('user.position.index', compact('positions'));
     }

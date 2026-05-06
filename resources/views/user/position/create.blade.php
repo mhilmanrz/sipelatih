@@ -1,44 +1,47 @@
 <x-layouts.app>
-    <div class="bg-[#13b9c6] min-h-screen font-sans pb-8">
-        <!-- TITLE & BUTTON -->
-        <section class="px-8 py-6 flex flex-wrap justify-between items-center gap-4">
-            <h1 class="text-white text-3xl font-bold">Tambah Jabatan</h1>
-            <a href="{{ route('positions.index') }}"
-                class="inline-flex items-center gap-2 bg-white text-gray-700 px-5 py-2.5 rounded-full font-bold shadow hover:bg-gray-50 transition">
-                Kembali
-            </a>
-        </section>
+    <x-slot:title>Tambah Jabatan</x-slot>
 
-        <section class="mx-8 bg-white rounded-[20px] overflow-hidden shadow p-8">
+    <div class="tw-wrap p-6 max-w-2xl mx-auto">
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+            <h1 class="text-2xl font-bold text-white border-b pb-2">TAMBAH JABATAN</h1>
+            <a href="{{ route('positions.index') }}"
+                class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 bg-white border border-gray-300 px-4 py-2 rounded-lg transition">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </a>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
             <form action="{{ route('positions.store') }}" method="POST">
                 @csrf
-                <div class="mb-6">
-                    <label for="code" class="block text-gray-700 font-semibold mb-2">Kode Jabatan <span
+                <div class="mb-5">
+                    <label for="code" class="block text-sm font-medium text-gray-700 mb-2">Kode Jabatan <span
                             class="text-red-500">*</span></label>
                     <input type="text" id="code" name="code" value="{{ old('code') }}" required
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#007a7a] @error('code') border-red-500 @enderror">
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm @error('code') border-red-500 @enderror">
                     @error('code')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="mb-6">
-                    <label for="name" class="block text-gray-700 font-semibold mb-2">Nama Jabatan <span
+                <div class="mb-5">
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nama Jabatan <span
                             class="text-red-500">*</span></label>
                     <input type="text" id="name" name="name" value="{{ old('name') }}" required
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#007a7a] @error('name') border-red-500 @enderror">
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm @error('name') border-red-500 @enderror">
                     @error('name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="flex justify-end mt-8">
-                    <button type="submit"
-                        class="bg-[#007a7a] text-white px-6 py-2.5 rounded-full font-bold shadow hover:bg-[#006bd6] transition">
-                        Simpan Data
+                <div class="flex items-center justify-end space-x-3 pt-4 border-t">
+                    <a href="{{ route('positions.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                        Batal
+                    </a>
+                    <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors shadow">
+                        Simpan
                     </button>
                 </div>
             </form>
-        </section>
+        </div>
     </div>
 </x-layouts.app>
