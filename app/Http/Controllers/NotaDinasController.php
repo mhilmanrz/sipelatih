@@ -24,17 +24,17 @@ class NotaDinasController extends Controller
         $logoBase64 = null;
 
         if (isset($settings['kemenkes_logo']) && Storage::disk('public')->exists($settings['kemenkes_logo'])) {
-            $path = storage_path('app/public/'.$settings['kemenkes_logo']);
+            $path = storage_path('app/public/' . $settings['kemenkes_logo']);
             $type = pathinfo($path, PATHINFO_EXTENSION);
             $data = file_get_contents($path);
-            $logoBase64 = 'data:image/'.$type.';base64,'.base64_encode($data);
+            $logoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         }
 
         $iconBase64 = [];
         foreach (['map' => 'map', 'phone' => 'phone', 'internet' => 'internet'] as $key => $file) {
             $iconPath = public_path("assets/icons/{$file}.png");
             if (file_exists($iconPath)) {
-                $iconBase64[$key] = 'data:image/png;base64,'.base64_encode(file_get_contents($iconPath));
+                $iconBase64[$key] = 'data:image/png;base64,' . base64_encode(file_get_contents($iconPath));
             }
         }
 
@@ -54,7 +54,7 @@ class NotaDinasController extends Controller
         $pdf = Pdf::loadView('pdf.nota-dinas', $data);
         $pdf->setPaper('A4', 'portrait');
 
-        $fileName = 'Nota_Dinas_'.$data['nomorSurat'].'.pdf';
+        $fileName = 'Nota_Dinas_' . $data['nomorSurat'] . '.pdf';
 
         return $pdf->stream($fileName);
     }
@@ -83,7 +83,7 @@ class NotaDinasController extends Controller
         $infoCell = $headerTable->addCell(70 * 50);
 
         // Logo image or fallback text
-        $logoPath = storage_path('app/public/'.$data['logoPath']);
+        $logoPath = storage_path('app/public/' . $data['logoPath']);
         if ($data['logoPath'] && file_exists($logoPath)) {
             $logoCell->addImage($logoPath, ['width' => 180, 'height' => 50]);
         } else {
@@ -103,7 +103,7 @@ class NotaDinasController extends Controller
 
         // --- TITLE ---
         $section->addText('NOTA DINAS', ['bold' => true, 'size' => 14, 'align' => 'center']);
-        $section->addText('NOMOR : '.$data['nomorSurat'], ['size' => 11, 'align' => 'center']);
+        $section->addText('NOMOR : ' . $data['nomorSurat'], ['size' => 11, 'align' => 'center']);
 
         // --- META TABLE ---
         $metaTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
@@ -120,7 +120,7 @@ class NotaDinasController extends Controller
         $metaTable->addRow();
         $metaTable->addCell(15 * 50)->addText('Hal');
         $metaTable->addCell(3 * 50)->addText(':');
-        $metaTable->addCell(82 * 50)->addText('Permohonan Narasumber '.$data['hal']);
+        $metaTable->addCell(82 * 50)->addText('Permohonan Narasumber ' . $data['hal']);
 
         $metaTable->addRow();
         $metaTable->addCell(15 * 50)->addText('Tanggal');
@@ -133,8 +133,8 @@ class NotaDinasController extends Controller
         // --- MAIN TEXT ---
         $section->addText(
             'Dalam rangka meningkatkan kompetensi tenaga keperawatan dalam asuhan keperawatan dan kolaborasi interprofesional, akan dilaksanakan kegiatan '
-            .$data['hal']
-            .' secara luring pada:',
+                . $data['hal']
+                . ' secara luring pada:',
             ['size' => 11],
             ['indentation' => ['firstLine' => 567]]
         );
@@ -159,7 +159,7 @@ class NotaDinasController extends Controller
         // --- CLOSING PARAGRAPH ---
         $section->addText(
             'Demikian hal ini kami sampaikan, mohon Kepala Unit dapat menugaskan peserta terlampir untuk mengikuti kegiatan sesuai dengan jadwal yang telah ditetapkan. Informasi lebih lanjut dapat menghubungi contact person Tim Kerja '
-            .$data['picUnitName'].' : '.$data['picName'].' ('.$data['picPhone'].').',
+                . $data['picUnitName'] . ' : ' . $data['picName'] . ' (' . $data['picPhone'] . ').',
             ['size' => 11],
             ['indentation' => ['firstLine' => 567]]
         );
@@ -182,14 +182,14 @@ class NotaDinasController extends Controller
             ['size' => 7.5, 'color' => '444444', 'align' => 'center']
         );
 
-        $fileName = 'Nota_Dinas_'.$data['nomorSurat'].'.docx';
+        $fileName = 'Nota_Dinas_' . $data['nomorSurat'] . '.docx';
 
         $tempPath = storage_path('app/temp');
         if (! is_dir($tempPath)) {
             mkdir($tempPath, 0755, true);
         }
 
-        $filePath = $tempPath.'/'.$fileName;
+        $filePath = $tempPath . '/' . $fileName;
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
         $objWriter->save($filePath);
 
@@ -214,10 +214,10 @@ class NotaDinasController extends Controller
         $logoBase64 = null;
         $logoPath = $settings['kemenkes_logo'] ?? null;
         if ($logoPath && Storage::disk('public')->exists($logoPath)) {
-            $path = storage_path('app/public/'.$logoPath);
+            $path = storage_path('app/public/' . $logoPath);
             $type = pathinfo($path, PATHINFO_EXTENSION);
             $logoData = file_get_contents($path);
-            $logoBase64 = 'data:image/'.$type.';base64,'.base64_encode($logoData);
+            $logoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($logoData);
         }
 
         // Icons
@@ -225,7 +225,7 @@ class NotaDinasController extends Controller
         foreach (['map' => 'map', 'phone' => 'phone', 'internet' => 'internet'] as $key => $file) {
             $iconPath = public_path("assets/icons/{$file}.png");
             if (file_exists($iconPath)) {
-                $iconBase64[$key] = 'data:image/png;base64,'.base64_encode(file_get_contents($iconPath));
+                $iconBase64[$key] = 'data:image/png;base64,' . base64_encode(file_get_contents($iconPath));
             }
         }
 
@@ -241,15 +241,15 @@ class NotaDinasController extends Controller
         if ($startDate->isSameDay($endDate)) {
             $hariTanggalAcara = $startDate->translatedFormat('l, j F Y');
         } else {
-            $hariTanggalAcara = $startDate->translatedFormat('l')."\u{2013}".$endDate->translatedFormat('l').', '.
-                $startDate->format('j')."\u{2013}".$endDate->translatedFormat('j F Y');
+            $hariTanggalAcara = $startDate->translatedFormat('l') . "\u{2013}" . $endDate->translatedFormat('l') . ', ' .
+                $startDate->format('j') . "\u{2013}" . $endDate->translatedFormat('j F Y');
         }
 
         // Time formatting
-        $waktuAcara = 'Pukul '.
-            Carbon::parse($kegiatan->start_time)->format('H.i').
-            ' – '.
-            Carbon::parse($kegiatan->end_time)->format('H.i').
+        $waktuAcara = 'Pukul ' .
+            Carbon::parse($kegiatan->start_time)->format('H.i') .
+            ' – ' .
+            Carbon::parse($kegiatan->end_time)->format('H.i') .
             ' WIB';
 
         // PIC data

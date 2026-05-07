@@ -26,6 +26,9 @@ class User extends Authenticatable
         'rank_id',
         'employee_id',
         'phone_number',
+        'npwp',
+        'bank_name',
+        'account_number',
     ];
 
     protected $hidden = [

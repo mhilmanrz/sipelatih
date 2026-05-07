@@ -37,6 +37,7 @@ class BatchController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'code' => 'nullable|string|max:255|unique:batches,code',
             'name' => 'required|string|max:255',
         ]);
 
@@ -69,6 +70,7 @@ class BatchController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'code' => 'nullable|string|max:255|unique:batches,code,' . $id,
             'name' => 'required|string|max:255',
         ]);
 

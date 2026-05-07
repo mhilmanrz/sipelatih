@@ -37,6 +37,7 @@ class ActivityMethodController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'code' => 'nullable|string|max:255|unique:activity_methods,code',
             'name' => 'required|string|max:255',
         ]);
 

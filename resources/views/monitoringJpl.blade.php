@@ -125,7 +125,7 @@
             <div class="px-6 py-4 border-b border-gray-200">
                 <h3 class="text-base font-semibold text-gray-800">Capaian JPL per Kategori Profesi Tahun {{ $year }}</h3>
             </div>
-            <div class="p-6">
+            <div class="p-6" style="height: 400px;">
                 <canvas id="jplChart"></canvas>
             </div>
         </div>
@@ -253,6 +253,7 @@
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         plugins: {
                             legend: {
                                 display: false

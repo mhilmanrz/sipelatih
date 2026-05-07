@@ -132,6 +132,21 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label>NPWP</label>
+                <input type="text" name="npwp" value="{{ old('npwp') }}">
+            </div>
+
+            <div class="form-group">
+                <label>Nama Bank</label>
+                <input type="text" name="bank_name" value="{{ old('bank_name') }}">
+            </div>
+
+            <div class="form-group">
+                <label>Nomor Rekening</label>
+                <input type="text" name="account_number" value="{{ old('account_number') }}">
+            </div>
+
             <div style="margin-top: 30px;">
                 <button type="submit" class="btn-save">💾 Simpan</button>
                 <a href="{{ url('/users') }}" class="btn-reset">BATAL</a>

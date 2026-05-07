@@ -19,6 +19,9 @@ class UsersTemplateExport implements FromArray, WithHeadings
             'jabatan',
             'jenis_pegawai',
             'pangkat',
+            'npwp',
+            'nama_bank',
+            'nomor_rekening',
         ];
     }
 
@@ -31,10 +34,13 @@ class UsersTemplateExport implements FromArray, WithHeadings
                 '081234567890',
                 '198501012010011001',
                 'Pusdiklatwas BPKP',
-                'Perawat',
-                'Fungsional',
+                'PRW',
+                'FUNG',
                 'PNS',
                 'III/a',
+                '12.345.678.9-012.000',
+                'Bank Mandiri',
+                '1234567890',
             ],
         ];
     }

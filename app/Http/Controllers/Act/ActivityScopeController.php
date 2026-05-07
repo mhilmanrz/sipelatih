@@ -37,6 +37,7 @@ class ActivityScopeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'code' => 'nullable|string|max:255|unique:activity_scopes,code',
             'name' => 'required|string|max:255',
         ]);
 
@@ -69,6 +70,7 @@ class ActivityScopeController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'code' => 'nullable|string|max:255|unique:activity_scopes,code,' . $id,
             'name' => 'required|string|max:255',
         ]);
 

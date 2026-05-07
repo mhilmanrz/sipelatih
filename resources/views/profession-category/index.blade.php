@@ -31,6 +31,7 @@
                     <thead class="bg-[#007a7a] text-white">
                         <tr>
                             <th class="text-center w-12 py-3 px-4 font-semibold text-sm">No.</th>
+                            <th class="py-3 px-4 font-semibold text-sm text-left">Kode</th>
                             <th class="text-left py-3 px-4 font-semibold text-sm">Nama Kategori</th>
                             <th class="text-left py-3 px-4 font-semibold text-sm">Target JPL</th>
                             <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
@@ -40,6 +41,7 @@
                         @forelse($categories as $index => $category)
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="text-center py-3 px-4">{{ $categories->firstItem() + $index }}</td>
+                                <td class="py-3 px-4 text-left">{{ $category->code ?? '-' }}</td>
                                 <td class="font-medium py-3 px-4">{{ $category->name }}</td>
                                 <td class="font-medium py-3 px-4">{{ $category->jpl_target }}</td>
                                 <td class="text-center py-3 px-4">

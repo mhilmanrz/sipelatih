@@ -27,6 +27,7 @@
                     <thead class="bg-[#007a7a] text-white">
                         <tr>
                             <th class="text-center w-12 py-3 px-4 font-semibold text-sm">No.</th>
+                            <th class="py-3 px-4 font-semibold text-sm text-left">Kode</th>
                             <th class="text-left py-3 px-4 font-semibold text-sm">Metode Kegiatan</th>
                             <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
                         </tr>
@@ -35,6 +36,7 @@
                         @forelse($activityMethods as $index => $activityMethod)
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="py-3 px-4">{{ $activityMethods->firstItem() + $index }}</td>
+                                <td class="py-3 px-4 text-left">{{ $activityMethod->code ?? '-' }}</td>
                                 <td class="py-3 px-4 font-medium">{{ $activityMethod->name }}</td>
                                 <td class="py-3 px-4 text-center">
                                     <div class="flex justify-center gap-1.5">
@@ -57,7 +59,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-center text-gray-500 py-6 px-4">
+                                <td colspan="4" class="text-center text-gray-500 py-6 px-4">
                                     Belum ada data Metode Kegiatan.
                                 </td>
                             </tr>

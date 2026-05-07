@@ -36,6 +36,7 @@ class ProfessionCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'code' => 'nullable|string|max:255|unique:profession_categories,code',
             'name' => 'required|string|max:255',
             'jpl_target' => 'required|integer|min:0',
         ]);

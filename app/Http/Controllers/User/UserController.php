@@ -82,6 +82,9 @@ class UserController extends Controller
             'position_id' => 'nullable|exists:positions,id',
             'employment_type_id' => 'nullable|exists:employment_types,id',
             'rank_id' => 'nullable|exists:ranks,id',
+            'npwp' => 'nullable|string|max:255',
+            'bank_name' => 'nullable|string|max:255',
+            'account_number' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
@@ -133,6 +136,9 @@ class UserController extends Controller
             'position_id' => 'nullable|exists:positions,id',
             'employment_type_id' => 'nullable|exists:employment_types,id',
             'rank_id' => 'nullable|exists:ranks,id',
+            'npwp' => 'nullable|string|max:255',
+            'bank_name' => 'nullable|string|max:255',
+            'account_number' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();

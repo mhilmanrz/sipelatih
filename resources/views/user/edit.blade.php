@@ -133,6 +133,21 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label>NPWP</label>
+                <input type="text" name="npwp" value="{{ old('npwp', $user->npwp) }}">
+            </div>
+
+            <div class="form-group">
+                <label>Nama Bank</label>
+                <input type="text" name="bank_name" value="{{ old('bank_name', $user->bank_name) }}">
+            </div>
+
+            <div class="form-group">
+                <label>Nomor Rekening</label>
+                <input type="text" name="account_number" value="{{ old('account_number', $user->account_number) }}">
+            </div>
+
 
 
             <hr style="margin: 30px 0;">

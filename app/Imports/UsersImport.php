@@ -30,11 +30,11 @@ class UsersImport implements ShouldQueue, ToModel, WithChunkReading, WithHeading
             return null;
         }
 
-        $workUnitId = $this->resolveIdByName(WorkUnit::class, $row['unit_kerja'] ?? null);
-        $professionId = $this->resolveIdByName(Profession::class, $row['profesi'] ?? null);
-        $positionId = $this->resolveIdByName(Positions::class, $row['jabatan'] ?? null);
-        $employmentTypeId = $this->resolveIdByName(EmploymentType::class, $row['jenis_pegawai'] ?? null);
-        $rankId = $this->resolveIdByName(Rank::class, $row['pangkat'] ?? null);
+        $workUnitId = $this->resolveIdByCode(WorkUnit::class, $row['unit_kerja'] ?? null);
+        $professionId = $this->resolveIdByCode(Profession::class, $row['profesi'] ?? null);
+        $positionId = $this->resolveIdByCode(Positions::class, $row['jabatan'] ?? null);
+        $employmentTypeId = $this->resolveIdByCode(EmploymentType::class, $row['jenis_pegawai'] ?? null);
+        $rankId = $this->resolveIdByCode(Rank::class, $row['pangkat'] ?? null);
 
         return new User([
             'name' => $row['nama'],
@@ -47,6 +47,9 @@ class UsersImport implements ShouldQueue, ToModel, WithChunkReading, WithHeading
             'position_id' => $positionId,
             'employment_type_id' => $employmentTypeId,
             'rank_id' => $rankId,
+            'npwp' => $row['npwp'] ?? null,
+            'bank_name' => $row['nama_bank'] ?? null,
+            'account_number' => $row['nomor_rekening'] ?? null,
         ]);
     }
 
@@ -55,13 +58,13 @@ class UsersImport implements ShouldQueue, ToModel, WithChunkReading, WithHeading
         return 1000;
     }
 
-    private function resolveIdByName(string $modelClass, ?string $name): ?int
+    private function resolveIdByCode(string $modelClass, ?string $code): ?int
     {
-        if (blank($name)) {
+        if (blank($code)) {
             return null;
         }
 
-        $record = $modelClass::where('name', $name)->first();
+        $record = $modelClass::where('code', $code)->first();
 
         return $record?->id;
     }

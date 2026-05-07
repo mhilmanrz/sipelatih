@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Nota Dinas Permohonan Narasumber</title>
@@ -8,6 +9,7 @@
         @page {
             margin: 0.5cm 1.5cm;
         }
+
         body {
             font-family: Arial, sans-serif;
             font-size: 11pt;
@@ -16,7 +18,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         /* Layout container to prevent shrinking */
         .wrapper {
             width: 100%;
@@ -25,29 +27,31 @@
         /* Header Table - Explicit widths to prevent collapse */
         .header-table {
             width: 100%;
-            border-bottom: 2px solid #000;
-            margin-bottom: 20px;
         }
+
         .header-table td {
             vertical-align: top;
             padding-bottom: 10px;
         }
-        
+
         .kemenkes-title {
             font-size: 14pt;
             color: #0d9488;
             font-weight: bold;
             margin: 0;
         }
+
         .dirjen-title {
             font-size: 12pt;
             font-weight: bold;
             margin: 2px 0;
         }
+
         .rsup-title {
             font-size: 11pt;
             margin: 0 0 8px 0;
         }
+
         .contact-item img {
             height: 10pt;
             width: 10pt;
@@ -71,43 +75,48 @@
             margin: 20px 0;
             text-transform: uppercase;
         }
+
         .nomor-surat {
             font-weight: normal;
             text-transform: none;
         }
-        
+
         /* Meta Table (Yth, Dari, Hal, Tanggal) */
         .meta-table {
             width: 100%;
             margin-bottom: 20px;
         }
+
         .meta-table td {
             vertical-align: top;
             padding-bottom: 5px;
         }
-        
+
         /* Content Styling */
         .main-text {
             text-align: justify;
         }
+
         .main-text p {
             margin-bottom: 15px;
             text-indent: 1cm;
         }
-        
+
         .event-detail-table {
             margin-left: 1cm;
             margin-bottom: 20px;
         }
+
         .event-detail-table td {
             padding-bottom: 5px;
         }
-        
+
         /* Signature Area - Table based for stability */
         .signature-table {
             width: 100%;
             margin-top: 30px;
         }
+
         .qr-placeholder {
             border: 1px solid #ccc;
             width: 80px;
@@ -117,7 +126,7 @@
             vertical-align: middle;
             margin: 0 auto 10px auto;
         }
-        
+
         /* Footer */
         .page-footer {
             position: fixed;
@@ -130,120 +139,129 @@
         }
     </style>
 </head>
+
 <body>
 
-<div class="wrapper">
-    <!-- PAGE 1: NOTA DINAS -->
-    <table class="header-table" cellpadding="0" cellspacing="0">
-        <tr>
-            <td style="width: 30%;">
-                @if(isset($logoBase64))
-                    <img src="{{ $logoBase64 }}" style="width: 180px;">
-                @else
-                    <div style="color: #0d9488; font-size: 18pt; font-weight: bold;">Kemenkes</div>
-                    <div style="color: #64748b; font-weight: bold; font-size: 9pt;">RS Cipto Mangunkusumo</div>
-                @endif
-            </td>
-            <td style="width: 70%; padding-left: 15px;">
-                <div class="kemenkes-title">Kementerian Kesehatan</div>
-                <div class="dirjen-title">Direktorat Jenderal Kesehatan Lanjutan</div>
-                <div class="rsup-title">RSUP Nasional Dr. Cipto Mangunkusumo Jakarta</div>
-                
-<div class="contact-item">
-                    @if(isset($iconBase64['map']))
-                        <img style="height: 1em; width: 1em; vertical-align: middle; margin-right: 3px;" src="{{ $iconBase64['map'] }}">
-                    @endif
-                    Jalan Diponegoro Nomor 71 Jakarta 10430
-                </div>
-                <div class="contact-item">
-                    @if(isset($iconBase64['phone']))
-                        <img style="height: 1em; width: 1em; vertical-align: middle; margin-right: 3px;" src="{{ $iconBase64['phone'] }}">
-                    @endif
-                    1500135
-                </div>
-                <div class="contact-item">
-                    @if(isset($iconBase64['internet']))
-                        <img style="height: 1em; width: 1em; vertical-align: middle; margin-right: 3px;" src="{{ $iconBase64['internet'] }}">
-                    @endif
-                    https://www.rscm.co.id
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <div class="doc-title">
-        NOTA DINAS<br>
-        <span class="nomor-surat">NOMOR : {{ $nomorSurat }}</span>
-    </div>
-
-    <table class="meta-table" cellpadding="0" cellspacing="0">
-        <tr>
-            <td style="width: 15%;">Yth</td>
-            <td style="width: 3%;">:</td>
-            <td>Terlampir</td>
-        </tr>
-        <tr>
-            <td>Dari</td>
-            <td>:</td>
-            <td>{{ $signerPosition }}</td>
-        </tr>
-        <tr>
-            <td>Hal</td>
-            <td>:</td>
-            <td>Permohonan Narasumber {{ $hal }}</td>
-        </tr>
-        <tr>
-            <td>Tanggal</td>
-            <td>:</td>
-            <td>{{ $tanggalSuratFormatted }}</td>
-        </tr>
-    </table>
-    
-    <div style="border-bottom: 2px solid #000; margin-bottom: 20px;"></div>
-
-    <div class="main-text">
-        <p>Dalam rangka meningkatkan kompetensi tenaga keperawatan dalam asuhan keperawatan dan kolaborasi interprofesional, akan dilaksanakan kegiatan <strong>{{ $hal }}</strong> secara luring pada:</p>
-        
-        <table class="event-detail-table" cellpadding="0" cellspacing="0">
+    <div class="wrapper">
+        <!-- PAGE 1: NOTA DINAS -->
+        <table class="header-table" cellpadding="0" cellspacing="0">
             <tr>
-                <td style="width: 100px;">tanggal</td>
-                <td style="width: 20px;">:</td>
-                <td>{{ $hariTanggalAcara }}</td>
-            </tr>
-            <tr>
-                <td>waktu</td>
-                <td>:</td>
-                <td>{{ $waktuAcara }}</td>
-            </tr>
-            <tr>
-                <td>tempat</td>
-                <td>:</td>
-                <td>{{ $tempat }}</td>
+                <td style="width: 30%;">
+                    @if (isset($logoBase64))
+                        <img src="{{ $logoBase64 }}" style="width: 180px;">
+                    @else
+                        <div style="color: #0d9488; font-size: 18pt; font-weight: bold;">Kemenkes</div>
+                        <div style="color: #64748b; font-weight: bold; font-size: 9pt;">RS Cipto Mangunkusumo</div>
+                    @endif
+                </td>
+                <td style="width: 70%; padding-left: 15px;">
+                    <div class="kemenkes-title">Kementerian Kesehatan</div>
+                    <div class="dirjen-title">Direktorat Jenderal Kesehatan Lanjutan</div>
+                    <div class="rsup-title">RSUP Nasional Dr. Cipto Mangunkusumo Jakarta</div>
+
+                    <div class="contact-item">
+                        @if (isset($iconBase64['map']))
+                            <img style="height: 1em; width: 1em; vertical-align: middle; margin-right: 3px;"
+                                src="{{ $iconBase64['map'] }}">
+                        @endif
+                        Jalan Diponegoro Nomor 71 Jakarta 10430
+                    </div>
+                    <div class="contact-item">
+                        @if (isset($iconBase64['phone']))
+                            <img style="height: 1em; width: 1em; vertical-align: middle; margin-right: 3px;"
+                                src="{{ $iconBase64['phone'] }}">
+                        @endif
+                        1500135
+                    </div>
+                    <div class="contact-item">
+                        @if (isset($iconBase64['internet']))
+                            <img style="height: 1em; width: 1em; vertical-align: middle; margin-right: 3px;"
+                                src="{{ $iconBase64['internet'] }}">
+                        @endif
+                        https://www.rscm.co.id
+                    </div>
+                </td>
             </tr>
         </table>
 
-        <p>Demikian hal ini kami sampaikan, mohon Kepala Unit dapat menugaskan peserta terlampir untuk mengikuti kegiatan sesuai dengan jadwal yang telah ditetapkan. Informasi lebih lanjut dapat menghubungi contact person Tim Kerja {{ $picUnitName }} : {{ $picName }} ({{ $picPhone }}).</p>
-    </div>
+        <div class="doc-title">
+            NOTA DINAS<br>
+            <span class="nomor-surat">NOMOR : ${nomor_naskah}</span>
+        </div>
 
-    <table class="signature-table">
-        <tr>
-            <td style="width: 60%;"></td>
-            <td style="width: 40%; text-align: center;">
-                <div class="qr-placeholder">
-                    <br><small>QR TTE</small>
-                </div>
-                <div class="signer-position">{{ $signerPosition }}</div>
-                <div class="signer-name"><strong>{{ $namaPengirim }}</strong></div>
-                <div class="signer-nip">NIP. {{ $nipPengirim }}</div>
-            </td>
-        </tr>
-    </table>
+        <table class="meta-table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width: 15%;">Yth</td>
+                <td style="width: 3%;">:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Dari</td>
+                <td>:</td>
+                <td>{{ $signerPosition }}</td>
+            </tr>
+            <tr>
+                <td>Hal</td>
+                <td>:</td>
+                <td>${hal}</td>
+            </tr>
+            <tr>
+                <td>Tanggal</td>
+                <td>:</td>
+                <td>${tanggal_naskah}</td>
+            </tr>
+        </table>
 
-    <div class="page-footer">
-        Dokumen ini telah ditandatangani secara elektronik menggunakan sertifikat elektronik<br>
-        yang diterbitkan oleh Balai Besar Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara (BSSN).
+        <div style="border-bottom: 2px solid #000; margin-bottom: 20px;"></div>
+
+        <div class="main-text">
+            <p>Dalam rangka {{ $kegiatan->tujuan }}, akan dilaksanakan kegiatan <strong>{{ $hal }}</strong>
+                secara {{ $kegiatan->metode }} pada:
+            </p>
+
+            <table class="event-detail-table" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td style="width: 100px;">tanggal</td>
+                    <td style="width: 20px;">:</td>
+                    <td>{{ $hariTanggalAcara }}</td>
+                </tr>
+                <tr>
+                    <td>waktu</td>
+                    <td>:</td>
+                    <td>{{ $waktuAcara }}</td>
+                </tr>
+                <tr>
+                    <td>tempat</td>
+                    <td>:</td>
+                    <td>{{ $tempat }}</td>
+                </tr>
+            </table>
+            <p>Sehubungan hal tersebut kami mohon kesediaan Bapak/Ibu sebagai pengajar/fasilitator
+                pada kegiatan tersebut sesuai jadwal terlampir.
+                Informasi lebih lanjut dapat menghubungi contact person Tim Kerja {{ $picUnitName }} :
+                {{ $picName }} ({{ $picPhone }}).
+            </p>
+            <p>Demikian hal ini kami sampaikan, atas kesediaan dan kerjasama Bapak/Ibu diucapkan
+                terima kasih.</p>
+        </div>
+
+        <table class="signature-table">
+            <tr>
+                <td style="width: 60%;"></td>
+                <td style="width: 40%; text-align: center;">
+                    <div class="signer-position" style="margin-top: 30px;">${ttd_pengirim}</div>
+                    <div class="signer-name" style="margin-top: 45px;"><strong>${nama_pengirim}</strong></div>
+                    <div class="signer-nip">NIP. ${nip_pengirim}</div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            Dokumen ini telah ditandatangani secara elektronik menggunakan sertifikat elektronik<br>
+            yang diterbitkan oleh Balai Besar Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara (BSSN).
+        </div>
     </div>
-</div>
 
 </body>
+
 </html>
