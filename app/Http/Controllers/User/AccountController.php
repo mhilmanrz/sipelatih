@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Exports\AccountsTemplateExport;
 use App\Http\Controllers\Controller;
-use App\Jobs\ImportUsersJob;
+use App\Jobs\ImportAccountsJob;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
 class AccountController extends Controller
@@ -142,11 +144,19 @@ class AccountController extends Controller
     }
 
     /**
-     * Show the form for importing users via CSV.
+     * Show the form for importing accounts.
      */
     public function importView()
     {
         return view('account.import');
+    }
+
+    /**
+     * Download the template for importing accounts.
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new AccountsTemplateExport, 'Template_Import_Akun.xlsx');
     }
 
     /**
@@ -155,7 +165,7 @@ class AccountController extends Controller
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240', // 10MB max
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
         ], [
             'file.required' => 'Pilih file terlebih dahulu.',
             'file.mimes' => 'Format file harus berupa Excel (.xlsx, .xls) atau CSV.',
@@ -165,7 +175,7 @@ class AccountController extends Controller
         if ($request->hasFile('file')) {
             try {
                 $path = $request->file('file')->store('imports', 'local');
-                ImportUsersJob::dispatch($path);
+                ImportAccountsJob::dispatch($path);
 
                 return redirect('/accounts')->with('success', 'File berhasil diunggah. Proses import sedang berjalan di antrean (background). Harap periksa beberapa saat lagi.');
             } catch (\Exception $e) {

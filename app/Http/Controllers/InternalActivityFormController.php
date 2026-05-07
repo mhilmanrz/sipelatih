@@ -38,8 +38,17 @@ class InternalActivityFormController extends Controller
             $logoBase64 = 'data:image/'.$type.';base64,'.base64_encode($data);
         }
 
+        $iconBase64 = [];
+        foreach (['maps', 'telephone', 'web'] as $icon) {
+            $iconPath = public_path("assets/icons/{$icon}.svg");
+            if (file_exists($iconPath)) {
+                $iconBase64[$icon] = 'data:image/svg+xml;base64,'.base64_encode(file_get_contents($iconPath));
+            }
+        }
+
         $pdf = Pdf::loadView('pdf.internal-activity-form', [
             'logoBase64' => $logoBase64,
+            'iconBase64' => $iconBase64,
             'kegiatan' => $kegiatan,
         ]);
 

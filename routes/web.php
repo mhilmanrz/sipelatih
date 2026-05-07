@@ -28,6 +28,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndikatorKinerjaController;
 use App\Http\Controllers\InternalActivityFormController;
 use App\Http\Controllers\MonitoringJplController;
+use App\Http\Controllers\NotaDinasController;
 use App\Http\Controllers\PaguController;
 use App\Http\Controllers\ProfessionCategoryController;
 use App\Http\Controllers\ProfileController;
@@ -54,6 +55,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
+    Route::get('/test-pdf-nota-dinas', [NotaDinasController::class, 'streamPdf'])->name('test.pdf.nota-dinas');
+
     Route::get('/', function () {
         return redirect()->route('dashboard');
     });
@@ -90,9 +93,13 @@ Route::middleware(['auth'])->group(function () {
     Route::view('/evaluasi2', 'evaluasi2')->name('evaluasi2');
     Route::view('/evaluasi3', 'evaluasi3')->name('evaluasi3');
 
+    Route::get('users/import/template', [UserController::class, 'downloadTemplate'])->name('users.import.template');
     Route::get('users/import', [UserController::class, 'importView'])->name('users.import.view');
     Route::post('users/import', [UserController::class, 'import'])->name('users.import');
     Route::resource('users', UserController::class);
+    Route::get('accounts/import/template', [AccountController::class, 'downloadTemplate'])->name('accounts.import.template');
+    Route::get('accounts/import', [AccountController::class, 'importView'])->name('accounts.import.view');
+    Route::post('accounts/import', [AccountController::class, 'import'])->name('accounts.import');
     Route::resource('accounts', AccountController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('kegiatan', ActivityController::class);
@@ -102,6 +109,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('kegiatan/{kegiatan}/materi/{id}', [ActivityMaterialController::class, 'destroy'])->name('kegiatan.materi.destroy');
     Route::post('kegiatan/{kegiatan}/narasumber', [ActivitySpeakerController::class, 'store'])->name('kegiatan.narasumber.store');
     Route::delete('kegiatan/{kegiatan}/narasumber/{id}', [ActivitySpeakerController::class, 'destroy'])->name('kegiatan.narasumber.destroy');
+    Route::get('kegiatan/{kegiatan}/narasumber/{speaker}/pdf', [NotaDinasController::class, 'downloadPdf'])->name('kegiatan.narasumber.pdf');
+    Route::get('kegiatan/{kegiatan}/narasumber/{speaker}/docx', [NotaDinasController::class, 'downloadDocx'])->name('kegiatan.narasumber.docx');
     Route::post('kegiatan/{kegiatan}/moderator', [ActivityModeratorController::class, 'store'])->name('kegiatan.moderator.store');
     Route::delete('kegiatan/{kegiatan}/moderator/{id}', [ActivityModeratorController::class, 'destroy'])->name('kegiatan.moderator.destroy');
     Route::post('kegiatan/{kegiatan}/target', [ActivityTargetController::class, 'store'])->name('kegiatan.target.store');

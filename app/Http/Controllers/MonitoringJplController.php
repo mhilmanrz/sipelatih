@@ -11,8 +11,7 @@ class MonitoringJplController extends Controller
 {
     public function index(Request $request)
     {
-        $searchNip = $request->input('nip');
-        $searchNama = $request->input('nama');
+        $search = $request->input('q');
         $year = $request->input('year', date('Y'));
 
         $usersQuery = User::doesntHave('roles')
@@ -24,10 +23,17 @@ class MonitoringJplController extends Controller
                             ->orWhereYear('start_date', $year);
                     })
                     ->with('activity.activityMaterials');
-            }])->when($searchNip, function ($q, $nip) {
-                $q->where('employee_id', 'like', '%'.$nip.'%');
-            })->when($searchNama, function ($q, $nama) {
-                $q->where('name', 'like', '%'.$nama.'%');
+            }])->when($search, function ($q, $search) {
+                $q->where(function ($query) use ($search) {
+                    $query->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('employee_id', 'like', '%'.$search.'%')
+                        ->orWhereHas('workUnit', function ($qu) use ($search) {
+                            $qu->where('name', 'like', '%'.$search.'%');
+                        })
+                        ->orWhereHas('profession', function ($qu) use ($search) {
+                            $qu->where('name', 'like', '%'.$search.'%');
+                        });
+                });
             });
 
         // Get users and calculate JPL

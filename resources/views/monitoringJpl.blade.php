@@ -45,16 +45,8 @@
                     <svg class="absolute left-3 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
-                    <input type="text" name="nip" value="{{ request('nip') }}" placeholder="Cari NIP..."
-                        class="bg-gray-50 border border-gray-300 rounded-lg pl-9 pr-4 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition w-40">
-                </div>
-
-                <div class="relative flex items-center">
-                    <svg class="absolute left-3 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <input type="text" name="nama" value="{{ request('nama') }}" placeholder="Cari Nama..."
-                        class="bg-gray-50 border border-gray-300 rounded-lg pl-9 pr-4 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition w-40">
+                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari NIP, Nama, Unit Kerja, Profesi..."
+                        class="bg-gray-50 border border-gray-300 rounded-lg pl-9 pr-4 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition w-64">
                 </div>
 
                 <button type="submit"

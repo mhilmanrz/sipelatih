@@ -7,7 +7,7 @@
     @endpush
 
     <div class="wrap">
-        <div class="page-title">IMPORT PESERTA</div>
+        <div class="page-title">IMPORT PEGAWAI</div>
 
         @if (session('error'))
             <div style="padding: 15px; background-color: #f8d7da; color: #721c24; margin-bottom: 20px; border-radius: 5px;">
@@ -32,7 +32,7 @@
                 <div style="color:#2B6B71;font-weight:700;font-size:12px;opacity:.8">
                     Unduh template Excel, isi datanya, lalu unggah di bawah.
                 </div>
-                <a href="#" class="btn" style="text-decoration:none;">
+<a href="{{ route('users.import.template') }}" class="btn" style="text-decoration:none;">
                     <span aria-hidden="true">⬇️</span>
                     Download Template
                 </a>
@@ -41,7 +41,7 @@
 
         <!-- IMPORT CARD -->
         <div class="card">
-            <h3>IMPORT PESERTA</h3>
+            <h3>IMPORT PEGAWAI</h3>
 
             <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -57,9 +57,9 @@
                 </div>
 
                 <div class="note" style="margin-bottom: 20px;">
-                    Format file harus <b>Excel (.xlsx, .xls)</b> atau <b>CSV</b> dengan header minimal:
-                    <b>nama,email,telepon</b>.<br />
-                    Validasi: nama tidak kosong; email format dasar; telepon boleh kosong.
+Format file harus <b>Excel (.xlsx, .xls)</b> atau <b>CSV</b> dengan header minimal:
+                    <b>nama, email, telepon, nip, unit_kerja, profesi, jabatan, jenis_pegawai, pangkat</b>.<br />
+                    Validasi: nama dan email tidak kosong; kolom relasi (unit_kerja, profesi, dll.) harus sesuai data yang tersedia di sistem.
                 </div>
 
                 <button type="submit" class="btn save"

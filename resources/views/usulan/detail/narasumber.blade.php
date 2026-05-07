@@ -86,7 +86,7 @@
                         <th class="bg-[#007a7a] text-white py-3 px-4 font-semibold text-sm text-center w-16">NO.</th>
                         <th class="bg-[#007a7a] text-white py-3 px-4 font-semibold text-sm text-left">Nama Narasumber</th>
                         <th class="bg-[#007a7a] text-white py-3 px-4 font-semibold text-sm text-left">Materi</th>
-                        <th class="bg-[#007a7a] text-white py-3 px-4 font-semibold text-sm text-center w-32">Aksi</th>
+                        <th class="bg-[#007a7a] text-white py-3 px-4 font-semibold text-sm text-center w-44">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
@@ -96,11 +96,15 @@
                             <td class="border border-gray-200 py-3 px-4">{{ $speaker->name }}</td>
                             <td class="border border-gray-200 py-3 px-4">{{ $speaker->material_name }}</td>
                             <td class="text-center border border-gray-200 py-3 px-4">
-                                <form action="{{ route('kegiatan.narasumber.destroy', ['kegiatan' => $kegiatan->id, 'id' => $speaker->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus narasumber ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">Hapus</button>
-                                </form>
+                                <div class="flex items-center justify-center gap-1">
+                                    <a href="{{ route('kegiatan.narasumber.pdf', ['kegiatan' => $kegiatan->id, 'speaker' => $speaker->id]) }}" target="_blank" class="bg-[#007a7a] hover:bg-[#005f5f] text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition inline-block">PDF</a>
+                                    <a href="{{ route('kegiatan.narasumber.docx', ['kegiatan' => $kegiatan->id, 'speaker' => $speaker->id]) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition inline-block">DOCX</a>
+                                    <form action="{{ route('kegiatan.narasumber.destroy', ['kegiatan' => $kegiatan->id, 'id' => $speaker->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus narasumber ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">Hapus</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty

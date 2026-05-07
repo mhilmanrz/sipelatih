@@ -7,7 +7,7 @@
     @endpush
 
     <div class="wrap">
-        <div class="page-title">IMPORT PESERTA</div>
+        <div class="page-title">IMPORT AKUN</div>
 
         @if (session('error'))
             <div style="padding: 15px; background-color: #f8d7da; color: #721c24; margin-bottom: 20px; border-radius: 5px;">
@@ -32,7 +32,7 @@
                 <div style="color:#2B6B71;font-weight:700;font-size:12px;opacity:.8">
                     Unduh template Excel, isi datanya, lalu unggah di bawah.
                 </div>
-                <a href="#" class="btn" style="text-decoration:none;">
+<a href="{{ route('accounts.import.template') }}" class="btn" style="text-decoration:none;">
                     <span aria-hidden="true">⬇️</span>
                     Download Template
                 </a>
@@ -43,7 +43,7 @@
         <div class="card">
             <h3>IMPORT PESERTA</h3>
 
-            <form action="{{ route('users.import') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('accounts.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="import-footer" style="margin-top:20px; margin-bottom: 20px;">
@@ -57,9 +57,9 @@
                 </div>
 
                 <div class="note" style="margin-bottom: 20px;">
-                    Format file harus <b>Excel (.xlsx, .xls)</b> atau <b>CSV</b> dengan header minimal:
-                    <b>nama,email,telepon</b>.<br />
-                    Validasi: nama tidak kosong; email format dasar; telepon boleh kosong.
+Format file harus <b>Excel (.xlsx, .xls)</b> atau <b>CSV</b> dengan header minimal:
+                    <b>nama, email, password, unit_kerja, role</b>.<br />
+                    Validasi: nama dan email tidak kosong; role harus sesuai dengan role yang tersedia di sistem.
                 </div>
 
                 <button type="submit" class="btn save"
@@ -67,7 +67,7 @@
                     <span aria-hidden="true">💾</span>
                     SIMPAN JALANKAN IMPORT
                 </button>
-                <a href="{{ route('users.index') }}" class="btn"
+                <a href="{{ route('accounts.index') }}" class="btn"
                     style="padding:10px 20px; border:1px solid #ccc; border-radius:5px; text-decoration:none; color:#D6DE20; margin-left: 10px;">Batal</a>
             </form>
         </div>

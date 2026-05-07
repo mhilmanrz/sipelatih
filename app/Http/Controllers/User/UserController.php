@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Exports\UsersTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Jobs\ImportUsersJob;
 use App\Models\User\EmploymentType;
@@ -11,6 +12,7 @@ use App\Models\User\Rank;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -162,6 +164,14 @@ class UserController extends Controller
     public function importView()
     {
         return view('user.import');
+    }
+
+    /**
+     * Download the template for importing users.
+     */
+    public function downloadTemplate()
+    {
+        return Excel::download(new UsersTemplateExport, 'Template_Import_Pegawai.xlsx');
     }
 
     /**
