@@ -20,7 +20,7 @@ use App\Http\Controllers\Act\BatchController;
 use App\Http\Controllers\Act\BudgetCategoryController;
 use App\Http\Controllers\Act\FundSourceController;
 use App\Http\Controllers\Act\MaterialTypeController;
-use App\Http\Controllers\Act\TargetParticipantController; // Added ProfileController
+use App\Http\Controllers\Act\TargetParticipantController;
 use App\Http\Controllers\ActivityNameController;
 use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\AuthController;
@@ -31,7 +31,6 @@ use App\Http\Controllers\MonitoringJplController;
 use App\Http\Controllers\NotaDinasController;
 use App\Http\Controllers\PaguController;
 use App\Http\Controllers\ProfessionCategoryController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\EmploymentTypeController;
 use App\Http\Controllers\User\PositionController;
