@@ -43,10 +43,11 @@
                 @csrf
 
                 <div class="mb-4">
-                    <label for="code" class="block text-gray-700 font-semibold mb-2">Kode</label>
+                    <label for="code" class="block text-gray-700 font-semibold mb-2">Kode <span
+                            class="text-red-500">*</span></label>
                     <input type="text" name="code" id="code" value="{{ old('code') }}"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 @error('code') border-red-500 @enderror"
-                        placeholder="Kode (opsional)">
+                        placeholder="Contoh: DOK" required>
                     @error('code')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
