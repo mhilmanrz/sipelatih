@@ -35,13 +35,15 @@ class ProfessionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'code' => 'nullable|string|max:255|unique:professions,code',
             'name' => 'required|string|max:255',
             'profession_category_id' => 'required|exists:profession_categories,id',
         ]);
 
-        Profession::create($request->all());
+        $validated['code'] = $validated['code'] ?: null;
+
+        Profession::create($validated);
 
         return redirect()->route('professions.index')->with('success', 'Profesi berhasil ditambahkan.');
     }
@@ -71,14 +73,16 @@ class ProfessionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'code' => 'nullable|string|max:255|unique:professions,code,' . $id,
+        $validated = $request->validate([
+            'code' => 'nullable|string|max:255|unique:professions,code,'.$id,
             'name' => 'required|string|max:255',
             'profession_category_id' => 'required|exists:profession_categories,id',
         ]);
 
+        $validated['code'] = $validated['code'] ?: null;
+
         $profession = Profession::findOrFail($id);
-        $profession->update($request->all());
+        $profession->update($validated);
 
         return redirect()->route('professions.index')->with('success', 'Profesi berhasil diperbarui.');
     }
