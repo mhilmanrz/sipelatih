@@ -36,6 +36,7 @@ class ProfessionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'code' => 'nullable|string|max:255|unique:professions,code',
             'name' => 'required|string|max:255',
             'profession_category_id' => 'required|exists:profession_categories,id',
         ]);
@@ -71,6 +72,7 @@ class ProfessionController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'code' => 'nullable|string|max:255|unique:professions,code,' . $id,
             'name' => 'required|string|max:255',
             'profession_category_id' => 'required|exists:profession_categories,id',
         ]);
