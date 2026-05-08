@@ -31,6 +31,7 @@
                     <thead class="bg-[#007a7a] text-white">
                         <tr>
                             <th class="text-center w-12 py-3 px-4 font-semibold text-sm">No.</th>
+                            <th class="py-3 px-4 font-semibold text-sm text-left">Kode</th>
                             <th class="text-left py-3 px-4 font-semibold text-sm">Kategori Profesi</th>
                             <th class="text-left py-3 px-4 font-semibold text-sm">Nama Profesi</th>
                             <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
@@ -40,6 +41,7 @@
                         @forelse($professions as $index => $profession)
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="text-center py-3 px-4">{{ $professions->firstItem() + $index }}</td>
+                                <td class="py-3 px-4 text-left">{{ $profession->code ?? '-' }}</td>
                                 <td class="font-medium py-3 px-4">{{ $profession->category ? $profession->category->name : '-' }}</td>
                                 <td class="font-medium py-3 px-4">{{ $profession->name }}</td>
                                 <td class="text-center py-3 px-4">
@@ -62,7 +64,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center text-gray-500 py-6 px-4">
+                                <td colspan="5" class="text-center text-gray-500 py-6 px-4">
                                     Belum ada data profesi.
                                 </td>
                             </tr>
