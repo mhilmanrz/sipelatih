@@ -162,7 +162,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dictionaries/activity-names/template', [ActivityNameController::class, 'downloadTemplate'])->name('activity-names.template');
     Route::post('dictionaries/activity-names/import', [ActivityNameController::class, 'import'])->name('activity-names.import');
     Route::resource('dictionaries/activity-names', ActivityNameController::class);
-    Route::resource('dictionaries/budget-categories', BudgetCategoryController::class);
+    Route::resource('budget-categories', BudgetCategoryController::class);
     Route::resource('employment-types', EmploymentTypeController::class);
 
     // Pengaturan Aplikasi (SuperAdmin)
