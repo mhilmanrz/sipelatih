@@ -160,6 +160,48 @@
                 </div>
             </div>
 
+            {{-- KOP NOTA DINAS --}}
+            <div class="bg-white rounded-xl shadow-sm p-6 lg:col-span-2">
+                <h2 class="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-file-lines text-teal-600"></i>
+                    Kop Nota Dinas
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    <div>
+                        {{-- Preview kop saat ini --}}
+                        @if($settings->get('nota_dinas_kop'))
+                            <div class="mb-3">
+                                <p class="text-xs text-gray-500 mb-2">Kop saat ini</p>
+                                <img src="{{ asset('storage/' . $settings->get('nota_dinas_kop')) }}"
+                                    alt="Kop Nota Dinas" class="w-full max-h-48 object-contain rounded-lg border border-gray-200 bg-gray-50 p-2">
+                                <a href="{{ route('settings.delete-nota-dinas-kop') }}"
+                                    onclick="return confirm('Hapus kop ini?')"
+                                    class="inline-block mt-2 text-xs text-red-500 hover:underline">
+                                    <i class="fa-solid fa-trash mr-1"></i>Hapus Kop
+                                </a>
+                            </div>
+                        @else
+                            <div class="mb-3 flex items-center justify-center h-32 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                <p class="text-xs text-gray-400">Belum ada kop Nota Dinas</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Upload Kop Baru</label>
+                        <input type="file" name="nota_dinas_kop" accept="image/png,image/jpeg,image/webp"
+                            class="w-full text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100"
+                            onchange="previewImage(this, 'kop-preview')">
+                        <img id="kop-preview" src="#" alt="Preview" class="hidden mt-3 w-full max-h-48 object-contain rounded-lg border border-gray-200 bg-gray-50 p-2">
+                        @error('nota_dinas_kop')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                        <p class="text-xs text-gray-400 mt-2">Format: PNG, JPG, WebP. Maks 4MB. Gambar kop surat yang akan tampil sebagai header Nota Dinas (lebar penuh).</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="mt-6 flex justify-end">

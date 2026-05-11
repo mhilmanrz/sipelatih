@@ -70,7 +70,7 @@ class BatchController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'code' => 'nullable|string|max:255|unique:batches,code,' . $id,
+            'code' => 'nullable|string|max:255|unique:batches,code,'.$id,
             'name' => 'required|string|max:255',
         ]);
 

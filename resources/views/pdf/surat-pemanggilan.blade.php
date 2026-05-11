@@ -3,9 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Nota Dinas Permohonan Narasumber</title>
+    <title>Surat Pemanggilan Peserta</title>
     <style>
-        /* DOMPDF Compatibility: Fixed units and basic tables */
         @page {
             margin: 0.5cm 1.5cm;
         }
@@ -19,12 +18,11 @@
             padding: 0;
         }
 
-        /* Layout container to prevent shrinking */
         .wrapper {
             width: 100%;
         }
 
-        /* Header Table - Explicit widths to prevent collapse */
+        /* Reused from nota-dinas */
         .header-table {
             width: 100%;
         }
@@ -52,14 +50,6 @@
             margin: 0 0 8px 0;
         }
 
-        .contact-item img {
-            height: 10pt;
-            width: 10pt;
-            vertical-align: middle;
-            margin-right: 5px;
-            margin-top: -2px;
-        }
-
         .contact-item {
             font-size: 8.5pt;
             color: #666;
@@ -81,7 +71,7 @@
             text-transform: none;
         }
 
-        /* Meta Table (Yth, Dari, Hal, Tanggal) */
+        /* Meta Table */
         .meta-table {
             width: 100%;
             margin-bottom: 20px;
@@ -92,7 +82,7 @@
             padding-bottom: 5px;
         }
 
-        /* Content Styling */
+        /* Content */
         .main-text {
             text-align: justify;
         }
@@ -111,20 +101,10 @@
             padding-bottom: 5px;
         }
 
-        /* Signature Area - Table based for stability */
+        /* Signature */
         .signature-table {
             width: 100%;
             margin-top: 30px;
-        }
-
-        .qr-placeholder {
-            border: 1px solid #ccc;
-            width: 80px;
-            height: 80px;
-            background-color: #f9f9f9;
-            text-align: center;
-            vertical-align: middle;
-            margin: 0 auto 10px auto;
         }
 
         /* Footer */
@@ -137,28 +117,53 @@
             font-size: 7.5pt;
             color: #444;
         }
+
+        /* Lampiran Table */
+        .peserta-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 10.5pt;
+        }
+
+        .peserta-table th,
+        .peserta-table td {
+            border: 1px solid #000;
+            padding: 6px 8px;
+            vertical-align: top;
+        }
+
+        .peserta-table th {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .peserta-table td.center {
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="wrapper">
-        <!-- PAGE 1: NOTA DINAS -->
+        {{-- Reuse header dari nota-dinas --}}
         @include('pdf.nota-dinas.header')
 
-        @include('pdf.nota-dinas.doc-title')
+        @include('pdf.surat-pemanggilan.doc-title')
 
-        @include('pdf.nota-dinas.meta-table')
+        @include('pdf.surat-pemanggilan.meta-table')
 
         <div style="border-bottom: 2px solid #000; margin-bottom: 20px;"></div>
 
-        @include('pdf.nota-dinas.body')
+        @include('pdf.surat-pemanggilan.body')
 
-        @include('pdf.nota-dinas.signature')
+        @include('pdf.surat-pemanggilan.signature')
 
+        {{-- Reuse footer dari nota-dinas --}}
         @include('pdf.nota-dinas.footer')
 
-        @include('pdf.nota-dinas.lampiran')
+        @include('pdf.surat-pemanggilan.lampiran')
     </div>
 
 </body>

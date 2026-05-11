@@ -31,6 +31,7 @@ use App\Http\Controllers\MonitoringJplController;
 use App\Http\Controllers\NotaDinasController;
 use App\Http\Controllers\PaguController;
 use App\Http\Controllers\ProfessionCategoryController;
+use App\Http\Controllers\SuratPemanggilanController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\EmploymentTypeController;
 use App\Http\Controllers\User\PositionController;
@@ -110,6 +111,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('kegiatan/{kegiatan}/narasumber/{id}', [ActivitySpeakerController::class, 'destroy'])->name('kegiatan.narasumber.destroy');
     Route::get('kegiatan/{kegiatan}/narasumber/{speaker}/pdf', [NotaDinasController::class, 'downloadPdf'])->name('kegiatan.narasumber.pdf');
     Route::get('kegiatan/{kegiatan}/narasumber/{speaker}/docx', [NotaDinasController::class, 'downloadDocx'])->name('kegiatan.narasumber.docx');
+    Route::get('kegiatan/{kegiatan}/nota-dinas/pdf', [NotaDinasController::class, 'downloadPdfByKegiatan'])->name('kegiatan.nota-dinas.pdf');
+    Route::get('kegiatan/{kegiatan}/nota-dinas/docx', [NotaDinasController::class, 'downloadDocxByKegiatan'])->name('kegiatan.nota-dinas.docx');
+    Route::get('kegiatan/{kegiatan}/surat-pemanggilan/pdf', [SuratPemanggilanController::class, 'downloadPdf'])->name('kegiatan.surat-pemanggilan.pdf');
+    Route::get('kegiatan/{kegiatan}/surat-pemanggilan/docx', [SuratPemanggilanController::class, 'downloadDocx'])->name('kegiatan.surat-pemanggilan.docx');
     Route::post('kegiatan/{kegiatan}/moderator', [ActivityModeratorController::class, 'store'])->name('kegiatan.moderator.store');
     Route::delete('kegiatan/{kegiatan}/moderator/{id}', [ActivityModeratorController::class, 'destroy'])->name('kegiatan.moderator.destroy');
     Route::post('kegiatan/{kegiatan}/target', [ActivityTargetController::class, 'store'])->name('kegiatan.target.store');
@@ -163,5 +168,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/settings/logo', [AppSettingController::class, 'deleteLogo'])->name('settings.delete-logo');
     Route::delete('/settings/login-image', [AppSettingController::class, 'deleteLoginImage'])->name('settings.delete-login-image');
     Route::delete('/settings/kemenkes-logo', [AppSettingController::class, 'deleteKemenkesLogo'])->name('settings.delete-kemenkes-logo');
+    Route::delete('/settings/nota-dinas-kop', [AppSettingController::class, 'deleteNotaDinasKop'])->name('settings.delete-nota-dinas-kop');
     Route::get('/kegiatan/{kegiatan}/formulir-permintaan-kegiatan', [InternalActivityFormController::class, 'streamPdf'])->name('kegiatan.pdf.formulir');
 });

@@ -28,6 +28,7 @@ class AppSettingController extends Controller
             'app_logo' => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
             'login_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:4096',
             'kemenkes_logo' => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
+            'nota_dinas_kop' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:4096',
         ]);
 
         AppSetting::set('app_name', $request->app_name);
@@ -60,6 +61,16 @@ class AppSettingController extends Controller
 
             $path = $request->file('kemenkes_logo')->store('settings', 'public');
             AppSetting::set('kemenkes_logo', $path);
+        }
+
+        if ($request->hasFile('nota_dinas_kop')) {
+            $old = AppSetting::get('nota_dinas_kop');
+            if ($old) {
+                Storage::disk('public')->delete($old);
+            }
+
+            $path = $request->file('nota_dinas_kop')->store('settings', 'public');
+            AppSetting::set('nota_dinas_kop', $path);
         }
 
         return back()->with('success', 'Pengaturan berhasil disimpan.');
@@ -102,5 +113,18 @@ class AppSettingController extends Controller
         AppSetting::set('kemenkes_logo', null);
 
         return back()->with('success', 'Logo Kemenkes berhasil dihapus.');
+    }
+
+    public function deleteNotaDinasKop(): RedirectResponse
+    {
+        abort_unless(auth()->user()->hasRole('superadmin'), 403);
+
+        $old = AppSetting::get('nota_dinas_kop');
+        if ($old) {
+            Storage::disk('public')->delete($old);
+        }
+        AppSetting::set('nota_dinas_kop', null);
+
+        return back()->with('success', 'Kop Nota Dinas berhasil dihapus.');
     }
 }

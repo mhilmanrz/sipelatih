@@ -70,7 +70,7 @@ class ActivityCategoryController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'code' => 'nullable|string|max:255|unique:activity_categories,code,' . $id,
+            'code' => 'nullable|string|max:255|unique:activity_categories,code,'.$id,
             'name' => 'required|string|max:255',
         ]);
 

@@ -70,7 +70,7 @@ class MaterialTypeController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'code' => 'nullable|string|max:255|unique:material_types,code,' . $id,
+            'code' => 'nullable|string|max:255|unique:material_types,code,'.$id,
             'name' => 'required|string|max:255',
         ]);
 

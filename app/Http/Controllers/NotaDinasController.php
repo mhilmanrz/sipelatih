@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\SimpleType\Jc;
 use PhpOffice\PhpWord\Style\Language;
+use Symfony\Component\HttpFoundation\Response;
 
 class NotaDinasController extends Controller
 {
@@ -24,17 +26,17 @@ class NotaDinasController extends Controller
         $logoBase64 = null;
 
         if (isset($settings['kemenkes_logo']) && Storage::disk('public')->exists($settings['kemenkes_logo'])) {
-            $path = storage_path('app/public/' . $settings['kemenkes_logo']);
+            $path = storage_path('app/public/'.$settings['kemenkes_logo']);
             $type = pathinfo($path, PATHINFO_EXTENSION);
             $data = file_get_contents($path);
-            $logoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            $logoBase64 = 'data:image/'.$type.';base64,'.base64_encode($data);
         }
 
         $iconBase64 = [];
         foreach (['map' => 'map', 'phone' => 'phone', 'internet' => 'internet'] as $key => $file) {
             $iconPath = public_path("assets/icons/{$file}.png");
             if (file_exists($iconPath)) {
-                $iconBase64[$key] = 'data:image/png;base64,' . base64_encode(file_get_contents($iconPath));
+                $iconBase64[$key] = 'data:image/png;base64,'.base64_encode(file_get_contents($iconPath));
             }
         }
 
@@ -42,6 +44,144 @@ class NotaDinasController extends Controller
         $pdf->setPaper('A4', 'portrait');
 
         return $pdf->stream('Nota_Dinas_Permohonan_Narasumber.pdf');
+    }
+
+    /**
+     * Download Nota Dinas as PDF for the entire kegiatan.
+     */
+    public function downloadPdfByKegiatan(Activity $kegiatan): Response
+    {
+        $data = $this->getNotaDinasByKegiatanData($kegiatan);
+
+        $pdf = Pdf::loadView('pdf.nota-dinas', $data);
+        $pdf->setPaper('A4', 'portrait');
+
+        $fileName = 'Nota_Dinas_'.$data['nomorSurat'].'.pdf';
+
+        return $pdf->stream($fileName);
+    }
+
+    /**
+     * Download Nota Dinas as DOCX for the entire kegiatan.
+     */
+    public function downloadDocxByKegiatan(Activity $kegiatan): Response
+    {
+        $data = $this->getNotaDinasByKegiatanData($kegiatan);
+
+        $phpWord = new PhpWord;
+        $phpWord->getSettings()->setThemeFontLang(new Language('id-ID'));
+
+        $section = $phpWord->addSection([
+            'marginLeft' => 1417,
+            'marginRight' => 1417,
+            'marginTop' => 567,
+            'marginBottom' => 567,
+        ]);
+
+        // --- HEADER ---
+        $kopPath = $data['kopPath'] ? storage_path('app/public/'.$data['kopPath']) : null;
+        if ($kopPath && file_exists($kopPath)) {
+            $section->addImage($kopPath, [
+                'width' => 450,
+                'alignment' => Jc::CENTER,
+            ]);
+        } else {
+            $headerTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
+            $headerTable->addRow();
+            $logoCell = $headerTable->addCell(30 * 50);
+            $infoCell = $headerTable->addCell(70 * 50);
+
+            $logoPath = $data['logoPath'] ? storage_path('app/public/'.$data['logoPath']) : null;
+            if ($logoPath && file_exists($logoPath)) {
+                $logoCell->addImage($logoPath, ['width' => 180, 'height' => 50]);
+            } else {
+                $logoCell->addText('Kemenkes', ['bold' => true, 'size' => 18, 'color' => '0D9488']);
+                $logoCell->addText('RS Cipto Mangunkusumo', ['bold' => true, 'size' => 9, 'color' => '64748B']);
+            }
+
+            $infoCell->addText('Kementerian Kesehatan', ['bold' => true, 'size' => 14, 'color' => '0D9488']);
+            $infoCell->addText('Direktorat Jenderal Kesehatan Lanjutan', ['bold' => true, 'size' => 12]);
+            $infoCell->addText('RSUP Nasional Dr. Cipto Mangunkusumo Jakarta', ['size' => 11]);
+            $infoCell->addText('Jalan Diponegoro Nomor 71 Jakarta 10430', ['size' => 8.5, 'color' => '666666']);
+            $infoCell->addText('1500135', ['size' => 8.5, 'color' => '666666']);
+            $infoCell->addText('https://www.rscm.co.id', ['size' => 8.5, 'color' => '666666']);
+        }
+
+        $section->addText('', [], ['borderBottom' => ['size' => 2, 'color' => '000000']]);
+        $section->addText('NOTA DINAS', ['bold' => true, 'size' => 14, 'align' => 'center']);
+        $section->addText('NOMOR : '.$data['nomorSurat'], ['size' => 11, 'align' => 'center']);
+
+        $metaTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
+        $metaTable->addRow();
+        $metaTable->addCell(15 * 50)->addText('Yth');
+        $metaTable->addCell(3 * 50)->addText(':');
+        $metaTable->addCell(82 * 50)->addText('Terlampir');
+        $metaTable->addRow();
+        $metaTable->addCell(15 * 50)->addText('Dari');
+        $metaTable->addCell(3 * 50)->addText(':');
+        $metaTable->addCell(82 * 50)->addText($data['signerPosition']);
+        $metaTable->addRow();
+        $metaTable->addCell(15 * 50)->addText('Hal');
+        $metaTable->addCell(3 * 50)->addText(':');
+        $metaTable->addCell(82 * 50)->addText('Permohonan Narasumber '.$data['hal']);
+        $metaTable->addRow();
+        $metaTable->addCell(15 * 50)->addText('Tanggal');
+        $metaTable->addCell(3 * 50)->addText(':');
+        $metaTable->addCell(82 * 50)->addText($data['tanggalSuratFormatted']);
+
+        $section->addText('', [], ['borderBottom' => ['size' => 2, 'color' => '000000']]);
+        $section->addText(
+            'Dalam rangka '.$data['kegiatan']->tujuan.', akan dilaksanakan kegiatan '.$data['hal'].' secara '.$data['kegiatan']->metode.' pada:',
+            ['size' => 11],
+            ['indentation' => ['firstLine' => 567]]
+        );
+
+        $detailTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
+        $detailTable->addRow();
+        $detailTable->addCell(15 * 50)->addText('tanggal');
+        $detailTable->addCell(3 * 50)->addText(':');
+        $detailTable->addCell(82 * 50)->addText($data['hariTanggalAcara']);
+        $detailTable->addRow();
+        $detailTable->addCell(15 * 50)->addText('waktu');
+        $detailTable->addCell(3 * 50)->addText(':');
+        $detailTable->addCell(82 * 50)->addText($data['waktuAcara']);
+        $detailTable->addRow();
+        $detailTable->addCell(15 * 50)->addText('tempat');
+        $detailTable->addCell(3 * 50)->addText(':');
+        $detailTable->addCell(82 * 50)->addText($data['tempat']);
+
+        $section->addText(
+            'Sehubungan hal tersebut kami mohon kesediaan Bapak/Ibu sebagai pengajar/fasilitator pada kegiatan tersebut sesuai jadwal terlampir. Informasi lebih lanjut dapat menghubungi contact person Tim Kerja '.$data['picUnitName'].' : '.$data['picName'].' ('.$data['picPhone'].').',
+            ['size' => 11],
+            ['indentation' => ['firstLine' => 567]]
+        );
+        $section->addText('Demikian hal ini kami sampaikan, atas kesediaan dan kerjasama Bapak/Ibu diucapkan terima kasih.', ['size' => 11], ['indentation' => ['firstLine' => 567]]);
+
+        $section->addText('');
+        $section->addText('');
+        $sigTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
+        $sigTable->addRow();
+        $sigTable->addCell(60 * 50);
+        $sigCell = $sigTable->addCell(40 * 50);
+        $sigCell->addText($data['signerPosition'], ['align' => 'center', 'size' => 11]);
+        $sigCell->addText($data['namaPengirim'], ['align' => 'center', 'bold' => true, 'size' => 11]);
+        $sigCell->addText('NIP. '.$data['nipPengirim'], ['align' => 'center', 'size' => 11]);
+
+        $section->addText(
+            'Dokumen ini telah ditandatangani secara elektronik menggunakan sertifikat elektronik yang diterbitkan oleh Balai Besar Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara (BSSN).',
+            ['size' => 7.5, 'color' => '444444', 'align' => 'center']
+        );
+
+        $fileName = 'Nota_Dinas_'.$data['nomorSurat'].'.docx';
+        $tempPath = storage_path('app/temp');
+        if (! is_dir($tempPath)) {
+            mkdir($tempPath, 0755, true);
+        }
+        $filePath = $tempPath.'/'.$fileName;
+        $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
+        $objWriter->save($filePath);
+
+        return response()->download($filePath, $fileName)->deleteFileAfterSend(true);
     }
 
     /**
@@ -54,7 +194,7 @@ class NotaDinasController extends Controller
         $pdf = Pdf::loadView('pdf.nota-dinas', $data);
         $pdf->setPaper('A4', 'portrait');
 
-        $fileName = 'Nota_Dinas_' . $data['nomorSurat'] . '.pdf';
+        $fileName = 'Nota_Dinas_'.$data['nomorSurat'].'.pdf';
 
         return $pdf->stream($fileName);
     }
@@ -76,34 +216,41 @@ class NotaDinasController extends Controller
             'marginBottom' => 567,
         ]);
 
-        // --- HEADER TABLE ---
-        $headerTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
-        $headerTable->addRow();
-        $logoCell = $headerTable->addCell(30 * 50);
-        $infoCell = $headerTable->addCell(70 * 50);
-
-        // Logo image or fallback text
-        $logoPath = storage_path('app/public/' . $data['logoPath']);
-        if ($data['logoPath'] && file_exists($logoPath)) {
-            $logoCell->addImage($logoPath, ['width' => 180, 'height' => 50]);
+        // --- HEADER ---
+        $kopPath = $data['kopPath'] ? storage_path('app/public/'.$data['kopPath']) : null;
+        if ($kopPath && file_exists($kopPath)) {
+            $section->addImage($kopPath, [
+                'width' => 450,
+                'alignment' => Jc::CENTER,
+            ]);
         } else {
-            $logoCell->addText('Kemenkes', ['bold' => true, 'size' => 18, 'color' => '0D9488']);
-            $logoCell->addText('RS Cipto Mangunkusumo', ['bold' => true, 'size' => 9, 'color' => '64748B']);
-        }
+            $headerTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
+            $headerTable->addRow();
+            $logoCell = $headerTable->addCell(30 * 50);
+            $infoCell = $headerTable->addCell(70 * 50);
 
-        $infoCell->addText('Kementerian Kesehatan', ['bold' => true, 'size' => 14, 'color' => '0D9488']);
-        $infoCell->addText('Direktorat Jenderal Kesehatan Lanjutan', ['bold' => true, 'size' => 12]);
-        $infoCell->addText('RSUP Nasional Dr. Cipto Mangunkusumo Jakarta', ['size' => 11]);
-        $infoCell->addText('Jalan Diponegoro Nomor 71 Jakarta 10430', ['size' => 8.5, 'color' => '666666']);
-        $infoCell->addText('1500135', ['size' => 8.5, 'color' => '666666']);
-        $infoCell->addText('https://www.rscm.co.id', ['size' => 8.5, 'color' => '666666']);
+            $logoPath = $data['logoPath'] ? storage_path('app/public/'.$data['logoPath']) : null;
+            if ($logoPath && file_exists($logoPath)) {
+                $logoCell->addImage($logoPath, ['width' => 180, 'height' => 50]);
+            } else {
+                $logoCell->addText('Kemenkes', ['bold' => true, 'size' => 18, 'color' => '0D9488']);
+                $logoCell->addText('RS Cipto Mangunkusumo', ['bold' => true, 'size' => 9, 'color' => '64748B']);
+            }
+
+            $infoCell->addText('Kementerian Kesehatan', ['bold' => true, 'size' => 14, 'color' => '0D9488']);
+            $infoCell->addText('Direktorat Jenderal Kesehatan Lanjutan', ['bold' => true, 'size' => 12]);
+            $infoCell->addText('RSUP Nasional Dr. Cipto Mangunkusumo Jakarta', ['size' => 11]);
+            $infoCell->addText('Jalan Diponegoro Nomor 71 Jakarta 10430', ['size' => 8.5, 'color' => '666666']);
+            $infoCell->addText('1500135', ['size' => 8.5, 'color' => '666666']);
+            $infoCell->addText('https://www.rscm.co.id', ['size' => 8.5, 'color' => '666666']);
+        }
 
         // Horizontal line
         $section->addText('', [], ['borderBottom' => ['size' => 2, 'color' => '000000']]);
 
         // --- TITLE ---
         $section->addText('NOTA DINAS', ['bold' => true, 'size' => 14, 'align' => 'center']);
-        $section->addText('NOMOR : ' . $data['nomorSurat'], ['size' => 11, 'align' => 'center']);
+        $section->addText('NOMOR : '.$data['nomorSurat'], ['size' => 11, 'align' => 'center']);
 
         // --- META TABLE ---
         $metaTable = $section->addTable(['width' => 100 * 50, 'unit' => 'pct']);
@@ -120,7 +267,7 @@ class NotaDinasController extends Controller
         $metaTable->addRow();
         $metaTable->addCell(15 * 50)->addText('Hal');
         $metaTable->addCell(3 * 50)->addText(':');
-        $metaTable->addCell(82 * 50)->addText('Permohonan Narasumber ' . $data['hal']);
+        $metaTable->addCell(82 * 50)->addText('Permohonan Narasumber '.$data['hal']);
 
         $metaTable->addRow();
         $metaTable->addCell(15 * 50)->addText('Tanggal');
@@ -133,8 +280,8 @@ class NotaDinasController extends Controller
         // --- MAIN TEXT ---
         $section->addText(
             'Dalam rangka meningkatkan kompetensi tenaga keperawatan dalam asuhan keperawatan dan kolaborasi interprofesional, akan dilaksanakan kegiatan '
-                . $data['hal']
-                . ' secara luring pada:',
+                .$data['hal']
+                .' secara luring pada:',
             ['size' => 11],
             ['indentation' => ['firstLine' => 567]]
         );
@@ -159,7 +306,7 @@ class NotaDinasController extends Controller
         // --- CLOSING PARAGRAPH ---
         $section->addText(
             'Demikian hal ini kami sampaikan, mohon Kepala Unit dapat menugaskan peserta terlampir untuk mengikuti kegiatan sesuai dengan jadwal yang telah ditetapkan. Informasi lebih lanjut dapat menghubungi contact person Tim Kerja '
-                . $data['picUnitName'] . ' : ' . $data['picName'] . ' (' . $data['picPhone'] . ').',
+                .$data['picUnitName'].' : '.$data['picName'].' ('.$data['picPhone'].').',
             ['size' => 11],
             ['indentation' => ['firstLine' => 567]]
         );
@@ -182,14 +329,14 @@ class NotaDinasController extends Controller
             ['size' => 7.5, 'color' => '444444', 'align' => 'center']
         );
 
-        $fileName = 'Nota_Dinas_' . $data['nomorSurat'] . '.docx';
+        $fileName = 'Nota_Dinas_'.$data['nomorSurat'].'.docx';
 
         $tempPath = storage_path('app/temp');
         if (! is_dir($tempPath)) {
             mkdir($tempPath, 0755, true);
         }
 
-        $filePath = $tempPath . '/' . $fileName;
+        $filePath = $tempPath.'/'.$fileName;
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
         $objWriter->save($filePath);
 
@@ -214,10 +361,20 @@ class NotaDinasController extends Controller
         $logoBase64 = null;
         $logoPath = $settings['kemenkes_logo'] ?? null;
         if ($logoPath && Storage::disk('public')->exists($logoPath)) {
-            $path = storage_path('app/public/' . $logoPath);
+            $path = storage_path('app/public/'.$logoPath);
             $type = pathinfo($path, PATHINFO_EXTENSION);
             $logoData = file_get_contents($path);
-            $logoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($logoData);
+            $logoBase64 = 'data:image/'.$type.';base64,'.base64_encode($logoData);
+        }
+
+        // Kop Nota Dinas (full-width header image)
+        $kopBase64 = null;
+        $kopPath = $settings['nota_dinas_kop'] ?? null;
+        if ($kopPath && Storage::disk('public')->exists($kopPath)) {
+            $path = storage_path('app/public/'.$kopPath);
+            $type = pathinfo($path, PATHINFO_EXTENSION);
+            $kopData = file_get_contents($path);
+            $kopBase64 = 'data:image/'.$type.';base64,'.base64_encode($kopData);
         }
 
         // Icons
@@ -225,7 +382,7 @@ class NotaDinasController extends Controller
         foreach (['map' => 'map', 'phone' => 'phone', 'internet' => 'internet'] as $key => $file) {
             $iconPath = public_path("assets/icons/{$file}.png");
             if (file_exists($iconPath)) {
-                $iconBase64[$key] = 'data:image/png;base64,' . base64_encode(file_get_contents($iconPath));
+                $iconBase64[$key] = 'data:image/png;base64,'.base64_encode(file_get_contents($iconPath));
             }
         }
 
@@ -241,15 +398,15 @@ class NotaDinasController extends Controller
         if ($startDate->isSameDay($endDate)) {
             $hariTanggalAcara = $startDate->translatedFormat('l, j F Y');
         } else {
-            $hariTanggalAcara = $startDate->translatedFormat('l') . "\u{2013}" . $endDate->translatedFormat('l') . ', ' .
-                $startDate->format('j') . "\u{2013}" . $endDate->translatedFormat('j F Y');
+            $hariTanggalAcara = $startDate->translatedFormat('l')."\u{2013}".$endDate->translatedFormat('l').', '.
+                $startDate->format('j')."\u{2013}".$endDate->translatedFormat('j F Y');
         }
 
         // Time formatting
-        $waktuAcara = 'Pukul ' .
-            Carbon::parse($kegiatan->start_time)->format('H.i') .
-            ' – ' .
-            Carbon::parse($kegiatan->end_time)->format('H.i') .
+        $waktuAcara = 'Pukul '.
+            Carbon::parse($kegiatan->start_time)->format('H.i').
+            ' – '.
+            Carbon::parse($kegiatan->end_time)->format('H.i').
             ' WIB';
 
         // PIC data
@@ -267,7 +424,9 @@ class NotaDinasController extends Controller
             'kegiatan' => $kegiatan,
             'speaker' => $speaker,
             'logoBase64' => $logoBase64,
+            'kopBase64' => $kopBase64,
             'logoPath' => $logoPath,
+            'kopPath' => $kopPath,
             'iconBase64' => $iconBase64,
             'nomorSurat' => $kegiatan->reference_number ?? '-',
             'hal' => $kegiatan->activityName?->name ?? '-',
@@ -281,6 +440,109 @@ class NotaDinasController extends Controller
             'picPhone' => $picPhone,
             'namaPengirim' => $namaPengirim,
             'nipPengirim' => $nipPengirim,
+        ];
+    }
+
+    /**
+     * Gather all dynamic data for the Nota Dinas document (by kegiatan only, no specific speaker).
+     */
+    private function getNotaDinasByKegiatanData(Activity $kegiatan): array
+    {
+        $kegiatan->loadMissing(['activityName', 'picUser.workUnit', 'activityParticipants.user.workUnit']);
+
+        $settings = AppSetting::pluck('value', 'key');
+
+        // Logo
+        $logoBase64 = null;
+        $logoPath = $settings['kemenkes_logo'] ?? null;
+        if ($logoPath && Storage::disk('public')->exists($logoPath)) {
+            $path = storage_path('app/public/'.$logoPath);
+            $type = pathinfo($path, PATHINFO_EXTENSION);
+            $logoData = file_get_contents($path);
+            $logoBase64 = 'data:image/'.$type.';base64,'.base64_encode($logoData);
+        }
+
+        // Kop Nota Dinas (full-width header image)
+        $kopBase64 = null;
+        $kopPath = $settings['nota_dinas_kop'] ?? null;
+        if ($kopPath && Storage::disk('public')->exists($kopPath)) {
+            $path = storage_path('app/public/'.$kopPath);
+            $type = pathinfo($path, PATHINFO_EXTENSION);
+            $kopData = file_get_contents($path);
+            $kopBase64 = 'data:image/'.$type.';base64,'.base64_encode($kopData);
+        }
+
+        // Icons
+        $iconBase64 = [];
+        foreach (['map' => 'map', 'phone' => 'phone', 'internet' => 'internet'] as $key => $file) {
+            $iconPath = public_path("assets/icons/{$file}.png");
+            if (file_exists($iconPath)) {
+                $iconBase64[$key] = 'data:image/png;base64,'.base64_encode(file_get_contents($iconPath));
+            }
+        }
+
+        // Date formatting
+        Carbon::setLocale('id');
+        $tanggalSurat = Carbon::parse($kegiatan->date);
+        $tanggalSuratFormatted = $tanggalSurat->translatedFormat('j F Y');
+
+        // Event date formatting
+        $startDate = Carbon::parse($kegiatan->start_date);
+        $endDate = Carbon::parse($kegiatan->end_date);
+
+        if ($startDate->isSameDay($endDate)) {
+            $hariTanggalAcara = $startDate->translatedFormat('l, j F Y');
+        } else {
+            $hariTanggalAcara = $startDate->translatedFormat('l')."\u{2013}".$endDate->translatedFormat('l').', '.
+                $startDate->format('j')."\u{2013}".$endDate->translatedFormat('j F Y');
+        }
+
+        // Time formatting
+        $waktuAcara = 'Pukul '.
+            Carbon::parse($kegiatan->start_time)->format('H.i').
+            ' – '.
+            Carbon::parse($kegiatan->end_time)->format('H.i').
+            ' WIB';
+
+        // PIC data
+        $picUser = $kegiatan->picUser;
+        $picUnitName = $picUser?->workUnit?->name ?? '-';
+        $picName = $picUser?->name ?? '-';
+        $picPhone = $picUser?->phone_number ?? '-';
+
+        // Signer data
+        $signerPosition = $settings['nota_dinas_signer_position'] ?? '-';
+        $namaPengirim = $picUser?->name ?? '-';
+        $nipPengirim = $picUser?->employee_id ?? '-';
+
+        // Daftar undangan: distinct unit kerja dari peserta
+        $daftarUndangan = $kegiatan->activityParticipants
+            ->map(fn ($participant) => $participant->user?->workUnit?->name)
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
+
+        return [
+            'kegiatan' => $kegiatan,
+            'logoBase64' => $logoBase64,
+            'kopBase64' => $kopBase64,
+            'logoPath' => $logoPath,
+            'kopPath' => $kopPath,
+            'iconBase64' => $iconBase64,
+            'nomorSurat' => $kegiatan->reference_number ?? '-',
+            'hal' => $kegiatan->activityName?->name ?? '-',
+            'tanggalSuratFormatted' => $tanggalSuratFormatted,
+            'signerPosition' => $signerPosition,
+            'hariTanggalAcara' => $hariTanggalAcara,
+            'waktuAcara' => $waktuAcara,
+            'tempat' => $kegiatan->tempat ?? '-',
+            'picUnitName' => $picUnitName,
+            'picName' => $picName,
+            'picPhone' => $picPhone,
+            'namaPengirim' => $namaPengirim,
+            'nipPengirim' => $nipPengirim,
+            'daftarUndangan' => $daftarUndangan,
         ];
     }
 }

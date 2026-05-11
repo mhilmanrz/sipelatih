@@ -12,10 +12,10 @@ $directories = [
     'profession-category',
 ];
 
-$baseDir = __DIR__ . '/resources/views/';
+$baseDir = __DIR__.'/resources/views/';
 
 foreach ($directories as $dir) {
-    $createFile = $baseDir . $dir . '/create.blade.php';
+    $createFile = $baseDir.$dir.'/create.blade.php';
     if (file_exists($createFile)) {
         $content = file_get_contents($createFile);
         $codeInput = '
@@ -30,17 +30,17 @@ foreach ($directories as $dir) {
                 </div>
 ';
         // Insert before the name input or after @csrf
-        if (!str_contains($content, 'name="code"')) {
+        if (! str_contains($content, 'name="code"')) {
             $content = preg_replace('/(@csrf)/', "$1\n$codeInput", $content);
             file_put_contents($createFile, $content);
             echo "Updated $createFile\n";
         }
     }
 
-    $editFile = $baseDir . $dir . '/edit.blade.php';
+    $editFile = $baseDir.$dir.'/edit.blade.php';
     if (file_exists($editFile)) {
         $content = file_get_contents($editFile);
-        
+
         // Use a heuristic to find the variable name, e.g. $activityCategory
         // Typically value="{{ old('name', $activityCategory->name) }}"
         preg_match('/value="\{\{\s*old\(\'name\',\s*\$([a-zA-Z0-9_]+)->name\)\s*\}\}"/', $content, $matches);
@@ -57,27 +57,27 @@ foreach ($directories as $dir) {
                     @enderror
                 </div>
 ';
-        if (!str_contains($content, 'name="code"')) {
+        if (! str_contains($content, 'name="code"')) {
             $content = preg_replace('/(@method\(\'PUT\'\))/', "$1\n$codeInput", $content);
             file_put_contents($editFile, $content);
             echo "Updated $editFile\n";
         }
     }
 
-    $indexFile = $baseDir . $dir . '/index.blade.php';
+    $indexFile = $baseDir.$dir.'/index.blade.php';
     if (file_exists($indexFile)) {
         $content = file_get_contents($indexFile);
-        
+
         // Add header
-        if (!str_contains($content, '>Kode</th>')) {
+        if (! str_contains($content, '>Kode</th>')) {
             $content = preg_replace('/(<th[^>]*>No<\/th>\s*)/', "$1<th class=\"py-3 px-6 text-left\">Kode</th>\n                                    ", $content);
-            
+
             // Add column
             preg_match('/@foreach \(\$([a-zA-Z0-9_]+) as \$([a-zA-Z0-9_]+)\)/', $content, $matches);
             $itemName = $matches[2] ?? 'item';
-            
+
             $content = preg_replace('/(<td[^>]*>\{\{\s*\$([a-zA-Z0-9_]+)->name\s*\}\}<\/td>)/', "<td class=\"py-3 px-6 text-left\">{{ $$itemName->code ?? '-' }}</td>\n                                    $1", $content);
-            
+
             file_put_contents($indexFile, $content);
             echo "Updated $indexFile\n";
         }
