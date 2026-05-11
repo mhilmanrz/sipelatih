@@ -32,6 +32,7 @@ use App\Http\Controllers\NotaDinasController;
 use App\Http\Controllers\PaguController;
 use App\Http\Controllers\ProfessionCategoryController;
 use App\Http\Controllers\SuratPemanggilanController;
+use App\Http\Controllers\SuratTugasController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\EmploymentTypeController;
 use App\Http\Controllers\User\PositionController;
@@ -115,6 +116,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('kegiatan/{kegiatan}/nota-dinas/docx', [NotaDinasController::class, 'downloadDocxByKegiatan'])->name('kegiatan.nota-dinas.docx');
     Route::get('kegiatan/{kegiatan}/surat-pemanggilan/pdf', [SuratPemanggilanController::class, 'downloadPdf'])->name('kegiatan.surat-pemanggilan.pdf');
     Route::get('kegiatan/{kegiatan}/surat-pemanggilan/docx', [SuratPemanggilanController::class, 'downloadDocx'])->name('kegiatan.surat-pemanggilan.docx');
+    Route::get('kegiatan/{kegiatan}/surat-tugas/pdf', [SuratTugasController::class, 'downloadPdf'])->name('kegiatan.surat-tugas.pdf');
+    Route::get('kegiatan/{kegiatan}/surat-tugas/docx', [SuratTugasController::class, 'downloadDocx'])->name('kegiatan.surat-tugas.docx');
     Route::post('kegiatan/{kegiatan}/moderator', [ActivityModeratorController::class, 'store'])->name('kegiatan.moderator.store');
     Route::delete('kegiatan/{kegiatan}/moderator/{id}', [ActivityModeratorController::class, 'destroy'])->name('kegiatan.moderator.destroy');
     Route::post('kegiatan/{kegiatan}/target', [ActivityTargetController::class, 'store'])->name('kegiatan.target.store');
