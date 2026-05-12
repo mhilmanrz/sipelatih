@@ -107,11 +107,13 @@ class PaguController extends Controller
             'budget_category_id' => 'required|exists:budget_categories,id',
             'submark' => 'nullable|string|max:255',
             'total_amount' => 'required|numeric|min:0',
+            'blocked_amount' => 'nullable|numeric|min:0',
         ], [
             'rkkal_code.unique' => 'Pagu dengan kombinasi Kode RKKAL dan Tahun Anggaran tersebut sudah ada.',
         ]);
 
         $data = $request->all();
+        $data['blocked_amount'] = $data['blocked_amount'] ?? 0;
 
         Budget::create($data);
 
@@ -151,11 +153,13 @@ class PaguController extends Controller
             'budget_category_id' => 'required|exists:budget_categories,id',
             'submark' => 'nullable|string|max:255',
             'total_amount' => 'required|numeric|min:0',
+            'blocked_amount' => 'nullable|numeric|min:0',
         ], [
             'rkkal_code.unique' => 'Pagu dengan kombinasi Kode RKKAL dan Tahun Anggaran tersebut sudah ada.',
         ]);
 
         $data = $request->all();
+        $data['blocked_amount'] = $data['blocked_amount'] ?? 0;
 
         $pagu->update($data);
 

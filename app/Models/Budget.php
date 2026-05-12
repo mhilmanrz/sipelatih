@@ -18,6 +18,7 @@ class Budget extends Model
         'rkkal_code',
         'submark',
         'total_amount',
+        'blocked_amount',
         'remaining_amount',
     ];
 

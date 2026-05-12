@@ -12,9 +12,10 @@ class BudgetTemplateExport implements FromArray, WithHeadings
         return [
             'tahun',
             'no rkakl',
-            'kategori pagu',
+            'kode kategori pagu',
             'submark',
             'total anggaran',
+            'dana blokir',
         ];
     }
 
@@ -27,6 +28,7 @@ class BudgetTemplateExport implements FromArray, WithHeadings
                 'DIPA',
                 'Submark Dummy A',
                 '150000000',
+                '0',
             ],
             [
                 date('Y'),
@@ -34,6 +36,7 @@ class BudgetTemplateExport implements FromArray, WithHeadings
                 'PNBP',
                 'Submark Dummy B',
                 '200000000',
+                '50000000',
             ],
         ];
     }

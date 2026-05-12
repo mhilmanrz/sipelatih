@@ -113,6 +113,7 @@
                             <th class="text-left py-3 px-4 font-semibold text-sm">Kategori Pagu</th>
                             <th class="text-left py-3 px-4 font-semibold text-sm">Submark</th>
                             <th class="text-right py-3 px-4 font-semibold text-sm">Pagu</th>
+                            <th class="text-right py-3 px-4 font-semibold text-sm">Dana Blokir</th>
                             <th class="text-right py-3 px-4 font-semibold text-sm">Sisa Pagu</th>
                             <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
                         </tr>
@@ -128,6 +129,7 @@
                                 <td class="py-3 px-4">{{ $budget->budgetCategory->name ?? '-' }}</td>
                                 <td class="py-3 px-4">{{ $budget->submark }}</td>
                                 <td class="text-right font-medium py-3 px-4">{{ number_format($budget->total_amount, 0, ',', '.') }}</td>
+                                <td class="text-right py-3 px-4">{{ number_format($budget->blocked_amount, 0, ',', '.') }}</td>
                                 <td class="text-right py-3 px-4">{{ number_format($budget->remaining_amount, 0, ',', '.') }}</td>
                                 <td class="text-center py-3 px-4">
                                     <div class="flex justify-center gap-1.5">
@@ -141,7 +143,8 @@
                                                 data-year="{{ $budget->year }}"
                                                 data-category="{{ $budget->budget_category_id }}"
                                                 data-submark="{{ $budget->submark }}"
-                                                data-amount="{{ $budget->total_amount }}">
+                                                data-amount="{{ $budget->total_amount }}"
+                                                data-blocked="{{ $budget->blocked_amount }}">
                                             Edit
                                         </button>
                                         <form action="{{ route('pagu.destroy', $budget->id) }}" method="POST" class="inline-block m-0">
@@ -157,7 +160,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center text-gray-500 py-6 px-4">
+                                <td colspan="9" class="text-center text-gray-500 py-6 px-4">
                                     Belum ada data Pagu.
                                 </td>
                             </tr>
@@ -171,6 +174,9 @@
                             </td>
                             <td class="text-right text-sm font-semibold text-gray-800 py-3 px-4">
                                 {{ number_format($budgets->sum('total_amount'), 0, ',', '.') }}
+                            </td>
+                            <td class="text-right text-sm font-semibold text-gray-800 py-3 px-4">
+                                {{ number_format($budgets->sum('blocked_amount'), 0, ',', '.') }}
                             </td>
                             <td colspan="2"></td>
                         </tr>
@@ -234,6 +240,13 @@
                         <input type="number" name="total_amount" id="inputAmount" required
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
                     </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Dana Blokir</label>
+                        <input type="number" name="blocked_amount" id="inputBlocked" min="0"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition"
+                               placeholder="0">
+                    </div>
                 </div>
 
                 <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3 border-t border-gray-200">
@@ -260,6 +273,7 @@
                 const inputCategory = document.getElementById('inputCategory');
                 const inputSubmark = document.getElementById('inputSubmark');
                 const inputAmount = document.getElementById('inputAmount');
+                const inputBlocked = document.getElementById('inputBlocked');
 
                 function hideModal() {
                     modal.classList.add('hidden');
@@ -280,6 +294,7 @@
                     inputCategory.value = '';
                     inputSubmark.value = '';
                     inputAmount.value = '';
+                    inputBlocked.value = '';
                 });
 
                 btnClose.addEventListener('click', hideModal);
@@ -296,6 +311,7 @@
                         const category = this.getAttribute('data-category');
                         const submark = this.getAttribute('data-submark');
                         const amount = this.getAttribute('data-amount');
+                        const blocked = this.getAttribute('data-blocked');
 
                         formPagu.action = `/pagu/${id}`;
                         formMethod.value = "PUT";
@@ -305,6 +321,7 @@
                         inputCategory.value = category;
                         inputSubmark.value = submark;
                         inputAmount.value = amount;
+                        inputBlocked.value = blocked;
                     });
                 });
 
