@@ -193,8 +193,8 @@
     </div>
 
     {{-- MODAL --}}
-    <div id="modalPagu" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black/50">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+    <div id="modalPagu" class="fixed inset-0 z-[9999] flex items-center justify-center hidden bg-black/50 overflow-y-auto py-6">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
             <form id="formPagu" method="POST" action="{{ route('pagu.store') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formMethod" value="POST">
@@ -236,7 +236,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Pagu <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Dana Awal <span class="text-red-500">*</span></label>
                         <input type="number" name="total_amount" id="inputAmount" required
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
                     </div>

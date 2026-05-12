@@ -114,6 +114,7 @@ class PaguController extends Controller
 
         $data = $request->all();
         $data['blocked_amount'] = $data['blocked_amount'] ?? 0;
+        $data['remaining_amount'] = $data['total_amount'] - ($data['blocked_amount'] ?? 0);
 
         Budget::create($data);
 
@@ -160,6 +161,7 @@ class PaguController extends Controller
 
         $data = $request->all();
         $data['blocked_amount'] = $data['blocked_amount'] ?? 0;
+        $data['remaining_amount'] = $data['total_amount'] - ($data['blocked_amount'] ?? 0);
 
         $pagu->update($data);
 
