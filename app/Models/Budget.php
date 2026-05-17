@@ -12,6 +12,17 @@ class Budget extends Model
 
     protected $table = 'budgets';
 
+    protected static function booted()
+    {
+        static::saving(function ($budget) {
+            $budget->blocked_amount = $budget->blocked_amount ?? 0;
+            $rawRemaining = $budget->getAttributes()['remaining_amount'] ?? null;
+            if (is_null($rawRemaining) || $budget->isDirty(['total_amount', 'blocked_amount'])) {
+                $budget->attributes['remaining_amount'] = $budget->total_amount - $budget->blocked_amount;
+            }
+        });
+    }
+
     protected $fillable = [
         'budget_category_id',
         'year',

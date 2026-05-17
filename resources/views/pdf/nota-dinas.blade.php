@@ -156,7 +156,7 @@
 
         @include('pdf.nota-dinas.signature')
 
-        @include('pdf.nota-dinas.footer')
+        {{-- @include('pdf.nota-dinas.footer') --}}
 
         @include('pdf.nota-dinas.lampiran')
     </div>

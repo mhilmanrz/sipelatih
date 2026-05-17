@@ -141,7 +141,7 @@ class SuratTugasController extends Controller
         $sigTable->addRow();
         $sigTable->addCell(60 * 50);
         $sigCell = $sigTable->addCell(40 * 50);
-        $sigCell->addText(\Carbon\Carbon::now()->translatedFormat('d F Y'), ['align' => 'left', 'size' => 11]);
+        $sigCell->addText(Carbon::now()->translatedFormat('d F Y'), ['align' => 'left', 'size' => 11]);
         $sigCell->addText('Direktur Utama,', ['align' => 'left', 'size' => 11]);
         $sigCell->addText('');
         $sigCell->addText('');
@@ -185,11 +185,11 @@ class SuratTugasController extends Controller
         $phpWord->addTableStyle('PesertaTable', $tableStyle);
         $pesertaTable = $section->addTable('PesertaTable');
 
-            $pesertaTable->addCell(500, ['bgColor' => 'F2F2F2'])->addText('No.', ['bold' => true, 'size' => 11]);
-            $pesertaTable->addCell(2500, ['bgColor' => 'F2F2F2'])->addText('Nama', ['bold' => true, 'size' => 11]);
-            $pesertaTable->addCell(2000, ['bgColor' => 'F2F2F2'])->addText('NIP/NPS', ['bold' => true, 'size' => 11]);
-            $pesertaTable->addCell(2000, ['bgColor' => 'F2F2F2'])->addText('Pangkat/ Golongan', ['bold' => true, 'size' => 11]);
-            $pesertaTable->addCell(3000, ['bgColor' => 'F2F2F2'])->addText('Jabatan', ['bold' => true, 'size' => 11]);
+        $pesertaTable->addCell(500, ['bgColor' => 'F2F2F2'])->addText('No.', ['bold' => true, 'size' => 11]);
+        $pesertaTable->addCell(2500, ['bgColor' => 'F2F2F2'])->addText('Nama', ['bold' => true, 'size' => 11]);
+        $pesertaTable->addCell(2000, ['bgColor' => 'F2F2F2'])->addText('NIP/NPS', ['bold' => true, 'size' => 11]);
+        $pesertaTable->addCell(2000, ['bgColor' => 'F2F2F2'])->addText('Pangkat/ Golongan', ['bold' => true, 'size' => 11]);
+        $pesertaTable->addCell(3000, ['bgColor' => 'F2F2F2'])->addText('Jabatan', ['bold' => true, 'size' => 11]);
 
         if ($data['peserta']->isEmpty()) {
             $pesertaTable->addRow();
@@ -302,6 +302,22 @@ class SuratTugasController extends Controller
             $kopBase64 = 'data:image/'.$type.';base64,'.base64_encode(file_get_contents($path));
         }
 
+        // JCI Logo (from public assets)
+        $jciBase64 = null;
+        $jciPath = public_path('assets/images/Jci_logo.png');
+        if (file_exists($jciPath)) {
+            $type = pathinfo($jciPath, PATHINFO_EXTENSION);
+            $jciBase64 = 'data:image/'.$type.';base64,'.base64_encode(file_get_contents($jciPath));
+        }
+
+        // BLU Logo (from public assets)
+        $bluBase64 = null;
+        $bluPath = public_path('assets/images/blu_logo.png');
+        if (file_exists($bluPath)) {
+            $type = pathinfo($bluPath, PATHINFO_EXTENSION);
+            $bluBase64 = 'data:image/'.$type.';base64,'.base64_encode(file_get_contents($bluPath));
+        }
+
         // Date formatting
         Carbon::setLocale('id');
         $tanggalSuratFormatted = Carbon::parse($kegiatan->date)->translatedFormat('j F Y');
@@ -311,10 +327,13 @@ class SuratTugasController extends Controller
         $endDate = Carbon::parse($kegiatan->end_date);
 
         if ($startDate->isSameDay($endDate)) {
-            $hariTanggalAcara = $startDate->translatedFormat('l, j F Y');
+            $hariTanggalAcara = $startDate->translatedFormat('j F Y');
         } else {
-            $hariTanggalAcara = $startDate->translatedFormat('l')."\u{2013}".$endDate->translatedFormat('l').', '.
-                $startDate->format('j')."\u{2013}".$endDate->translatedFormat('j F Y');
+            if ($startDate->format('Y-m') === $endDate->format('Y-m')) {
+                $hariTanggalAcara = $startDate->format('j').' s.d. '.$endDate->translatedFormat('j F Y');
+            } else {
+                $hariTanggalAcara = $startDate->translatedFormat('j F Y').' s.d. '.$endDate->translatedFormat('j F Y');
+            }
         }
 
         // Time formatting
@@ -354,6 +373,8 @@ class SuratTugasController extends Controller
             'kegiatan' => $kegiatan,
             'logoBase64' => $logoBase64,
             'kopBase64' => $kopBase64,
+            'jciBase64' => $jciBase64,
+            'bluBase64' => $bluBase64,
             'logoPath' => $logoPath,
             'kopPath' => $kopPath,
             'nomorSurat' => $kegiatan->reference_number ?? '-',

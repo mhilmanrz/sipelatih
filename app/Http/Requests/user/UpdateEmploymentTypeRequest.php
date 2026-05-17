@@ -23,7 +23,7 @@ class UpdateEmploymentTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string|max:255|unique:employment_types,code,'.$this->route('id'),
+            'code' => 'required|string|max:255|unique:employment_types,code,'.($this->route('employment_type') ?? $this->route('id')),
             'name' => 'required|string|max:255',
         ];
     }

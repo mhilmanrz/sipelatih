@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\user\StoreEmploymentTypeRequest;
+use App\Http\Requests\user\UpdateEmploymentTypeRequest;
 use App\Models\User\EmploymentType;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,10 @@ class EmploymentTypeController extends Controller
     {
         $query = EmploymentType::query();
         if ($request->has('q') && $request->q != '') {
-            $query->where('name', 'like', '%'.$request->q.'%');
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->q.'%')
+                    ->orWhere('code', 'like', '%'.$request->q.'%');
+            });
         }
         $perPage = $request->input('entries', $request->input('per_page', 10));
         $employmentTypes = $query->paginate($perPage)->appends($request->all());
@@ -34,13 +39,9 @@ class EmploymentTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEmploymentTypeRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
-        EmploymentType::create($request->all());
+        EmploymentType::create($request->validated());
 
         return redirect()->route('employment-types.index')->with('success', 'Jenis Kepegawaian berhasil ditambahkan.');
     }
@@ -66,14 +67,10 @@ class EmploymentTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateEmploymentTypeRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
         $employmentType = EmploymentType::findOrFail($id);
-        $employmentType->update($request->all());
+        $employmentType->update($request->validated());
 
         return redirect()->route('employment-types.index')->with('success', 'Jenis Kepegawaian berhasil diperbarui.');
     }

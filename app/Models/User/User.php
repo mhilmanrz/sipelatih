@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityParticipant;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,6 +15,11 @@ class User extends Authenticatable
     use HasFactory, HasRoles;
 
     protected $table = 'users';
+
+    protected static function newFactory()
+    {
+        return UserFactory::new();
+    }
 
     protected $fillable = [
         'name',

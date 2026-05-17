@@ -7,7 +7,7 @@
     <tr>
         <td>Dari</td>
         <td>:</td>
-        <td>{{ $signerPosition }}</td>
+        <td>${jabatan_pengirim}</td>
     </tr>
     <tr>
         <td>Hal</td>

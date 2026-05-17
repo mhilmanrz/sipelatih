@@ -35,6 +35,7 @@ use App\Http\Controllers\SuratPemanggilanController;
 use App\Http\Controllers\SuratTugasController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\EmploymentTypeController;
+use App\Http\Controllers\User\PermissionController;
 use App\Http\Controllers\User\PositionController;
 use App\Http\Controllers\User\ProfessionController;
 use App\Http\Controllers\User\RankController;
@@ -90,9 +91,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/laporan-kegiatan', [ActivityReportController::class, 'index'])->name('kegiatan.laporan.index');
     Route::post('/laporan-kegiatan', [ActivityReportController::class, 'store'])->name('kegiatan.laporan.store');
     Route::put('/laporan-kegiatan/{id}', [ActivityReportController::class, 'update'])->name('kegiatan.laporan.update');
-    Route::view('/evaluasi1', 'evaluasi1')->name('evaluasi1');
-    Route::view('/evaluasi2', 'evaluasi2')->name('evaluasi2');
-    Route::view('/evaluasi3', 'evaluasi3')->name('evaluasi3');
+    Route::view('/evaluasi1', 'evaluasi1')->name('evaluasi');
 
     Route::get('users/import/template', [UserController::class, 'downloadTemplate'])->name('users.import.template');
     Route::get('users/import', [UserController::class, 'importView'])->name('users.import.view');
@@ -103,6 +102,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('accounts/import', [AccountController::class, 'import'])->name('accounts.import');
     Route::resource('accounts', AccountController::class);
     Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
     Route::resource('kegiatan', ActivityController::class);
     Route::post('kegiatan/{kegiatan}/sasaran-profesi', [ActivityProfessionController::class, 'store'])->name('kegiatan.sasaran-profesi.store');
     Route::delete('kegiatan/{kegiatan}/sasaran-profesi/{id}', [ActivityProfessionController::class, 'destroy'])->name('kegiatan.sasaran-profesi.destroy');

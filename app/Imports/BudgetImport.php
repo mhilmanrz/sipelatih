@@ -25,11 +25,14 @@ class BudgetImport implements ToCollection, WithHeadingRow
                 continue;
             }
 
-            // Find category by code
+            // Find or create category by code
             $budgetCategory = null;
             if (isset($row['kode_kategori_pagu']) && trim($row['kode_kategori_pagu']) !== '') {
                 $categoryCode = trim($row['kode_kategori_pagu']);
-                $budgetCategory = BudgetCategory::where('code', $categoryCode)->first();
+                $budgetCategory = BudgetCategory::firstOrCreate(
+                    ['code' => $categoryCode],
+                    ['name' => $categoryCode]
+                );
             }
 
             $totalAmount = (float) $row['total_anggaran'];
@@ -41,9 +44,10 @@ class BudgetImport implements ToCollection, WithHeadingRow
                 'rkkal_code' => $rkkal,
             ], [
                 'budget_category_id' => $budgetCategory ? $budgetCategory->id : null,
-                'submark' => isset($row['submark']) ? trim($row['submark']) : null,
+                'submark' => isset($row['submark']) ? trim($row['submark']) : '',
                 'total_amount' => $totalAmount,
                 'blocked_amount' => $blockedAmount,
+                'remaining_amount' => $totalAmount - $blockedAmount,
             ]);
         }
     }
