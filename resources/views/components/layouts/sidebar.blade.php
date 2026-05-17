@@ -74,7 +74,7 @@
         @canany(['view kegiatan laporan', 'view evaluasi'])
             @php
                 $isEvaluasiOpen =
-                    request()->is('laporan-kegiatan*') || request()->is('evaluasi*');
+                    request()->is('laporan-kegiatan*') || request()->is('evaluations*');
             @endphp
             <details class="group" {{ $isEvaluasiOpen ? 'open' : '' }}>
                 <summary
@@ -95,8 +95,8 @@
                     @endcan
 
                     @can('view evaluasi')
-                        <a href="{{ route('evaluasi') }}"
-                            class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluasi1*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+                        <a href="{{ route('evaluations.index') }}"
+                            class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluations*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                             <i class="fa-solid fa-clipboard-check w-6 text-center mr-2 text-sm"></i>
                             <span>Evaluasi</span>
                         </a>
@@ -111,7 +111,8 @@
             'view roles', 'view permissions', 'view positions', 'view ranks', 'view work units', 
             'view activity types', 'view activity categories', 'view activity scopes', 
             'view material types', 'view activity formats', 'view activity methods', 
-            'view employment types', 'view batches', 'view fund sources', 'view activity names'
+            'view employment types', 'view batches', 'view fund sources', 'view activity names',
+            'view evaluation criteria'
         ])
             @php
                 $isMasterDataOpen =
@@ -133,7 +134,8 @@
                     request()->is('employment-types*') ||
                     request()->is('dictionaries/batches*') ||
                     request()->is('fund-sources*') ||
-                    request()->is('dictionaries/activity-names*');
+                    request()->is('dictionaries/activity-names*') ||
+                    request()->is('evaluation-criteria*');
             @endphp
             <details class="group" {{ $isMasterDataOpen ? 'open' : '' }}>
                 <summary
@@ -294,6 +296,14 @@
                             class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dictionaries/activity-names*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                             <i class="fa-solid fa-signature w-6 text-center mr-2 text-sm"></i>
                             <span>Nama Kegiatan</span>
+                        </a>
+                    @endcan
+
+                    @can('view evaluation criteria')
+                        <a href="{{ route('evaluation-criteria.index') }}"
+                            class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluation-criteria*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+                            <i class="fa-solid fa-clipboard-list w-6 text-center mr-2 text-sm"></i>
+                            <span>Kriteria Evaluasi</span>
                         </a>
                     @endcan
                 </div>

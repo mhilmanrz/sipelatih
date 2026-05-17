@@ -7,6 +7,7 @@ use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Activity extends Model
 {
@@ -166,5 +167,10 @@ class Activity extends Model
     public function gradeCategories()
     {
         return $this->hasMany(ActivityGradeCategory::class)->orderBy('order');
+    }
+
+    public function evaluations(): HasMany
+    {
+        return $this->hasMany(ActivityEvaluation::class);
     }
 }
