@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Act\ActivityCategoryController;
 use App\Http\Controllers\Act\ActivityController;
+use App\Http\Controllers\Act\ActivityEvaluationController;
 use App\Http\Controllers\Act\ActivityFormatController;
 use App\Http\Controllers\Act\ActivityMaterialController;
 use App\Http\Controllers\Act\ActivityMethodController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Act\ActivityTargetController;
 use App\Http\Controllers\Act\ActivityTypeController;
 use App\Http\Controllers\Act\BatchController;
 use App\Http\Controllers\Act\BudgetCategoryController;
+use App\Http\Controllers\Act\EvaluationCriteriaController;
 use App\Http\Controllers\Act\FundSourceController;
 use App\Http\Controllers\Act\MaterialTypeController;
 use App\Http\Controllers\Act\TargetParticipantController;
@@ -91,7 +93,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/laporan-kegiatan', [ActivityReportController::class, 'index'])->name('kegiatan.laporan.index');
     Route::post('/laporan-kegiatan', [ActivityReportController::class, 'store'])->name('kegiatan.laporan.store');
     Route::put('/laporan-kegiatan/{id}', [ActivityReportController::class, 'update'])->name('kegiatan.laporan.update');
-    Route::view('/evaluasi1', 'evaluasi1')->name('evaluasi');
+    Route::get('/evaluations', [ActivityEvaluationController::class, 'index'])->name('evaluations.index');
+    Route::get('/evaluations/{kegiatan}', [ActivityEvaluationController::class, 'show'])->name('evaluations.show');
+    Route::post('/evaluations/{kegiatan}', [ActivityEvaluationController::class, 'store'])->name('evaluations.store');
 
     Route::get('users/import/template', [UserController::class, 'downloadTemplate'])->name('users.import.template');
     Route::get('users/import', [UserController::class, 'importView'])->name('users.import.view');
@@ -163,6 +167,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('dictionaries/activity-names/import', [ActivityNameController::class, 'import'])->name('activity-names.import');
     Route::resource('dictionaries/activity-names', ActivityNameController::class);
     Route::resource('budget-categories', BudgetCategoryController::class);
+    Route::resource('evaluation-criteria', EvaluationCriteriaController::class);
     Route::resource('employment-types', EmploymentTypeController::class);
 
     // Pengaturan Aplikasi (SuperAdmin)
