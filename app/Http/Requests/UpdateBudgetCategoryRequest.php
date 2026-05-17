@@ -22,8 +22,10 @@ class UpdateBudgetCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('budget_category') ?? $this->route('id');
+
         return [
-            'code' => 'required|string|max:255|unique:budget_categories,code,'.$this->route('id'),
+            'code' => 'required|string|max:255|unique:budget_categories,code,'.$id,
             'name' => 'required|string|max:255',
         ];
     }

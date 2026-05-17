@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -13,23 +14,92 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Define some basic permissions (optional)
+        // Reset cache
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        // All system permissions
         $permissions = [
-            'manage users',
-            'manage activities',
+            // General & Dashboard
             'view dashboard',
+
+            // Usulan Diklat
+            'view usulan diklat',
+
+            // Monitoring
+            'view monitoring jpl',
+
+            // Evaluasi & Laporan
+            'view budget categories',
+            'view pagu',
+            'view kegiatan laporan',
+            'view evaluasi',
+
+            // Master Data - Pegawai & Akun
+            'view users',
+            'view accounts',
+            'view professions',
+            'view profession categories',
+            'view roles',
+            'view permissions',
+            'view positions',
+            'view ranks',
+            'view work units',
+
+            // Master Data - Dictionaries
+            'view activity types',
+            'view activity categories',
+            'view activity scopes',
+            'view material types',
+            'view activity formats',
+            'view activity methods',
+            'view employment types',
+            'view batches',
+            'view fund sources',
+            'view activity names',
+
+            // Settings
+            'view settings',
         ];
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
-        // Create Roles
-        $superAdmin = Role::firstOrCreate(['name' => 'SuperAdmin']);
-        $pengusul = Role::firstOrCreate(['name' => 'Pengusul']);
+        // Create Roles matching our sidebar and system needs
+        $superadmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
+        $perencanaan = Role::firstOrCreate(['name' => 'perencanaan', 'guard_name' => 'web']);
+        $penyelenggara = Role::firstOrCreate(['name' => 'penyelenggara', 'guard_name' => 'web']);
+        $evaluasi = Role::firstOrCreate(['name' => 'evaluasi', 'guard_name' => 'web']);
+        $pengusul = Role::firstOrCreate(['name' => 'pengusul', 'guard_name' => 'web']);
 
-        // Assign Permissions (SuperAdmin gets all)
-        $superAdmin->givePermissionTo(Permission::all());
-        $pengusul->givePermissionTo(['view dashboard']); // Just an example
+        // Superadmin gets all permissions
+        $superadmin->syncPermissions(Permission::all());
+
+        // Assign some basic permissions to other roles as sensible defaults
+        $pengusul->syncPermissions([
+            'view dashboard',
+            'view usulan diklat',
+        ]);
+
+        $perencanaan->syncPermissions([
+            'view dashboard',
+            'view usulan diklat',
+            'view budget categories',
+            'view pagu',
+            'view kegiatan laporan',
+        ]);
+
+        $penyelenggara->syncPermissions([
+            'view dashboard',
+            'view usulan diklat',
+            'view kegiatan laporan',
+        ]);
+
+        $evaluasi->syncPermissions([
+            'view dashboard',
+            'view usulan diklat',
+            'view kegiatan laporan',
+            'view evaluasi',
+        ]);
     }
 }

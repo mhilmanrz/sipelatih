@@ -161,7 +161,7 @@
         @include('pdf.surat-pemanggilan.signature')
 
         {{-- Reuse footer dari nota-dinas --}}
-        @include('pdf.nota-dinas.footer')
+        {{-- @include('pdf.nota-dinas.footer') --}}
 
         @include('pdf.surat-pemanggilan.lampiran')
     </div>

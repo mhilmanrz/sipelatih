@@ -31,6 +31,7 @@
                     <thead class="bg-[#007a7a] text-white">
                         <tr>
                             <th class="text-center w-12 py-3 px-4 font-semibold text-sm">No.</th>
+                            <th class="text-left w-36 py-3 px-4 font-semibold text-sm">Kode</th>
                             <th class="text-left py-3 px-4 font-semibold text-sm">Kategori Pagu</th>
                             <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
                         </tr>
@@ -39,6 +40,7 @@
                         @forelse($categoryPagus as $index => $category)
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="text-center py-3 px-4">{{ $categoryPagus->firstItem() + $index }}</td>
+                                <td class="font-medium text-gray-500 py-3 px-4">{{ $category->code ?? '-' }}</td>
                                 <td class="font-medium py-3 px-4">{{ $category->name }}</td>
                                 <td class="text-center py-3 px-4">
                                     <div class="flex justify-center gap-1.5">
@@ -60,7 +62,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-center text-gray-500 py-6 px-4">
+                                <td colspan="4" class="text-center text-gray-500 py-6 px-4">
                                     Belum ada data Kategori Pagu.
                                 </td>
                             </tr>

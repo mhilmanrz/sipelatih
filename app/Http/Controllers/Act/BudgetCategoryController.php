@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Act;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBudgetCategoryRequest;
+use App\Http\Requests\UpdateBudgetCategoryRequest;
 use App\Models\BudgetCategory;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,10 @@ class BudgetCategoryController extends Controller
     {
         $query = BudgetCategory::query();
         if ($request->has('q') && $request->q != '') {
-            $query->where('name', 'like', '%'.$request->q.'%');
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->q.'%')
+                    ->orWhere('code', 'like', '%'.$request->q.'%');
+            });
         }
         $perPage = $request->input('entries', $request->input('per_page', 10));
         $categoryPagus = $query->paginate($perPage)->appends($request->all());
@@ -34,14 +39,9 @@ class BudgetCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBudgetCategoryRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'nullable|string|max:50',
-        ]);
-
-        BudgetCategory::create($request->all());
+        BudgetCategory::create($request->validated());
 
         return redirect()->route('budget-categories.index')->with('success', 'Kategori Pagu berhasil ditambahkan.');
     }
@@ -67,15 +67,10 @@ class BudgetCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateBudgetCategoryRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'nullable|string|max:50',
-        ]);
-
         $categoryPagu = BudgetCategory::findOrFail($id);
-        $categoryPagu->update($request->all());
+        $categoryPagu->update($request->validated());
 
         return redirect()->route('budget-categories.index')->with('success', 'Kategori Pagu berhasil diperbarui.');
     }
