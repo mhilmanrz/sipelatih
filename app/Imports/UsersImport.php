@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class UsersImport implements ShouldQueue, ToModel, WithChunkReading, WithHeadingRow
+class UsersImport implements ToModel, WithChunkReading, WithHeadingRow
 {
     /**
      * @return Model|null
@@ -52,6 +52,7 @@ class UsersImport implements ShouldQueue, ToModel, WithChunkReading, WithHeading
             'account_number' => $row['nomor_rekening'] ?? null,
         ]);
     }
+
 
     public function chunkSize(): int
     {
