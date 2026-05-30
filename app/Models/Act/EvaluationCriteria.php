@@ -4,6 +4,7 @@ namespace App\Models\Act;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EvaluationCriteria extends Model
@@ -18,6 +19,8 @@ class EvaluationCriteria extends Model
         'is_fillable',
         'type',
         'evaluation_type',
+        'evaluation_category_id',
+        'form_type',
         'order',
     ];
 
@@ -33,5 +36,10 @@ class EvaluationCriteria extends Model
     public function activityEvaluationCriteria(): HasMany
     {
         return $this->hasMany(ActivityEvaluationCriteria::class, 'evaluation_criteria_id');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(EvaluationCategory::class, 'evaluation_category_id');
     }
 }

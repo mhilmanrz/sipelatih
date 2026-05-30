@@ -7,6 +7,7 @@ use App\Models\Act\Activity;
 use App\Models\Act\ActivityEvaluation;
 use App\Models\Act\ActivityEvaluationCriteria;
 use App\Models\Act\EvaluationCriteria;
+use App\Models\Act\ParticipantEvaluation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -202,5 +203,86 @@ class ActivityEvaluationController extends Controller
 
         return redirect()->route('evaluations.show', $activity->id)
             ->with('success', "Evaluasi Tingkat {$evaluationType} berhasil disimpan.");
+    }
+
+    /**
+     * Generate participant evaluation forms for an activity.
+     */
+    public function generateForms(Request $request, $id): RedirectResponse
+    {
+        $activity = Activity::with('activityParticipants', 'activityMaterials.speakers')->findOrFail($id);
+
+        $evaluationType = (int) $request->input('evaluation_type', 1);
+
+        if (! in_array($evaluationType, [1, 3])) {
+            return redirect()->back()->withErrors(['error' => 'Invalid evaluation type.']);
+        }
+
+        DB::transaction(function () use ($activity, $evaluationType) {
+            if ($evaluationType === 1) {
+                // Generate Level 1 forms: per participant × per speaker, and per participant × kegiatan
+                foreach ($activity->activityParticipants as $participant) {
+                    // Speaker evaluation
+                    $speakers = $activity->activityMaterials->flatMap(fn ($m) => $m->speakers)->unique('id');
+                    foreach ($speakers as $speaker) {
+                        ParticipantEvaluation::firstOrCreate(
+                            [
+                                'activity_participant_id' => $participant->id,
+                                'evaluation_type' => 1,
+                                'form_type' => 'speaker',
+                                'activity_speaker_id' => $speaker->id,
+                            ],
+                            ['token' => null]
+                        );
+                    }
+
+                    // Activity evaluation (1 per participant)
+                    ParticipantEvaluation::firstOrCreate(
+                        [
+                            'activity_participant_id' => $participant->id,
+                            'evaluation_type' => 1,
+                            'form_type' => 'activity',
+                        ],
+                        ['token' => null]
+                    );
+                }
+            } elseif ($evaluationType === 3) {
+                // Generate Level 3 forms: 1 per participant
+                foreach ($activity->activityParticipants as $participant) {
+                    ParticipantEvaluation::firstOrCreate(
+                        [
+                            'activity_participant_id' => $participant->id,
+                            'evaluation_type' => 3,
+                        ],
+                        ['token' => null]
+                    );
+                }
+            }
+        });
+
+        $levelLabel = $evaluationType === 1 ? 'Level 1' : 'Level 3';
+        return redirect()->route('evaluations.show', $activity->id)
+            ->with('success', "Form {$levelLabel} berhasil dibuat untuk semua peserta.");
+    }
+
+    /**
+     * Toggle Level 3 availability for an activity.
+     */
+    public function toggleLevel3(Request $request, $id): RedirectResponse
+    {
+        $activity = Activity::findOrFail($id);
+
+        if ($request->input('action') === 'enable') {
+            $this->generateForms(new Request(['evaluation_type' => 3]), $id);
+        } elseif ($request->input('action') === 'disable') {
+            ParticipantEvaluation::where('activity_id', $activity->id)
+                ->where('evaluation_type', 3)
+                ->delete();
+
+            return redirect()->route('evaluations.show', $activity->id)
+                ->with('success', 'Level 3 evaluasi dihapus.');
+        }
+
+        return redirect()->back();
     }
 }

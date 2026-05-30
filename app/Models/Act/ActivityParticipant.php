@@ -44,6 +44,11 @@ class ActivityParticipant extends Model
         return $this->hasMany(ActivityComponentScore::class);
     }
 
+    public function participantEvaluations()
+    {
+        return $this->hasMany(ParticipantEvaluation::class, 'activity_participant_id');
+    }
+
     /**
      * Hitung nilai akhir berdasarkan komponen berpersentase (non pre-test).
      * Mengembalikan null jika belum ada komponen yang dikonfigurasi.

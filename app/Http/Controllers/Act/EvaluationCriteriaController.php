@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Act;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Act\StoreEvaluationCriteriaRequest;
 use App\Http\Requests\Act\UpdateEvaluationCriteriaRequest;
+use App\Models\Act\EvaluationCategory;
 use App\Models\Act\EvaluationCriteria;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,7 +45,9 @@ class EvaluationCriteriaController extends Controller
      */
     public function create(): View
     {
-        return view('evaluation_criteria.create');
+        $categories = EvaluationCategory::orderBy('evaluation_type')->orderBy('order')->get();
+
+        return view('evaluation_criteria.create', compact('categories'));
     }
 
     /**
@@ -74,8 +77,9 @@ class EvaluationCriteriaController extends Controller
     public function edit($id): View
     {
         $criterion = EvaluationCriteria::findOrFail($id);
+        $categories = EvaluationCategory::orderBy('evaluation_type')->orderBy('order')->get();
 
-        return view('evaluation_criteria.edit', compact('criterion'));
+        return view('evaluation_criteria.edit', compact('criterion', 'categories'));
     }
 
     /**

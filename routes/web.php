@@ -17,8 +17,10 @@ use App\Http\Controllers\Act\ActivitySpeakerController;
 use App\Http\Controllers\Act\ActivityStatusController;
 use App\Http\Controllers\Act\ActivityTargetController;
 use App\Http\Controllers\Act\ActivityTypeController;
+use App\Http\Controllers\Act\AdminParticipantEvaluationController;
 use App\Http\Controllers\Act\BatchController;
 use App\Http\Controllers\Act\BudgetCategoryController;
+use App\Http\Controllers\Act\EvaluationCategoryController;
 use App\Http\Controllers\Act\EvaluationCriteriaController;
 use App\Http\Controllers\Act\FundSourceController;
 use App\Http\Controllers\Act\MaterialTypeController;
@@ -32,7 +34,9 @@ use App\Http\Controllers\InternalActivityFormController;
 use App\Http\Controllers\MonitoringJplController;
 use App\Http\Controllers\NotaDinasController;
 use App\Http\Controllers\PaguController;
+use App\Http\Controllers\ParticipantEvaluationController;
 use App\Http\Controllers\ProfessionCategoryController;
+use App\Http\Controllers\PublicEvaluationController;
 use App\Http\Controllers\SuratPemanggilanController;
 use App\Http\Controllers\SuratTugasController;
 use App\Http\Controllers\User\AccountController;
@@ -47,6 +51,10 @@ use App\Http\Controllers\User\WorkUnitController;
 use App\Http\Controllers\UsulanDiklatController;
 use App\Models\AppSetting;
 use Illuminate\Support\Facades\Route;
+
+// Public Evaluation Routes (Token-based)
+Route::get('/evaluations/public/{token}', [PublicEvaluationController::class, 'show'])->name('public-evaluations.show');
+Route::post('/evaluations/public/{token}', [PublicEvaluationController::class, 'store'])->name('public-evaluations.store');
 
 // Authentication Routes
 Route::get('/login', function () {
@@ -96,6 +104,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/evaluations', [ActivityEvaluationController::class, 'index'])->name('evaluations.index');
     Route::get('/evaluations/{kegiatan}', [ActivityEvaluationController::class, 'show'])->name('evaluations.show');
     Route::post('/evaluations/{kegiatan}', [ActivityEvaluationController::class, 'store'])->name('evaluations.store');
+    Route::post('/evaluations/{kegiatan}/generate-forms', [ActivityEvaluationController::class, 'generateForms'])->name('evaluations.generate-forms');
+    Route::post('/evaluations/{kegiatan}/toggle-level3', [ActivityEvaluationController::class, 'toggleLevel3'])->name('evaluations.toggle-level3');
+
+    // Participant Evaluations (Logged-in Users)
+    Route::get('/my-evaluations', [ParticipantEvaluationController::class, 'index'])->name('my-evaluations.index');
+    Route::get('/my-evaluations/{participantEvaluation}', [ParticipantEvaluationController::class, 'show'])->name('my-evaluations.show');
+    Route::post('/my-evaluations/{participantEvaluation}', [ParticipantEvaluationController::class, 'store'])->name('my-evaluations.store');
+
+    // Admin Participant Evaluations (Fill on Behalf)
+    Route::get('/admin/participant-evaluations/{id}', [AdminParticipantEvaluationController::class, 'show'])->name('admin-participant-evaluations.show');
+    Route::post('/admin/participant-evaluations/{id}', [AdminParticipantEvaluationController::class, 'store'])->name('admin-participant-evaluations.store');
+
+    // Evaluation Categories Management
+    Route::resource('evaluation-categories', EvaluationCategoryController::class);
 
     Route::get('users/import/template', [UserController::class, 'downloadTemplate'])->name('users.import.template');
     Route::get('users/import', [UserController::class, 'importView'])->name('users.import.view');
