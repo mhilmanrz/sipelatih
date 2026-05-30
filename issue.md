@@ -1,144 +1,76 @@
-# Feature: Sistem Evaluasi Kegiatan Bertingkat (3 Level)
+# Redesign Sistem Evaluasi Kegiatan — 3 Level Independen
 
-## Konteks
+## Latar Belakang
 
-Membangun sistem evaluasi kegiatan bertingkat (Evaluasi 1, 2, 3) untuk kegiatan yang sudah selesai (status `accepted`). Setiap tingkatan memiliki kriteria yang bisa di-customize. Kegiatan harus lulus evaluasi tingkat sebelumnya agar muncul di daftar tingkat berikutnya. Menggantikan halaman statis `evaluasi1.blade.php`, `evaluasi2.blade.php`, `evaluasi3.blade.php`.
+Sistem evaluasi saat ini dirancang sebagai evaluasi bertingkat (harus selesai level 1 dulu untuk lanjut ke level 2, dst) dan form diisi oleh admin/evaluator. Desain ini perlu diubah total menjadi:
 
-## Keputusan Desain
-
-- Kegiatan yang bisa dievaluasi = yang `latestStatus` bernilai `accepted`
-- Evaluasi yang sudah di-submit bisa diedit kembali
-- Semua user dengan permission `create evaluasi` bisa mengevaluasi
-- Download laporan PDF tetap diperlukan (terpisah dari fitur evaluasi ini, sudah ada di menu Laporan)
+- Level 1, 2, dan 3 adalah **kategori independen**, bukan hierarki bertingkat
+- **Tidak ada status lulus/gagal** per evaluasi
+- Form diisi oleh **peserta sendiri**, bukan admin
+- Admin tetap bisa mengisi form mewakili peserta
 
 ---
 
-## Data Model
+## Spesifikasi Per Level
 
-### Tabel `evaluation_criteria` (Master Kriteria)
+### Level 1 — Evaluasi Penyelenggaraan
+Semua kegiatan berstatus *accepted* otomatis masuk ke Level 1. Peserta mengisi dua jenis form:
 
-| Kolom | Tipe | Keterangan |
-|---|---|---|
-| id | bigint unsigned PK | |
-| code | varchar(50) | Kode unik, misal `E1-01` |
-| name | varchar(255) | Nama kriteria |
-| is_fillable | boolean, default false | Jika true, tampilkan input di form |
-| type | enum('string','number') | Tipe input (relevan jika is_fillable = true) |
-| evaluation_type | tinyint unsigned | 1, 2, atau 3 |
-| order | smallint unsigned | Urutan tampil |
-| timestamps | | |
+1. **Form Evaluasi Narasumber** — setiap peserta mengisi satu form per narasumber (semua narasumber wajib dinilai). Jawaban berupa rating bintang 1–4 (tidak memuaskan → sangat memuaskan). Form dikelompokkan dalam kategori dan kriteria.
+2. **Form Evaluasi Kegiatan** — setiap peserta mengisi satu kali per kegiatan. Jawaban berupa rating bintang 1–4. Form dikelompokkan dalam kategori dan kriteria.
 
-### Tabel `activity_evaluations`
+### Level 2 — Evaluasi Hasil Belajar
+Semua kegiatan berstatus *accepted* otomatis masuk ke Level 2. **Tidak ada form baru.** Hanya menampilkan data nilai pre-test dan post-test yang sudah ada di sistem beserta status kelulusan per peserta.
 
-| Kolom | Tipe | Keterangan |
-|---|---|---|
-| id | bigint unsigned PK | |
-| activity_id | bigint unsigned FK | FK ke activities |
-| evaluation_type | tinyint unsigned | 1, 2, atau 3 |
-| is_passed | boolean, default false | Manual check oleh user |
-| notes | text, nullable | Catatan evaluator |
-| evaluated_by | bigint unsigned FK, nullable | FK ke users |
-| evaluated_at | timestamp, nullable | |
-| timestamps | | |
-
-**Unique constraint**: `(activity_id, evaluation_type)`
-
-### Tabel `activity_evaluation_criteria`
-
-| Kolom | Tipe | Keterangan |
-|---|---|---|
-| id | bigint unsigned PK | |
-| activity_evaluation_id | bigint unsigned FK | |
-| evaluation_criteria_id | bigint unsigned FK | |
-| value | text, nullable | Nilai input (jika is_fillable) |
-| is_passed | boolean, default false | Manual check per kriteria |
-| timestamps | | |
+### Level 3 — Evaluasi Dampak
+Hanya kegiatan yang **dipilih manual oleh admin** yang masuk ke Level 3. Peserta mengisi satu form untuk dirinya sendiri, berisi:
+- Kriteria dengan kategori, jawaban rating 1–4 (tidak setuju → sangat setuju)
+- Upload file data dukung
+- Field teks: Rekomendasi/Saran Atasan Langsung (diisi oleh peserta sendiri)
 
 ---
 
-## Scope of Work
-
-### 1. Migration & Model
-
-- Buat 3 migration sesuai tabel di atas.
-- Buat 3 model di `App\Models\Act`: `EvaluationCriteria`, `ActivityEvaluation`, `ActivityEvaluationCriteria` dengan relasi yang sesuai.
-- Tambahkan relasi `evaluations()` di model `Activity`.
-- Buat factory untuk `EvaluationCriteria`.
-- Buat seeder `EvaluationCriteriaSeeder` dengan contoh kriteria per tingkat (buat 3-5 kriteria per level, beberapa dengan `is_fillable = true`).
-
-### 2. CRUD Kriteria Evaluasi (Master Data)
-
-- Buat `EvaluationCriteriaController` di `App\Http\Controllers\Act` — resource controller lengkap (index, create, store, edit, update, destroy).
-- Buat `StoreEvaluationCriteriaRequest` dan `UpdateEvaluationCriteriaRequest`.
-- Buat views di `resources/views/evaluation_criteria/` (index, create, edit) — ikuti pola yang sama dengan `budget_categories` views.
-- Halaman index harus bisa filter berdasarkan `evaluation_type` (1/2/3).
-- Daftarkan resource route: `Route::resource('evaluation-criteria', EvaluationCriteriaController::class)`.
-
-### 3. Halaman Evaluasi Kegiatan
-
-- Buat `ActivityEvaluationController` di `App\Http\Controllers\Act` dengan method:
-  - `index` — halaman utama evaluasi
-  - `show($activityId, $type)` — detail evaluasi per kegiatan
-  - `store($activityId, $type)` — simpan/update evaluasi
-
-- **Halaman Index** (`resources/views/evaluations/index.blade.php`):
-  - Filter tahun (dropdown dari `activity_names.year`)
-  - Stepper/tab horizontal: Evaluasi 1, Evaluasi 2, Evaluasi 3
-  - Setiap tab menampilkan tabel kegiatan yang relevan:
-    - Tab 1: kegiatan dengan `latestStatus` = `accepted`
-    - Tab 2: kegiatan yang `is_passed = true` di evaluasi tipe 1
-    - Tab 3: kegiatan yang `is_passed = true` di evaluasi tipe 2
-  - Kolom tabel: No, Nama Kegiatan, Tanggal, Jumlah Peserta, Status Evaluasi (badge), Aksi
-  - Pagination
-
-- **Halaman Detail** (`resources/views/evaluations/show.blade.php`):
-  - Info kegiatan (nama, tanggal, tempat, tipe, kategori, dll)
-  - Statistik cards: jumlah peserta, total JPL (`activity_materials.value` sum), jumlah materi
-  - Form evaluasi:
-    - List kriteria sesuai `evaluation_type`
-    - Input field jika `is_fillable = true` (text/number sesuai `type`)
-    - Checkbox `is_passed` per kriteria
-    - Textarea catatan
-    - Toggle utama "Lulus Evaluasi"
-    - Tombol Simpan
-
-- Routes:
-  ```
-  GET  /evaluasi                       → index   (evaluasi.index)
-  GET  /evaluasi/{activity}/{type}     → show    (evaluasi.show)
-  POST /evaluasi/{activity}/{type}     → store   (evaluasi.store)
-  ```
-
-### 4. Sidebar & Navigasi
-
-- Update sidebar: ubah link Evaluasi ke `route('evaluasi.index')`, active state `request()->is('evaluasi*')`
-- Tambah menu "Kriteria Evaluasi" di group Master Data dengan permission `view evaluation criteria`
-- Hapus route lama `Route::view('/evaluasi1', 'evaluasi1')`
-- Hapus file lama: `evaluasi1.blade.php`, `evaluasi2.blade.php`, `evaluasi3.blade.php`
-
-### 5. Permissions
-
-Tambahkan di `RolePermissionSeeder`:
-- `view evaluation criteria`, `create evaluation criteria`, `edit evaluation criteria`, `delete evaluation criteria`
-- `view evaluasi`, `create evaluasi`
-
-Assign semua ke role `superadmin`.
-
-### 6. Testing
-
-- Feature test CRUD `EvaluationCriteria`
-- Feature test evaluasi: kegiatan accepted muncul di tab 1, lulus tab 1 muncul di tab 2, lulus tab 2 muncul di tab 3, simpan evaluasi dengan kriteria, filter tahun
-
-### 7. Pint
-
-Jalankan `vendor/bin/pint --dirty --format agent` setelah semua PHP file selesai.
+## Mode Akses Form Peserta
+Tiga mode akses untuk peserta mengisi form:
+1. **Login sistem** — peserta login ke aplikasi dan mengakses daftar form yang perlu diisi
+2. **Public link (token)** — setiap form punya token unik; peserta bisa isi via link tanpa login
+3. **Admin isi mewakili** — admin bisa membuka dan mengisi form atas nama peserta tertentu
 
 ---
 
-## Referensi Pola Kode
+## Yang Perlu Diimplementasikan
 
-- Controller CRUD: lihat `App\Http\Controllers\Act\BudgetCategoryController`
-- Views CRUD: lihat `resources/views/budget_categories/`
-- Model dengan relasi: lihat `App\Models\Act\Activity`
-- Sidebar menu item: lihat `resources/views/components/layouts/sidebar.blade.php`
-- Permission check: gunakan `@can()` di Blade, pattern sudah ada di sidebar
+### 1. Database — Tabel Baru
+- `evaluation_categories` — mengelompokkan kriteria per level dan jenis form (speaker/activity)
+- `participant_evaluations` — record evaluasi per peserta, menyimpan token unik untuk public link
+- `participant_evaluation_answers` — jawaban rating per kriteria
+- `participant_evaluation_files` — file upload untuk data dukung Level 3
+
+### 2. Database — Modifikasi Tabel Existing
+- `evaluation_criteria` — tambah kolom `evaluation_category_id` (FK) dan `form_type` (speaker/activity/null)
+
+### 3. Fitur Admin
+- **Generate form evaluasi** — admin men-generate `participant_evaluations` untuk semua peserta suatu kegiatan. Level 1 otomatis saat kegiatan accepted, Level 3 dipilih manual
+- **Enable/disable Level 3** — toggle untuk menentukan kegiatan mana yang masuk ke evaluasi Level 3
+- **Isi form mewakili peserta** — admin bisa membuka dan submit form evaluasi atas nama peserta
+- **Halaman evaluasi (revamp)** — tampilkan progress pengisian per kegiatan: Level 1 (berapa peserta submit), Level 2 (tabel nilai), Level 3 (progress + files + rekomendasi)
+- **Manajemen kategori evaluasi** — CRUD untuk `evaluation_categories`
+- **Update manajemen kriteria** — form add/edit kriteria mendukung kategori dan `form_type`
+
+### 4. Fitur Peserta (Login)
+- Halaman daftar form evaluasi yang perlu diisi (pending)
+- Halaman form evaluasi dengan tampilan rating bintang, dikelompokkan per kategori
+- Submit form dan tandai `submitted_at`
+
+### 5. Fitur Public (Token)
+- Route publik tanpa auth: `GET /e/{token}` dan `POST /e/{token}`
+- Tampilan form evaluasi tanpa layout login
+- Setelah submit, tandai `submitted_at` dan catat `ip_address`
+
+---
+
+## Catatan Teknis
+- Tabel `activity_evaluations` dan `activity_evaluation_criteria` yang lama tidak dipakai di sistem baru (legacy), jangan dihapus dulu
+- Token publik dibuat saat generate form, format string random 64 karakter
+- Narasumber diambil dari relasi `activity_materials → activity_speakers → user`
+- Untuk Level 3, field "Rekomendasi/Saran Atasan" adalah text field biasa yang diisi peserta sendiri
