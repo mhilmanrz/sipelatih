@@ -96,13 +96,17 @@
                                 </p>
                             </div>
 
-                            <div>
+                            <div x-data="{ isSubmitting: false }">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Buat Form Evaluasi Peserta</label>
-                                <form action="{{ route('evaluations.generate-forms', $activity->id) }}" method="POST" class="inline">
+                                <form action="{{ route('evaluations.generate-forms', $activity->id) }}" method="POST" class="inline" @submit="isSubmitting = true">
                                     @csrf
                                     <input type="hidden" name="evaluation_type" value="1">
-                                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">
-                                        Buat Form Level 1
+                                    <button type="submit" :disabled="isSubmitting" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                                        <svg x-show="isSubmitting" class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <span x-text="isSubmitting ? 'Membuat Form...' : 'Buat Form Level 1'"></span>
                                     </button>
                                 </form>
                                 <p class="text-xs text-gray-600 mt-2">
@@ -238,22 +242,30 @@
                                     </p>
                                 </div>
 
-                                <div>
+                                <div x-data="{ isSubmitting: false }">
                                     @if (!isset($evaluations[3]))
-                                        <form action="{{ route('evaluations.toggle-level3', $activity->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('evaluations.toggle-level3', $activity->id) }}" method="POST" class="inline" @submit="isSubmitting = true">
                                             @csrf
                                             <input type="hidden" name="action" value="enable">
-                                            <button type="submit" class="px-4 py-2 bg-orange-600 text-white rounded-lg text-sm font-medium hover:bg-orange-700 transition">
-                                                Aktifkan Level 3
+                                            <button type="submit" :disabled="isSubmitting" class="px-4 py-2 bg-orange-600 text-white rounded-lg text-sm font-medium hover:bg-orange-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                                                <svg x-show="isSubmitting" class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                <span x-text="isSubmitting ? 'Mengaktifkan...' : 'Aktifkan Level 3'"></span>
                                             </button>
                                         </form>
                                     @else
                                         <form action="{{ route('evaluations.toggle-level3', $activity->id) }}" method="POST" class="inline"
-                                              onsubmit="return confirm('Yakin ingin menonaktifkan Level 3? Form peserta akan dihapus.');">
+                                              @submit="if (!confirm('Yakin ingin menonaktifkan Level 3? Form peserta akan dihapus.')) { $event.preventDefault(); return; } isSubmitting = true">
                                             @csrf
                                             <input type="hidden" name="action" value="disable">
-                                            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition">
-                                                Nonaktifkan Level 3
+                                            <button type="submit" :disabled="isSubmitting" class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                                                <svg x-show="isSubmitting" class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                <span x-text="isSubmitting ? 'Menonaktifkan...' : 'Nonaktifkan Level 3'"></span>
                                             </button>
                                         </form>
                                     @endif
