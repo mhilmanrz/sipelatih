@@ -204,6 +204,59 @@ class ActivityEvaluationController extends Controller
         ];
     }
 
+    public function loadTab(Request $request, $id): \Illuminate\Http\Response
+    {
+        $activity = Activity::with([
+            'activityName',
+            'activityParticipants.user',
+            'activityParticipants.score',
+            'activityMaterials.speakers',
+            'evaluations',
+        ])->findOrFail($id);
+
+        $tab = (int) $request->query('tab', 1);
+        if (! in_array($tab, [1, 2, 3])) {
+            $tab = 1;
+        }
+
+        $html = '';
+
+        if ($tab === 1) {
+            // Load Level 1 data
+            $participantEvaluationsLevel1 = ParticipantEvaluation::whereIn(
+                'activity_participant_id',
+                $activity->activityParticipants->pluck('id')
+            )
+                ->where('evaluation_type', 1)
+                ->with(['participant.user', 'speaker.user'])
+                ->orderBy('activity_participant_id')
+                ->get()
+                ->groupBy('activity_participant_id');
+
+            $level1Stats = $this->calculateLevel1Stats($activity, $participantEvaluationsLevel1);
+            $html = view('evaluations.tabs.tab-1', compact('activity', 'level1Stats', 'participantEvaluationsLevel1'))->render();
+        } elseif ($tab === 2) {
+            // Load Level 2 data
+            $level2Stats = $this->calculateLevel2Stats($activity);
+            $html = view('evaluations.tabs.tab-2', compact('activity', 'level2Stats'))->render();
+        } elseif ($tab === 3) {
+            // Load Level 3 data
+            $participantEvaluationsLevel3 = ParticipantEvaluation::whereIn(
+                'activity_participant_id',
+                $activity->activityParticipants->pluck('id')
+            )
+                ->where('evaluation_type', 3)
+                ->with(['participant.user'])
+                ->get()
+                ->groupBy('activity_participant_id');
+
+            $level3Stats = $this->calculateLevel3Stats($participantEvaluationsLevel3);
+            $html = view('evaluations.tabs.tab-3', compact('activity', 'level3Stats', 'participantEvaluationsLevel3'))->render();
+        }
+
+        return response($html, 200, ['Content-Type' => 'text/html; charset=utf-8']);
+    }
+
     /**
      * Store or update evaluation for a level.
      */

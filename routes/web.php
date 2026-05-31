@@ -103,6 +103,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/laporan-kegiatan/{id}', [ActivityReportController::class, 'update'])->name('kegiatan.laporan.update');
     Route::get('/evaluations', [ActivityEvaluationController::class, 'index'])->name('evaluations.index');
     Route::get('/evaluations/{kegiatan}', [ActivityEvaluationController::class, 'show'])->name('evaluations.show');
+    Route::get('/evaluations/{kegiatan}/tab', [ActivityEvaluationController::class, 'loadTab'])->name('evaluations.load-tab');
     Route::post('/evaluations/{kegiatan}', [ActivityEvaluationController::class, 'store'])->name('evaluations.store');
     Route::post('/evaluations/{kegiatan}/generate-forms', [ActivityEvaluationController::class, 'generateForms'])->name('evaluations.generate-forms');
     Route::post('/evaluations/{kegiatan}/toggle-level3', [ActivityEvaluationController::class, 'toggleLevel3'])->name('evaluations.toggle-level3');

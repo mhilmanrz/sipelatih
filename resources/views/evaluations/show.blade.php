@@ -94,21 +94,39 @@
                 $activeTab = 1;
             }
         @endphp
-        <div x-data="{ activeTab: {{ $activeTab }} }" class="space-y-6">
+        <div x-data="{
+            activeTab: {{ $activeTab }},
+            loading: true,
+            loadTab(tab) {
+                this.loading = true;
+                this.activeTab = tab;
+                window.history.pushState({}, '', '{{ route('evaluations.show', $activity->id) }}?tab=' + tab);
+                fetch('{{ route('evaluations.load-tab', $activity->id) }}?tab=' + tab)
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('tab-content').innerHTML = html;
+                        this.loading = false;
+                    })
+                    .catch(err => {
+                        console.error('Error loading tab:', err);
+                        this.loading = false;
+                    });
+            }
+        }" @load="loadTab({{ $activeTab }})" class="space-y-6">
             {{-- TAB NAVIGATION --}}
             <div class="border-b border-gray-200">
                 <div class="flex gap-8">
-                    <button @click="activeTab = 1; window.history.pushState({}, '', '{{ route('evaluations.show', $activity->id) }}?tab=1')"
+                    <button @click="loadTab(1)"
                             :class="activeTab === 1 ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600 hover:text-gray-900'"
                             class="py-4 font-medium text-sm transition">
                         Tab 1: Kepuasan Peserta
                     </button>
-                    <button @click="activeTab = 2; window.history.pushState({}, '', '{{ route('evaluations.show', $activity->id) }}?tab=2')"
+                    <button @click="loadTab(2)"
                             :class="activeTab === 2 ? 'border-b-2 border-purple-600 text-purple-600' : 'text-gray-600 hover:text-gray-900'"
                             class="py-4 font-medium text-sm transition">
                         Tab 2: Pre/Post Test
                     </button>
-                    <button @click="activeTab = 3; window.history.pushState({}, '', '{{ route('evaluations.show', $activity->id) }}?tab=3')"
+                    <button @click="loadTab(3)"
                             :class="activeTab === 3 ? 'border-b-2 border-orange-600 text-orange-600' : 'text-gray-600 hover:text-gray-900'"
                             class="py-4 font-medium text-sm transition">
                         Tab 3: Evaluasi Dampak
@@ -116,8 +134,19 @@
                 </div>
             </div>
 
-            {{-- TAB 1: KEPUASAN PESERTA --}}
-            <div x-show="activeTab === 1" class="space-y-6">
+            {{-- TAB CONTENT CONTAINER (loaded via AJAX) --}}
+            <div id="tab-content" x-show="!loading" class="space-y-6"></div>
+
+            {{-- LOADING INDICATOR --}}
+            <div x-show="loading" class="flex justify-center py-12">
+                <div class="inline-flex items-center gap-2">
+                    <div class="w-4 h-4 bg-blue-600 rounded-full animate-pulse"></div>
+                    <p class="text-sm text-gray-600">Loading...</p>
+                </div>
+            </div>
+
+            {{-- OLD CONTENT BELOW (TO BE REMOVED) --}}
+            <div style="display: none;">
                 {{-- STATS CARDS --}}
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="bg-white rounded-lg border border-gray-200 p-4">
@@ -360,6 +389,7 @@
                         </table>
                     </div>
                 @endif
+            </div>
             </div>
         </div>
     </div>
