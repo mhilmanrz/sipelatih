@@ -88,19 +88,28 @@
         </div>
 
         {{-- SECTION BAWAH: EVALUATION TABS --}}
-        <div x-data="{ activeTab: 1 }" class="space-y-6">
+        @php
+            $activeTab = (int) request()->query('tab', 1);
+            if (! in_array($activeTab, [1, 2, 3])) {
+                $activeTab = 1;
+            }
+        @endphp
+        <div x-data="{ activeTab: {{ $activeTab }} }" class="space-y-6">
             {{-- TAB NAVIGATION --}}
             <div class="border-b border-gray-200">
                 <div class="flex gap-8">
-                    <button @click="activeTab = 1" :class="activeTab === 1 ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600 hover:text-gray-900'"
+                    <button @click="activeTab = 1; window.history.pushState({}, '', '{{ route('evaluations.show', $activity->id) }}?tab=1')"
+                            :class="activeTab === 1 ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600 hover:text-gray-900'"
                             class="py-4 font-medium text-sm transition">
                         Tab 1: Kepuasan Peserta
                     </button>
-                    <button @click="activeTab = 2" :class="activeTab === 2 ? 'border-b-2 border-purple-600 text-purple-600' : 'text-gray-600 hover:text-gray-900'"
+                    <button @click="activeTab = 2; window.history.pushState({}, '', '{{ route('evaluations.show', $activity->id) }}?tab=2')"
+                            :class="activeTab === 2 ? 'border-b-2 border-purple-600 text-purple-600' : 'text-gray-600 hover:text-gray-900'"
                             class="py-4 font-medium text-sm transition">
                         Tab 2: Pre/Post Test
                     </button>
-                    <button @click="activeTab = 3" :class="activeTab === 3 ? 'border-b-2 border-orange-600 text-orange-600' : 'text-gray-600 hover:text-gray-900'"
+                    <button @click="activeTab = 3; window.history.pushState({}, '', '{{ route('evaluations.show', $activity->id) }}?tab=3')"
+                            :class="activeTab === 3 ? 'border-b-2 border-orange-600 text-orange-600' : 'text-gray-600 hover:text-gray-900'"
                             class="py-4 font-medium text-sm transition">
                         Tab 3: Evaluasi Dampak
                     </button>
