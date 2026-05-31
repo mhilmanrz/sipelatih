@@ -1,0 +1,123 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e6]: RSUPN Dr. Cipto Mangunkusumo
+    - generic [ref=e7]:
+      - link " Dashboard" [ref=e8] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/dashboard
+        - generic [ref=e9]: 
+        - generic [ref=e10]: Dashboard
+      - link " Usulan Diklat" [ref=e11] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/usulan-diklat
+        - generic [ref=e12]: 
+        - generic [ref=e13]: Usulan Diklat
+      - link " Monitoring JPL" [ref=e14] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/monitoring-jpl
+        - generic [ref=e15]: 
+        - generic [ref=e16]: Monitoring JPL
+      - group [ref=e17]:
+        - generic " Keuangan " [ref=e18] [cursor=pointer]:
+          - generic [ref=e19]:
+            - generic [ref=e20]: 
+            - generic [ref=e21]: Keuangan
+          - generic [ref=e22]: 
+        - text:  
+      - group [ref=e23]:
+        - generic " Evaluasi & Laporan " [ref=e24] [cursor=pointer]:
+          - generic [ref=e25]:
+            - generic [ref=e26]: 
+            - generic [ref=e27]: Evaluasi & Laporan
+          - generic [ref=e28]: 
+        - generic [ref=e29]:
+          - link " Laporan" [ref=e30] [cursor=pointer]:
+            - /url: http://127.0.0.1:8000/laporan-kegiatan
+            - generic [ref=e31]: 
+            - generic [ref=e32]: Laporan
+          - link " Evaluasi" [ref=e33] [cursor=pointer]:
+            - /url: http://127.0.0.1:8000/evaluations
+            - generic [ref=e34]: 
+            - generic [ref=e35]: Evaluasi
+      - group [ref=e36]:
+        - generic " Master Data " [ref=e37] [cursor=pointer]:
+          - generic [ref=e38]:
+            - generic [ref=e39]: 
+            - generic [ref=e40]: Master Data
+          - generic [ref=e41]: 
+        - text:                    
+      - link " Pengaturan" [ref=e42] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/settings
+        - generic [ref=e43]: 
+        - generic [ref=e44]: Pengaturan
+  - generic [ref=e45]:
+    - banner [ref=e46]:
+      - button "" [ref=e47]:
+        - generic [ref=e48]: 
+      - generic [ref=e49]:
+        - generic [ref=e50] [cursor=pointer]:
+          - generic [ref=e51]: 
+          - generic [ref=e52]: Super Admin Diklat
+          - generic [ref=e53]: 
+        - text:  
+    - main [ref=e54]:
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - link "Kembali ke Daftar Evaluasi" [ref=e57] [cursor=pointer]:
+            - /url: http://127.0.0.1:8000/evaluations
+            - img [ref=e58]
+            - text: Kembali ke Daftar Evaluasi
+          - heading "Kegiatan" [level=1] [ref=e60]
+          - paragraph [ref=e61]: "Kode: ACT-ANWV07 · PIC: Super Admin Diklat"
+        - generic [ref=e62]:
+          - generic [ref=e64]:
+            - heading "Informasi Kegiatan" [level=2] [ref=e65]
+            - generic [ref=e66]:
+              - generic [ref=e67]:
+                - text: Kategori & Format
+                - paragraph [ref=e68]: "- (Mandiri)"
+              - generic [ref=e69]:
+                - text: Tanggal
+                - paragraph [ref=e70]: 30 May 2026 - 02 Jun 2026
+              - generic [ref=e71]:
+                - text: Peserta
+                - paragraph [ref=e72]: 5 orang
+              - generic [ref=e73]:
+                - text: Narasumber
+                - paragraph [ref=e74]: 5 orang
+          - generic [ref=e75]:
+            - generic [ref=e76]:
+              - generic [ref=e78]:
+                - generic [ref=e79]:
+                  - generic [ref=e80]: "1"
+                  - generic [ref=e81]:
+                    - 'heading "Level 1: Kepuasan Peserta" [level=3] [ref=e82]'
+                    - paragraph [ref=e83]: Peserta mengisi form evaluasi narasumber & kegiatan
+                - generic [ref=e84]: Aktif
+              - generic [ref=e86]:
+                - paragraph [ref=e88]:
+                  - strong [ref=e89]: "Status:"
+                  - generic [ref=e90]: Belum Dinilai
+                - generic [ref=e91]:
+                  - generic [ref=e92]: Buat Form Evaluasi Peserta
+                  - button "Buat Form Level 1" [ref=e94]:
+                    - generic [ref=e95]: Buat Form Level 1
+                  - paragraph [ref=e96]: Akan membuat 5 × (5 narasumber + 1 kegiatan) form
+            - generic [ref=e97]:
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - generic [ref=e101]: "2"
+                  - generic [ref=e102]:
+                    - 'heading "Level 2: Pre/Post Test Scores" [level=3] [ref=e103]'
+                    - paragraph [ref=e104]: Tampilan hasil penilaian pre dan post test
+                - generic [ref=e105]: Terkunci
+              - paragraph [ref=e108]: Level 2 akan terbuka setelah Level 1 dinilai dan lulus.
+            - generic [ref=e109]:
+              - generic [ref=e111]:
+                - generic [ref=e112]:
+                  - generic [ref=e113]: "3"
+                  - generic [ref=e114]:
+                    - 'heading "Level 3: Penilaian Dampak" [level=3] [ref=e115]'
+                    - paragraph [ref=e116]: Peserta mengisi form penilaian dampak & data dukung
+                - generic [ref=e117]: Nonaktif
+              - paragraph [ref=e120]: Level 3 akan tersedia setelah Level 2 dinilai dan lulus.
+    - contentinfo [ref=e121]: © 2026 — Saskya • Nina • Sandra • Hilman
