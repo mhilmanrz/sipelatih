@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Act;
 
+use App\Http\Controllers\Controller;
 use App\Models\Act\EvaluationCriteria;
 use App\Models\Act\ParticipantEvaluation;
 use Illuminate\Http\RedirectResponse;

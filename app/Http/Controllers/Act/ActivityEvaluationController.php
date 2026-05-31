@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityEvaluation;
 use App\Models\Act\ActivityEvaluationCriteria;
-use App\Models\Act\EvaluationCriteria;
 use App\Models\Act\ParticipantEvaluation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -102,14 +101,10 @@ class ActivityEvaluationController extends Controller
             'fundSource',
             'budget',
             'activityParticipants.user',
-            'activityMaterials',
+            'activityParticipants.score',
+            'activityMaterials.speakers',
             'evaluations.criteriaValues.criteria',
         ])->findOrFail($id);
-
-        // Fetch criteria for all levels
-        $criteria1 = EvaluationCriteria::where('evaluation_type', 1)->orderBy('order')->get();
-        $criteria2 = EvaluationCriteria::where('evaluation_type', 2)->orderBy('order')->get();
-        $criteria3 = EvaluationCriteria::where('evaluation_type', 3)->orderBy('order')->get();
 
         // Get evaluations for this activity grouped by level
         $evaluations = $activity->evaluations->keyBy('evaluation_type');
@@ -124,14 +119,89 @@ class ActivityEvaluationController extends Controller
             3 => $level2Passed,
         ];
 
+        // Load participant evaluations for Level 1 & 3
+        $participantEvaluationsLevel1 = ParticipantEvaluation::whereIn(
+            'activity_participant_id',
+            $activity->activityParticipants->pluck('id')
+        )
+            ->where('evaluation_type', 1)
+            ->with(['participant.user', 'speaker.user'])
+            ->orderBy('activity_participant_id')
+            ->get()
+            ->groupBy('activity_participant_id');
+
+        $participantEvaluationsLevel3 = ParticipantEvaluation::whereIn(
+            'activity_participant_id',
+            $activity->activityParticipants->pluck('id')
+        )
+            ->where('evaluation_type', 3)
+            ->with(['participant.user'])
+            ->get()
+            ->groupBy('activity_participant_id');
+
+        // Calculate stats for Level 1
+        $level1Stats = $this->calculateLevel1Stats($activity, $participantEvaluationsLevel1);
+
+        // Calculate stats for Level 2
+        $level2Stats = $this->calculateLevel2Stats($activity);
+
+        // Calculate stats for Level 3
+        $level3Stats = $this->calculateLevel3Stats($participantEvaluationsLevel3);
+
         return view('evaluations.show', compact(
             'activity',
-            'criteria1',
-            'criteria2',
-            'criteria3',
             'evaluations',
-            'unlockedLevels'
+            'unlockedLevels',
+            'participantEvaluationsLevel1',
+            'participantEvaluationsLevel3',
+            'level1Stats',
+            'level2Stats',
+            'level3Stats'
         ));
+    }
+
+    private function calculateLevel1Stats($activity, $participantEvaluations): array
+    {
+        $totalForms = $participantEvaluations->sum(fn ($evals) => $evals->count());
+        $submittedForms = $participantEvaluations->sum(fn ($evals) => $evals->where('submitted_at', '!=', null)->count());
+        $percentage = $totalForms > 0 ? round(($submittedForms / $totalForms) * 100) : 0;
+
+        return [
+            'totalForms' => $totalForms,
+            'submittedForms' => $submittedForms,
+            'pendingForms' => $totalForms - $submittedForms,
+            'percentage' => $percentage,
+        ];
+    }
+
+    private function calculateLevel2Stats($activity): array
+    {
+        $scores = $activity->activityParticipants->flatMap(fn ($p) => $p->score ? [$p->score] : []);
+        $preScores = $scores->whereNotNull('pre_test_score')->pluck('pre_test_score');
+        $postScores = $scores->whereNotNull('post_test_score')->pluck('post_test_score');
+
+        $avgPre = $preScores->isNotEmpty() ? round($preScores->avg(), 2) : 0;
+        $avgPost = $postScores->isNotEmpty() ? round($postScores->avg(), 2) : 0;
+        $avgDelta = $postScores->isNotEmpty() && $preScores->isNotEmpty() ? round($avgPost - $avgPre, 2) : 0;
+
+        return [
+            'avgPre' => $avgPre,
+            'avgPost' => $avgPost,
+            'avgDelta' => $avgDelta,
+        ];
+    }
+
+    private function calculateLevel3Stats($participantEvaluations): array
+    {
+        $totalForms = $participantEvaluations->sum(fn ($evals) => $evals->count());
+        $submittedForms = $participantEvaluations->sum(fn ($evals) => $evals->where('submitted_at', '!=', null)->count());
+        $percentage = $totalForms > 0 ? round(($submittedForms / $totalForms) * 100) : 0;
+
+        return [
+            'totalForms' => $totalForms,
+            'submittedForms' => $submittedForms,
+            'percentage' => $percentage,
+        ];
     }
 
     /**
@@ -261,6 +331,7 @@ class ActivityEvaluationController extends Controller
         });
 
         $levelLabel = $evaluationType === 1 ? 'Level 1' : 'Level 3';
+
         return redirect()->route('evaluations.show', $activity->id)
             ->with('success', "Form {$levelLabel} berhasil dibuat untuk semua peserta.");
     }

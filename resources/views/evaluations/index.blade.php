@@ -120,12 +120,12 @@
                                         </span>
                                     @else
                                         <span class="inline-block px-2.5 py-1 rounded-full font-medium
-                                            @if (isset($activity->evaluations->firstWhere('evaluation_type', 3)))
+                                            @if ($activity->evaluations->firstWhere('evaluation_type', 3) !== null)
                                                 bg-green-100 text-green-800
                                             @else
                                                 bg-gray-100 text-gray-800
                                             @endif">
-                                            {{ isset($activity->evaluations->firstWhere('evaluation_type', 3)) ? '✓ Aktif' : '○ Nonaktif' }}
+                                            {{ $activity->evaluations->firstWhere('evaluation_type', 3) !== null ? '✓ Aktif' : '○ Nonaktif' }}
                                         </span>
                                     @endif
 

@@ -1,0 +1,13 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]: TERBAIK YANG MEMBERIKAN, MENOLONG, MELESAT, PRIMA • TERBAIK YANG MEMBERIKAN, MENOLONG, MELESAT, PRIMA • TERBAIK YANG MEMBERIKAN, MENOLONG, MELESAT, PRIMA
+  - main [ref=e5]:
+    - generic [ref=e6]:
+      - img [ref=e7]
+      - generic [ref=e8]:
+        - generic [ref=e9]: Email
+        - textbox "Masukkan email" [ref=e10]
+        - generic [ref=e11]: Password
+        - textbox "Masukkan password" [ref=e13]
+        - button "Login" [ref=e15] [cursor=pointer]
+  - contentinfo [ref=e16]: © Tim Kerja Pendidikan dan Pelatihan (Nina, Hilman, Sandra, Saskya)
