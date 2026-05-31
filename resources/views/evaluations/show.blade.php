@@ -96,7 +96,7 @@
         @endphp
         <div x-data="{
             activeTab: {{ $activeTab }},
-            loading: true,
+            loading: false,
             loadTab(tab) {
                 this.loading = true;
                 this.activeTab = tab;
@@ -112,7 +112,7 @@
                         this.loading = false;
                     });
             }
-        }" @load="loadTab({{ $activeTab }})" class="space-y-6">
+        }" class="space-y-6">
             {{-- TAB NAVIGATION --}}
             <div class="border-b border-gray-200">
                 <div class="flex gap-8">
@@ -134,8 +134,10 @@
                 </div>
             </div>
 
-            {{-- TAB CONTENT CONTAINER (loaded via AJAX) --}}
-            <div id="tab-content" x-show="!loading" class="space-y-6"></div>
+            {{-- TAB CONTENT CONTAINER --}}
+            <div id="tab-content" x-show="!loading" class="space-y-6">
+                {!! $tabContent !!}
+            </div>
 
             {{-- LOADING INDICATOR --}}
             <div x-show="loading" class="flex justify-center py-12">
@@ -143,253 +145,6 @@
                     <div class="w-4 h-4 bg-blue-600 rounded-full animate-pulse"></div>
                     <p class="text-sm text-gray-600">Loading...</p>
                 </div>
-            </div>
-
-            {{-- OLD CONTENT BELOW (TO BE REMOVED) --}}
-            <div style="display: none;">
-                {{-- STATS CARDS --}}
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase">Total Form</p>
-                        <p class="text-2xl font-bold text-gray-900 mt-2">{{ $level1Stats['totalForms'] }}</p>
-                    </div>
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase">Sudah Diisi</p>
-                        <p class="text-2xl font-bold text-green-600 mt-2">{{ $level1Stats['submittedForms'] }}</p>
-                    </div>
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase">Belum Diisi</p>
-                        <p class="text-2xl font-bold text-orange-600 mt-2">{{ $level1Stats['pendingForms'] }}</p>
-                    </div>
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase">% Selesai</p>
-                        <p class="text-2xl font-bold text-blue-600 mt-2">{{ $level1Stats['percentage'] }}%</p>
-                    </div>
-                </div>
-
-                {{-- TABLE --}}
-                @if ($level1Stats['totalForms'] === 0)
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
-                        <p class="text-gray-600 text-sm mb-4">Form evaluasi belum digenerate</p>
-                        <form action="{{ route('evaluations.generate-forms', $activity->id) }}" method="POST" class="inline" x-data="{ isSubmitting: false }" @submit="isSubmitting = true">
-                            @csrf
-                            <input type="hidden" name="evaluation_type" value="1">
-                            <button type="submit" :disabled="isSubmitting" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50">
-                                <span x-text="isSubmitting ? 'Membuat Form...' : 'Buat Form Level 1'"></span>
-                            </button>
-                        </form>
-                    </div>
-                @else
-                    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                        <table class="w-full text-sm">
-                            <thead class="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Peserta</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Jenis Form</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Narasumber</th>
-                                    <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Status</th>
-                                    <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                @forelse ($participantEvaluationsLevel1 as $participantId => $forms)
-                                    @php
-                                        $participant = $activity->activityParticipants->firstWhere('id', $participantId);
-                                    @endphp
-                                    @foreach ($forms as $form)
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-4 py-3 text-gray-900 font-medium">{{ $participant->user->name }}</td>
-                                            <td class="px-4 py-3 text-gray-600">
-                                                @if ($form->form_type === 'speaker')
-                                                    Narasumber
-                                                @else
-                                                    Kegiatan
-                                                @endif
-                                            </td>
-                                            <td class="px-4 py-3 text-gray-600">
-                                                @if ($form->speaker)
-                                                    {{ $form->speaker->user->name }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                @if ($form->submitted_at)
-                                                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">Sudah Diisi</span>
-                                                @else
-                                                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800">Belum Diisi</span>
-                                                @endif
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                @if ($form->submitted_at)
-                                                    <a href="{{ route('admin-participant-evaluations.show', $form->id) }}" class="text-blue-600 hover:text-blue-700 text-sm font-medium">Detail</a>
-                                                @else
-                                                    <a href="{{ route('public-evaluations.show', $form->token) }}" target="_blank" class="text-green-600 hover:text-green-700 text-sm font-medium">Isi Form</a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="px-4 py-6 text-center text-gray-500 text-sm">Tidak ada data</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                @endif
-            </div>
-
-            {{-- TAB 2: PRE/POST TEST --}}
-            <div x-show="activeTab === 2" class="space-y-6">
-                {{-- STATS CARDS --}}
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase">Rata-rata Pre Test</p>
-                        <p class="text-2xl font-bold text-blue-600 mt-2">{{ $level2Stats['avgPre'] }}</p>
-                    </div>
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase">Rata-rata Post Test</p>
-                        <p class="text-2xl font-bold text-purple-600 mt-2">{{ $level2Stats['avgPost'] }}</p>
-                    </div>
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase">Rata-rata Peningkatan</p>
-                        <p class="text-2xl font-bold {{ $level2Stats['avgDelta'] >= 0 ? 'text-green-600' : 'text-red-600' }} mt-2">
-                            {{ $level2Stats['avgDelta'] >= 0 ? '+' : '' }}{{ $level2Stats['avgDelta'] }}
-                        </p>
-                    </div>
-                </div>
-
-                {{-- TABLE --}}
-                <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50 border-b border-gray-200">
-                            <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Peserta</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Pre Test</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Post Test</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Progress</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            @forelse ($activity->activityParticipants as $participant)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-3 text-gray-900 font-medium">{{ $participant->user->name }}</td>
-                                    <td class="px-4 py-3 text-center">
-                                        @php
-                                            $preScore = $participant->score?->pre_test_score ?? '-';
-                                        @endphp
-                                        {{ $preScore }}
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        @php
-                                            $postScore = $participant->score?->post_test_score ?? '-';
-                                        @endphp
-                                        {{ $postScore }}
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        @if ($preScore !== '-' && $postScore !== '-')
-                                            @php
-                                                $delta = $postScore - $preScore;
-                                            @endphp
-                                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold
-                                                @if ($delta > 0)
-                                                    bg-green-100 text-green-800
-                                                @elseif ($delta < 0)
-                                                    bg-red-100 text-red-800
-                                                @else
-                                                    bg-gray-100 text-gray-800
-                                                @endif">
-                                                {{ $delta > 0 ? '+' : '' }}{{ $delta }}
-                                            </span>
-                                        @else
-                                            <span class="text-gray-400 text-xs">-</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="px-4 py-6 text-center text-gray-500 text-sm">Tidak ada peserta</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {{-- TAB 3: EVALUASI DAMPAK --}}
-            <div x-show="activeTab === 3" class="space-y-6">
-                {{-- STATS CARDS --}}
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase">Total Form</p>
-                        <p class="text-2xl font-bold text-gray-900 mt-2">{{ $level3Stats['totalForms'] }}</p>
-                    </div>
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase">Sudah Diisi</p>
-                        <p class="text-2xl font-bold text-green-600 mt-2">{{ $level3Stats['submittedForms'] }}</p>
-                    </div>
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <p class="text-xs font-semibold text-gray-500 uppercase">% Selesai</p>
-                        <p class="text-2xl font-bold text-orange-600 mt-2">{{ $level3Stats['percentage'] }}%</p>
-                    </div>
-                </div>
-
-                {{-- TABLE --}}
-                @if ($level3Stats['totalForms'] === 0)
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
-                        <p class="text-gray-600 text-sm mb-4">Form evaluasi belum digenerate</p>
-                        <form action="{{ route('evaluations.toggle-level3', $activity->id) }}" method="POST" class="inline" x-data="{ isSubmitting: false }" @submit="isSubmitting = true">
-                            @csrf
-                            <input type="hidden" name="action" value="enable">
-                            <button type="submit" :disabled="isSubmitting" class="px-4 py-2 bg-orange-600 text-white rounded-lg text-sm font-medium hover:bg-orange-700 disabled:opacity-50">
-                                <span x-text="isSubmitting ? 'Mengaktifkan...' : 'Aktifkan Level 3'"></span>
-                            </button>
-                        </form>
-                    </div>
-                @else
-                    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                        <table class="w-full text-sm">
-                            <thead class="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Peserta</th>
-                                    <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Status</th>
-                                    <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                @forelse ($participantEvaluationsLevel3 as $participantId => $forms)
-                                    @php
-                                        $participant = $activity->activityParticipants->firstWhere('id', $participantId);
-                                        $form = $forms->first();
-                                    @endphp
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-4 py-3 text-gray-900 font-medium">{{ $participant->user->name }}</td>
-                                        <td class="px-4 py-3 text-center">
-                                            @if ($form->submitted_at)
-                                                <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">Sudah Diisi</span>
-                                            @else
-                                                <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800">Belum Diisi</span>
-                                            @endif
-                                        </td>
-                                        <td class="px-4 py-3 text-center">
-                                            @if ($form->submitted_at)
-                                                <a href="{{ route('admin-participant-evaluations.show', $form->id) }}" class="text-blue-600 hover:text-blue-700 text-sm font-medium">Detail</a>
-                                            @else
-                                                <a href="{{ route('public-evaluations.show', $form->token) }}" target="_blank" class="text-green-600 hover:text-green-700 text-sm font-medium">Isi Form</a>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="3" class="px-4 py-6 text-center text-gray-500 text-sm">Tidak ada data</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                @endif
-            </div>
             </div>
         </div>
     </div>
