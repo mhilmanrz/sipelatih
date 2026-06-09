@@ -16,8 +16,9 @@ class EvaluationCriteria extends Model
     protected $fillable = [
         'code',
         'name',
-        'is_fillable',
         'type',
+        'bottom_label',
+        'top_label',
         'evaluation_type',
         'evaluation_category_id',
         'form_type',
@@ -27,7 +28,6 @@ class EvaluationCriteria extends Model
     protected function casts(): array
     {
         return [
-            'is_fillable' => 'boolean',
             'evaluation_type' => 'integer',
             'order' => 'integer',
         ];

@@ -11,6 +11,7 @@ class ParticipantEvaluationAnswer extends Model
         'participant_evaluation_id',
         'evaluation_criteria_id',
         'rating',
+        'answer_text',
     ];
 
     protected function casts(): array

@@ -9,7 +9,11 @@ class ParticipantEvaluationFile extends Model
 {
     protected $fillable = [
         'participant_evaluation_id',
+        'evaluation_criteria_id',
         'file_path',
+        'file_name',
+        'file_size',
+        'mime_type',
         'original_name',
         'size',
     ];
@@ -24,5 +28,10 @@ class ParticipantEvaluationFile extends Model
     public function evaluation(): BelongsTo
     {
         return $this->belongsTo(ParticipantEvaluation::class, 'participant_evaluation_id');
+    }
+
+    public function criteria(): BelongsTo
+    {
+        return $this->belongsTo(EvaluationCriteria::class, 'evaluation_criteria_id');
     }
 }

@@ -8,7 +8,6 @@ use App\Models\User\Profession;
 use App\Models\User\Rank;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -52,7 +51,6 @@ class UsersImport implements ToModel, WithChunkReading, WithHeadingRow
             'account_number' => $row['nomor_rekening'] ?? null,
         ]);
     }
-
 
     public function chunkSize(): int
     {

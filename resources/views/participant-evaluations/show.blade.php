@@ -36,8 +36,15 @@
             </p>
         </div>
 
-        <form action="{{ route('my-evaluations.store', $evaluation->id) }}" method="POST" class="space-y-6">
+        <form action="{{ route('my-evaluations.store', $evaluation->id) }}" method="POST"
+            enctype="multipart/form-data" class="space-y-6">
             @csrf
+
+            @php
+                $ratingLabels = $evaluation->evaluation_type === 3
+                    ? [1 => 'Tidak Setuju', 2 => 'Kurang Setuju', 3 => 'Setuju', 4 => 'Sangat Setuju']
+                    : [1 => 'Sangat Kurang', 2 => 'Kurang', 3 => 'Baik', 4 => 'Sangat Baik'];
+            @endphp
 
             @foreach ($criteria as $categoryId => $categoryItems)
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -56,27 +63,55 @@
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">
                                     {{ $crit->name }}
                                 </label>
-                                <div class="flex gap-2">
-                                    @for ($rating = 1; $rating <= 4; $rating++)
-                                        <label class="cursor-pointer">
-                                            <input type="radio" name="answers[{{ $crit->id }}]" value="{{ $rating }}"
-                                                @checked(optional($evaluation->answers->firstWhere('evaluation_criteria_id', $crit->id))->rating === $rating)
-                                                @disabled($evaluation->isSubmitted())
-                                                class="sr-only">
-                                            <span class="inline-block px-4 py-2 rounded-lg border-2 transition
-                                                @disabled($evaluation->isSubmitted()) opacity-60 cursor-not-allowed @enddisabled
-                                                @checked(optional($evaluation->answers->firstWhere('evaluation_criteria_id', $crit->id))->rating === $rating)
-                                                    border-teal-500 bg-teal-50
-                                                @else
-                                                    border-gray-200 bg-white {{ $evaluation->isSubmitted() ? '' : 'hover:border-gray-300' }}
-                                                @endchecked">
-                                                @for ($star = 1; $star <= $rating; $star++)
-                                                    ★
-                                                @endfor
-                                            </span>
-                                        </label>
-                                    @endfor
-                                </div>
+                                @if ($crit->type === 'rating')
+                                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                        @foreach ($ratingLabels as $rating => $label)
+                                            <label class="cursor-pointer">
+                                                <input type="radio" name="answers[{{ $crit->id }}]" value="{{ $rating }}"
+                                                    @checked(optional($evaluation->answers->firstWhere('evaluation_criteria_id', $crit->id))->rating === $rating)
+                                                    @disabled($evaluation->isSubmitted())
+                                                    class="sr-only peer">
+                                                <span class="block h-full px-3 py-3 rounded-xl border-2 transition text-center
+                                                    @disabled($evaluation->isSubmitted()) opacity-60 cursor-not-allowed @enddisabled
+                                                    peer-checked:border-teal-500 peer-checked:bg-teal-50 peer-checked:text-teal-800
+                                                    border-gray-200 bg-white {{ $evaluation->isSubmitted() ? '' : 'hover:border-teal-300 hover:bg-teal-50/50 text-gray-700' }}">
+                                                    <div class="text-teal-500 mb-1">
+                                                        @for ($star = 1; $star <= $rating; $star++) ★ @endfor
+                                                    </div>
+                                                    <div class="text-xs font-medium leading-tight">{{ $rating }} - {{ $label }}</div>
+                                                </span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+
+                                @elseif ($crit->type === 'file')
+                                    @php $existingFile = $evaluation->files->firstWhere('evaluation_criteria_id', $crit->id); @endphp
+                                    <div class="space-y-2">
+                                        @if ($existingFile)
+                                            <div class="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+                                                <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd"/></svg>
+                                                File sudah diupload: {{ $existingFile->file_name ?? $existingFile->original_name }}
+                                            </div>
+                                        @endif
+                                        @if (! $evaluation->isSubmitted())
+                                            <input type="file" name="files[{{ $crit->id }}]"
+                                                class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-l-lg file:border-0 file:text-sm file:font-medium file:bg-teal-600 file:text-white hover:file:bg-teal-700"
+                                                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx">
+                                            <p class="text-xs text-gray-500">Maks. 10 MB. Format: PDF, Word, Excel, atau gambar.</p>
+                                        @endif
+                                    </div>
+                                    @error("files.{$crit->id}")
+                                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+
+                                @else
+                                    <div>
+                                        <textarea name="answers[{{ $crit->id }}]" rows="3"
+                                            @disabled($evaluation->isSubmitted())
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent @disabled($evaluation->isSubmitted()) opacity-60 cursor-not-allowed @enddisabled"
+                                            placeholder="Tulis jawaban Anda di sini...">{{ old("answers.{$crit->id}", optional($evaluation->answers->firstWhere('evaluation_criteria_id', $crit->id))->answer_text) }}</textarea>
+                                    </div>
+                                @endif
                                 @error("answers.{$crit->id}")
                                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                                 @enderror
@@ -85,20 +120,6 @@
                     </div>
                 </div>
             @endforeach
-
-            @if ($evaluation->evaluation_type === 3)
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-3">
-                        Rekomendasi/Saran Atasan Langsung
-                    </label>
-                    <textarea name="supervisor_recommendation" rows="4"
-                        @disabled($evaluation->isSubmitted())
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent @disabled($evaluation->isSubmitted()) opacity-60 cursor-not-allowed @enddisabled">{{ old('supervisor_recommendation', $evaluation->supervisor_recommendation) }}</textarea>
-                    @error('supervisor_recommendation')
-                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-            @endif
 
             @if (!$evaluation->isSubmitted())
                 <div class="flex gap-3">

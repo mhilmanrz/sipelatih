@@ -32,7 +32,8 @@ class EvaluationCriteriaController extends Controller
         }
 
         $perPage = (int) $request->input('entries', $request->input('per_page', 10));
-        $criteria = $query->orderBy('evaluation_type')
+        $criteria = $query->with('category')
+            ->orderBy('evaluation_type')
             ->orderBy('order')
             ->paginate($perPage)
             ->appends($request->all());
@@ -56,7 +57,10 @@ class EvaluationCriteriaController extends Controller
     public function store(StoreEvaluationCriteriaRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $validated['is_fillable'] = $request->boolean('is_fillable');
+
+        if (empty($validated['evaluation_category_id'])) {
+            $validated['evaluation_category_id'] = null;
+        }
 
         EvaluationCriteria::create($validated);
 
@@ -89,7 +93,10 @@ class EvaluationCriteriaController extends Controller
     {
         $criterion = EvaluationCriteria::findOrFail($id);
         $validated = $request->validated();
-        $validated['is_fillable'] = $request->boolean('is_fillable');
+
+        if (empty($validated['evaluation_category_id'])) {
+            $validated['evaluation_category_id'] = null;
+        }
 
         $criterion->update($validated);
 

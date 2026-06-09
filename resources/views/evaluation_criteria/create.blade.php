@@ -1,23 +1,25 @@
 <x-layouts.app>
     <x-slot:title>Tambah Kriteria Evaluasi</x-slot>
 
-    @push('styles')
-        <style>
-            .tw-wrap p, .tw-wrap h1, .tw-wrap h2, .tw-wrap h3, .tw-wrap h4, .tw-wrap h5, .tw-wrap h6, .tw-wrap span, .tw-wrap div, .tw-wrap a, .tw-wrap button, .tw-wrap form, .tw-wrap input, .tw-wrap label {
-                font-family: inherit;
-            }
-        </style>
-    @endpush
+    <div class="px-8 py-6">
+        <div class="mb-8">
+            <a href="{{ route('evaluation-criteria.index') }}"
+               class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 text-sm font-medium mb-6">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Kembali ke Daftar Kriteria
+            </a>
 
-    <div class="tw-wrap p-6 max-w-2xl mx-auto">
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-white border-b pb-2">TAMBAH KRITERIA EVALUASI</h1>
+            <h1 class="text-3xl font-bold text-gray-900">
+                Tambah Kriteria Evaluasi
+            </h1>
         </div>
 
         @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
                 <strong>Terdapat kesalahan:</strong>
-                <ul class="mt-2 list-disc list-inside">
+                <ul class="mt-2 list-disc list-inside text-sm">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -25,108 +27,179 @@
             </div>
         @endif
 
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <form action="{{ route('evaluation-criteria.store') }}" method="POST">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 max-w-2xl">
+            <form action="{{ route('evaluation-criteria.store') }}" method="POST" class="space-y-6"
+                x-data="criteriaForm">
                 @csrf
 
                 {{-- TINGKAT EVALUASI --}}
-                <div class="mb-5">
-                    <label for="evaluation_type" class="block text-sm font-medium text-gray-700 mb-2">Tingkat Evaluasi <span class="text-red-500">*</span></label>
-                    <select name="evaluation_type" id="evaluation_type" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm @error('evaluation_type') border-red-500 @enderror">
-                        <option value="">Pilih Tingkat Evaluasi</option>
-                        <option value="1" {{ old('evaluation_type') == '1' ? 'selected' : '' }}>Evaluasi 1 (Penyelenggaraan)</option>
-                        <option value="2" {{ old('evaluation_type') == '2' ? 'selected' : '' }}>Evaluasi 2 (Hasil Belajar)</option>
-                        <option value="3" {{ old('evaluation_type') == '3' ? 'selected' : '' }}>Evaluasi 3 (Dampak)</option>
+                <div>
+                    <label for="evaluation_type" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Tingkat Evaluasi <span class="text-red-600">*</span>
+                    </label>
+                    <select id="evaluation_type" name="evaluation_type" required
+                        x-model="evaluationType" @change="onTypeChange"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent @error('evaluation_type') border-red-600 @enderror">
+                        <option value="">-- Pilih Tingkat Evaluasi --</option>
+                        <option value="1">Level 1</option>
+                        <option value="3">Level 3</option>
                     </select>
                     @error('evaluation_type')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- SCOPE / TARGET EVALUASI --}}
+                <div x-show="evaluationType === '1'" x-transition>
+                    <label for="form_type" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Scope / Target Evaluasi <span class="text-red-600">*</span>
+                    </label>
+                    <select id="form_type" name="form_type" x-model="formType"
+                        :required="evaluationType === '1'"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent @error('form_type') border-red-600 @enderror">
+                        <option value="">-- Pilih Scope --</option>
+                        <option value="speaker">Narasumber</option>
+                        <option value="activity">Kegiatan</option>
+                    </select>
+                    @error('form_type')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- KATEGORI --}}
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="evaluation_category_id" class="block text-sm font-semibold text-gray-700">
+                            Kategori <span class="text-red-600" x-show="evaluationType === '1' || evaluationType === '3'">*</span>
+                        </label>
+                        <a href="{{ route('evaluation-categories.create') }}" target="_blank" class="text-xs text-teal-600 hover:text-teal-700 hover:underline flex items-center gap-1">
+                            <i class="fas fa-plus"></i> Tambah Kategori
+                        </a>
+                    </div>
+                    <select id="evaluation_category_id" name="evaluation_category_id"
+                        x-model="categoryId"
+                        :disabled="!(evaluationType === '1' || evaluationType === '3')"
+                        :required="evaluationType === '1' || evaluationType === '3'"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent @error('evaluation_category_id') border-red-600 @enderror disabled:bg-gray-100 disabled:text-gray-500">
+                        <option value="" x-show="!(evaluationType === '1' || evaluationType === '3')">-- Pilih Tingkat Evaluasi Terlebih Dahulu --</option>
+                        <option value="" x-show="evaluationType === '1' || evaluationType === '3'">-- Pilih Kategori --</option>
+                        <template x-for="cat in filteredCategories" :key="cat.id">
+                            <option :value="cat.id" x-text="cat.name"></option>
+                        </template>
+                    </select>
+                    @error('evaluation_category_id')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- KODE KRITERIA --}}
-                <div class="mb-5">
-                    <label for="code" class="block text-sm font-medium text-gray-700 mb-2">Kode Kriteria <span class="text-red-500">*</span></label>
-                    <input type="text" name="code" id="code" value="{{ old('code') }}" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm @error('code') border-red-500 @enderror"
-                           placeholder="Contoh: E1-01">
+                <div>
+                    <label for="code" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Kode Kriteria <span class="text-red-600">*</span>
+                    </label>
+                    <input type="text" id="code" name="code" value="{{ old('code') }}" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent @error('code') border-red-600 @enderror"
+                        placeholder="Contoh: E1-01">
                     @error('code')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- NAMA KRITERIA --}}
-                <div class="mb-5">
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nama Kriteria <span class="text-red-500">*</span></label>
-                    <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm @error('name') border-red-500 @enderror"
-                           placeholder="Contoh: Kelayakan Sarana Prasarana">
+                <div>
+                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Nama Kriteria <span class="text-red-600">*</span>
+                    </label>
+                    <input type="text" id="name" name="name" value="{{ old('name') }}" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent @error('name') border-red-600 @enderror"
+                        placeholder="Contoh: Kelayakan Sarana Prasarana">
                     @error('name')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                {{-- FILLABLE / BISA DIISI NILAI --}}
-                <div class="mb-5">
-                    <div class="flex items-center">
-                        <input id="is_fillable" name="is_fillable" type="checkbox" value="1" {{ old('is_fillable') ? 'checked' : '' }}
-                            class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
-                        <label for="is_fillable" class="ml-2 block text-sm text-gray-900 font-medium">
-                            Kriteria Butuh Input Nilai Tambahan? (Jika centang, form evaluasi akan menampilkan input isian)
-                        </label>
-                    </div>
-                </div>
-
-                {{-- TIPE INPUT (STRING / NUMBER) --}}
-                <div id="type_container" class="mb-5 {{ old('is_fillable') ? '' : 'hidden' }}">
-                    <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Tipe Isian Nilai <span class="text-red-500">*</span></label>
-                    <select name="type" id="type"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm @error('type') border-red-500 @enderror">
-                        <option value="string" {{ old('type') == 'string' ? 'selected' : '' }}>Teks (String)</option>
-                        <option value="number" {{ old('type') == 'number' ? 'selected' : '' }}>Angka (Number)</option>
+                {{-- TIPE KRITERIA --}}
+                <div>
+                    <label for="type" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Tipe Kriteria <span class="text-red-600">*</span>
+                    </label>
+                    <select id="type" name="type" required x-model="criteriaType"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent @error('type') border-red-600 @enderror">
+                        <option value="rating" @selected(old('type') === 'rating')>Rating 1-4</option>
+                        <option value="isian" @selected(old('type') === 'isian')>Isian (Teks)</option>
                     </select>
                     @error('type')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                {{-- ORDER / URUTAN --}}
-                <div class="mb-5">
-                    <label for="order" class="block text-sm font-medium text-gray-700 mb-2">Urutan Tampil <span class="text-red-500">*</span></label>
-                    <input type="number" name="order" id="order" value="{{ old('order', 0) }}" required min="0"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 shadow-sm @error('order') border-red-500 @enderror"
-                           placeholder="Contoh: 1">
+
+
+                {{-- URUTAN --}}
+                <div>
+                    <label for="order" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Urutan <span class="text-gray-500 text-sm font-normal">(Opsional)</span>
+                    </label>
+                    <input type="number" id="order" name="order" value="{{ old('order', 0) }}" min="0"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent @error('order') border-red-600 @enderror">
                     @error('order')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="flex items-center justify-end space-x-3 pt-4 border-t">
-                    <a href="{{ route('evaluation-criteria.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                <div class="flex gap-3 pt-2">
+                    <button type="submit" class="px-6 py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition">
+                        Simpan Kriteria
+                    </button>
+                    <a href="{{ route('evaluation-criteria.index') }}"
+                       class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition">
                         Batal
                     </a>
-                    <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors shadow">
-                        Simpan
-                    </button>
                 </div>
             </form>
         </div>
     </div>
 
     @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const isFillableCheckbox = document.getElementById('is_fillable');
-                const typeContainer = document.getElementById('type_container');
+    <script>
+        var criteriaCategories = @json($categories);
+        var criteriaInitType = @json(old('evaluation_type', ''));
+        var criteriaInitCategoryId = @json(old('evaluation_category_id', ''));
+        var criteriaInitFormType = @json(old('form_type', ''));
 
-                isFillableCheckbox.addEventListener('change', function () {
-                    if (this.checked) {
-                        typeContainer.classList.remove('hidden');
-                    } else {
-                        typeContainer.classList.add('hidden');
-                    }
-                });
+        var criteriaInitTypeOption = @json(old('type', 'rating'));
+
+        document.addEventListener('alpine:init', function () {
+            Alpine.data('criteriaForm', function () {
+                return {
+                    criteriaType: criteriaInitTypeOption,
+                    evaluationType: criteriaInitType,
+                    categoryId: criteriaInitCategoryId,
+                    formType: criteriaInitFormType,
+                    categories: criteriaCategories,
+                    get filteredCategories() {
+                        return this.categories.filter(function (c) {
+                            return String(c.evaluation_type) === String(this.evaluationType);
+                        }.bind(this));
+                    },
+                    get selectedCategory() {
+                        if (!this.categoryId) return null;
+                        var id = this.categoryId;
+                        return this.categories.find(function (c) {
+                            return String(c.id) === String(id);
+                        }) || null;
+                    },
+                    onTypeChange: function () {
+                        this.categoryId = '';
+                        this.formType = '';
+                    },
+                };
             });
-        </script>
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Remove vanilla JS event listener for is_fillable
+        });
+    </script>
     @endpush
 </x-layouts.app>

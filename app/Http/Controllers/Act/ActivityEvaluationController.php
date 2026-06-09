@@ -9,6 +9,7 @@ use App\Models\Act\ActivityEvaluationCriteria;
 use App\Models\Act\ParticipantEvaluation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -90,7 +91,6 @@ class ActivityEvaluationController extends Controller
      */
     public function show($id): View
     {
-        // Find activity with relationships
         $activity = Activity::with([
             'activityName',
             'activityType',
@@ -106,57 +106,51 @@ class ActivityEvaluationController extends Controller
             'evaluations.criteriaValues.criteria',
         ])->findOrFail($id);
 
-        // Get evaluations for this activity grouped by level
         $evaluations = $activity->evaluations->keyBy('evaluation_type');
 
-        // Determine which levels are unlocked
-        $level1Passed = isset($evaluations[1]) && $evaluations[1]->is_passed;
-        $level2Passed = isset($evaluations[2]) && $evaluations[2]->is_passed;
+        $activeTab = (int) request()->query('tab', 1);
+        if (! in_array($activeTab, [1, 2, 3])) {
+            $activeTab = 1;
+        }
 
-        $unlockedLevels = [
-            1 => true,
-            2 => $level1Passed,
-            3 => $level2Passed,
-        ];
+        // Load data for active tab only
+        $tabContent = null;
 
-        // Load participant evaluations for Level 1 & 3
-        $participantEvaluationsLevel1 = ParticipantEvaluation::whereIn(
-            'activity_participant_id',
-            $activity->activityParticipants->pluck('id')
-        )
-            ->where('evaluation_type', 1)
-            ->with(['participant.user', 'speaker.user'])
-            ->orderBy('activity_participant_id')
-            ->get()
-            ->groupBy('activity_participant_id');
+        if ($activeTab === 1) {
+            $participantEvaluationsLevel1 = ParticipantEvaluation::whereIn(
+                'activity_participant_id',
+                $activity->activityParticipants->pluck('id')
+            )
+                ->where('evaluation_type', 1)
+                ->with(['participant.user', 'speaker.user'])
+                ->orderBy('activity_participant_id')
+                ->get()
+                ->groupBy('activity_participant_id');
 
-        $participantEvaluationsLevel3 = ParticipantEvaluation::whereIn(
-            'activity_participant_id',
-            $activity->activityParticipants->pluck('id')
-        )
-            ->where('evaluation_type', 3)
-            ->with(['participant.user'])
-            ->get()
-            ->groupBy('activity_participant_id');
+            $level1Stats = $this->calculateLevel1Stats($activity, $participantEvaluationsLevel1);
+            $tabContent = view('evaluations.tabs.tab-1', compact('activity', 'level1Stats', 'participantEvaluationsLevel1'))->render();
+        } elseif ($activeTab === 2) {
+            $level2Stats = $this->calculateLevel2Stats($activity);
+            $tabContent = view('evaluations.tabs.tab-2', compact('activity', 'level2Stats'))->render();
+        } elseif ($activeTab === 3) {
+            $participantEvaluationsLevel3 = ParticipantEvaluation::whereIn(
+                'activity_participant_id',
+                $activity->activityParticipants->pluck('id')
+            )
+                ->where('evaluation_type', 3)
+                ->with(['participant.user'])
+                ->get()
+                ->groupBy('activity_participant_id');
 
-        // Calculate stats for Level 1
-        $level1Stats = $this->calculateLevel1Stats($activity, $participantEvaluationsLevel1);
-
-        // Calculate stats for Level 2
-        $level2Stats = $this->calculateLevel2Stats($activity);
-
-        // Calculate stats for Level 3
-        $level3Stats = $this->calculateLevel3Stats($participantEvaluationsLevel3);
+            $level3Stats = $this->calculateLevel3Stats($participantEvaluationsLevel3);
+            $tabContent = view('evaluations.tabs.tab-3', compact('activity', 'level3Stats', 'participantEvaluationsLevel3'))->render();
+        }
 
         return view('evaluations.show', compact(
             'activity',
             'evaluations',
-            'unlockedLevels',
-            'participantEvaluationsLevel1',
-            'participantEvaluationsLevel3',
-            'level1Stats',
-            'level2Stats',
-            'level3Stats'
+            'activeTab',
+            'tabContent'
         ));
     }
 
@@ -204,7 +198,7 @@ class ActivityEvaluationController extends Controller
         ];
     }
 
-    public function loadTab(Request $request, $id): \Illuminate\Http\Response
+    public function loadTab(Request $request, $id): Response
     {
         $activity = Activity::with([
             'activityName',

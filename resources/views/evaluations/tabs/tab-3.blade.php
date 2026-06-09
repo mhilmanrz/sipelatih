@@ -53,11 +53,13 @@
                                 @endif
                             </td>
                             <td class="px-4 py-3 text-center">
-                                @if ($form->submitted_at)
-                                    <a href="{{ route('admin-participant-evaluations.show', $form->id) }}" class="text-blue-600 hover:text-blue-700 text-sm font-medium">Detail</a>
-                                @else
-                                    <a href="{{ route('public-evaluations.show', $form->token) }}" target="_blank" class="text-green-600 hover:text-green-700 text-sm font-medium">Isi Form</a>
-                                @endif
+                                <a href="{{ route('admin-participant-evaluations.show', $form->id) }}" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                    @if ($form->submitted_at)
+                                        Detail
+                                    @else
+                                        Isi Form
+                                    @endif
+                                </a>
                             </td>
                         </tr>
                     @empty

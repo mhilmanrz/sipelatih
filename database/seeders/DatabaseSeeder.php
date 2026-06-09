@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             MaterialTypeSeeder::class,
             TargetParticipantSeeder::class,
             BatchSeeder::class,
+            EvaluationCategorySeeder::class,
             EvaluationCriteriaSeeder::class,
 
             // === Anggaran ===

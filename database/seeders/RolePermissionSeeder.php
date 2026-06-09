@@ -57,6 +57,7 @@ class RolePermissionSeeder extends Seeder
             'view fund sources',
             'view activity names',
             'view evaluation criteria',
+            'view evaluation categories',
 
             // Settings
             'view settings',
@@ -102,6 +103,7 @@ class RolePermissionSeeder extends Seeder
             'view kegiatan laporan',
             'view evaluasi',
             'view evaluation criteria',
+            'view evaluation categories',
         ]);
     }
 }

@@ -12,11 +12,23 @@
         <!-- MENU UTAMA -->
         @can('view dashboard')
         <a href="{{ route('dashboard') }}"
-            class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('/') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dashboard') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
             <i class="fa-solid fa-house w-6 text-center mr-2"></i>
             <span>Dashboard</span>
         </a>
         @endcan
+
+        <a href="{{ route('my-activities.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('my-activities*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+            <i class="fa-solid fa-person-chalkboard w-6 text-center mr-2"></i>
+            <span>Kegiatanku</span>
+        </a>
+
+        <a href="{{ route('my-evaluations.index') }}"
+            class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('my-evaluations*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+            <i class="fa-solid fa-clipboard-user w-6 text-center mr-2"></i>
+            <span>Evaluasi Saya</span>
+        </a>
 
         @can('view usulan diklat')
         <a href="{{ route('usulan-diklat') }}"
@@ -112,7 +124,8 @@
             'view activity types', 'view activity categories', 'view activity scopes', 
             'view material types', 'view activity formats', 'view activity methods', 
             'view employment types', 'view batches', 'view fund sources', 'view activity names',
-            'view evaluation criteria'
+            'view evaluation criteria',
+            'view evaluation categories'
         ])
             @php
                 $isMasterDataOpen =
@@ -135,7 +148,8 @@
                     request()->is('dictionaries/batches*') ||
                     request()->is('fund-sources*') ||
                     request()->is('dictionaries/activity-names*') ||
-                    request()->is('evaluation-criteria*');
+                    request()->is('evaluation-criteria*') ||
+                    request()->is('evaluation-categories*');
             @endphp
             <details class="group" {{ $isMasterDataOpen ? 'open' : '' }}>
                 <summary
@@ -296,6 +310,14 @@
                             class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('dictionaries/activity-names*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                             <i class="fa-solid fa-signature w-6 text-center mr-2 text-sm"></i>
                             <span>Nama Kegiatan</span>
+                        </a>
+                    @endcan
+
+                    @can('view evaluation categories')
+                        <a href="{{ route('evaluation-categories.index') }}"
+                            class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluation-categories*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+                            <i class="fa-solid fa-layer-group w-6 text-center mr-2 text-sm"></i>
+                            <span>Kategori Evaluasi</span>
                         </a>
                     @endcan
 

@@ -25,9 +25,10 @@ class StoreEvaluationCriteriaRequest extends FormRequest
         return [
             'code' => ['required', 'string', 'max:50', 'unique:evaluation_criteria,code'],
             'name' => ['required', 'string', 'max:255'],
-            'is_fillable' => ['boolean'],
-            'type' => ['required_if:is_fillable,true', 'in:string,number'],
-            'evaluation_type' => ['required', 'integer', 'in:1,2,3'],
+            'type' => ['required', 'in:rating,isian,file'],
+            'evaluation_type' => ['required', 'integer', 'in:1,3'],
+            'form_type' => ['nullable', 'required_if:evaluation_type,1', 'in:speaker,activity'],
+            'evaluation_category_id' => ['nullable', 'exists:evaluation_categories,id'],
             'order' => ['integer', 'min:0'],
         ];
     }

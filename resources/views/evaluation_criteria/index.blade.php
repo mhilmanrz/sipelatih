@@ -35,9 +35,8 @@
                     <select name="evaluation_type" id="evaluation_type" 
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#007a7a] focus:border-transparent">
                         <option value="">Semua Tingkat</option>
-                        <option value="1" {{ request('evaluation_type') == '1' ? 'selected' : '' }}>Evaluasi 1 (Penyelenggaraan)</option>
-                        <option value="2" {{ request('evaluation_type') == '2' ? 'selected' : '' }}>Evaluasi 2 (Hasil Belajar)</option>
-                        <option value="3" {{ request('evaluation_type') == '3' ? 'selected' : '' }}>Evaluasi 3 (Dampak)</option>
+                        <option value="1" {{ request('evaluation_type') == '1' ? 'selected' : '' }}>Level 1</option>
+                        <option value="3" {{ request('evaluation_type') == '3' ? 'selected' : '' }}>Level 3</option>
                     </select>
                 </div>
                 <button type="submit" 
@@ -63,6 +62,8 @@
                             <th class="text-left w-32 py-3 px-4 font-semibold text-sm">Kode</th>
                             <th class="text-left py-3 px-4 font-semibold text-sm">Nama Kriteria</th>
                             <th class="text-center w-40 py-3 px-4 font-semibold text-sm">Tingkat Evaluasi</th>
+                            <th class="text-left py-3 px-4 font-semibold text-sm">Kategori</th>
+                            <th class="text-center w-32 py-3 px-4 font-semibold text-sm">Scope</th>
                             <th class="text-center w-40 py-3 px-4 font-semibold text-sm">Isian / Tipe</th>
                             <th class="text-center w-20 py-3 px-4 font-semibold text-sm">Order</th>
                             <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
@@ -89,14 +90,30 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td class="py-3 px-4 text-sm text-gray-700">
+                                    {{ $item->category->name ?? '-' }}
+                                </td>
                                 <td class="py-3 px-4 text-center">
-                                    @if ($item->is_fillable)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Fillable ({{ ucfirst($item->type) }})
+                                    @if ($item->form_type === 'speaker')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                            Narasumber
+                                        </span>
+                                    @elseif ($item->form_type === 'activity')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            Kegiatan
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                            Checklist Saja
+                                        <span class="text-gray-400">-</span>
+                                    @endif
+                                </td>
+                                <td class="py-3 px-4 text-center">
+                                    @if ($item->type === 'rating')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            Rating
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                            Isian
                                         </span>
                                     @endif
                                 </td>
@@ -122,7 +139,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center text-gray-500 py-8 px-4">
+                                <td colspan="9" class="text-center text-gray-500 py-8 px-4">
                                     Belum ada data Kriteria Evaluasi.
                                 </td>
                             </tr>

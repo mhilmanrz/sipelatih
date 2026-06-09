@@ -21,8 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
-            $table->string('collaboration_inst')->nullable(false)->change();
-        });
+        // Tidak di-revert — memaksa NOT NULL saat ada data NULL akan error
     }
 };

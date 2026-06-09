@@ -41,6 +41,7 @@ use App\Http\Controllers\SuratPemanggilanController;
 use App\Http\Controllers\SuratTugasController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\EmploymentTypeController;
+use App\Http\Controllers\User\MyActivityController;
 use App\Http\Controllers\User\PermissionController;
 use App\Http\Controllers\User\PositionController;
 use App\Http\Controllers\User\ProfessionController;
@@ -70,7 +71,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/test-pdf-nota-dinas', [NotaDinasController::class, 'streamPdf'])->name('test.pdf.nota-dinas');
 
     Route::get('/', function () {
-        return redirect()->route('dashboard');
+        if (auth()->user()->can('view dashboard')) {
+            return redirect()->route('dashboard');
+        }
+
+        return redirect()->route('my-activities.index');
     });
 
     // Menu Layout Placeholder Routes
@@ -112,6 +117,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/my-evaluations', [ParticipantEvaluationController::class, 'index'])->name('my-evaluations.index');
     Route::get('/my-evaluations/{participantEvaluation}', [ParticipantEvaluationController::class, 'show'])->name('my-evaluations.show');
     Route::post('/my-evaluations/{participantEvaluation}', [ParticipantEvaluationController::class, 'store'])->name('my-evaluations.store');
+
+    // My Activities (Logged-in Users)
+    Route::get('/my-activities', [MyActivityController::class, 'index'])->name('my-activities.index');
+    Route::get('/my-activities/{activity}', [MyActivityController::class, 'show'])->name('my-activities.show');
 
     // Admin Participant Evaluations (Fill on Behalf)
     Route::get('/admin/participant-evaluations/{id}', [AdminParticipantEvaluationController::class, 'show'])->name('admin-participant-evaluations.show');

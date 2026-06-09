@@ -45,25 +45,46 @@
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">
                                     {{ $crit->name }}
                                 </label>
-                                <div class="flex gap-2">
-                                    @for ($rating = 1; $rating <= 4; $rating++)
-                                        <label class="cursor-pointer">
-                                            <input type="radio" name="answers[{{ $crit->id }}]" value="{{ $rating }}"
-                                                @checked(optional($evaluation->answers->firstWhere('evaluation_criteria_id', $crit->id))->rating === $rating)
-                                                class="sr-only">
-                                            <span class="inline-block px-4 py-2 rounded-lg border-2 transition
-                                                @checked(optional($evaluation->answers->firstWhere('evaluation_criteria_id', $crit->id))->rating === $rating)
-                                                    border-teal-500 bg-teal-50
-                                                @else
-                                                    border-gray-200 bg-white hover:border-gray-300
-                                                @endchecked">
-                                                @for ($star = 1; $star <= $rating; $star++)
-                                                    ★
-                                                @endfor
-                                            </span>
-                                        </label>
-                                    @endfor
-                                </div>
+                                @if ($crit->type === 'rating')
+                                    @php
+                                        $ratingLabels = [
+                                            1 => 'Sangat Kurang/Tidak Memuaskan',
+                                            2 => 'Kurang/Kurang Memuaskan',
+                                            3 => 'Baik/Memuaskan',
+                                            4 => 'Sangat Baik/Sangat Memuaskan',
+                                        ];
+                                    @endphp
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                                        @foreach ($ratingLabels as $rating => $label)
+                                            <label class="cursor-pointer">
+                                                <input type="radio" name="answers[{{ $crit->id }}]" value="{{ $rating }}"
+                                                    @checked(optional($evaluation->answers->firstWhere('evaluation_criteria_id', $crit->id))->rating === $rating)
+                                                    disabled
+                                                    class="sr-only">
+                                                <span class="block h-full px-4 py-3 rounded-xl border-2 transition text-center
+                                                    opacity-80 cursor-not-allowed
+                                                    @if(optional($evaluation->answers->firstWhere('evaluation_criteria_id', $crit->id))->rating === $rating)
+                                                        border-teal-500 bg-teal-50 text-teal-800
+                                                    @else
+                                                        border-gray-200 bg-white text-gray-700
+                                                    @endif">
+                                                    <div class="text-teal-500 mb-1">
+                                                        @for ($star = 1; $star <= $rating; $star++)
+                                                            ★
+                                                        @endfor
+                                                    </div>
+                                                    <div class="text-sm font-medium">{{ $rating }} - {{ $label }}</div>
+                                                </span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div>
+                                        <textarea name="answers[{{ $crit->id }}]" rows="3"
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                            placeholder="Tulis jawaban di sini...">{{ old("answers.{$crit->id}", optional($evaluation->answers->firstWhere('evaluation_criteria_id', $crit->id))->answer_text) }}</textarea>
+                                    </div>
+                                @endif
                                 @error("answers.{$crit->id}")
                                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                                 @enderror
