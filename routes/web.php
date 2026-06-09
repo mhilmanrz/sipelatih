@@ -22,6 +22,7 @@ use App\Http\Controllers\Act\BatchController;
 use App\Http\Controllers\Act\BudgetCategoryController;
 use App\Http\Controllers\Act\EvaluationCategoryController;
 use App\Http\Controllers\Act\EvaluationCriteriaController;
+use App\Http\Controllers\Act\EvaluationDashboardController;
 use App\Http\Controllers\Act\FundSourceController;
 use App\Http\Controllers\Act\MaterialTypeController;
 use App\Http\Controllers\Act\TargetParticipantController;
@@ -107,6 +108,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/laporan-kegiatan', [ActivityReportController::class, 'store'])->name('kegiatan.laporan.store');
     Route::put('/laporan-kegiatan/{id}', [ActivityReportController::class, 'update'])->name('kegiatan.laporan.update');
     Route::get('/evaluations', [ActivityEvaluationController::class, 'index'])->name('evaluations.index');
+    Route::get('/evaluations/dashboard', [EvaluationDashboardController::class, 'index'])->name('evaluations.dashboard');
     Route::get('/evaluations/{kegiatan}', [ActivityEvaluationController::class, 'show'])->name('evaluations.show');
     Route::get('/evaluations/{kegiatan}/tab', [ActivityEvaluationController::class, 'loadTab'])->name('evaluations.load-tab');
     Route::post('/evaluations/{kegiatan}', [ActivityEvaluationController::class, 'store'])->name('evaluations.store');
