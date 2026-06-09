@@ -45,6 +45,6 @@ class Budget extends Model
 
     public function getRemainingAmountAttribute()
     {
-        return $this->total_amount - $this->activities()->sum('budget_amount');
+        return $this->total_amount - ($this->blocked_amount ?? 0) - $this->activities()->sum('budget_amount');
     }
 }

@@ -33,7 +33,7 @@ class PaguController extends Controller
         $totalDana = $budgets->sum('total_amount');
         $budgetIds = $budgets->pluck('id');
         $totalTerserap = Activity::whereIn('budget_id', $budgetIds)->sum('budget_amount');
-        $totalSisa = $totalDana - $totalTerserap;
+        $totalSisa = $totalDana - $budgets->sum('blocked_amount') - $totalTerserap;
 
         // Paginate budgets
         $perPage = $request->input('entries', 10);
@@ -70,7 +70,7 @@ class PaguController extends Controller
 
         foreach ($budgetsForChart as $b) {
             $used = $b->activities->sum('budget_amount');
-            $sisa = $b->total_amount - $used;
+            $sisa = $b->remaining_amount;
 
             $label = $b->rkkal_code;
             if ($b->submark) {
