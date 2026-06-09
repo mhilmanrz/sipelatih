@@ -62,7 +62,7 @@ class PaguController extends Controller
 
         // Data for Bar Chart Per RKAKL
         $chartYear = $selectedYear ?: (empty($availableYears) ? date('Y') : max($availableYears));
-        $budgetsForChart = Budget::with('activities')->where('year', $chartYear)->get();
+        $budgetsForChart = Budget::with(['activities', 'budgetCategory'])->where('year', $chartYear)->get();
 
         $rkaklLabels = [];
         $rkaklDigunakan = [];
@@ -73,8 +73,8 @@ class PaguController extends Controller
             $sisa = $b->remaining_amount;
 
             $label = $b->rkkal_code;
-            if ($b->submark) {
-                $label .= ' - '.Str::limit($b->submark, 20);
+            if ($b->budgetCategory && $b->budgetCategory->name) {
+                $label .= ' - '.Str::limit($b->budgetCategory->name, 25);
             }
 
             $rkaklLabels[] = $label;
