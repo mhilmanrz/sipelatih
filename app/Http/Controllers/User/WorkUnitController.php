@@ -13,12 +13,14 @@ class WorkUnitController extends Controller
      */
     public function index(Request $request)
     {
-        $query = WorkUnit::query();
-        if ($request->has('q') && $request->q != '') {
-            $query->where('name', 'like', '%'.$request->q.'%');
-        }
-        $perPage = $request->input('entries', $request->input('per_page', 10));
-        $workUnits = $query->paginate($perPage)->appends($request->all());
+        $search = $request->input('search');
+        $perPage = $request->input('entries', 10);
+
+        $workUnits = WorkUnit::query()
+            ->when($search, fn ($q) => $q->where('name', 'like', '%'.$search.'%')
+                ->orWhere('code', 'like', '%'.$search.'%'))
+            ->paginate($perPage)
+            ->appends($request->all());
 
         return view('workunit.index', compact('workUnits'));
     }

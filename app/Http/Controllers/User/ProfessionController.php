@@ -14,8 +14,14 @@ class ProfessionController extends Controller
      */
     public function index(Request $request)
     {
+        $search = $request->input('search');
         $perPage = $request->input('entries', 10);
-        $professions = Profession::with('category')->paginate($perPage)->appends($request->all());
+
+        $professions = Profession::with('category')
+            ->when($search, fn ($q) => $q->where('name', 'like', '%'.$search.'%')
+                ->orWhere('code', 'like', '%'.$search.'%'))
+            ->paginate($perPage)
+            ->appends($request->all());
 
         return view('profession.index', compact('professions'));
     }
