@@ -43,8 +43,13 @@ class Budget extends Model
         return $this->hasMany(Activity::class);
     }
 
+    public function getEffectiveAmountAttribute()
+    {
+        return $this->total_amount - ($this->blocked_amount ?? 0);
+    }
+
     public function getRemainingAmountAttribute()
     {
-        return $this->total_amount - ($this->blocked_amount ?? 0) - $this->activities()->sum('budget_amount');
+        return $this->effective_amount - $this->activities()->sum('budget_amount');
     }
 }

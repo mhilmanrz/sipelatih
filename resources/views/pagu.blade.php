@@ -83,6 +83,8 @@
                 </div>
                 <div class="mt-4 text-center text-sm text-gray-600">
                     <p>Total Pagu: <span class="font-semibold">Rp {{ number_format($totalDana, 0, ',', '.') }}</span></p>
+                    <p>Dana Blokir: <span class="font-semibold">Rp {{ number_format($budgets->sum('blocked_amount'), 0, ',', '.') }}</span></p>
+                    <p>Pagu Efektif: <span class="font-semibold">Rp {{ number_format($totalDana - $budgets->sum('blocked_amount'), 0, ',', '.') }}</span></p>
                     <p>Pagu Digunakan: <span class="font-semibold">Rp {{ number_format($totalTerserap, 0, ',', '.') }}</span></p>
                     <p>Pagu Tersisa: <span class="font-semibold">Rp {{ number_format($totalSisa, 0, ',', '.') }}</span></p>
                 </div>
@@ -114,6 +116,7 @@
                             <th class="text-left py-3 px-4 font-semibold text-sm">Submark</th>
                             <th class="text-right py-3 px-4 font-semibold text-sm">Pagu</th>
                             <th class="text-right py-3 px-4 font-semibold text-sm">Dana Blokir</th>
+                            <th class="text-right py-3 px-4 font-semibold text-sm">Pagu Efektif</th>
                             <th class="text-right py-3 px-4 font-semibold text-sm">Sisa Pagu</th>
                             <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
                         </tr>
@@ -130,6 +133,7 @@
                                 <td class="py-3 px-4">{{ $budget->submark }}</td>
                                 <td class="text-right font-medium py-3 px-4">{{ number_format($budget->total_amount, 0, ',', '.') }}</td>
                                 <td class="text-right py-3 px-4">{{ number_format($budget->blocked_amount, 0, ',', '.') }}</td>
+                                <td class="text-right py-3 px-4">{{ number_format($budget->effective_amount, 0, ',', '.') }}</td>
                                 <td class="text-right py-3 px-4">{{ number_format($budget->remaining_amount, 0, ',', '.') }}</td>
                                 <td class="text-center py-3 px-4">
                                     <div class="flex justify-center gap-1.5">
@@ -160,7 +164,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="text-center text-gray-500 py-6 px-4">
+                                <td colspan="10" class="text-center text-gray-500 py-6 px-4">
                                     Belum ada data Pagu.
                                 </td>
                             </tr>
@@ -178,7 +182,13 @@
                             <td class="text-right text-sm font-semibold text-gray-800 py-3 px-4">
                                 {{ number_format($budgets->sum('blocked_amount'), 0, ',', '.') }}
                             </td>
-                            <td colspan="2"></td>
+                            <td class="text-right text-sm font-semibold text-gray-800 py-3 px-4">
+                                {{ number_format($budgets->sum('total_amount') - $budgets->sum('blocked_amount'), 0, ',', '.') }}
+                            </td>
+                            <td class="text-right text-sm font-semibold text-gray-800 py-3 px-4">
+                                {{ number_format($totalSisa, 0, ',', '.') }}
+                            </td>
+                            <td></td>
                         </tr>
                     </tfoot>
                     @endif

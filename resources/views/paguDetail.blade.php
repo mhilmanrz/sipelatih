@@ -63,6 +63,14 @@
                     <p class="mt-1 text-lg font-bold text-gray-900 text-teal-700">Rp {{ number_format($pagu->total_amount, 0, ',', '.') }}</p>
                 </div>
                 <div>
+                    <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Dana Blokir</h3>
+                    <p class="mt-1 text-lg font-bold text-gray-900 text-red-600">Rp {{ number_format($pagu->blocked_amount, 0, ',', '.') }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Pagu Efektif</h3>
+                    <p class="mt-1 text-lg font-bold text-gray-900 text-teal-700">Rp {{ number_format($pagu->effective_amount, 0, ',', '.') }}</p>
+                </div>
+                <div>
                     <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Sisa Pagu</h3>
                     <p class="mt-1 text-lg font-bold {{ $pagu->remaining_amount < 0 ? 'text-red-600' : 'text-blue-600' }}">
                         Rp {{ number_format($pagu->remaining_amount, 0, ',', '.') }}
