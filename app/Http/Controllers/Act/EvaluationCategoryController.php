@@ -22,7 +22,8 @@ class EvaluationCategoryController extends Controller
             $query->where('name', 'like', '%'.$request->q.'%');
         }
 
-        $categories = $query->orderBy('evaluation_type')->orderBy('order')->paginate(10)->appends($request->all());
+        $perPage = $request->input('entries', $request->input('per_page', 10));
+        $categories = $query->orderBy('evaluation_type')->orderBy('order')->paginate($perPage)->appends($request->all());
 
         return view('evaluation_categories.index', compact('categories'));
     }

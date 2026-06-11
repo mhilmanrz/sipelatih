@@ -20,7 +20,42 @@
             </a>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        {{-- FILTER BAR --}}
+        <form method="GET" action="{{ route('evaluation-categories.index') }}"
+            class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+            <div class="flex flex-wrap items-center gap-3 px-5 py-4 border-b border-gray-200">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <span>Tampilkan</span>
+                    <select name="entries" onchange="this.form.submit()"
+                        class="bg-gray-50 border border-gray-300 rounded-lg px-2.5 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
+                        <option value="5" {{ request('entries') == 5 ? 'selected' : '' }}>5</option>
+                        <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                    </select>
+                    <span>data</span>
+                </div>
+                <div class="h-6 w-px bg-gray-200 hidden sm:block"></div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari Nama Kategori..."
+                        class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
+                    
+                    <select name="evaluation_type" onchange="this.form.submit()"
+                        class="bg-gray-50 border border-gray-300 rounded-lg px-2.5 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition">
+                        <option value="">Semua Tingkat</option>
+                        <option value="1" {{ request('evaluation_type') == '1' ? 'selected' : '' }}>Level 1</option>
+                        <option value="3" {{ request('evaluation_type') == '3' ? 'selected' : '' }}>Level 3</option>
+                    </select>
+                    
+                    <button type="submit"
+                        class="bg-[#007a7a] text-white px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-[#005f5f] transition">Cari</button>
+                    <a href="{{ route('evaluation-categories.index') }}"
+                        class="bg-gray-100 text-gray-700 px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-gray-200 transition">Reset</a>
+                </div>
+            </div>
+        </form>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
@@ -94,12 +129,10 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-
-        @if ($categories->hasPages())
-            <div class="mt-8">
-                {{ $categories->links() }}
+            {{-- PAGINATION --}}
+            <div class="px-5 py-4 border-t border-gray-200">
+                {{ $categories->links('components.pagination') }}
             </div>
-        @endif
+        </div>
     </div>
 </x-layouts.app>

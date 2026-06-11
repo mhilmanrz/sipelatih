@@ -14,7 +14,11 @@ class ProfessionCategoryController extends Controller
     {
         $query = ProfessionCategory::query();
         if ($request->has('q') && $request->q != '') {
-            $query->where('name', 'like', '%'.$request->q.'%');
+            $search = $request->q;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('code', 'like', '%'.$search.'%');
+            });
         }
         $perPage = $request->input('entries', $request->input('per_page', 10));
         $categories = $query->paginate($perPage)->appends($request->all());
