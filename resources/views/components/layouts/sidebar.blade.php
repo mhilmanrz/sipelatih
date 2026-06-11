@@ -112,8 +112,13 @@
                             <i class="fa-solid fa-chart-pie w-6 text-center mr-2 text-sm"></i>
                             <span>Dashboard Evaluasi</span>
                         </a>
+                        <a href="{{ route('evaluations.participant-dashboard') }}"
+                            class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluations/participant-dashboard*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+                            <i class="fa-solid fa-chart-line w-6 text-center mr-2 text-sm"></i>
+                            <span>Eval Peserta Detail</span>
+                        </a>
                         <a href="{{ route('evaluations.index') }}"
-                            class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluations*') && !request()->is('evaluations/dashboard*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+                            class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('evaluations*') && !request()->is('evaluations/dashboard*') && !request()->is('evaluations/participant-dashboard*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                             <i class="fa-solid fa-clipboard-check w-6 text-center mr-2 text-sm"></i>
                             <span>Evaluasi</span>
                         </a>

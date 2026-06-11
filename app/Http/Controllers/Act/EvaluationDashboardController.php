@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityEvaluation;
 use App\Models\Act\ActivityParticipant;
+use App\Models\Act\ActivityScope;
 use App\Models\Act\EvaluationCategory;
 use App\Models\Act\ParticipantEvaluation;
 use App\Models\Act\ParticipantEvaluationAnswer;
+use App\Models\User\User;
+use App\Models\User\WorkUnit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -214,6 +217,241 @@ class EvaluationDashboardController extends Controller
             'level3Total',
             'level3Submitted',
             'level3CategoryRatings',
+        ));
+    }
+
+    public function participantDashboard(Request $request): View
+    {
+        $monthsList = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+        ];
+
+        $scopesList = ActivityScope::orderBy('name')->get();
+        $workUnitsList = WorkUnit::orderBy('name')->get();
+
+        // Get list of accepted activities for filter dropdown
+        $activitiesList = Activity::whereHas('latestStatus', function ($q) {
+            $q->where('status', 'accepted');
+        })->with('activityName')->get()->sortBy(function ($activity) {
+            return $activity->activityName->name ?? '';
+        });
+
+        // Current filter values
+        $selectedMonth = $request->input('month');
+        $selectedScope = $request->input('activity_scope_id');
+        $selectedWorkUnit = $request->input('work_unit_id');
+        $selectedActivity = $request->input('activity_id');
+        $searchEmployee = $request->input('employee_name');
+
+        // Query participant list
+        $query = ActivityParticipant::query()
+            ->whereHas('activity.latestStatus', function ($q) {
+                $q->where('status', 'accepted');
+            });
+
+        // Apply filters
+        if ($request->filled('month')) {
+            $query->whereHas('activity', function ($q) use ($request) {
+                $q->whereMonth('start_date', $request->month)
+                    ->orWhereMonth('end_date', $request->month);
+            });
+        }
+
+        if ($request->filled('activity_scope_id')) {
+            $query->whereHas('activity', function ($q) use ($request) {
+                $q->where('activity_scope_id', $request->activity_scope_id);
+            });
+        }
+
+        if ($request->filled('work_unit_id')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('work_unit_id', $request->work_unit_id);
+            });
+        }
+
+        if ($request->filled('activity_id')) {
+            $query->where('activity_id', $request->activity_id);
+        }
+
+        if ($request->filled('employee_name')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->employee_name.'%');
+            });
+        }
+
+        // Calculate statistics cards
+        $totalKegiatan = (clone $query)->distinct('activity_id')->count('activity_id');
+        $totalPeserta = (clone $query)->count();
+
+        // Unique work units of filtered participants
+        $totalUnitKerja = User::whereIn('id', (clone $query)->select('user_id'))
+            ->whereNotNull('work_unit_id')
+            ->distinct('work_unit_id')
+            ->count('work_unit_id');
+
+        // Response rate of evaluation forms
+        $totalForms = ParticipantEvaluation::whereIn('activity_participant_id', (clone $query)->select('id'))->count();
+        $submittedForms = ParticipantEvaluation::whereIn('activity_participant_id', (clone $query)->select('id'))
+            ->whereNotNull('submitted_at')
+            ->count();
+        $responseRate = $totalForms > 0 ? round(($submittedForms / $totalForms) * 100, 2) : 0;
+
+        // Paginate participants with relationships
+        $participants = $query->with([
+            'user.workUnit',
+            'activity.activityName',
+            'activity.activityScope',
+            'activity.activityMaterials.speakers.user',
+            'participantEvaluations.answers.criteria',
+            'participantEvaluations.files',
+        ])->paginate($request->input('per_page', 10))->appends($request->all());
+
+        // Process data for presentation
+        $mappedParticipants = $participants->map(function ($ap) {
+            // General Info
+            $name = $ap->user->name ?? '-';
+            $workUnit = $ap->user->workUnit->name ?? '-';
+            $activityTitle = $ap->activity->activityName->name ?? '-';
+
+            // Level 1: check standard activity form and speaker forms
+            $activityEval1 = $ap->participantEvaluations
+                ->where('evaluation_type', 1)
+                ->where('form_type', 'activity')
+                ->first();
+            $activitySubmitted = $activityEval1 ? $activityEval1->isSubmitted() : false;
+
+            $speakerEvals = $ap->participantEvaluations
+                ->where('evaluation_type', 1)
+                ->where('form_type', 'speaker');
+            $activitySpeakerIds = $ap->activity->activityMaterials
+                ->flatMap(fn ($m) => $m->speakers)
+                ->pluck('id')
+                ->unique();
+            $totalSpeakers = $activitySpeakerIds->count();
+
+            if ($totalSpeakers > 0) {
+                $submittedSpeakersCount = $speakerEvals
+                    ->whereIn('activity_speaker_id', $activitySpeakerIds)
+                    ->whereNotNull('submitted_at')
+                    ->count();
+                $speakerStatus = ($submittedSpeakersCount === $totalSpeakers)
+                    ? 'Sudah'
+                    : 'Belum ('.$submittedSpeakersCount.'/'.$totalSpeakers.')';
+            } else {
+                $speakerStatus = 'Tidak Ada Narasumber';
+            }
+
+            $level1Data = [
+                'cat1' => $activitySubmitted ? 'Sudah' : 'Belum', // Pelayanan Administrasi
+                'cat2' => $activitySubmitted ? 'Sudah' : 'Belum', // Sarana dan Fasilitas
+                'cat3' => $activitySubmitted ? 'Sudah' : 'Belum', // Metode dan Proses Pembelajaran
+                'cat4' => $activitySubmitted ? 'Sudah' : 'Belum', // Kepuasan dan Keberlanjutan Program
+                'narasumber' => $speakerStatus,
+            ];
+
+            // Level 2: result (is_passed)
+            if ($ap->is_passed === true) {
+                $level2Status = 'Lulus';
+            } elseif ($ap->is_passed === false) {
+                $level2Status = 'Tidak Lulus';
+            } else {
+                $level2Status = 'Belum Dinilai';
+            }
+            $finalScore = $ap->calculateFinalScore();
+
+            // Level 3: status per category and ketercapaian
+            $level3Eval = $ap->participantEvaluations
+                ->where('evaluation_type', 3)
+                ->first();
+            $level3Submitted = $level3Eval ? $level3Eval->isSubmitted() : false;
+
+            $cat5Status = 'Belum';
+            $cat6Score = '-';
+            $cat7Score = '-';
+            $cat8Score = '-';
+            $cat9Score = '-';
+            $cat10Status = 'Belum';
+            $ketercapaian = '-';
+
+            if ($level3Submitted && $level3Eval) {
+                $answersGrouped = $level3Eval->answers->groupBy(function ($ans) {
+                    return $ans->criteria->evaluation_category_id ?? null;
+                });
+
+                $cat5Status = $answersGrouped->has(5) ? 'Sudah' : 'Belum';
+
+                $cat6Avg = $answersGrouped->has(6) ? $answersGrouped->get(6)->whereNotNull('rating')->avg('rating') : null;
+                $cat6Score = $cat6Avg !== null ? round($cat6Avg, 2) : '-';
+
+                $cat7Avg = $answersGrouped->has(7) ? $answersGrouped->get(7)->whereNotNull('rating')->avg('rating') : null;
+                $cat7Score = $cat7Avg !== null ? round($cat7Avg, 2) : '-';
+
+                $cat8Avg = $answersGrouped->has(8) ? $answersGrouped->get(8)->whereNotNull('rating')->avg('rating') : null;
+                $cat8Score = $cat8Avg !== null ? round($cat8Avg, 2) : '-';
+
+                $cat9Avg = $answersGrouped->has(9) ? $answersGrouped->get(9)->whereNotNull('rating')->avg('rating') : null;
+                $cat9Score = $cat9Avg !== null ? round($cat9Avg, 2) : '-';
+
+                $hasFiles = $level3Eval->files->isNotEmpty();
+                $hasRecom = $answersGrouped->has(10);
+                $cat10Status = ($hasFiles || $hasRecom) ? 'Sudah' : 'Belum';
+
+                $ratingAns = $level3Eval->answers->filter(function ($ans) {
+                    return in_array($ans->criteria->evaluation_category_id ?? null, [6, 7, 8, 9]) && $ans->rating !== null;
+                });
+                $ketercapaian = $ratingAns->isNotEmpty() ? round($ratingAns->avg('rating'), 2) : '-';
+            }
+
+            return (object) [
+                'id' => $ap->id,
+                'name' => $name,
+                'workUnit' => $workUnit,
+                'activityTitle' => $activityTitle,
+                'level1' => (object) $level1Data,
+                'level2' => (object) [
+                    'status' => $level2Status,
+                    'score' => $finalScore,
+                ],
+                'level3' => (object) [
+                    'submitted' => $level3Submitted ? 'Sudah' : 'Belum',
+                    'cat5' => $cat5Status,
+                    'cat6' => $cat6Score,
+                    'cat7' => $cat7Score,
+                    'cat8' => $cat8Score,
+                    'cat9' => $cat9Score,
+                    'cat10' => $cat10Status,
+                    'ketercapaian' => $ketercapaian,
+                ],
+            ];
+        });
+
+        return view('evaluations.dashboard_participant', compact(
+            'monthsList',
+            'scopesList',
+            'workUnitsList',
+            'activitiesList',
+            'selectedMonth',
+            'selectedScope',
+            'selectedWorkUnit',
+            'selectedActivity',
+            'searchEmployee',
+            'totalKegiatan',
+            'totalPeserta',
+            'totalUnitKerja',
+            'responseRate',
+            'participants',
+            'mappedParticipants'
         ));
     }
 }

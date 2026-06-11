@@ -68,21 +68,21 @@ class ActivityEvaluationTest extends TestCase
     {
         $response = $this->actingAs($this->adminUser)
             ->post(route('evaluation-criteria.store'), [
-                'code' => 'K2-NEW',
+                'code' => 'K1-NEW',
                 'name' => 'Kriteria Kognitif Baru',
-                'evaluation_type' => 2,
-                'is_fillable' => 1,
-                'type' => 'number',
+                'evaluation_type' => 1,
+                'form_type' => 'activity',
+                'type' => 'rating',
                 'order' => 5,
             ]);
 
         $response->assertRedirect(route('evaluation-criteria.index'));
         $this->assertDatabaseHas('evaluation_criteria', [
-            'code' => 'K2-NEW',
+            'code' => 'K1-NEW',
             'name' => 'Kriteria Kognitif Baru',
-            'evaluation_type' => 2,
-            'is_fillable' => true,
-            'type' => 'number',
+            'evaluation_type' => 1,
+            'form_type' => 'activity',
+            'type' => 'rating',
         ]);
     }
 
