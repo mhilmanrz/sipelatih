@@ -55,12 +55,7 @@
             <div class="grid grid-cols-[1fr_1fr_auto] gap-4 items-end mb-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">*Nama SDM</label>
-                    <select name="user_id" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
-                        <option value="">- PILIH NARASUMBER -</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                        @endforeach
-                    </select>
+                    <x-select-user name="user_id" id="speaker_user_id" placeholder="- PILIH NARASUMBER -" required />
                 </div>
 
                 <div>
@@ -120,12 +115,7 @@
             <div class="grid grid-cols-[1fr_1fr_auto] gap-4 items-end mb-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">*Nama Moderator</label>
-                    <select name="user_id" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
-                        <option value="">- PILIH MODERATOR -</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                        @endforeach
-                    </select>
+                    <x-select-user name="user_id" id="moderator_user_id" placeholder="- PILIH MODERATOR -" required />
                 </div>
 
                 <div>
