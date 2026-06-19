@@ -228,15 +228,7 @@
 
                 <div class="form-row">
                     <label>Nama PIC</label>
-                    <select name="pic_user_id" id="pic_user_id">
-                        @if ($selectedPic)
-                            <option value="{{ $selectedPic->id }}" data-phone="{{ $selectedPic->phone_number ?? '-' }}" selected>
-                                {{ $selectedPic->name }}
-                            </option>
-                        @else
-                            <option value="" data-phone="">-PILIH PEGAWAI (PIC)-</option>
-                        @endif
-                    </select>
+                    <x-select-user name="pic_user_id" id="pic_user_id" :selected-user="$selectedPic" placeholder="-PILIH PEGAWAI (PIC)-" />
                 </div>
 
                 <div class="form-row">
@@ -253,15 +245,7 @@
 
                 <div class="form-row">
                     <label>PIC Penyelenggara</label>
-                    <select name="organizer_pic_id" id="organizer_pic_id">
-                        @if ($selectedOrganizerPic)
-                            <option value="{{ $selectedOrganizerPic->id }}" selected>
-                                {{ $selectedOrganizerPic->name }}
-                            </option>
-                        @else
-                            <option value="">-PILIH PEGAWAI-</option>
-                        @endif
-                    </select>
+                    <x-select-user name="organizer_pic_id" id="organizer_pic_id" :selected-user="$selectedOrganizerPic" placeholder="-PILIH PEGAWAI-" />
                 </div>
 
                 <div class="form-action">
@@ -288,96 +272,10 @@
                 }
             });
 
-            // Initialize PIC TomSelect with live search
-            const picSelect = document.getElementById('pic_user_id');
-            const initialPicOptions = [];
-            Array.from(picSelect.options).forEach(opt => {
-                if (opt.value) {
-                    initialPicOptions.push({
-                        id: opt.value,
-                        name: opt.text,
-                        phone_number: opt.getAttribute('data-phone') || '-'
-                    });
-                }
-            });
-
-            const picTomSelect = new TomSelect('#pic_user_id', {
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name', 'employee_id'],
-                options: initialPicOptions,
-                items: initialPicOptions.map(o => o.id),
-                placeholder: '-PILIH PEGAWAI (PIC)-',
-                load: function(query, callback) {
-                    if (query.length < 3) return callback();
-                    var url = '/users/search-candidates?q=' + encodeURIComponent(query);
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(json => {
-                            callback(json);
-                        }).catch(() => {
-                            callback();
-                        });
-                },
-                render: {
-                    option: function(item, escape) {
-                        return `<div>
-                            <span class="font-semibold">${escape(item.name)}</span>
-                            ${item.employee_id ? `<span class="text-xs text-gray-500">(${escape(item.employee_id)})</span>` : ''}
-                        </div>`;
-                    },
-                    item: function(item, escape) {
-                        return `<div>${escape(item.name)}</div>`;
-                    }
-                }
-            });
-
-            // Initialize Organizer PIC TomSelect with live search
-            const organizerSelect = document.getElementById('organizer_pic_id');
-            const initialOrganizerOptions = [];
-            Array.from(organizerSelect.options).forEach(opt => {
-                if (opt.value) {
-                    initialOrganizerOptions.push({
-                        id: opt.value,
-                        name: opt.text
-                    });
-                }
-            });
-
-            const organizerTomSelect = new TomSelect('#organizer_pic_id', {
-                valueField: 'id',
-                labelField: 'name',
-                searchField: ['name', 'employee_id'],
-                options: initialOrganizerOptions,
-                items: initialOrganizerOptions.map(o => o.id),
-                placeholder: '-PILIH PEGAWAI-',
-                load: function(query, callback) {
-                    if (query.length < 3) return callback();
-                    var url = '/users/search-candidates?q=' + encodeURIComponent(query);
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(json => {
-                            callback(json);
-                        }).catch(() => {
-                            callback();
-                        });
-                },
-                render: {
-                    option: function(item, escape) {
-                        return `<div>
-                            <span class="font-semibold">${escape(item.name)}</span>
-                            ${item.employee_id ? `<span class="text-xs text-gray-500">(${escape(item.employee_id)})</span>` : ''}
-                        </div>`;
-                    },
-                    item: function(item, escape) {
-                        return `<div>${escape(item.name)}</div>`;
-                    }
-                }
-            });
-
-            // Update WA PIC when PIC selected changes
-            function updateWaPic(value) {
-                const userObj = picTomSelect.options[value];
+            // Listen to selection changes from select-user component
+            const picEl = document.getElementById('pic_user_id');
+            picEl.addEventListener('user-selected', function(e) {
+                const userObj = e.detail.user;
                 const waInput = document.getElementById('wa_pic_temp');
                 if (userObj) {
                     const phoneNumber = userObj.phone_number;
@@ -389,15 +287,18 @@
                 } else {
                     waInput.value = "";
                 }
-            }
-
-            picTomSelect.on('change', function(value) {
-                updateWaPic(value);
             });
 
-            // Run once on load to set initial WA PIC
-            if (picTomSelect.getValue()) {
-                updateWaPic(picTomSelect.getValue());
+            // Set initial WA PIC value on load
+            const initialOption = picEl.options[picEl.selectedIndex];
+            if (initialOption) {
+                const phone = initialOption.getAttribute('data-phone');
+                const waInput = document.getElementById('wa_pic_temp');
+                if (phone && phone !== '-') {
+                    waInput.value = phone;
+                } else if (picEl.value) {
+                    waInput.value = "(Nomor WA tidak terdaftar)";
+                }
             }
 
             const select = document.getElementById('activity_name_select');

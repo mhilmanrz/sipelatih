@@ -209,14 +209,21 @@ class UserController extends Controller
     }
 
     /**
-     * Search candidate users for PIC / Organizer PIC roles.
+     * Search users for autocomplete / dropdown fields.
      */
-    public function searchCandidates(Request $request): JsonResponse
+    public function search(Request $request): JsonResponse
     {
         $search = $request->input('q');
+        $excludeRoles = $request->boolean('exclude_roles', false);
 
-        $query = User::doesntHave('roles')
-            ->where('email', '!=', 'admin@mail.com');
+        $query = User::query();
+
+        // Standard filter: exclude admin mail
+        $query->where('email', '!=', 'admin@mail.com');
+
+        if ($excludeRoles) {
+            $query->doesntHave('roles');
+        }
 
         if ($search && strlen($search) >= 3) {
             $query->where(function ($q) use ($search) {
