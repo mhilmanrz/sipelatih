@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\act;
+namespace App\Http\Requests\Act;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTargetParticipanRequest extends FormRequest
+class UpdateTargetParticipanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
