@@ -12,7 +12,7 @@ use App\Models\Act\ActivityType;
 use App\Models\Act\Batch;
 use App\Models\Act\FundSource;
 use App\Models\Act\MaterialType;
-use App\Models\Act\TargetParticipant;
+use App\Models\User\Profession;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Carbon\Carbon;
@@ -47,9 +47,9 @@ class ActivitySeeder extends Seeder
         $formatMandiri = ActivityFormat::where('name', 'Mandiri')->first();
         $formatKerjasama = ActivityFormat::where('name', 'Kerjasama')->first();
 
-        $targetDokter = TargetParticipant::where('name', 'Dokter')->first();
-        $targetPerawat = TargetParticipant::where('name', 'Perawat')->first();
-        $targetUmum = TargetParticipant::where('name', 'Umum')->first();
+        $targetDokter = Profession::where('name', 'Dokter')->first();
+        $targetPerawat = Profession::where('name', 'Perawat')->first();
+        $targetUmum = Profession::where('name', 'Akuntan')->first();
 
         $wuDiklat = WorkUnit::where('code', 'DIKLAT')->first();
         $wuSdm = WorkUnit::where('code', 'SDM')->first();
@@ -77,7 +77,7 @@ class ActivitySeeder extends Seeder
                 'activity_method_id' => $methodLuring?->id,
                 'batch_id' => $batch1?->id,
                 'activity_format_id' => $formatMandiri?->id,
-                'target_participant_id' => $targetPerawat?->id,
+                'profession_id' => $targetPerawat?->id,
                 'quota_participant' => 30,
                 'start_date' => Carbon::now()->subMonths(2)->toDateString(),
                 'end_date' => Carbon::now()->subMonths(2)->addDays(2)->toDateString(),
@@ -106,7 +106,7 @@ class ActivitySeeder extends Seeder
                 'activity_method_id' => $methodLuring?->id,
                 'batch_id' => $batch2?->id,
                 'activity_format_id' => $formatMandiri?->id,
-                'target_participant_id' => $targetDokter?->id,
+                'profession_id' => $targetDokter?->id,
                 'quota_participant' => 20,
                 'start_date' => Carbon::now()->subWeeks(3)->toDateString(),
                 'end_date' => Carbon::now()->subWeeks(3)->addDay()->toDateString(),
@@ -136,7 +136,7 @@ class ActivitySeeder extends Seeder
                 'batch_id' => $batch1?->id,
                 'activity_format_id' => $formatKerjasama?->id,
                 'collaboration_inst' => 'PT Medika Sistem Indonesia',
-                'target_participant_id' => $targetUmum?->id,
+                'profession_id' => $targetUmum?->id,
                 'quota_participant' => 50,
                 'start_date' => Carbon::now()->addWeek()->toDateString(),
                 'end_date' => Carbon::now()->addWeek()->addDays(2)->toDateString(),
@@ -165,7 +165,7 @@ class ActivitySeeder extends Seeder
                 'activity_method_id' => $methodBlanded?->id,
                 'batch_id' => $batch3?->id,
                 'activity_format_id' => $formatMandiri?->id,
-                'target_participant_id' => $targetPerawat?->id,
+                'profession_id' => $targetPerawat?->id,
                 'quota_participant' => 40,
                 'start_date' => Carbon::now()->subMonth()->toDateString(),
                 'end_date' => Carbon::now()->subMonth()->addDays(3)->toDateString(),
@@ -194,7 +194,7 @@ class ActivitySeeder extends Seeder
                 'activity_method_id' => $methodLuring?->id,
                 'batch_id' => $batch1?->id,
                 'activity_format_id' => $formatMandiri?->id,
-                'target_participant_id' => $targetUmum?->id,
+                'profession_id' => $targetUmum?->id,
                 'quota_participant' => 35,
                 'start_date' => Carbon::now()->subDay()->toDateString(),
                 'end_date' => Carbon::now()->addDays(2)->toDateString(),

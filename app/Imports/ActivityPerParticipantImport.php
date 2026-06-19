@@ -17,7 +17,7 @@ use App\Models\Act\ActivityType;
 use App\Models\Act\Batch;
 use App\Models\Act\FundSource;
 use App\Models\Act\MaterialType;
-use App\Models\Act\TargetParticipant;
+use App\Models\User\Profession;
 use App\Models\User\User;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -50,7 +50,26 @@ class ActivityPerParticipantImport implements ToCollection, WithHeadingRow
             $activityFormat = isset($row['bentuk_kegiatan']) && $row['bentuk_kegiatan'] ? ActivityFormat::firstOrCreate(['name' => trim($row['bentuk_kegiatan'])]) : null;
             $activityScope = isset($row['scope']) && $row['scope'] ? ActivityScope::firstOrCreate(['name' => trim($row['scope'])]) : null;
             $batch = isset($row['batch']) && $row['batch'] ? Batch::firstOrCreate(['name' => trim($row['batch'])]) : null;
-            $targetParticipant = isset($row['target_peserta']) && $row['target_peserta'] ? TargetParticipant::firstOrCreate(['name' => trim($row['target_peserta'])]) : null;
+            $profession = null;
+            if (isset($row['target_peserta']) && $row['target_peserta']) {
+                $profName = trim($row['target_peserta']);
+                $profession = Profession::where('name', $profName)->first();
+                if (! $profession) {
+                    $code = strtoupper(substr(preg_replace('/[^a-zA-Z0-9]/', '', $profName), 0, 3));
+                    if (empty($code)) {
+                        $code = 'PRF';
+                    }
+                    $baseCode = $code;
+                    $counter = 1;
+                    while (Profession::where('code', $code)->exists()) {
+                        $code = substr($baseCode, 0, 2).$counter++;
+                    }
+                    $profession = Profession::create([
+                        'name' => $profName,
+                        'code' => $code,
+                    ]);
+                }
+            }
 
             // Resolve fund source by name
             $fundSource = null;
@@ -99,7 +118,7 @@ class ActivityPerParticipantImport implements ToCollection, WithHeadingRow
                 'activity_format_id' => $activityFormat ? $activityFormat->id : null,
                 'activity_scope_id' => $activityScope ? $activityScope->id : null,
                 'batch_id' => $batch ? $batch->id : null,
-                'target_participant_id' => $targetParticipant ? $targetParticipant->id : null,
+                'profession_id' => $profession ? $profession->id : null,
                 'fund_source_id' => $fundSource ? $fundSource->id : null,
                 'tempat' => isset($row['tempat']) ? trim($row['tempat']) : null,
                 'tujuan' => isset($row['tujuan']) ? trim($row['tujuan']) : null,
