@@ -50,7 +50,8 @@ class RoleController extends Controller
         $role = Role::create(['name' => $request->name, 'guard_name' => 'web']);
 
         if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
+            $permissions = Permission::whereIn('id', $request->permissions)->get();
+            $role->syncPermissions($permissions);
         }
 
         return redirect()->route('roles.index')->with('success', 'Role berhasil ditambahkan.');
@@ -90,7 +91,8 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $role->update(['name' => $request->name]);
 
-        $role->syncPermissions($request->permissions ?? []);
+        $permissions = Permission::whereIn('id', $request->permissions ?? [])->get();
+        $role->syncPermissions($permissions);
 
         return redirect()->route('roles.index')->with('success', 'Role berhasil diperbarui.');
     }

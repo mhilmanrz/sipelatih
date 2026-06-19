@@ -106,7 +106,7 @@ class RolePermissionTest extends TestCase
         $response = $this->actingAs($this->adminUser)
             ->post(route('roles.store'), [
                 'name' => 'Custom Manager Role',
-                'permissions' => [$perm1->id, $perm2->id],
+                'permissions' => [(string) $perm1->id, (string) $perm2->id],
             ]);
 
         $response->assertRedirect(route('roles.index'));
@@ -133,7 +133,7 @@ class RolePermissionTest extends TestCase
         $response = $this->actingAs($this->adminUser)
             ->put(route('roles.update', $role->id), [
                 'name' => 'Updated Custom Secretary',
-                'permissions' => [$perm2->id], // Switch from perm1 to perm2
+                'permissions' => [(string) $perm2->id], // Switch from perm1 to perm2
             ]);
 
         $response->assertRedirect(route('roles.index'));

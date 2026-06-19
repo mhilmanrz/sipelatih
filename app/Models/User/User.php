@@ -21,6 +21,10 @@ class User extends Authenticatable
         return UserFactory::new();
     }
 
+    protected $appends = [
+        'nip',
+    ];
+
     protected $fillable = [
         'name',
         'email',
@@ -74,5 +78,10 @@ class User extends Authenticatable
     public function activityParticipants()
     {
         return $this->hasMany(ActivityParticipant::class);
+    }
+
+    public function getNipAttribute(): ?string
+    {
+        return $this->employee_id;
     }
 }

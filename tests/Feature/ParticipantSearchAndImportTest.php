@@ -90,4 +90,21 @@ class ParticipantSearchAndImportTest extends TestCase
             'user_id' => $targetUser->id,
         ]);
     }
+
+    /**
+     * Test User model nip accessor and JSON serialization.
+     */
+    public function test_user_model_exposes_nip_accessor_and_json_serialization(): void
+    {
+        $user = User::factory()->create([
+            'employee_id' => '198607122012122001',
+        ]);
+
+        // 1. Check accessor in PHP
+        $this->assertEquals('198607122012122001', $user->nip);
+
+        // 2. Check serialization in JSON
+        $json = $user->toJson();
+        $this->assertStringContainsString('"nip":"198607122012122001"', $json);
+    }
 }
