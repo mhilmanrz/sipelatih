@@ -46,6 +46,9 @@ class ActivityController extends Controller
         $selectedOrganizerPicId = old('organizer_pic_id');
         $selectedOrganizerPic = $selectedOrganizerPicId ? User::find($selectedOrganizerPicId) : null;
 
+        $selectedActivityNameId = old('activity_name_id');
+        $selectedActivityName = $selectedActivityNameId ? ActivityName::find($selectedActivityNameId) : null;
+
         $activity_names = ActivityName::whereDoesntHave('activities')->get();
         $activity_categories = ActivityCategory::all();
         $activity_types = ActivityType::all();
@@ -67,6 +70,7 @@ class ActivityController extends Controller
         return view('usulan.pengajuan.create', compact(
             'selectedPic',
             'selectedOrganizerPic',
+            'selectedActivityName',
             'activity_names',
             'activity_categories',
             'activity_types',
@@ -156,6 +160,9 @@ class ActivityController extends Controller
         $selectedOrganizerPicId = old('organizer_pic_id', $kegiatan->organizer_pic_id);
         $selectedOrganizerPic = $selectedOrganizerPicId ? User::find($selectedOrganizerPicId) : null;
 
+        $selectedActivityNameId = old('activity_name_id', $kegiatan->activity_name_id);
+        $selectedActivityName = $selectedActivityNameId ? ActivityName::find($selectedActivityNameId) : null;
+
         $activity_names = ActivityName::all();
         $activity_categories = ActivityCategory::all();
         $activity_types = ActivityType::all();
@@ -168,11 +175,16 @@ class ActivityController extends Controller
         $work_units = WorkUnit::all();
         $budgets = Budget::withSum('activities', 'budget_amount')->get();
         $fund_sources = FundSource::all();
+        $years = ActivityName::whereNotNull('year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
 
         return view('usulan.pengajuan.edit', compact(
             'kegiatan',
             'selectedPic',
             'selectedOrganizerPic',
+            'selectedActivityName',
             'activity_names',
             'activity_categories',
             'activity_types',
@@ -184,7 +196,8 @@ class ActivityController extends Controller
             'professions',
             'work_units',
             'budgets',
-            'fund_sources'
+            'fund_sources',
+            'years'
         ));
     }
 

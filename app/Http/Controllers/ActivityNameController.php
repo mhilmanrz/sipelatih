@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ImportActivityNameJob;
 use App\Models\Act\ActivityName;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -112,5 +113,33 @@ class ActivityNameController extends Controller
         $activityName->delete();
 
         return redirect()->route('activity-names.index')->with('success', 'Nama Kegiatan berhasil dihapus.');
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        $year = $request->input('year');
+        $search = $request->input('q');
+        $includeId = $request->input('include_id');
+
+        $query = ActivityName::query();
+
+        if ($year) {
+            $query->where('year', $year);
+        }
+
+        if ($search) {
+            $query->where('name', 'like', '%'.$search.'%');
+        }
+
+        $query->where(function ($q) use ($includeId) {
+            $q->whereDoesntHave('activities');
+            if ($includeId) {
+                $q->orWhere('id', $includeId);
+            }
+        });
+
+        $activityNames = $query->limit(50)->get(['id', 'name', 'start_date', 'end_date', 'year']);
+
+        return response()->json($activityNames);
     }
 }

@@ -38,23 +38,17 @@
                     <select id="year_filter">
                         <option value="">-PILIH TAHUN-</option>
                         @foreach ($years as $year)
-                            <option value="{{ $year }}">{{ $year }}</option>
+                            <option value="{{ $year }}" 
+                                {{ (old('year') == $year || ($selectedActivityName && $selectedActivityName->year == $year)) ? 'selected' : '' }}>
+                                {{ $year }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
 
                 <div class="form-row">
                     <label>Nama Kegiatan</label>
-                    <select name="activity_name_id" id="activity_name_select" required>
-                        <option value="" data-start="" data-end="" data-year="">-PILIH-</option>
-                        @foreach ($activity_names as $actName)
-                            <option value="{{ $actName->id }}"
-                                data-start="{{ $actName->start_date }}" data-end="{{ $actName->end_date }}"
-                                data-year="{{ $actName->year }}"
-                                {{ old('activity_name_id') == $actName->id ? 'selected' : '' }}>{{ $actName->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <x-select-activity-name name="activity_name_id" id="activity_name_select" :selected-activity-name="$selectedActivityName" required />
                 </div>
 
                 <div class="form-row">
@@ -175,7 +169,7 @@
                 </div>
 
                 <div class="form-row">
-                    <label>Profesi</label>
+                    <label>Target Peserta</label>
                     <select name="profession_id">
                         <option value="">-PILIH-</option>
                         @foreach ($professions as $prof)
@@ -309,47 +303,45 @@
             const endDateInput = document.getElementById('act_end_date');
 
             // Simpan semua opsi asli
-            const allActivityOptions = Array.from(actNameSelect.options).slice(1);
-            const allBudgetOptions = Array.from(budgetSelect.options).slice(1);
+            const allBudgetOptions = budgetSelect ? Array.from(budgetSelect.options).slice(1) : [];
 
             function filterByYear(year) {
-                // Reset Nama Kegiatan
-                actNameSelect.innerHTML = '<option value="" data-start="" data-end="" data-year="">-PILIH-</option>';
+                // Clear dates
                 startDateInput.value = '';
                 endDateInput.value = '';
 
                 // Reset Pagu
-                budgetSelect.innerHTML = '<option value="" data-year="">-PILIH PAGU-</option>';
-
-                if (!year) return;
-
-                allActivityOptions.forEach(opt => {
-                    if (opt.dataset.year == year) {
-                        actNameSelect.appendChild(opt.cloneNode(true));
+                if (budgetSelect) {
+                    budgetSelect.innerHTML = '<option value="" data-year="">-PILIH PAGU-</option>';
+                    if (year) {
+                        allBudgetOptions.forEach(opt => {
+                            if (opt.dataset.year == year) {
+                                budgetSelect.appendChild(opt.cloneNode(true));
+                            }
+                        });
                     }
-                });
-
-                allBudgetOptions.forEach(opt => {
-                    if (opt.dataset.year == year) {
-                        budgetSelect.appendChild(opt.cloneNode(true));
-                    }
-                });
+                }
             }
 
-            // Kosongkan saat pertama load
-            filterByYear('');
+            // Set initial year
+            const initialYear = yearFilter.value;
+            filterByYear(initialYear);
 
             yearFilter.addEventListener('change', function() {
                 filterByYear(this.value);
             });
 
-            actNameSelect.addEventListener('change', function() {
-                const selectedOption = actNameSelect.options[actNameSelect.selectedIndex];
-                const start = selectedOption.getAttribute('data-start');
-                const end = selectedOption.getAttribute('data-end');
-
-                if (start) startDateInput.value = start;
-                if (end) endDateInput.value = end;
+            actNameSelect.addEventListener('activity-name-selected', function(e) {
+                const activityNameObj = e.detail.activityName;
+                if (activityNameObj) {
+                    const start = activityNameObj.start_date;
+                    const end = activityNameObj.end_date;
+                    if (start) startDateInput.value = start;
+                    if (end) endDateInput.value = end;
+                } else {
+                    startDateInput.value = '';
+                    endDateInput.value = '';
+                }
             });
         });
     </script>

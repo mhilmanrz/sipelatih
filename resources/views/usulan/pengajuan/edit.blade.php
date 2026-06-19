@@ -36,16 +36,21 @@
                 </div>
 
                 <div class="form-row">
-                    <label>Nama Kegiatan</label>
-                    <select name="activity_name_id" id="activity_name_select" required>
-                        <option value="" data-start="" data-end="">-PILIH-</option>
-                        @foreach ($activity_names as $actName)
-                            <option value="{{ $actName->id }}"
-                                data-start="{{ $actName->start_date }}" data-end="{{ $actName->end_date }}"
-                                {{ old('activity_name_id', $kegiatan->activity_name_id) == $actName->id ? 'selected' : '' }}>
-                                {{ $actName->name }}</option>
+                    <label>Tahun</label>
+                    <select id="year_filter">
+                        <option value="">-PILIH TAHUN-</option>
+                        @foreach ($years as $year)
+                            <option value="{{ $year }}" 
+                                {{ (old('year') == $year || ($selectedActivityName && $selectedActivityName->year == $year)) ? 'selected' : '' }}>
+                                {{ $year }}
+                            </option>
                         @endforeach
                     </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Nama Kegiatan</label>
+                    <x-select-activity-name name="activity_name_id" id="activity_name_select" :selected-activity-name="$selectedActivityName" required />
                 </div>
 
                 <div class="form-row">
@@ -171,7 +176,7 @@
                 </div>
 
                 <div class="form-row">
-                    <label>Profesi</label>
+                    <label>Target Peserta</label>
                     <select name="profession_id">
                         <option value="">-PILIH-</option>
                         @foreach ($professions as $prof)
@@ -202,11 +207,11 @@
                 @if (auth()->user()->hasAnyRole(['perencanaan', 'superadmin']))
                     <div class="form-row">
                         <label>Pagu</label>
-                        <select name="budget_id">
-                            <option value="">-PILIH PAGU-</option>
+                        <select name="budget_id" id="budget_select">
+                            <option value="" data-year="">-PILIH PAGU-</option>
                             @foreach ($budgets as $bg)
                                 @php $sisa = $bg->total_amount - ($bg->blocked_amount ?? 0) - ($bg->activities_sum_budget_amount ?? 0); @endphp
-                                <option value="{{ $bg->id }}"
+                                <option value="{{ $bg->id }}" data-year="{{ $bg->year }}"
                                     {{ old('budget_id', $kegiatan->budget_id) == $bg->id ? 'selected' : '' }}>
                                     {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Sisa: Rp {{ number_format($sisa, 0, ',', '.') }})</option>
                             @endforeach
@@ -301,18 +306,60 @@
                 }
             }
 
-            const select = document.getElementById('activity_name_select');
+            const yearFilter = document.getElementById('year_filter');
+            const actNameSelect = document.getElementById('activity_name_select');
+            const budgetSelect = document.getElementById('budget_select');
             const startDateInput = document.getElementById('act_start_date');
             const endDateInput = document.getElementById('act_end_date');
 
-            if (select && startDateInput && endDateInput) {
-                select.addEventListener('change', function() {
-                    const selectedOption = select.options[select.selectedIndex];
-                    const start = selectedOption.getAttribute('data-start');
-                    const end = selectedOption.getAttribute('data-end');
+            // Simpan semua opsi asli
+            const allBudgetOptions = budgetSelect ? Array.from(budgetSelect.options).slice(1) : [];
 
-                    if (start) startDateInput.value = start;
-                    if (end) endDateInput.value = end;
+            function filterByYear(year, shouldClearDates = false) {
+                // Clear dates if requested
+                if (shouldClearDates) {
+                    startDateInput.value = '';
+                    endDateInput.value = '';
+                }
+
+                // Reset Pagu
+                if (budgetSelect) {
+                    const selectedBudgetId = budgetSelect.value;
+                    budgetSelect.innerHTML = '<option value="" data-year="">-PILIH PAGU-</option>';
+                    if (year) {
+                        allBudgetOptions.forEach(opt => {
+                            if (opt.dataset.year == year) {
+                                const clone = opt.cloneNode(true);
+                                if (clone.value === selectedBudgetId) {
+                                    clone.selected = true;
+                                }
+                                budgetSelect.appendChild(clone);
+                            }
+                        });
+                    }
+                }
+            }
+
+            // Set initial year
+            if (yearFilter) {
+                filterByYear(yearFilter.value, false);
+                yearFilter.addEventListener('change', function() {
+                    filterByYear(this.value, true);
+                });
+            }
+
+            if (actNameSelect) {
+                actNameSelect.addEventListener('activity-name-selected', function(e) {
+                    const activityNameObj = e.detail.activityName;
+                    if (activityNameObj) {
+                        const start = activityNameObj.start_date;
+                        const end = activityNameObj.end_date;
+                        if (start) startDateInput.value = start;
+                        if (end) endDateInput.value = end;
+                    } else {
+                        startDateInput.value = '';
+                        endDateInput.value = '';
+                    }
                 });
             }
         });
