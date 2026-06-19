@@ -129,7 +129,7 @@ class ActivityController extends Controller
                 if ($searchPeserta) {
                     $query->whereHas('user', function ($q) use ($searchPeserta) {
                         $q->where('name', 'like', '%'.$searchPeserta.'%')
-                            ->orWhere('nip', 'like', '%'.$searchPeserta.'%');
+                            ->orWhere('employee_id', 'like', '%'.$searchPeserta.'%');
                     });
                 }
             },

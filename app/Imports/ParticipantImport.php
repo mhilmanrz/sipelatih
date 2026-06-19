@@ -30,7 +30,7 @@ class ParticipantImport implements ToCollection, WithHeadingRow
                 continue;
             }
 
-            $user = User::where('nip', $nip)->first();
+            $user = User::where('employee_id', $nip)->first();
 
             // Jika User ditemukan
             if ($user) {
