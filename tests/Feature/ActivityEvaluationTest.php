@@ -70,9 +70,8 @@ class ActivityEvaluationTest extends TestCase
             ->post(route('evaluation-criteria.store'), [
                 'code' => 'K2-NEW',
                 'name' => 'Kriteria Kognitif Baru',
-                'evaluation_type' => 2,
-                'is_fillable' => 1,
-                'type' => 'number',
+                'evaluation_type' => 3,
+                'type' => 'isian',
                 'order' => 5,
             ]);
 
@@ -80,9 +79,8 @@ class ActivityEvaluationTest extends TestCase
         $this->assertDatabaseHas('evaluation_criteria', [
             'code' => 'K2-NEW',
             'name' => 'Kriteria Kognitif Baru',
-            'evaluation_type' => 2,
-            'is_fillable' => true,
-            'type' => 'number',
+            'evaluation_type' => 3,
+            'type' => 'isian',
         ]);
     }
 

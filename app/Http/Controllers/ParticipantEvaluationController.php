@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Act\Activity;
 use App\Models\Act\EvaluationCriteria;
 use App\Models\Act\ParticipantEvaluation;
 use App\Models\Act\ParticipantEvaluationFile;
@@ -15,19 +16,62 @@ class ParticipantEvaluationController extends Controller
     public function index(Request $request): View
     {
         $user = auth()->user();
+        $selectedActivityId = $request->input('activity_id');
 
-        $evaluations = ParticipantEvaluation::whereHas('participant', function ($query) use ($user) {
+        // Fetch activities for filter dropdown
+        $filterActivities = Activity::whereHas('participants', function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                ->whereHas('participantEvaluations');
+        })
+            ->with('activityName')
+            ->get()
+            ->sortBy(fn ($activity) => $activity->activityName->name ?? '')
+            ->values();
+
+        $evaluationsQuery = ParticipantEvaluation::whereHas('participant', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })
             ->with([
                 'participant.activity.activityName',
                 'speaker.user',
-            ])
+            ]);
+
+        if ($request->filled('activity_id')) {
+            $evaluationsQuery->whereHas('participant', function ($query) use ($selectedActivityId) {
+                $query->where('activity_id', $selectedActivityId);
+            });
+        }
+
+        // Stats calculation
+        $statsQuery = ParticipantEvaluation::whereHas('participant', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        });
+
+        if ($request->filled('activity_id')) {
+            $statsQuery->whereHas('participant', function ($query) use ($selectedActivityId) {
+                $query->where('activity_id', $selectedActivityId);
+            });
+        }
+
+        $totalCount = $statsQuery->count();
+        $completedCount = (clone $statsQuery)->whereNotNull('submitted_at')->count();
+        $pendingCount = $totalCount - $completedCount;
+        $completionRate = $totalCount > 0 ? (int) round(($completedCount / $totalCount) * 100) : 0;
+
+        $stats = [
+            'total' => $totalCount,
+            'completed' => $completedCount,
+            'pending' => $pendingCount,
+            'rate' => $completionRate,
+        ];
+
+        $evaluations = $evaluationsQuery
             ->orderBy('evaluation_type')
             ->orderBy('created_at', 'desc')
-            ->paginate($request->input('per_page', 10));
+            ->paginate($request->input('per_page', 10))
+            ->withQueryString();
 
-        return view('participant-evaluations.index', compact('evaluations'));
+        return view('participant-evaluations.index', compact('evaluations', 'filterActivities', 'selectedActivityId', 'stats'));
     }
 
     public function show($participantEvaluationId): View
