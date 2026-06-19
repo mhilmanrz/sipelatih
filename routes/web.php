@@ -143,6 +143,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
     Route::resource('kegiatan', ActivityController::class);
+    Route::post('kegiatan/{kegiatan}/upload-kak', [ActivityController::class, 'uploadKak'])->name('kegiatan.upload-kak');
     Route::post('kegiatan/{kegiatan}/sasaran-profesi', [ActivityProfessionController::class, 'store'])->name('kegiatan.sasaran-profesi.store');
     Route::delete('kegiatan/{kegiatan}/sasaran-profesi/{id}', [ActivityProfessionController::class, 'destroy'])->name('kegiatan.sasaran-profesi.destroy');
     Route::post('kegiatan/{kegiatan}/materi', [ActivityMaterialController::class, 'store'])->name('kegiatan.materi.store');

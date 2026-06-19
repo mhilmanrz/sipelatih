@@ -80,7 +80,7 @@
             </div>
 
             <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">*JPL</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">*Menit</label>
                 <input type="number" name="value" step="0.1" min="0.1" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500" placeholder="0" value="{{ old('value') }}">
             </div>
 

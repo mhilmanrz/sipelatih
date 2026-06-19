@@ -21,6 +21,7 @@ use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ActivityController extends Controller
 {
@@ -139,6 +140,7 @@ class ActivityController extends Controller
             'scoreSetting',
             'scoreComponents',
             'gradeCategories',
+            'activityKakFiles',
         ])->findOrFail($id);
 
         $professions = Profession::all();
@@ -221,5 +223,30 @@ class ActivityController extends Controller
         $activity->delete();
 
         return redirect()->route('usulan-diklat')->with('success', 'Kegiatan berhasil dihapus.');
+    }
+
+    /**
+     * Upload KAK file for the specified activity.
+     */
+    public function uploadKak(Request $request, $id)
+    {
+        $request->validate([
+            'kak_file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+        ]);
+
+        $kegiatan = Activity::findOrFail($id);
+
+        if ($request->hasFile('kak_file')) {
+            $path = $request->file('kak_file')->store('kegiatan/kak', 'public');
+
+            $kegiatan->activityKakFiles()->create([
+                'url' => $path,
+            ]);
+
+            return redirect()->route('kegiatan.show', ['kegiatan' => $id, 'tab' => 'kak'])
+                ->with('success', 'Dokumen KAK berhasil diunggah.');
+        }
+
+        return redirect()->back()->with('error', 'Gagal mengunggah file.');
     }
 }

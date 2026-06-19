@@ -208,4 +208,10 @@ class Activity extends Model
     {
         return $this->hasMany(ActivityEvaluation::class);
     }
+
+    public function activityKakFiles(): HasMany
+    {
+        return $this->hasMany(ActivityKakFile::class);
+    }
 }
+
