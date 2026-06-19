@@ -23,7 +23,7 @@
 
     <x-detail-section title="Peserta & Penyelenggara" icon="fa-users">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1">
-            <x-detail-row label="Target Peserta">{{ $kegiatan->targetParticipant->name ?? '-' }}</x-detail-row>
+            <x-detail-row label="Profesi">{{ $kegiatan->profession->name ?? '-' }}</x-detail-row>
             <x-detail-row label="Kuota Peserta">{{ $kegiatan->quota_participant ? $kegiatan->quota_participant . ' Orang' : '-' }}</x-detail-row>
             <x-detail-row label="Pengusul">{{ $kegiatan->workUnit->name ?? '-' }}</x-detail-row>
             <x-detail-row label="PIC Kegiatan">{{ $kegiatan->picUser->name ?? '-' }}</x-detail-row>

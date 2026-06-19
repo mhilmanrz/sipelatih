@@ -131,6 +131,7 @@ Route::middleware(['auth'])->group(function () {
     // Evaluation Categories Management
     Route::resource('evaluation-categories', EvaluationCategoryController::class);
 
+    Route::get('users/search-candidates', [UserController::class, 'searchCandidates'])->name('users.search-candidates');
     Route::get('users/import/template', [UserController::class, 'downloadTemplate'])->name('users.import.template');
     Route::get('users/import', [UserController::class, 'importView'])->name('users.import.view');
     Route::post('users/import', [UserController::class, 'import'])->name('users.import');

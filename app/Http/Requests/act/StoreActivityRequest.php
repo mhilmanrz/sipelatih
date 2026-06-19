@@ -63,7 +63,7 @@ class StoreActivityRequest extends FormRequest
             'justifikasi' => 'nullable|string',
             'target_kompetensi' => 'nullable|string',
             'fund_source_id' => 'nullable|exists:fund_sources,id',
-            'target_participant_id' => 'nullable|exists:target_participants,id',
+            'profession_id' => 'nullable|exists:professions,id',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
             'start_time' => 'nullable|date_format:H:i',

@@ -15,7 +15,6 @@ use App\Models\Act\ActivityType;
 use App\Models\Act\Batch;
 use App\Models\Act\FundSource;
 use App\Models\Act\MaterialType;
-use App\Models\Act\TargetParticipant;
 use App\Models\Budget;
 use App\Models\User\Profession;
 use App\Models\User\User;
@@ -41,7 +40,12 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        $picCandidates = User::doesntHave('roles')->where('email', '!=', 'admin@mail.com')->get();
+        $selectedPicId = old('pic_user_id');
+        $selectedPic = $selectedPicId ? User::find($selectedPicId) : null;
+
+        $selectedOrganizerPicId = old('organizer_pic_id');
+        $selectedOrganizerPic = $selectedOrganizerPicId ? User::find($selectedOrganizerPicId) : null;
+
         $activity_names = ActivityName::whereDoesntHave('activities')->get();
         $activity_categories = ActivityCategory::all();
         $activity_types = ActivityType::all();
@@ -50,7 +54,7 @@ class ActivityController extends Controller
         $activity_methods = ActivityMethod::all();
         $batches = Batch::all();
         $activity_formats = ActivityFormat::all();
-        $target_participants = TargetParticipant::all();
+        $professions = Profession::all();
         $work_units = WorkUnit::all();
         $budgets = Budget::withSum('activities', 'budget_amount')->get();
         $fund_sources = FundSource::all();
@@ -61,7 +65,8 @@ class ActivityController extends Controller
             ->pluck('year');
 
         return view('usulan.pengajuan.create', compact(
-            'picCandidates',
+            'selectedPic',
+            'selectedOrganizerPic',
             'activity_names',
             'activity_categories',
             'activity_types',
@@ -70,7 +75,7 @@ class ActivityController extends Controller
             'activity_methods',
             'batches',
             'activity_formats',
-            'target_participants',
+            'professions',
             'work_units',
             'budgets',
             'fund_sources',
@@ -106,7 +111,7 @@ class ActivityController extends Controller
             'activityMethod',
             'batch',
             'activityFormat',
-            'targetParticipant',
+            'profession',
             'workUnit',
             'picUser',
             'organizerPic',
@@ -145,7 +150,12 @@ class ActivityController extends Controller
     {
         $kegiatan = Activity::findOrFail($id);
 
-        $picCandidates = User::doesntHave('roles')->where('email', '!=', 'admin@mail.com')->get();
+        $selectedPicId = old('pic_user_id', $kegiatan->pic_user_id);
+        $selectedPic = $selectedPicId ? User::find($selectedPicId) : null;
+
+        $selectedOrganizerPicId = old('organizer_pic_id', $kegiatan->organizer_pic_id);
+        $selectedOrganizerPic = $selectedOrganizerPicId ? User::find($selectedOrganizerPicId) : null;
+
         $activity_names = ActivityName::all();
         $activity_categories = ActivityCategory::all();
         $activity_types = ActivityType::all();
@@ -154,14 +164,15 @@ class ActivityController extends Controller
         $activity_methods = ActivityMethod::all();
         $batches = Batch::all();
         $activity_formats = ActivityFormat::all();
-        $target_participants = TargetParticipant::all();
+        $professions = Profession::all();
         $work_units = WorkUnit::all();
         $budgets = Budget::withSum('activities', 'budget_amount')->get();
         $fund_sources = FundSource::all();
 
         return view('usulan.pengajuan.edit', compact(
             'kegiatan',
-            'picCandidates',
+            'selectedPic',
+            'selectedOrganizerPic',
             'activity_names',
             'activity_categories',
             'activity_types',
@@ -170,7 +181,7 @@ class ActivityController extends Controller
             'activity_methods',
             'batches',
             'activity_formats',
-            'target_participants',
+            'professions',
             'work_units',
             'budgets',
             'fund_sources'

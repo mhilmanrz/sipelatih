@@ -11,6 +11,7 @@ use App\Models\User\Profession;
 use App\Models\User\Rank;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -205,5 +206,29 @@ class UserController extends Controller
         }
 
         return redirect()->back()->with('error', 'Gagal mengunggah file.');
+    }
+
+    /**
+     * Search candidate users for PIC / Organizer PIC roles.
+     */
+    public function searchCandidates(Request $request): JsonResponse
+    {
+        $search = $request->input('q');
+
+        $query = User::doesntHave('roles')
+            ->where('email', '!=', 'admin@mail.com');
+
+        if ($search && strlen($search) >= 3) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('employee_id', 'like', '%'.$search.'%');
+            });
+        } else {
+            return response()->json([]);
+        }
+
+        $users = $query->limit(20)->get(['id', 'name', 'employee_id', 'phone_number']);
+
+        return response()->json($users);
     }
 }

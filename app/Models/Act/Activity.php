@@ -3,6 +3,7 @@
 namespace App\Models\Act;
 
 use App\Models\Budget;
+use App\Models\User\Profession;
 use App\Models\User\User;
 use App\Models\User\WorkUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,7 +30,7 @@ class Activity extends Model
         'tujuan',
         'justifikasi',
         'target_kompetensi',
-        'target_participant_id',
+        'profession_id',
         'start_date',
         'end_date',
         'start_time',
@@ -94,9 +95,9 @@ class Activity extends Model
         return $this->belongsTo(ActivityFormat::class);
     }
 
-    public function targetParticipant()
+    public function profession()
     {
-        return $this->belongsTo(TargetParticipant::class, 'target_participant_id');
+        return $this->belongsTo(Profession::class, 'profession_id');
     }
 
     public function workUnit()
