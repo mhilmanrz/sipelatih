@@ -144,6 +144,40 @@ class Activity extends Model
         return $this->hasMany(ActivityParticipant::class);
     }
 
+    public function participants()
+    {
+        return $this->hasMany(ActivityParticipant::class);
+    }
+
+    public function materials()
+    {
+        return $this->hasMany(ActivityMaterial::class);
+    }
+
+    public function speakers()
+    {
+        return $this->hasManyThrough(
+            ActivitySpeaker::class,
+            ActivityMaterial::class,
+            'activity_id',
+            'activity_material_id',
+            'id',
+            'id'
+        );
+    }
+
+    public function moderators()
+    {
+        return $this->hasManyThrough(
+            ActivityModerator::class,
+            ActivityMaterial::class,
+            'activity_id',
+            'activity_material_id',
+            'id',
+            'id'
+        );
+    }
+
     public function report()
     {
         return $this->hasOne(ActivityReport::class);

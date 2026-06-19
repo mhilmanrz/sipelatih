@@ -80,7 +80,7 @@
                                             <i class="fa-solid fa-file-pdf"></i>
                                         </div>
                                         <div>
-                                            <p class="font-medium text-gray-900">{{ $material->title }}</p>
+                                            <p class="font-medium text-gray-900">{{ $material->name }}</p>
                                             <p class="text-xs text-gray-500">{{ $material->speaker->user->name ?? 'Materi Umum' }}</p>
                                         </div>
                                     </div>
