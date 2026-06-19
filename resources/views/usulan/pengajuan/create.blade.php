@@ -202,18 +202,20 @@
                     <input type="number" name="budget_amount" value="{{ old('budget_amount') }}">
                 </div>
 
-                <div class="form-row">
-                    <label>Pagu</label>
-                    <select name="budget_id" id="budget_select">
-                        <option value="" data-year="">-PILIH PAGU-</option>
-                        @foreach ($budgets as $bg)
-                            @php $sisa = $bg->total_amount - ($bg->blocked_amount ?? 0) - ($bg->activities_sum_budget_amount ?? 0); @endphp
-                            <option value="{{ $bg->id }}" data-year="{{ $bg->year }}" {{ old('budget_id') == $bg->id ? 'selected' : '' }}>
-                                {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Sisa: Rp {{ number_format($sisa, 0, ',', '.') }})
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                @if (auth()->user()->hasAnyRole(['perencanaan', 'superadmin']))
+                    <div class="form-row">
+                        <label>Pagu</label>
+                        <select name="budget_id" id="budget_select">
+                            <option value="" data-year="">-PILIH PAGU-</option>
+                            @foreach ($budgets as $bg)
+                                @php $sisa = $bg->total_amount - ($bg->blocked_amount ?? 0) - ($bg->activities_sum_budget_amount ?? 0); @endphp
+                                <option value="{{ $bg->id }}" data-year="{{ $bg->year }}" {{ old('budget_id') == $bg->id ? 'selected' : '' }}>
+                                    {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Sisa: Rp {{ number_format($sisa, 0, ',', '.') }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
 
                 <div class="form-row">
                     <label>Unit Pengusul</label>

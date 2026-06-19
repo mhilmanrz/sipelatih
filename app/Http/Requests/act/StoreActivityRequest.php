@@ -30,6 +30,13 @@ class StoreActivityRequest extends FormRequest
                 'fund_source_id' => $fundSource->id,
             ]);
         }
+
+        $user = auth()->user();
+        if ($user && ! $user->hasAnyRole(['perencanaan', 'superadmin'])) {
+            $this->merge([
+                'budget_id' => null,
+            ]);
+        }
     }
 
     /**

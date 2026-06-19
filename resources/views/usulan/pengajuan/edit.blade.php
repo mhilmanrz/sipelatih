@@ -199,18 +199,20 @@
                         value="{{ old('budget_amount', $kegiatan->budget_amount ? floor($kegiatan->budget_amount) : '') }}">
                 </div>
 
-                <div class="form-row">
-                    <label>Pagu</label>
-                    <select name="budget_id">
-                        <option value="">-PILIH PAGU-</option>
-                        @foreach ($budgets as $bg)
-                            @php $sisa = $bg->total_amount - ($bg->blocked_amount ?? 0) - ($bg->activities_sum_budget_amount ?? 0); @endphp
-                            <option value="{{ $bg->id }}"
-                                {{ old('budget_id', $kegiatan->budget_id) == $bg->id ? 'selected' : '' }}>
-                                {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Sisa: Rp {{ number_format($sisa, 0, ',', '.') }})</option>
-                        @endforeach
-                    </select>
-                </div>
+                @if (auth()->user()->hasAnyRole(['perencanaan', 'superadmin']))
+                    <div class="form-row">
+                        <label>Pagu</label>
+                        <select name="budget_id">
+                            <option value="">-PILIH PAGU-</option>
+                            @foreach ($budgets as $bg)
+                                @php $sisa = $bg->total_amount - ($bg->blocked_amount ?? 0) - ($bg->activities_sum_budget_amount ?? 0); @endphp
+                                <option value="{{ $bg->id }}"
+                                    {{ old('budget_id', $kegiatan->budget_id) == $bg->id ? 'selected' : '' }}>
+                                    {{ $bg->rkkal_code }} - {{ $bg->budgetCategory->name ?? '' }} (Sisa: Rp {{ number_format($sisa, 0, ',', '.') }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
 
                 <div class="form-row">
                     <label>Unit Pengusul</label>

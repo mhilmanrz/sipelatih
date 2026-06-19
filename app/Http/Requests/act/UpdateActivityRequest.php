@@ -30,6 +30,11 @@ class UpdateActivityRequest extends FormRequest
                 'fund_source_id' => $fundSource->id,
             ]);
         }
+
+        $user = auth()->user();
+        if ($user && ! $user->hasAnyRole(['perencanaan', 'superadmin'])) {
+            $this->offsetUnset('budget_id');
+        }
     }
 
     /**
