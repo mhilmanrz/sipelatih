@@ -2,23 +2,36 @@
     <x-slot:title>Detail Usulan Diklat</x-slot>
 
     @php
-        $activeTab = request('tab', 'kegiatan');
         $status = $kegiatan->latestStatus->status ?? 'draft';
 
         $tabs = [
-            'kegiatan'    => ['label' => 'Kegiatan',        'title' => 'Informasi Kegiatan',       'icon' => 'fa-clipboard-list'],
-            'dokumen'     => ['label' => 'Dokumen',         'title' => 'Dokumen Kegiatan',         'icon' => 'fa-file-alt'],
-            'justifikasi' => ['label' => 'Justifikasi',     'title' => 'Tujuan & Justifikasi',     'icon' => 'fa-balance-scale'],
-            'sasaran'     => ['label' => 'Sasaran Profesi', 'title' => 'Sasaran Profesi',          'icon' => 'fa-bullseye'],
-            'kak'         => ['label' => 'KAK',             'title' => 'Dokumen KAK',              'icon' => 'fa-file-contract'],
-            'materi'      => ['label' => 'Materi',          'title' => 'Materi Kegiatan',           'icon' => 'fa-book'],
-            'narasumber'  => ['label' => 'Narasumber',      'title' => 'Narasumber / Pembicara',    'icon' => 'fa-user-tie'],
-            'peserta'     => ['label' => 'Peserta',          'title' => 'Peserta Kegiatan',          'icon' => 'fa-users'],
-            'input-nilai' => ['label' => 'Input Nilai',     'title' => 'Input Nilai Peserta',      'icon' => 'fa-pen-alt'],
-            'pengiriman'  => ['label' => 'Pengiriman',       'title' => 'Pengiriman Usulan',         'icon' => 'fa-paper-plane'],
-            'penilaian'   => ['label' => 'Penilaian',        'title' => 'Riwayat Penilaian',         'icon' => 'fa-star'],
-            'sertifikat'  => ['label' => 'Sertifikat',       'title' => 'E-Sertifikat',              'icon' => 'fa-certificate'],
+            'kegiatan'    => ['label' => 'Kegiatan',        'title' => 'Informasi Kegiatan',       'icon' => 'fa-clipboard-list',   'permission' => 'view activity tab kegiatan'],
+            'dokumen'     => ['label' => 'Dokumen',         'title' => 'Dokumen Kegiatan',         'icon' => 'fa-file-alt',         'permission' => 'view activity tab dokumen'],
+            'justifikasi' => ['label' => 'Justifikasi',     'title' => 'Tujuan & Justifikasi',     'icon' => 'fa-balance-scale',    'permission' => 'view activity tab justifikasi'],
+            'sasaran'     => ['label' => 'Sasaran Profesi', 'title' => 'Sasaran Profesi',          'icon' => 'fa-bullseye',         'permission' => 'view activity tab sasaran'],
+            'kak'         => ['label' => 'KAK',             'title' => 'Dokumen KAK',              'icon' => 'fa-file-contract',    'permission' => 'view activity tab kak'],
+            'materi'      => ['label' => 'Materi',          'title' => 'Materi Kegiatan',           'icon' => 'fa-book',             'permission' => 'view activity tab materi'],
+            'narasumber'  => ['label' => 'Narasumber',      'title' => 'Narasumber / Pembicara',    'icon' => 'fa-user-tie',         'permission' => 'view activity tab narasumber'],
+            'peserta'     => ['label' => 'Peserta',          'title' => 'Peserta Kegiatan',          'icon' => 'fa-users',            'permission' => 'view activity tab peserta'],
+            'input-nilai' => ['label' => 'Input Nilai',     'title' => 'Input Nilai Peserta',      'icon' => 'fa-pen-alt',          'permission' => 'view activity tab input-nilai'],
+            'pengiriman'  => ['label' => 'Pengiriman',       'title' => 'Pengiriman Usulan',         'icon' => 'fa-paper-plane',      'permission' => 'view activity tab pengiriman'],
+            'penilaian'   => ['label' => 'Penilaian',        'title' => 'Riwayat Penilaian',         'icon' => 'fa-star',             'permission' => 'view activity tab penilaian'],
+            'sertifikat'  => ['label' => 'Sertifikat',       'title' => 'E-Sertifikat',              'icon' => 'fa-certificate',      'permission' => 'view activity tab sertifikat'],
         ];
+
+        // Filter tabs based on user permissions
+        $tabs = array_filter($tabs, function ($meta) {
+            return auth()->user()->can($meta['permission']);
+        });
+
+        $activeTab = request('tab');
+        if (!$activeTab || !isset($tabs[$activeTab])) {
+            $activeTab = array_key_first($tabs);
+        }
+
+        if (!$activeTab) {
+            abort(403, 'Anda tidak memiliki akses ke tab manapun di halaman ini.');
+        }
 
         $statusColors = [
             'draft'     => 'bg-white/20 text-white',

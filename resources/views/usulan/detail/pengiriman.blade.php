@@ -1,11 +1,64 @@
 @php
     $currentStatus = $kegiatan->latestStatus ? $kegiatan->latestStatus->status : 'draft';
 
-    $canSubmit = false;
-    if ($kegiatan->start_date) {
-        $submitWindow = \Carbon\Carbon::parse($kegiatan->start_date)->subDays(40)->startOfDay();
-        $canSubmit = now()->startOfDay()->greaterThanOrEqualTo($submitWindow);
+    // 1. Kegiatan: Check if the key fields are filled
+    $kegiatanRequiredFields = [
+        'activity_name_id', 'activity_type_id', 'activity_category_id', 'activity_scope_id',
+        'material_type_id', 'activity_method_id', 'batch_id', 'activity_format_id',
+        'quota_participant', 'work_unit_id', 'pic_user_id', 'organizer_pic_id',
+        'date', 'reference_number', 'start_date', 'end_date', 'start_time',
+        'end_time', 'tempat', 'fund_source_id', 'budget_amount'
+    ];
+    $kegiatanComplete = true;
+    foreach ($kegiatanRequiredFields as $field) {
+        if (is_null($kegiatan->{$field}) || $kegiatan->{$field} === '') {
+            $kegiatanComplete = false;
+            break;
+        }
     }
+
+    // 2. Dokumen: (Auto-generated from Kegiatan details, so it's complete if Kegiatan is complete)
+    $dokumenComplete = $kegiatanComplete;
+
+    // 3. Justifikasi: (tujuan, justifikasi, and targets count > 0)
+    $justifikasiComplete = !empty($kegiatan->tujuan)
+        && !empty($kegiatan->justifikasi)
+        && $kegiatan->activityTargets->isNotEmpty();
+
+    // 4. Sasaran Profesi: (professions count > 0)
+    $sasaranComplete = $kegiatan->activityProfessions->isNotEmpty();
+
+    // 5. KAK: (kak files count > 0)
+    $kakComplete = $kegiatan->activityKakFiles->isNotEmpty();
+
+    // 6. Materi: (materials count > 0)
+    $materiComplete = $kegiatan->activityMaterials->isNotEmpty();
+
+    // 7. Narasumber: (speakers count > 0)
+    $narasumberComplete = $kegiatan->speakers->isNotEmpty();
+
+    // 8. Peserta: (participants count > 0)
+    $pesertaComplete = $kegiatan->activityParticipants->isNotEmpty();
+
+    // 9. Waktu Pengajuan: (diff in days < 45)
+    $waktuComplete = false;
+    $daysRemaining = null;
+    if ($kegiatan->start_date) {
+        $startDate = \Carbon\Carbon::parse($kegiatan->start_date)->startOfDay();
+        $today = now()->startOfDay();
+        $daysRemaining = $today->diffInDays($startDate, false);
+        $waktuComplete = $daysRemaining < 45;
+    }
+
+    $allRequirementsMet = $kegiatanComplete 
+        && $dokumenComplete 
+        && $justifikasiComplete 
+        && $sasaranComplete 
+        && $kakComplete 
+        && $materiComplete 
+        && $narasumberComplete 
+        && $pesertaComplete 
+        && $waktuComplete;
 
     // Warna untuk badge status
     $statusColor = match($currentStatus) {
@@ -43,27 +96,189 @@
         </div>
 
         @if($currentStatus === 'draft' || $currentStatus === 'revision')
-            @if(! $kegiatan->start_date)
-                <p class="text-gray-500 mb-8 max-w-[80%] leading-relaxed">
-                    Silakan lengkapi <strong class="text-gray-800">Tgl Mulai</strong> pada Data Kegiatan terlebih dahulu sebelum mengirim usulan.
-                </p>
-            @elseif(! $canSubmit)
-                <p class="text-gray-500 mb-8 max-w-[80%] leading-relaxed">
-                    Pengiriman usulan hanya dapat dilakukan maksimal <strong class="text-gray-800">40 hari</strong> sebelum tanggal mulai
-                    (<strong>{{ \Carbon\Carbon::parse($kegiatan->start_date)->format('d M Y') }}</strong>).
-                    Anda dapat mengirim mulai tanggal <strong>{{ \Carbon\Carbon::parse($kegiatan->start_date)->subDays(40)->format('d M Y') }}</strong>.
-                </p>
-            @else
+            <div class="mb-8 w-full max-w-2xl bg-gray-50 rounded-xl border border-gray-200 p-6 text-left shadow-sm">
+                <h4 class="text-base font-bold text-gray-800 mb-5 flex items-center gap-2 border-b border-gray-200 pb-3">
+                    <i class="fa fa-list-check text-[#007a7a]"></i>
+                    Persyaratan Pengiriman Usulan
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Kegiatan -->
+                    <div class="flex items-start gap-3">
+                        @if($kegiatanComplete)
+                            <i class="fa fa-circle-check text-green-500 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-800">Data Kegiatan</span>
+                                <p class="text-xs text-gray-500">Sudah terisi lengkap.</p>
+                            </div>
+                        @else
+                            <i class="fa fa-circle-xmark text-red-400 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-700">Data Kegiatan</span>
+                                <p class="text-xs text-red-500">Belum diisi lengkap (periksa tgl, tempat, anggaran, dll).</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Dokumen -->
+                    <div class="flex items-start gap-3">
+                        @if($dokumenComplete)
+                            <i class="fa fa-circle-check text-green-500 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-800">Dokumen</span>
+                                <p class="text-xs text-gray-500">Dokumen administrasi siap didownload.</p>
+                            </div>
+                        @else
+                            <i class="fa fa-circle-xmark text-red-400 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-700">Dokumen</span>
+                                <p class="text-xs text-red-500">Dokumen belum siap.</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Justifikasi -->
+                    <div class="flex items-start gap-3">
+                        @if($justifikasiComplete)
+                            <i class="fa fa-circle-check text-green-500 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-800">Justifikasi & Target</span>
+                                <p class="text-xs text-gray-500">Tujuan, justifikasi, dan target telah diisi.</p>
+                            </div>
+                        @else
+                            <i class="fa fa-circle-xmark text-red-400 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-700">Justifikasi & Target</span>
+                                <p class="text-xs text-red-500">Tujuan/justifikasi kosong atau belum ada target.</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Sasaran Profesi -->
+                    <div class="flex items-start gap-3">
+                        @if($sasaranComplete)
+                            <i class="fa fa-circle-check text-green-500 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-800">Sasaran Profesi</span>
+                                <p class="text-xs text-gray-500">Sasaran profesi telah diisi.</p>
+                            </div>
+                        @else
+                            <i class="fa fa-circle-xmark text-red-400 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-700">Sasaran Profesi</span>
+                                <p class="text-xs text-red-500">Belum ada sasaran profesi yang ditambahkan.</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- KAK -->
+                    <div class="flex items-start gap-3">
+                        @if($kakComplete)
+                            <i class="fa fa-circle-check text-green-500 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-800">Dokumen KAK</span>
+                                <p class="text-xs text-gray-500">File KAK telah diunggah.</p>
+                            </div>
+                        @else
+                            <i class="fa fa-circle-xmark text-red-400 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-700">Dokumen KAK</span>
+                                <p class="text-xs text-red-500">Silakan unggah dokumen KAK terlebih dahulu.</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Materi -->
+                    <div class="flex items-start gap-3">
+                        @if($materiComplete)
+                            <i class="fa fa-circle-check text-green-500 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-800">Materi Kegiatan</span>
+                                <p class="text-xs text-gray-500">Daftar materi telah diisi.</p>
+                            </div>
+                        @else
+                            <i class="fa fa-circle-xmark text-red-400 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-700">Materi Kegiatan</span>
+                                <p class="text-xs text-red-500">Belum ada materi yang ditambahkan.</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Narasumber -->
+                    <div class="flex items-start gap-3">
+                        @if($narasumberComplete)
+                            <i class="fa fa-circle-check text-green-500 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-800">Narasumber</span>
+                                <p class="text-xs text-gray-500">Narasumber telah diisi.</p>
+                            </div>
+                        @else
+                            <i class="fa fa-circle-xmark text-red-400 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-700">Narasumber</span>
+                                <p class="text-xs text-red-500">Belum ada narasumber yang ditambahkan.</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Peserta -->
+                    <div class="flex items-start gap-3">
+                        @if($pesertaComplete)
+                            <i class="fa fa-circle-check text-green-500 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-800">Peserta Kegiatan</span>
+                                <p class="text-xs text-gray-500">Peserta telah didaftarkan.</p>
+                            </div>
+                        @else
+                            <i class="fa fa-circle-xmark text-red-400 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-700">Peserta Kegiatan</span>
+                                <p class="text-xs text-red-500">Belum ada peserta yang didaftarkan.</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Waktu Pengajuan -->
+                    <div class="flex items-start gap-3 md:col-span-2 border-t border-gray-200 pt-3 mt-1">
+                        @if(!$kegiatan->start_date)
+                            <i class="fa fa-circle-xmark text-red-400 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-700">Tanggal Pelaksanaan</span>
+                                <p class="text-xs text-red-500">Tanggal pelaksanaan belum diisi pada Data Kegiatan.</p>
+                            </div>
+                        @elseif($waktuComplete)
+                            <i class="fa fa-circle-check text-green-500 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-800">Waktu Pengajuan</span>
+                                <p class="text-xs text-gray-500">Usulan diajukan kurang dari 45 hari kalender sebelum tanggal mulai ({{ $daysRemaining }} hari tersisa).</p>
+                            </div>
+                        @else
+                            <i class="fa fa-circle-xmark text-red-400 mt-0.5 text-base"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-gray-700">Waktu Pengajuan</span>
+                                <p class="text-xs text-red-500">
+                                    Pengiriman usulan hanya dapat dilakukan maksimal 45 hari sebelum tanggal mulai.
+                                    Anda dapat mengirim mulai tanggal <strong>{{ \Carbon\Carbon::parse($kegiatan->start_date)->subDays(45)->format('d M Y') }}</strong> ({{ $daysRemaining }} hari tersisa).
+                                </p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            @if($allRequirementsMet)
                 <p class="text-gray-500 mb-8 max-w-[80%] leading-relaxed">
                     Sebelum menekan tombol Kirim, pastikan Anda telah memeriksa ulang kelengkapan Data Kegiatan, KAK, Materi, Sasaran Profesi, Narasumber, dan Peserta dengan saksama.
                 </p>
+                <button onclick="document.getElementById('modalKirim').style.display='flex';"
+                    class="bg-[#007a7a] hover:bg-[#005f5f] text-white font-semibold px-4 py-2 rounded-lg text-sm transition border-0 cursor-pointer">
+                    🚀 Kirim Usulan
+                </button>
+            @else
+                <p class="text-red-500 font-semibold mb-8 max-w-[80%] leading-relaxed">
+                    Tombol kirim tidak muncul karena belum semua persyaratan terpenuhi. Silakan lengkapi checklist di atas.
+                </p>
             @endif
-
-            <button onclick="document.getElementById('modalKirim').style.display='flex';"
-                class="{{ $canSubmit ? 'bg-[#007a7a] hover:bg-[#005f5f] cursor-pointer' : 'bg-gray-400 cursor-not-allowed' }} text-white font-semibold px-4 py-2 rounded-lg text-sm transition border-0"
-                {{ ! $canSubmit ? 'disabled' : '' }}>
-                🚀 Kirim Usulan
-            </button>
         @elseif($currentStatus === 'submitted')
             <p class="text-gray-500 mb-8 max-w-[80%] leading-relaxed">
                 Usulan Anda berstatus <strong class="text-gray-800">Menunggu Verifikasi</strong> dan sedang dalam antrean Tim Peninjau. Apabila Anda menyadari ada kesalahan, Anda masih bisa menarik kembali usulan ini selama belum direview.

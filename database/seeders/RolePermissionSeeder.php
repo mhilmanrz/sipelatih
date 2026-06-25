@@ -67,6 +67,20 @@ class RolePermissionSeeder extends Seeder
 
             // Settings
             'view settings',
+
+            // Activity Tab Permissions
+            'view activity tab kegiatan',
+            'view activity tab dokumen',
+            'view activity tab justifikasi',
+            'view activity tab sasaran',
+            'view activity tab kak',
+            'view activity tab materi',
+            'view activity tab narasumber',
+            'view activity tab peserta',
+            'view activity tab input-nilai',
+            'view activity tab pengiriman',
+            'view activity tab penilaian',
+            'view activity tab sertifikat',
         ];
 
         foreach ($permissions as $permission) {
@@ -91,6 +105,15 @@ class RolePermissionSeeder extends Seeder
             'view document nota dinas',
             'view document surat pemanggilan',
             'view document surat tugas',
+            'view activity tab kegiatan',
+            'view activity tab dokumen',
+            'view activity tab justifikasi',
+            'view activity tab sasaran',
+            'view activity tab kak',
+            'view activity tab materi',
+            'view activity tab narasumber',
+            'view activity tab peserta',
+            'view activity tab pengiriman',
         ]);
 
         $perencanaan->syncPermissions([
@@ -103,6 +126,16 @@ class RolePermissionSeeder extends Seeder
             'view document nota dinas',
             'view document surat pemanggilan',
             'view document surat tugas',
+            'view activity tab kegiatan',
+            'view activity tab dokumen',
+            'view activity tab justifikasi',
+            'view activity tab sasaran',
+            'view activity tab kak',
+            'view activity tab materi',
+            'view activity tab narasumber',
+            'view activity tab peserta',
+            'view activity tab pengiriman',
+            'view activity tab penilaian',
         ]);
 
         $penyelenggara->syncPermissions([
@@ -113,6 +146,17 @@ class RolePermissionSeeder extends Seeder
             'view document nota dinas',
             'view document surat pemanggilan',
             'view document surat tugas',
+            'view activity tab kegiatan',
+            'view activity tab dokumen',
+            'view activity tab justifikasi',
+            'view activity tab sasaran',
+            'view activity tab kak',
+            'view activity tab materi',
+            'view activity tab narasumber',
+            'view activity tab peserta',
+            'view activity tab input-nilai',
+            'view activity tab pengiriman',
+            'view activity tab sertifikat',
         ]);
 
         $evaluasi->syncPermissions([
@@ -126,6 +170,18 @@ class RolePermissionSeeder extends Seeder
             'view document nota dinas',
             'view document surat pemanggilan',
             'view document surat tugas',
+            'view activity tab kegiatan',
+            'view activity tab dokumen',
+            'view activity tab justifikasi',
+            'view activity tab sasaran',
+            'view activity tab kak',
+            'view activity tab materi',
+            'view activity tab narasumber',
+            'view activity tab peserta',
+            'view activity tab input-nilai',
+            'view activity tab pengiriman',
+            'view activity tab penilaian',
+            'view activity tab sertifikat',
         ]);
     }
 }
