@@ -294,10 +294,18 @@
             });
 
             // Set initial WA PIC value on load
-            const initialOption = picEl.options[picEl.selectedIndex];
-            if (initialOption) {
-                const phone = initialOption.getAttribute('data-phone');
-                const waInput = document.getElementById('wa_pic_temp');
+            const waInput = document.getElementById('wa_pic_temp');
+            if (waInput) {
+                let phone = null;
+                if (picEl.tomselect && picEl.tomselect.options[picEl.value]) {
+                    phone = picEl.tomselect.options[picEl.value].phone_number;
+                } else {
+                    const initialOption = picEl.options[picEl.selectedIndex];
+                    if (initialOption) {
+                        phone = initialOption.getAttribute('data-phone');
+                    }
+                }
+
                 if (phone && phone !== '-') {
                     waInput.value = phone;
                 } else if (picEl.value) {
