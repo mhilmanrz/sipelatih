@@ -148,4 +148,21 @@ class MyActivityTest extends TestCase
         $response->assertSee('Detail Kegiatan');
         $response->assertSee('Pelatihan Kepemimpinan');
     }
+
+    public function test_administrative_accounts_cannot_access_my_activities(): void
+    {
+        $this->artisan('db:seed', ['--class' => 'RolePermissionSeeder']);
+
+        $adminRoles = ['superadmin', 'perencanaan', 'penyelenggara', 'evaluasi', 'pengusul'];
+
+        foreach ($adminRoles as $role) {
+            $adminUser = User::factory()->create();
+            $adminUser->assignRole($role);
+
+            $response = $this->actingAs($adminUser)
+                ->get(route('my-activities.index'));
+
+            $response->assertStatus(403);
+        }
+    }
 }

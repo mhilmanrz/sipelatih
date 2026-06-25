@@ -18,6 +18,7 @@
         </a>
         @endcan
 
+        @if(auth()->user()->isPegawai())
         <a href="{{ route('my-activities.index') }}"
             class="flex items-center px-4 py-3 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('my-activities*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
             <i class="fa-solid fa-person-chalkboard w-6 text-center mr-2"></i>
@@ -29,6 +30,7 @@
             <i class="fa-solid fa-clipboard-user w-6 text-center mr-2"></i>
             <span>Evaluasi Saya</span>
         </a>
+        @endif
 
         @can('view usulan diklat')
         <a href="{{ route('usulan-diklat') }}"

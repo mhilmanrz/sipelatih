@@ -15,6 +15,8 @@ class ParticipantEvaluationController extends Controller
 {
     public function index(Request $request): View
     {
+        abort_unless(auth()->user()->isPegawai(), 403);
+
         $user = auth()->user();
         $selectedActivityId = $request->input('activity_id');
 
@@ -76,6 +78,8 @@ class ParticipantEvaluationController extends Controller
 
     public function show($participantEvaluationId): View
     {
+        abort_unless(auth()->user()->isPegawai(), 403);
+
         $user = auth()->user();
         $evaluation = ParticipantEvaluation::whereHas('participant', function ($query) use ($user) {
             $query->where('user_id', $user->id);
@@ -109,6 +113,8 @@ class ParticipantEvaluationController extends Controller
 
     public function store(Request $request, $participantEvaluationId): RedirectResponse
     {
+        abort_unless(auth()->user()->isPegawai(), 403);
+
         $user = auth()->user();
         $evaluation = ParticipantEvaluation::whereHas('participant', function ($query) use ($user) {
             $query->where('user_id', $user->id);

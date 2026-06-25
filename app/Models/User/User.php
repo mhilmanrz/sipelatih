@@ -84,4 +84,9 @@ class User extends Authenticatable
     {
         return $this->employee_id;
     }
+
+    public function isPegawai(): bool
+    {
+        return ! $this->hasAnyRole(['superadmin', 'perencanaan', 'penyelenggara', 'evaluasi', 'pengusul']);
+    }
 }

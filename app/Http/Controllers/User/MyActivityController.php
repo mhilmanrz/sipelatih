@@ -10,6 +10,8 @@ class MyActivityController extends Controller
 {
     public function index(Request $request)
     {
+        abort_unless(auth()->user()->isPegawai(), 403);
+
         $user = auth()->user();
 
         $activities = Activity::with(['activityName', 'latestStatus'])
@@ -32,6 +34,8 @@ class MyActivityController extends Controller
 
     public function show($id)
     {
+        abort_unless(auth()->user()->isPegawai(), 403);
+
         $user = auth()->user();
 
         $activity = Activity::with([
