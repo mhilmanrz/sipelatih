@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\ImportParticipantJob;
 use App\Models\Act\Activity;
 use App\Models\Act\ActivityParticipant;
+use App\Models\Act\ParticipantImportLog;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -120,8 +121,9 @@ class ActivityParticipantController extends Controller
     public function importPage($kegiatanId)
     {
         $kegiatan = Activity::findOrFail($kegiatanId);
+        $logs = ParticipantImportLog::where('activity_id', $kegiatanId)->latest()->get();
 
-        return view('usulan.detail.import_peserta', compact('kegiatan'));
+        return view('usulan.detail.import_peserta', compact('kegiatan', 'logs'));
     }
 
     /**
@@ -136,11 +138,23 @@ class ActivityParticipantController extends Controller
         $activity = Activity::findOrFail($kegiatanId);
 
         try {
-            $path = $request->file('file')->store('imports', 'local');
-            ImportParticipantJob::dispatch($path, $activity->id);
+            $file = $request->file('file');
+            $filename = $file->getClientOriginalName();
+            $path = $file->store('imports', 'local');
 
-            return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'peserta'])
-                ->with('success', 'Data peserta sedang diimpor di antrean (background). Harap periksa beberapa saat lagi.');
+            $importLog = ParticipantImportLog::create([
+                'activity_id' => $activity->id,
+                'filename' => $filename,
+                'status' => 'pending',
+                'total_rows' => 0,
+                'success_count' => 0,
+                'failed_count' => 0,
+            ]);
+
+            ImportParticipantJob::dispatch($path, $activity->id, $importLog->id);
+
+            return redirect()->route('kegiatan.peserta.import.page', ['kegiatan' => $activity->id])
+                ->with('success', 'Data peserta sedang diimpor di antrean (background). Harap periksa riwayat di bawah.');
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan saat upload untuk impor: '.$e->getMessage());
         }

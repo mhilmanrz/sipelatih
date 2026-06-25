@@ -77,8 +77,83 @@
                     </div>
                 </form>
 
-            </div>
-
         </div>
+
+        <!-- RIWAYAT IMPORT -->
+        @if ($logs && $logs->isNotEmpty())
+            <div class="mt-12 bg-white rounded-xl shadow p-8 border-t-4 border-teal-500">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">Riwayat Import Peserta</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm border-collapse border border-gray-200">
+                        <thead class="bg-teal-600 text-white">
+                            <tr>
+                                <th class="text-left border border-gray-200 py-3 px-4 font-semibold text-sm">Waktu Upload</th>
+                                <th class="text-left border border-gray-200 py-3 px-4 font-semibold text-sm">Nama File</th>
+                                <th class="text-center border border-gray-200 py-3 px-4 font-semibold text-sm">Status</th>
+                                <th class="text-center border border-gray-200 py-3 px-4 font-semibold text-sm">Hasil (Sukses / Gagal)</th>
+                                <th class="text-left border border-gray-200 py-3 px-4 font-semibold text-sm">Detail Kegagalan</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            @foreach ($logs as $log)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="border border-gray-200 py-3 px-4">{{ $log->created_at->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}</td>
+                                    <td class="border border-gray-200 py-3 px-4 font-medium text-gray-700">{{ $log->filename }}</td>
+                                    <td class="border border-gray-200 py-3 px-4 text-center">
+                                        @if ($log->status === 'pending')
+                                            <span class="inline-block bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-gray-200">Antrean</span>
+                                        @elseif ($log->status === 'processing')
+                                            <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-200">Memproses</span>
+                                        @elseif ($log->status === 'completed')
+                                            @if ($log->failed_count > 0)
+                                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-yellow-200">Selesai (Ada Error)</span>
+                                            @else
+                                                <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-green-200">Sukses</span>
+                                            @endif
+                                        @else
+                                            <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-red-200">Gagal</span>
+                                        @endif
+                                    </td>
+                                    <td class="border border-gray-200 py-3 px-4 text-center font-medium">
+                                        @if ($log->status === 'completed')
+                                            <span class="text-green-600">{{ $log->success_count }} sukses</span>
+                                            <span class="text-gray-400">/</span>
+                                            <span class="{{ $log->failed_count > 0 ? 'text-red-600 font-bold' : 'text-gray-500' }}">{{ $log->failed_count }} gagal</span>
+                                        @elseif ($log->status === 'failed')
+                                            <span class="text-red-600 font-bold">Semua Gagal</span>
+                                        @else
+                                            <span class="text-gray-500">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="border border-gray-200 py-3 px-4">
+                                        @if ($log->failed_count > 0 && !empty($log->errors))
+                                            <details class="cursor-pointer group">
+                                                <summary class="text-teal-600 hover:text-teal-800 font-semibold select-none">
+                                                    Lihat Detail ({{ $log->failed_count }} NIP)
+                                                </summary>
+                                                <div class="mt-2 bg-red-50 border-l-4 border-red-400 p-3 rounded text-xs text-red-700 max-h-48 overflow-y-auto font-mono whitespace-pre-wrap leading-relaxed shadow-inner">
+                                                    @foreach ($log->errors as $err)
+                                                        <div class="mb-1 pb-1 border-b border-red-200/50 last:border-0">
+                                                            <strong>Baris {{ $err['row'] ?? '-' }}</strong> (NIP: {{ $err['nip'] ?? '-' }}): {{ $err['reason'] ?? '-' }}
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </details>
+                                        @elseif ($log->status === 'failed' && !empty($log->errors))
+                                            <div class="bg-red-50 border-l-4 border-red-400 p-3 rounded text-xs text-red-700 font-mono">
+                                                {{ $log->errors[0]['reason'] ?? 'Kesalahan tidak diketahui' }}
+                                            </div>
+                                        @else
+                                            <span class="text-gray-400 font-normal italic">Tidak ada error</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+
     </div>
 </x-layouts.app>
