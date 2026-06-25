@@ -20,6 +20,8 @@ class SuratTugasController extends Controller
      */
     public function downloadPdf(Activity $kegiatan): Response
     {
+        abort_unless(auth()->user()->can('view document surat tugas'), 403);
+
         $data = $this->getData($kegiatan);
 
         $pdf = Pdf::loadView('pdf.surat-tugas', $data);
@@ -35,6 +37,8 @@ class SuratTugasController extends Controller
      */
     public function downloadDocx(Activity $kegiatan): Response
     {
+        abort_unless(auth()->user()->can('view document surat tugas'), 403);
+
         $data = $this->getData($kegiatan);
 
         $phpWord = new PhpWord;

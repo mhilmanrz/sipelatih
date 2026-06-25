@@ -3,10 +3,8 @@
 
     <div class="px-8 py-6">
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">
-                Kegiatanku
-            </h1>
-            <p class="text-gray-600 mt-1">
+            <x-page-title>Kegiatanku</x-page-title>
+            <p class="text-teal-100 -mt-4">
                 Daftar kegiatan pelatihan di mana Anda terdaftar sebagai peserta, narasumber, atau moderator.
             </p>
         </div>

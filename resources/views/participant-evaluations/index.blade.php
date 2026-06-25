@@ -3,10 +3,8 @@
 
     <div class="px-8 py-6">
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">
-                Evaluasi Saya
-            </h1>
-            <p class="text-gray-600 mt-1">
+            <x-page-title>Evaluasi Saya</x-page-title>
+            <p class="text-teal-100 -mt-4">
                 Daftar evaluasi kegiatan yang harus Anda isi.
             </p>
         </div>

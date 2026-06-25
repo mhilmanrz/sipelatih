@@ -34,6 +34,12 @@ class RolePermissionSeeder extends Seeder
             'view kegiatan laporan',
             'view evaluasi',
 
+            // Document Permissions
+            'view document formulir',
+            'view document nota dinas',
+            'view document surat pemanggilan',
+            'view document surat tugas',
+
             // Master Data - Pegawai & Akun
             'view users',
             'view accounts',
@@ -81,6 +87,10 @@ class RolePermissionSeeder extends Seeder
         $pengusul->syncPermissions([
             'view dashboard',
             'view usulan diklat',
+            'view document formulir',
+            'view document nota dinas',
+            'view document surat pemanggilan',
+            'view document surat tugas',
         ]);
 
         $perencanaan->syncPermissions([
@@ -89,12 +99,20 @@ class RolePermissionSeeder extends Seeder
             'view budget categories',
             'view pagu',
             'view kegiatan laporan',
+            'view document formulir',
+            'view document nota dinas',
+            'view document surat pemanggilan',
+            'view document surat tugas',
         ]);
 
         $penyelenggara->syncPermissions([
             'view dashboard',
             'view usulan diklat',
             'view kegiatan laporan',
+            'view document formulir',
+            'view document nota dinas',
+            'view document surat pemanggilan',
+            'view document surat tugas',
         ]);
 
         $evaluasi->syncPermissions([
@@ -104,6 +122,10 @@ class RolePermissionSeeder extends Seeder
             'view evaluasi',
             'view evaluation criteria',
             'view evaluation categories',
+            'view document formulir',
+            'view document nota dinas',
+            'view document surat pemanggilan',
+            'view document surat tugas',
         ]);
     }
 }

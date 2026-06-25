@@ -276,8 +276,6 @@
                     $targetDesc = '.........................................................................................................';
                     if (isset($kegiatan->activityTargets) && $kegiatan->activityTargets->count() > $i) {
                         $targetDesc = $kegiatan->activityTargets[$i]->description;
-                    } elseif ($i == 0 && isset($kegiatan->target_kompetensi) && $kegiatan->target_kompetensi != '') {
-                        $targetDesc = $kegiatan->target_kompetensi;
                     }
                 @endphp
                 <tr>

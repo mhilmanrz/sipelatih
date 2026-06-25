@@ -17,7 +17,7 @@
         <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
             <i class="fa fa-tasks text-[26px] text-[#00B8A5] mb-1.5 block"></i>
             <span class="text-gray-800 text-sm">Proses Penilaian</span><br>
-            <b class="text-base text-gray-900">10</b>
+            <b class="text-base text-gray-900">{{ $prosesPenilaianCount }}</b>
         </div>
         <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
             <i class="fa fa-exclamation-triangle text-[26px] text-[#00B8A5] mb-1.5 block"></i>
@@ -27,7 +27,7 @@
         <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
             <i class="fa fa-check-circle text-[26px] text-[#00B8A5] mb-1.5 block"></i>
             <span class="text-gray-800 text-sm">Telah Perbaikan</span><br>
-            <b class="text-base text-gray-900">0</b>
+            <b class="text-base text-gray-900">{{ $telahPerbaikanCount }}</b>
         </div>
         <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
             <i class="fa fa-thumbs-up text-[26px] text-[#00B8A5] mb-1.5 block"></i>
@@ -37,7 +37,7 @@
         <div class="bg-white rounded-xl p-[18px] text-center shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
             <i class="fa fa-ban text-[26px] text-[#00B8A5] mb-1.5 block"></i>
             <span class="text-gray-800 text-sm">Ditolak</span><br>
-            <b class="text-base text-gray-900">7</b>
+            <b class="text-base text-gray-900">{{ $rejectedCount }}</b>
         </div>
     </div>
 

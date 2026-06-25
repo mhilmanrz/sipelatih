@@ -9,6 +9,7 @@
                 </tr>
             </thead>
             <tbody class="bg-white">
+                @can('view document formulir')
                 <tr class="hover:bg-gray-50 transition-colors">
                     <td class="text-center border border-gray-200 py-3 px-4">1</td>
                     <td class="border border-gray-200 py-3 px-4 text-gray-900">Formulir Permintaan Kegiatan</td>
@@ -23,6 +24,8 @@
                         </a>
                     </td>
                 </tr>
+                @endcan
+                @can('view document nota dinas')
                 <tr class="hover:bg-gray-50 transition-colors">
                     <td class="text-center border border-gray-200 py-3 px-4">2</td>
                     <td class="border border-gray-200 py-3 px-4 text-gray-900">Nota Dinas Permohonan Narasumber</td>
@@ -47,6 +50,8 @@
                         </div>
                     </td>
                 </tr>
+                @endcan
+                @can('view document surat pemanggilan')
                 <tr class="hover:bg-gray-50 transition-colors">
                     <td class="text-center border border-gray-200 py-3 px-4">3</td>
                     <td class="border border-gray-200 py-3 px-4 text-gray-900">Surat Pemanggilan Peserta</td>
@@ -71,6 +76,8 @@
                         </div>
                     </td>
                 </tr>
+                @endcan
+                @can('view document surat tugas')
                 <tr class="hover:bg-gray-50 transition-colors">
                     <td class="text-center border border-gray-200 py-3 px-4">4</td>
                     <td class="border border-gray-200 py-3 px-4 text-gray-900">Surat Tugas</td>
@@ -95,6 +102,7 @@
                         </div>
                     </td>
                 </tr>
+                @endcan
             </tbody>
         </table>
     </div>

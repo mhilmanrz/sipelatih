@@ -142,11 +142,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('accounts', AccountController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
-    Route::resource('kegiatan', ActivityController::class);
+    Route::resource('kegiatan', ActivityController::class)->except(['index']);
     Route::post('kegiatan/{kegiatan}/upload-kak', [ActivityController::class, 'uploadKak'])->name('kegiatan.upload-kak');
     Route::post('kegiatan/{kegiatan}/sasaran-profesi', [ActivityProfessionController::class, 'store'])->name('kegiatan.sasaran-profesi.store');
     Route::delete('kegiatan/{kegiatan}/sasaran-profesi/{id}', [ActivityProfessionController::class, 'destroy'])->name('kegiatan.sasaran-profesi.destroy');
     Route::post('kegiatan/{kegiatan}/materi', [ActivityMaterialController::class, 'store'])->name('kegiatan.materi.store');
+    Route::put('kegiatan/{kegiatan}/materi/{id}', [ActivityMaterialController::class, 'update'])->name('kegiatan.materi.update');
     Route::delete('kegiatan/{kegiatan}/materi/{id}', [ActivityMaterialController::class, 'destroy'])->name('kegiatan.materi.destroy');
     Route::post('kegiatan/{kegiatan}/narasumber', [ActivitySpeakerController::class, 'store'])->name('kegiatan.narasumber.store');
     Route::delete('kegiatan/{kegiatan}/narasumber/{id}', [ActivitySpeakerController::class, 'destroy'])->name('kegiatan.narasumber.destroy');

@@ -22,7 +22,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1">
             <x-detail-row label="Tujuan">{{ $kegiatan->tujuan ?? '-' }}</x-detail-row>
             <x-detail-row label="Justifikasi">{{ $kegiatan->justifikasi ?? '-' }}</x-detail-row>
-            <x-detail-row label="Target Kompetensi">{{ $kegiatan->target_kompetensi ?? '-' }}</x-detail-row>
+
         </div>
     </x-detail-section>
 

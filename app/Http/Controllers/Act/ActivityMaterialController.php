@@ -32,6 +32,28 @@ class ActivityMaterialController extends Controller
     }
 
     /**
+     * Update the specified materi in storage.
+     */
+    public function update(Request $request, $kegiatanId, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'value' => 'required|numeric|min:0.1', // JPL
+        ]);
+
+        $activityMaterial = ActivityMaterial::where('activity_id', $kegiatanId)
+            ->findOrFail($id);
+
+        $activityMaterial->update([
+            'name' => $request->name,
+            'value' => $request->value,
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $kegiatanId, 'tab' => 'materi'])
+            ->with('success', 'Materi berhasil diperbarui.');
+    }
+
+    /**
      * Remove the specified materi from storage.
      */
     public function destroy($kegiatanId, $id)

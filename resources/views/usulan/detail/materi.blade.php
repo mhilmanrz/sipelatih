@@ -44,6 +44,14 @@
                         <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-900">{{ $item->value }}</td>
                         <td class="text-center border border-gray-200 py-3 px-4 text-sm text-gray-900">{{ round($item->value / 45, 2) }}</td>
                         <td class="text-center border border-gray-200 py-3 px-4">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button type="button"
+                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition btn-edit"
+                                        data-id="{{ $item->id }}"
+                                        data-name="{{ $item->name }}"
+                                        data-value="{{ $item->value }}">
+                                    Edit
+                                </button>
                                 <form action="{{ route('kegiatan.materi.destroy', ['kegiatan' => $kegiatan->id, 'id' => $item->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus materi ini?');">
                                     @csrf
                                     @method('DELETE')
@@ -51,7 +59,8 @@
                                         Hapus
                                     </button>
                                 </form>
-                            </td>
+                            </div>
+                        </td>
                         </tr>
                     @empty
                         <tr>
@@ -64,24 +73,26 @@
     </div>
 </section>
 
-<!-- MODAL TAMBAH MATERI -->
+<!-- MODAL MATERI (TAMBAH / EDIT) -->
 <div id="modal" style="display: none;" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
     <div class="bg-white rounded-lg p-8 w-[500px] max-w-[90%]">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold m-0">Tambah Materi</h2>
+            <h2 id="modalTitle" class="text-xl font-bold m-0">Tambah Materi</h2>
             <button id="closeModal" class="bg-transparent border-none text-2xl cursor-pointer text-gray-500">✖</button>
         </div>
 
-        <form action="{{ route('kegiatan.materi.store', $kegiatan->id) }}" method="POST">
+        <form id="materiForm" action="{{ route('kegiatan.materi.store', $kegiatan->id) }}" method="POST">
             @csrf
+            <div id="methodField"></div>
+
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">*Judul Materi</label>
-                <input type="text" name="name" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Ketik jenis materi..." value="{{ old('name') }}">
+                <input type="text" id="materiName" name="name" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Ketik jenis materi..." value="{{ old('name') }}">
             </div>
 
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">*Menit</label>
-                <input type="number" name="value" step="0.1" min="0.1" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500" placeholder="0" value="{{ old('value') }}">
+                <input type="number" id="materiValue" name="value" step="0.1" min="0.1" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500" placeholder="0" value="{{ old('value') }}">
             </div>
 
             <div class="flex justify-end gap-2">
@@ -97,13 +108,43 @@
 </div>
 
 <script>
-    document.getElementById('openModal')?.addEventListener('click', function() {
-        document.getElementById('modal').style.display = 'flex';
-    });
-    document.getElementById('closeModal')?.addEventListener('click', function() {
-        document.getElementById('modal').style.display = 'none';
-    });
-    document.getElementById('cancelBtn')?.addEventListener('click', function() {
-        document.getElementById('modal').style.display = 'none';
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('modal');
+        const form = document.getElementById('materiForm');
+        const modalTitle = document.getElementById('modalTitle');
+        const methodField = document.getElementById('methodField');
+        const nameInput = document.getElementById('materiName');
+        const valueInput = document.getElementById('materiValue');
+
+        document.getElementById('openModal')?.addEventListener('click', function() {
+            modalTitle.textContent = 'Tambah Materi';
+            form.action = "{{ route('kegiatan.materi.store', $kegiatan->id) }}";
+            methodField.innerHTML = '';
+            nameInput.value = '';
+            valueInput.value = '';
+            modal.style.display = 'flex';
+        });
+
+        document.querySelectorAll('.btn-edit').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const value = this.getAttribute('data-value');
+
+                modalTitle.textContent = 'Edit Materi';
+                form.action = `/kegiatan/{{ $kegiatan->id }}/materi/${id}`;
+                methodField.innerHTML = '<input type="hidden" name="_method" value="PUT">';
+                nameInput.value = name;
+                valueInput.value = value;
+                modal.style.display = 'flex';
+            });
+        });
+
+        document.getElementById('closeModal')?.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        document.getElementById('cancelBtn')?.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
     });
 </script>

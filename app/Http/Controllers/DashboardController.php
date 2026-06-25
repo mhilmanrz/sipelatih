@@ -13,21 +13,45 @@ class DashboardController extends Controller
         $totalActivities = Activity::count();
         $totalUsers = User::count();
 
-        $draftCount = Activity::whereHas('latestStatus', function ($query) {
-            $query->where('status', 'draft');
+        // 1. Draft (latest status draft or no status at all)
+        $draftCount = Activity::where(function ($query) {
+            $query->whereDoesntHave('latestStatus')
+                ->orWhereHas('latestStatus', function ($q) {
+                    $q->where('status', 'draft');
+                });
         })->count();
 
+        // 2. Tahap Pengajuan (latest status submitted, and never revised)
         $submittedCount = Activity::whereHas('latestStatus', function ($query) {
             $query->where('status', 'submitted');
+        })->whereDoesntHave('statuses', function ($query) {
+            $query->where('status', 'revision');
         })->count();
 
+        // 3. Telah Perbaikan (latest status submitted, and has been revised in history)
+        $telahPerbaikanCount = Activity::whereHas('latestStatus', function ($query) {
+            $query->where('status', 'submitted');
+        })->whereHas('statuses', function ($query) {
+            $query->where('status', 'revision');
+        })->count();
+
+        // 4. Proses Penilaian (accepted activities where grading is configured / in progress)
+        $prosesPenilaianCount = Activity::whereHas('latestStatus', function ($query) {
+            $query->where('status', 'accepted');
+        })->whereHas('scoreSetting')->count();
+
+        // 5. Butuh Perbaikan (latest status revision)
         $revisionCount = Activity::whereHas('latestStatus', function ($query) {
             $query->where('status', 'revision');
         })->count();
 
+        // 6. Disetujui (latest status accepted)
         $acceptedCount = Activity::whereHas('latestStatus', function ($query) {
             $query->where('status', 'accepted');
         })->count();
+
+        // 7. Ditolak (always 0, as not supported in the database enum)
+        $rejectedCount = 0;
 
         $chartData = Activity::with('workUnit')
             ->get()
@@ -42,8 +66,11 @@ class DashboardController extends Controller
             'totalUsers',
             'draftCount',
             'submittedCount',
+            'telahPerbaikanCount',
+            'prosesPenilaianCount',
             'revisionCount',
             'acceptedCount',
+            'rejectedCount',
             'chartData'
         ));
     }

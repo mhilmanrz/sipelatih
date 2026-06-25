@@ -151,10 +151,6 @@
                     <textarea name="justifikasi" rows="3" style="resize:vertical;">{{ old('justifikasi') }}</textarea>
                 </div>
 
-                <div class="form-row">
-                    <label>Target Kompetensi</label>
-                    <textarea name="target_kompetensi" rows="3" style="resize:vertical;">{{ old('target_kompetensi') }}</textarea>
-                </div>
 
                 <div class="form-row">
                     <label>Sumber Dana</label>
@@ -168,6 +164,7 @@
                     </select>
                 </div>
 
+                @if (!auth()->user()->hasRole('pengusul'))
                 <div class="form-row">
                     <label>Target Peserta</label>
                     <select name="profession_id">
@@ -179,6 +176,7 @@
                         @endforeach
                     </select>
                 </div>
+                @endif
 
                 <div class="form-row">
                     <label>Kuota Peserta (Orang)</label>
@@ -246,7 +244,7 @@
 
                 <div class="form-action">
                     <button type="submit" id="btnSave" class="btn-save" style="cursor:pointer;">💾 SIMPAN</button>
-                    <a href="{{ route('kegiatan.index') }}" id="btnCancel" class="btn-cancel"
+                    <a href="{{ route('usulan-diklat') }}" id="btnCancel" class="btn-cancel"
                         style="cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">✖
                         BATAL</a>
                 </div>

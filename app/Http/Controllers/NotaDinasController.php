@@ -51,6 +51,8 @@ class NotaDinasController extends Controller
      */
     public function downloadPdfByKegiatan(Activity $kegiatan): Response
     {
+        abort_unless(auth()->user()->can('view document nota dinas'), 403);
+
         $data = $this->getNotaDinasByKegiatanData($kegiatan);
 
         $pdf = Pdf::loadView('pdf.nota-dinas', $data);
@@ -66,6 +68,8 @@ class NotaDinasController extends Controller
      */
     public function downloadDocxByKegiatan(Activity $kegiatan): Response
     {
+        abort_unless(auth()->user()->can('view document nota dinas'), 403);
+
         $data = $this->getNotaDinasByKegiatanData($kegiatan);
 
         $phpWord = new PhpWord;
@@ -189,6 +193,8 @@ class NotaDinasController extends Controller
      */
     public function downloadPdf(Request $request, $kegiatanId, $speakerId)
     {
+        abort_unless(auth()->user()->can('view document nota dinas'), 403);
+
         $data = $this->getNotaDinasData($kegiatanId, $speakerId);
 
         $pdf = Pdf::loadView('pdf.nota-dinas', $data);
@@ -204,6 +210,8 @@ class NotaDinasController extends Controller
      */
     public function downloadDocx(Request $request, $kegiatanId, $speakerId)
     {
+        abort_unless(auth()->user()->can('view document nota dinas'), 403);
+
         $data = $this->getNotaDinasData($kegiatanId, $speakerId);
 
         $phpWord = new PhpWord;

@@ -37,6 +37,12 @@ class StoreActivityRequest extends FormRequest
                 'budget_id' => null,
             ]);
         }
+
+        if ($user && $user->hasRole('pengusul')) {
+            $this->merge([
+                'profession_id' => null,
+            ]);
+        }
     }
 
     /**
@@ -61,7 +67,6 @@ class StoreActivityRequest extends FormRequest
             'tempat' => 'nullable|string|max:255',
             'tujuan' => 'nullable|string',
             'justifikasi' => 'nullable|string',
-            'target_kompetensi' => 'nullable|string',
             'fund_source_id' => 'nullable|exists:fund_sources,id',
             'profession_id' => 'nullable|exists:professions,id',
             'start_date' => 'nullable|date',

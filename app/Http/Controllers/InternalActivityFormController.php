@@ -15,6 +15,8 @@ class InternalActivityFormController extends Controller
      */
     public function streamPdf(Request $request, $id): Response
     {
+        abort_unless(auth()->user()->can('view document formulir'), 403);
+
         $kegiatan = Activity::with([
             'activityName',
             'workUnit',
