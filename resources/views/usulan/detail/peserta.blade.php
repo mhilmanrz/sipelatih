@@ -10,11 +10,19 @@
     <div class="flex justify-between items-center mb-4">
         <div class="flex items-center gap-2 text-gray-500 text-sm">
             Show
-            <select class="px-3 py-1.5 border border-gray-300 rounded text-sm outline-none bg-white cursor-pointer">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-            </select>
+            <form action="{{ request()->url() }}" method="GET" class="inline">
+                @if(request('tab'))
+                    <input type="hidden" name="tab" value="{{ request('tab') }}">
+                @endif
+                @if(request('search_peserta'))
+                    <input type="hidden" name="search_peserta" value="{{ request('search_peserta') }}">
+                @endif
+                <select name="entries" onchange="this.form.submit()" class="px-3 py-1.5 border border-gray-300 rounded text-sm outline-none bg-white cursor-pointer">
+                    <option value="10" {{ request('entries', 10) == 10 ? 'selected' : '' }}>10</option>
+                    <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                    <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                </select>
+            </form>
             entries
         </div>
 
@@ -33,10 +41,13 @@
     <div class="flex gap-2.5 mb-6 items-center">
         <form action="{{ request()->url() }}" method="GET" class="flex-1 max-w-md flex gap-2">
             <input type="hidden" name="tab" value="peserta">
+            @if(request('entries'))
+                <input type="hidden" name="entries" value="{{ request('entries') }}">
+            @endif
             <input type="text" name="search_peserta" value="{{ request('search_peserta') }}" placeholder="Cari Nama/NIP Peserta..." class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
             <button type="submit" class="bg-[#007a7a] hover:bg-[#005f5f] text-white font-semibold px-4 py-2 rounded-lg text-sm transition">Cari</button>
             @if(request('search_peserta'))
-                <a href="{{ request()->url() }}?tab=peserta" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition no-underline">Reset</a>
+                <a href="{{ request()->url() }}?tab=peserta{{ request('entries') ? '&entries=' . request('entries') : '' }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition no-underline">Reset</a>
             @endif
         </form>
     </div>
@@ -55,9 +66,9 @@
                 </tr>
             </thead>
             <tbody class="bg-white">
-                @forelse ($kegiatan->activityParticipants as $index => $participant)
+                @forelse ($participants as $index => $participant)
                     <tr>
-                        <td class="text-center border border-gray-200 py-3 px-4">{{ $index + 1 }}</td>
+                        <td class="text-center border border-gray-200 py-3 px-4">{{ $participants->firstItem() + $index }}</td>
                         <td class="border border-gray-200 py-3 px-4">{{ $participant->user->nip ?? '-' }}</td>
                         <td class="border border-gray-200 py-3 px-4">{{ $participant->user->name ?? '-' }}</td>
                         <td class="border border-gray-200 py-3 px-4">{{ $participant->user->workUnit->name ?? '-' }}</td>
@@ -83,14 +94,8 @@
     </div>
 
     <!-- FOOTER -->
-    <div class="flex justify-between items-center text-sm text-gray-500 mb-6">
-        <span>Total {{ $kegiatan->activityParticipants->count() }} peserta</span>
-        <div class="flex gap-1">
-            <!-- Temporary static pagination UI -->
-            <button class="px-3 py-1 border border-gray-300 rounded text-gray-500 hover:bg-gray-100 disabled:opacity-50" disabled>Previous</button>
-            <button class="px-3 py-1 border border-teal-500 bg-teal-500 text-white rounded">1</button>
-            <button class="px-3 py-1 border border-gray-300 rounded text-gray-500 hover:bg-gray-100 disabled:opacity-50" disabled>Next</button>
-        </div>
+    <div class="mb-6">
+        {{ $participants->links('components.pagination') }}
     </div>
 
     <!-- Modal Sertifikat -->

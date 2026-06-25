@@ -10,6 +10,7 @@ use App\Models\Act\ActivityCategory;
 use App\Models\Act\ActivityFormat;
 use App\Models\Act\ActivityMethod;
 use App\Models\Act\ActivityName;
+use App\Models\Act\ActivityParticipant;
 use App\Models\Act\ActivityScope;
 use App\Models\Act\ActivityType;
 use App\Models\Act\Batch;
@@ -146,7 +147,24 @@ class ActivityController extends Controller
         $professions = Profession::all();
         $users = User::doesntHave('roles')->where('email', '!=', 'admin@mail.com')->get();
 
-        return view('usulan.detail.index', compact('kegiatan', 'professions', 'users'));
+        $entries = $request->input('entries', 10);
+        $participants = ActivityParticipant::with(['user.workUnit'])
+            ->where('activity_id', $id);
+
+        if ($searchPeserta) {
+            $participants->whereHas('user', function ($q) use ($searchPeserta) {
+                $q->where('name', 'like', '%'.$searchPeserta.'%')
+                    ->orWhere('employee_id', 'like', '%'.$searchPeserta.'%');
+            });
+        }
+
+        $participants = $participants->paginate($entries)->appends([
+            'tab' => 'peserta',
+            'search_peserta' => $searchPeserta,
+            'entries' => $entries,
+        ]);
+
+        return view('usulan.detail.index', compact('kegiatan', 'professions', 'users', 'participants'));
     }
 
     /**
