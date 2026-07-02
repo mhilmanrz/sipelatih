@@ -164,20 +164,6 @@
                     </select>
                 </div>
 
-                @if (!auth()->user()->hasRole('pengusul'))
-                <div class="form-row">
-                    <label>Target Peserta</label>
-                    <select name="profession_id">
-                        <option value="">-PILIH-</option>
-                        @foreach ($professions as $prof)
-                            <option value="{{ $prof->id }}"
-                                {{ old('profession_id') == $prof->id ? 'selected' : '' }}>{{ $prof->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                @endif
-
                 <div class="form-row">
                     <label>Kuota Peserta (Orang)</label>
                     <input type="number" name="quota_participant" value="{{ old('quota_participant') }}" min="1">
