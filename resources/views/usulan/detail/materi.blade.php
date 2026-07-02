@@ -19,10 +19,13 @@
 
     <!-- TABLE -->
     <div>
-        <div class="flex justify-start mb-4">
+        <div class="flex justify-start gap-2 mb-4">
             <button id="openModal" class="bg-[#007a7a] hover:bg-[#005f5f] text-white font-semibold px-4 py-2 rounded-lg text-sm transition">
                 + Tambah Materi
             </button>
+            <a href="{{ route('kegiatan.materi.import.page', $kegiatan->id) }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition inline-block no-underline">
+                ⬇ Import Materi
+            </a>
         </div>
 
         <div class="overflow-x-auto">

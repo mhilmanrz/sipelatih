@@ -184,6 +184,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('kegiatan/peserta/template', [ActivityParticipantController::class, 'downloadTemplate'])->name('kegiatan.peserta.template');
     Route::get('kegiatan/{kegiatan}/peserta/import', [ActivityParticipantController::class, 'importPage'])->name('kegiatan.peserta.import.page');
     Route::post('kegiatan/{kegiatan}/peserta/import', [ActivityParticipantController::class, 'importStore'])->name('kegiatan.peserta.import.store');
+    Route::get('kegiatan/materi/template', [ActivityMaterialController::class, 'downloadTemplate'])->name('kegiatan.materi.template');
+    Route::get('kegiatan/{kegiatan}/materi/import', [ActivityMaterialController::class, 'importPage'])->name('kegiatan.materi.import.page');
+    Route::post('kegiatan/{kegiatan}/materi/import', [ActivityMaterialController::class, 'importStore'])->name('kegiatan.materi.import.store');
 
     Route::resource('fund-sources', FundSourceController::class);
     Route::resource('professions', ProfessionController::class);
