@@ -223,10 +223,12 @@
                     <input type="time" name="end_time" value="{{ old('end_time') }}">
                 </div>
 
+                @if (auth()->user()->hasAnyRole(['penyelenggara', 'superadmin']))
                 <div class="form-row">
                     <label>PIC Penyelenggara</label>
                     <x-select-user name="organizer_pic_id" id="organizer_pic_id" :selected-user="$selectedOrganizerPic" placeholder="-PILIH PEGAWAI-" />
                 </div>
+                @endif
 
                 <div class="form-action">
                     <button type="submit" id="btnSave" class="btn-save" style="cursor:pointer;">💾 SIMPAN</button>
