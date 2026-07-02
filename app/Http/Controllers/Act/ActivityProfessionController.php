@@ -15,25 +15,30 @@ class ActivityProfessionController extends Controller
     public function store(Request $request, $kegiatanId)
     {
         $request->validate([
-            'profession_id' => 'required|exists:professions,id',
+            'profession_id' => 'required|array|min:1',
+            'profession_id.*' => 'exists:professions,id',
         ]);
 
         $activity = Activity::findOrFail($kegiatanId);
 
-        // Check if the profession is already added to prevent duplicates
-        $exists = ActivityProfession::where('activity_id', $activity->id)
-            ->where('profession_id', $request->profession_id)
-            ->exists();
+        $existingIds = ActivityProfession::where('activity_id', $activity->id)
+            ->whereIn('profession_id', $request->profession_id)
+            ->pluck('profession_id')
+            ->all();
 
-        if ($exists) {
+        $newIds = array_diff($request->profession_id, $existingIds);
+
+        foreach ($newIds as $professionId) {
+            ActivityProfession::create([
+                'activity_id' => $activity->id,
+                'profession_id' => $professionId,
+            ]);
+        }
+
+        if (empty($newIds)) {
             return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'sasaran'])
                 ->withErrors(['profession_id' => 'Sasaran profesi ini sudah ditambahkan.']);
         }
-
-        ActivityProfession::create([
-            'activity_id' => $activity->id,
-            'profession_id' => $request->profession_id,
-        ]);
 
         return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'sasaran'])
             ->with('success', 'Sasaran Profesi berhasil ditambahkan.');

@@ -72,8 +72,7 @@
             @csrf
             <div class="mb-4">
                 <label class="block text-sm font-medium mb-2 text-gray-700">*Sasaran Profesi</label>
-                <select name="profession_id" id="professionSelect" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
-                    <option value="">- PILIH PROFESI -</option>
+                <select name="profession_id[]" id="professionSelect" multiple required class="w-full border border-gray-300 rounded-md p-2 focus:ring-teal-500 focus:border-teal-500">
                     @foreach ($professions as $prof)
                         <option value="{{ $prof->id }}">{{ $prof->name }}</option>
                     @endforeach
@@ -92,6 +91,14 @@
     </div>
 </div>
 
+@pushOnce('styles')
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+@endPushOnce
+
+@pushOnce('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+@endPushOnce
+
 <script>
     document.getElementById('openModal')?.addEventListener('click', function() {
         document.getElementById('modal').style.display = 'flex';
@@ -101,5 +108,18 @@
     });
     document.getElementById('cancelBtn')?.addEventListener('click', function() {
         document.getElementById('modal').style.display = 'none';
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const el = document.getElementById('professionSelect');
+        if (el && !el.tomselect) {
+            new TomSelect(el, {
+                plugins: ['remove_button'],
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                }
+            });
+        }
     });
 </script>
