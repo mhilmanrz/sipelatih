@@ -42,10 +42,10 @@ class ActivityNameController extends Controller
 
     public function downloadTemplate()
     {
-        $header = ['nama_kegiatan', 'start_date', 'end_date', 'year'];
+        $header = ['nama_kegiatan', 'start_date', 'end_date', 'year', 'quota'];
         $data = [
-            ['Contoh Nama Kegiatan 1', '2026-05-01', '2026-05-10', '2026'],
-            ['Contoh Nama Kegiatan 2', null, null, null],
+            ['Contoh Nama Kegiatan 1', '2026-05-01', '2026-05-10', '2026', 30],
+            ['Contoh Nama Kegiatan 2', null, null, null, null],
         ];
 
         return Excel::download(new class($header, $data) implements FromCollection, WithHeadings
@@ -84,6 +84,7 @@ class ActivityNameController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'year' => 'nullable|integer',
+            'quota' => 'nullable|integer|min:1',
         ]);
         ActivityName::create($request->all());
 
@@ -102,6 +103,7 @@ class ActivityNameController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'year' => 'nullable|integer',
+            'quota' => 'nullable|integer|min:1',
         ]);
         $activityName->update($request->all());
 
@@ -138,7 +140,7 @@ class ActivityNameController extends Controller
             }
         });
 
-        $activityNames = $query->limit(50)->get(['id', 'name', 'start_date', 'end_date', 'year']);
+        $activityNames = $query->limit(50)->get(['id', 'name', 'start_date', 'end_date', 'year', 'quota']);
 
         return response()->json($activityNames);
     }

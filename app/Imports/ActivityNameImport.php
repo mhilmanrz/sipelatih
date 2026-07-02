@@ -43,6 +43,7 @@ class ActivityNameImport implements SkipsEmptyRows, ToModel, WithHeadingRow, Wit
             'start_date' => $startDate,
             'end_date' => $endDate,
             'year' => $row['year'] ?? null,
+            'quota' => $row['quota'] ?? null,
         ]);
     }
 

@@ -74,6 +74,7 @@
                             <th class="text-left py-3 px-4 font-semibold text-sm">Tgl Mulai</th>
                             <th class="text-left py-3 px-4 font-semibold text-sm">Tgl Selesai</th>
                             <th class="text-center py-3 px-4 font-semibold text-sm">Tahun</th>
+                            <th class="text-center py-3 px-4 font-semibold text-sm">Kuota</th>
                             <th class="text-center w-48 py-3 px-4 font-semibold text-sm">Aksi</th>
                         </tr>
                     </thead>
@@ -85,6 +86,7 @@
                                 <td class="py-3 px-4">{{ $activityName->start_date }}</td>
                                 <td class="py-3 px-4">{{ $activityName->end_date }}</td>
                                 <td class="text-center py-3 px-4">{{ $activityName->year ?? '-' }}</td>
+                                <td class="text-center py-3 px-4">{{ $activityName->quota ?? '-' }}</td>
                                 <td class="text-center py-3 px-4">
                                     <div class="flex justify-center gap-1.5">
                                         <a href="{{ route('activity-names.edit', $activityName->id) }}"
@@ -106,7 +108,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center text-gray-500 py-6 px-4">
+                                <td colspan="7" class="text-center text-gray-500 py-6 px-4">
                                     Belum ada data Nama Kegiatan.
                                 </td>
                             </tr>

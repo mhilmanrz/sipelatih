@@ -11,15 +11,16 @@
 
 <select name="{{ $name }}" id="{{ $id }}" class="select-activity-name-live" data-placeholder="{{ $placeholder }}" {{ $attributes }}>
     @if ($selectedActivityName)
-        <option value="{{ $selectedActivityName->id }}" 
-                data-start="{{ $selectedActivityName->start_date }}" 
-                data-end="{{ $selectedActivityName->end_date }}" 
-                data-year="{{ $selectedActivityName->year }}" 
+        <option value="{{ $selectedActivityName->id }}"
+                data-start="{{ $selectedActivityName->start_date }}"
+                data-end="{{ $selectedActivityName->end_date }}"
+                data-year="{{ $selectedActivityName->year }}"
+                data-quota="{{ $selectedActivityName->quota }}"
                 selected>
             {{ $selectedActivityName->name }}
         </option>
     @else
-        <option value="" data-start="" data-end="" data-year="">{{ $placeholder }}</option>
+        <option value="" data-start="" data-end="" data-year="" data-quota="">{{ $placeholder }}</option>
     @endif
 </select>
 
@@ -42,7 +43,8 @@
                             name: opt.text,
                             start_date: opt.getAttribute('data-start') || '',
                             end_date: opt.getAttribute('data-end') || '',
-                            year: opt.getAttribute('data-year') || ''
+                            year: opt.getAttribute('data-year') || '',
+                            quota: opt.getAttribute('data-quota') || ''
                         });
                     }
                 });

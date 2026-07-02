@@ -166,7 +166,7 @@
 
                 <div class="form-row">
                     <label>Kuota Peserta (Orang)</label>
-                    <input type="number" name="quota_participant" value="{{ old('quota_participant') }}" min="1">
+                    <input type="number" name="quota_participant" id="act_quota_participant" value="{{ old('quota_participant') }}" min="1">
                 </div>
 
                 <div class="form-row two">
@@ -293,6 +293,7 @@
             const budgetSelect = document.getElementById('budget_select');
             const startDateInput = document.getElementById('act_start_date');
             const endDateInput = document.getElementById('act_end_date');
+            const quotaInput = document.getElementById('act_quota_participant');
 
             // Simpan semua opsi asli
             const allBudgetOptions = budgetSelect ? Array.from(budgetSelect.options).slice(1) : [];
@@ -328,11 +329,14 @@
                 if (activityNameObj) {
                     const start = activityNameObj.start_date;
                     const end = activityNameObj.end_date;
+                    const quota = activityNameObj.quota;
                     if (start) startDateInput.value = start;
                     if (end) endDateInput.value = end;
+                    if (quota) quotaInput.value = quota;
                 } else {
                     startDateInput.value = '';
                     endDateInput.value = '';
+                    quotaInput.value = '';
                 }
             });
         });
