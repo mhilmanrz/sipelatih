@@ -219,7 +219,7 @@
 
                 <div class="form-row">
                     <label>Unit Pengusul</label>
-                    <select name="work_unit_id">
+                    <select name="work_unit_id" id="work_unit_select">
                         <option value="">-PILIH-</option>
                         @foreach ($work_units as $unit)
                             <option value="{{ $unit->id }}"
@@ -272,6 +272,13 @@
 
             new TomSelect('select[name="fund_source_id"]', {
                 create: true,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                }
+            });
+
+            new TomSelect('#work_unit_select', {
                 sortField: {
                     field: "text",
                     direction: "asc"
