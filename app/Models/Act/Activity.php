@@ -36,6 +36,8 @@ class Activity extends Model
         'start_time',
         'end_time',
         'budget_amount',
+        'budget_diterima',
+        'budget_diserap',
         'work_unit_id',
         'user_id',
         'pic_user_id',

@@ -52,7 +52,35 @@
             </x-detail-row>
             <x-detail-row label="Tempat">{{ $kegiatan->tempat ?? '-' }}</x-detail-row>
             <x-detail-row label="Sumber Dana">{{ $kegiatan->fundSource->name ?? '-' }}</x-detail-row>
-            <x-detail-row label="Anggaran">Rp {{ number_format($kegiatan->budget_amount, 0, ',', '.') }}</x-detail-row>
+            <x-detail-row label="Anggaran Ajuan">Rp {{ number_format($kegiatan->budget_amount, 0, ',', '.') }}</x-detail-row>
+
+            <x-detail-row label="Anggaran Diterima">
+                @if (auth()->user()->stageRole() === 'perencanaan' && $kegiatan->currentStage() === 'perencanaan')
+                    <form action="{{ route('kegiatan.budget_diterima', $kegiatan->id) }}" method="POST" class="flex items-center gap-2">
+                        @csrf
+                        <input type="number" step="0.01" min="0" name="budget_diterima"
+                            value="{{ old('budget_diterima', $kegiatan->budget_diterima) }}"
+                            class="w-40 rounded-lg border-gray-300 text-sm focus:border-[#007a7a] focus:ring-[#007a7a]">
+                        <button type="submit" class="text-xs font-semibold text-[#007a7a] hover:text-[#005f5f]">Simpan</button>
+                    </form>
+                @else
+                    {{ $kegiatan->budget_diterima !== null ? 'Rp ' . number_format($kegiatan->budget_diterima, 0, ',', '.') : '-' }}
+                @endif
+            </x-detail-row>
+
+            <x-detail-row label="Anggaran Diserap">
+                @if (auth()->user()->stageRole() === 'penyelenggara' && $kegiatan->currentStage() === 'penyelenggara')
+                    <form action="{{ route('kegiatan.budget_diserap', $kegiatan->id) }}" method="POST" class="flex items-center gap-2">
+                        @csrf
+                        <input type="number" step="0.01" min="0" name="budget_diserap"
+                            value="{{ old('budget_diserap', $kegiatan->budget_diserap) }}"
+                            class="w-40 rounded-lg border-gray-300 text-sm focus:border-[#007a7a] focus:ring-[#007a7a]">
+                        <button type="submit" class="text-xs font-semibold text-[#007a7a] hover:text-[#005f5f]">Simpan</button>
+                    </form>
+                @else
+                    {{ $kegiatan->budget_diserap !== null ? 'Rp ' . number_format($kegiatan->budget_diserap, 0, ',', '.') : '-' }}
+                @endif
+            </x-detail-row>
         </div>
     </x-detail-section>
 </section>

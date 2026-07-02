@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Act\ActivityBudgetController;
 use App\Http\Controllers\Act\ActivityCategoryController;
 use App\Http\Controllers\Act\ActivityController;
 use App\Http\Controllers\Act\ActivityEvaluationController;
@@ -184,6 +185,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('kegiatan/{kegiatan}/perencanaan-forward', [ActivityStatusController::class, 'perencanaanForward'])->name('kegiatan.perencanaan_forward');
     Route::post('kegiatan/{kegiatan}/penyelenggara-complete', [ActivityStatusController::class, 'penyelenggaraComplete'])->name('kegiatan.penyelenggara_complete');
     Route::post('kegiatan/{kegiatan}/evaluasi-complete', [ActivityStatusController::class, 'evaluasiComplete'])->name('kegiatan.evaluasi_complete');
+    Route::post('kegiatan/{kegiatan}/budget-diterima', [ActivityBudgetController::class, 'updateDiterima'])->name('kegiatan.budget_diterima');
+    Route::post('kegiatan/{kegiatan}/budget-diserap', [ActivityBudgetController::class, 'updateDiserap'])->name('kegiatan.budget_diserap');
 
     // Excel Import Routes
     Route::get('kegiatan/peserta/template', [ActivityParticipantController::class, 'downloadTemplate'])->name('kegiatan.peserta.template');
