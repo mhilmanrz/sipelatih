@@ -28,7 +28,7 @@
                                         {{ $activity->activityName->name ?? $activity->name ?? 'Kegiatan' }}
                                     </h3>
                                     
-                                    @if ($activity->latestStatus && $activity->latestStatus->status === 'accepted')
+                                    @if ($activity->latestStatus && $activity->latestStatus->status === 'completed')
                                         <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                             Disetujui
                                         </span>

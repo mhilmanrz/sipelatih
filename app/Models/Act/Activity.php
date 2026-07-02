@@ -120,6 +120,16 @@ class Activity extends Model
         return $this->hasOne(ActivityStatus::class)->latestOfMany();
     }
 
+    public function currentStage(): string
+    {
+        return $this->latestStatus?->stage ?? 'pengusul';
+    }
+
+    public function currentStatus(): string
+    {
+        return $this->latestStatus?->status ?? 'draft';
+    }
+
     public function activityProfessions()
     {
         return $this->hasMany(ActivityProfession::class);
@@ -214,4 +224,3 @@ class Activity extends Model
         return $this->hasMany(ActivityKakFile::class);
     }
 }
-

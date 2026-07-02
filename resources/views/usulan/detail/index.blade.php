@@ -2,7 +2,21 @@
     <x-slot:title>Detail Usulan Diklat</x-slot>
 
     @php
-        $status = $kegiatan->latestStatus->status ?? 'draft';
+        $status = $kegiatan->currentStatus();
+        $stage = $kegiatan->currentStage();
+        $stageLabels = [
+            'pengusul' => 'Pengusul',
+            'perencanaan' => 'Perencanaan',
+            'penyelenggara' => 'Penyelenggara',
+            'evaluasi' => 'Evaluasi',
+        ];
+        $statusLabel = match(true) {
+            $status === 'draft' => 'Draft',
+            $status === 'pending' => 'Menunggu '.$stageLabels[$stage],
+            $status === 'revision' => 'Revisi ('.$stageLabels[$stage].')',
+            $status === 'completed' => 'Selesai',
+            default => 'Draft',
+        };
 
         $tabs = [
             'kegiatan'    => ['label' => 'Kegiatan',        'title' => 'Informasi Kegiatan',       'icon' => 'fa-clipboard-list',   'permission' => 'view activity tab kegiatan'],
@@ -35,9 +49,9 @@
 
         $statusColors = [
             'draft'     => 'bg-white/20 text-white',
-            'submitted' => 'bg-white/25 text-white',
+            'pending'   => 'bg-white/25 text-white',
             'revision'  => 'bg-yellow-400/90 text-yellow-900',
-            'accepted'  => 'bg-green-400/90 text-green-900',
+            'completed' => 'bg-green-400/90 text-green-900',
         ];
         $statusColor = $statusColors[$status] ?? 'bg-white/15 text-white';
     @endphp
@@ -52,9 +66,9 @@
                     <h1 class="text-xl font-bold text-white truncate">{{ $kegiatan->activityName->name ?? '-' }}</h1>
                 </div>
                 <div class="shrink-0">
-                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold capitalize {{ $statusColor }}">
-                        <span class="w-2 h-2 rounded-full {{ $status === 'accepted' ? 'bg-green-900' : ($status === 'submitted' ? 'bg-white' : ($status === 'revision' ? 'bg-yellow-900' : 'bg-white/70')) }}"></span>
-                        {{ ucfirst($status) }}
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold {{ $statusColor }}">
+                        <span class="w-2 h-2 rounded-full {{ $status === 'completed' ? 'bg-green-900' : ($status === 'pending' ? 'bg-white' : ($status === 'revision' ? 'bg-yellow-900' : 'bg-white/70')) }}"></span>
+                        {{ $statusLabel }}
                     </span>
                 </div>
             </div>

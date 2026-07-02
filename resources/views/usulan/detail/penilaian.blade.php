@@ -5,6 +5,12 @@
 
         @php
             $statuses = $kegiatan->statuses()->orderBy('created_at', 'desc')->get();
+            $stageLabels = [
+                'pengusul' => 'Pengusul',
+                'perencanaan' => 'Perencanaan',
+                'penyelenggara' => 'Penyelenggara',
+                'evaluasi' => 'Evaluasi',
+            ];
         @endphp
 
         <div class="overflow-x-auto">
@@ -31,17 +37,17 @@
                                     <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">
                                         ✎ Draft
                                     </span>
-                                @elseif($hist->status === 'submitted')
+                                @elseif($hist->status === 'pending')
                                     <span class="bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold uppercase shadow-sm tracking-wide">
-                                        🚀 Terkirim / Diajukan
+                                        🚀 Menunggu {{ $stageLabels[$hist->stage] ?? $hist->stage }}
                                     </span>
                                 @elseif($hist->status === 'revision')
                                     <span class="bg-yellow-500 text-white px-3 py-1 rounded text-xs font-bold uppercase shadow-sm tracking-wide">
-                                        🔧 Butuh Perbaikan
+                                        🔧 Revisi ({{ $stageLabels[$hist->stage] ?? $hist->stage }})
                                     </span>
-                                @elseif($hist->status === 'accepted')
+                                @elseif($hist->status === 'completed')
                                     <span class="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold uppercase shadow-sm tracking-wide">
-                                        ✔ Disetujui
+                                        ✔ Selesai
                                     </span>
                                 @else
                                     <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded text-xs font-bold uppercase">

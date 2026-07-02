@@ -55,13 +55,13 @@ class ActivityReportController extends Controller
         $statusCounts = [
             'draft' => Activity::whereDoesntHave('latestStatus')->count(),
             'submitted' => Activity::whereHas('latestStatus', function ($q) {
-                $q->where('status', 'submitted');
+                $q->where('status', 'pending');
             })->count(),
             'revision' => Activity::whereHas('latestStatus', function ($q) {
                 $q->where('status', 'revision');
             })->count(),
             'accepted' => Activity::whereHas('latestStatus', function ($q) {
-                $q->where('status', 'accepted');
+                $q->where('status', 'completed');
             })->count(),
         ];
 

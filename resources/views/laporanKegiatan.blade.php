@@ -98,9 +98,9 @@
                                 $status = $item->latestStatus?->status ?? 'draft';
                                 $statusMap = [
                                     'draft'     => ['label' => 'Draft',     'class' => 'bg-gray-200 text-gray-700'],
-                                    'submitted' => ['label' => 'Diajukan',  'class' => 'bg-blue-100 text-blue-700'],
+                                    'pending'   => ['label' => 'Diajukan',  'class' => 'bg-blue-100 text-blue-700'],
                                     'revision'  => ['label' => 'Revisi',    'class' => 'bg-yellow-100 text-yellow-700'],
-                                    'accepted'  => ['label' => 'Disetujui', 'class' => 'bg-green-100 text-green-700'],
+                                    'completed' => ['label' => 'Disetujui', 'class' => 'bg-green-100 text-green-700'],
                                 ];
                                 $badge = $statusMap[$status] ?? ['label' => ucfirst($status), 'class' => 'bg-gray-100 text-gray-600'];
                             @endphp

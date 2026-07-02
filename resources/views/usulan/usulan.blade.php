@@ -79,9 +79,9 @@
                     class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-[#007a7a]/40 focus:border-[#007a7a] transition appearance-none pr-8 bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%236b7280%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.23%207.21a.75.75%200%20011.06.02L10%2011.168l3.71-3.938a.75.75%200%20111.08%201.04l-4.25%204.5a.75.75%200%2001-1.08%200l-4.25-4.5a.75.75%200%2001.02-1.06z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat">
                     <option value="">Semua Status</option>
                     <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="submitted" {{ request('status') === 'submitted' ? 'selected' : '' }}>Submitted</option>
-                    <option value="revision" {{ request('status') === 'revision' ? 'selected' : '' }}>Revision</option>
-                    <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>Accepted</option>
+                    <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu</option>
+                    <option value="revision" {{ request('status') === 'revision' ? 'selected' : '' }}>Revisi</option>
+                    <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Selesai</option>
                 </select>
 
                 <div class="relative flex items-center">
@@ -108,6 +108,7 @@
                         <th class="border-b border-gray-400 py-2 px-2 font-semibold text-left">Nama Kegiatan</th>
                         <th class="border-b border-gray-400 py-2 px-2 font-semibold text-left">Jenis</th>
                         <th class="border-b border-gray-400 py-2 px-2 font-semibold text-left">Pelaksanaan</th>
+                        <th class="border-b border-gray-400 py-2 px-2 font-semibold text-center w-32">Status</th>
                         <th class="border-b border-gray-400 py-2 px-2 font-semibold text-center w-40">Aksi</th>
                     </tr>
                 </thead>
@@ -135,6 +136,29 @@
                                     -
                                 @endif
                             </td>
+                            @php
+                                $itemStage = $item->currentStage();
+                                $itemStatus = $item->currentStatus();
+                                $isEditable = in_array($itemStatus, ['draft', 'revision']);
+                                $stageLabels = [
+                                    'pengusul' => 'Pengusul',
+                                    'perencanaan' => 'Perencanaan',
+                                    'penyelenggara' => 'Penyelenggara',
+                                    'evaluasi' => 'Evaluasi',
+                                ];
+                                $statusBadge = match(true) {
+                                    $itemStatus === 'draft' => ['label' => 'Draft', 'class' => 'bg-gray-100 text-gray-700 border border-gray-300'],
+                                    $itemStatus === 'pending' => ['label' => 'Menunggu '.$stageLabels[$itemStage], 'class' => 'bg-blue-100 text-blue-800 border border-blue-300'],
+                                    $itemStatus === 'revision' => ['label' => 'Revisi ('.$stageLabels[$itemStage].')', 'class' => 'bg-yellow-100 text-yellow-800 border border-yellow-300'],
+                                    $itemStatus === 'completed' => ['label' => 'Selesai', 'class' => 'bg-green-100 text-green-800 border border-green-300'],
+                                    default => ['label' => 'Draft', 'class' => 'bg-gray-100 text-gray-700 border border-gray-300'],
+                                };
+                            @endphp
+                            <td class="border-b border-gray-300 py-2 px-2 text-center">
+                                <span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold {{ $statusBadge['class'] }}">
+                                    {{ $statusBadge['label'] }}
+                                </span>
+                            </td>
                             <td class="border-b border-gray-300 py-2 px-2 text-center">
                                 <div class="flex justify-center gap-1 items-center">
                                     <a href="{{ route('kegiatan.show', $item->id) }}"
@@ -143,29 +167,31 @@
                                         title="Detail">
                                         Detail
                                     </a>
-                                    <a href="{{ route('kegiatan.edit', $item->id) }}"
-                                        style="background-color: #eab308;"
-                                        class="text-white px-2 py-1 rounded hover:bg-[#ca8a04] text-xs font-semibold transition"
-                                        title="Edit">
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST"
-                                        class="inline m-0"
-                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" style="background-color: #ef4444;"
-                                            class="text-white px-2 py-1 rounded hover:bg-[#dc2626] text-xs font-semibold transition"
-                                            title="Hapus">
-                                            Hapus
-                                        </button>
-                                    </form>
+                                    @if($isEditable)
+                                        <a href="{{ route('kegiatan.edit', $item->id) }}"
+                                            style="background-color: #eab308;"
+                                            class="text-white px-2 py-1 rounded hover:bg-[#ca8a04] text-xs font-semibold transition"
+                                            title="Edit">
+                                            Edit
+                                        </a>
+                                        <form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST"
+                                            class="inline m-0"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" style="background-color: #ef4444;"
+                                                class="text-white px-2 py-1 rounded hover:bg-[#dc2626] text-xs font-semibold transition"
+                                                title="Hapus">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="border-b border-gray-300 py-4 text-center text-gray-500 text-sm">Tidak ada
+                            <td colspan="8" class="border-b border-gray-300 py-4 text-center text-gray-500 text-sm">Tidak ada
                                 data kegiatan.</td>
                         </tr>
                     @endforelse

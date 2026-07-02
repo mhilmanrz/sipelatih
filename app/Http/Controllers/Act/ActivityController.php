@@ -174,6 +174,11 @@ class ActivityController extends Controller
     {
         $kegiatan = Activity::findOrFail($id);
 
+        if (! in_array($kegiatan->currentStatus(), ['draft', 'revision'])) {
+            return redirect()->route('kegiatan.show', $id)
+                ->with('error', 'Kegiatan tidak dapat diedit karena sudah dikirim atau disetujui.');
+        }
+
         $selectedPicId = old('pic_user_id', $kegiatan->pic_user_id);
         $selectedPic = $selectedPicId ? User::find($selectedPicId) : null;
 
@@ -227,6 +232,12 @@ class ActivityController extends Controller
     public function update(UpdateActivityRequest $request, $id)
     {
         $activity = Activity::findOrFail($id);
+
+        if (! in_array($activity->currentStatus(), ['draft', 'revision'])) {
+            return redirect()->route('kegiatan.show', $id)
+                ->with('error', 'Kegiatan tidak dapat diubah karena sudah dikirim atau disetujui.');
+        }
+
         $activity->update($request->validated());
 
         return redirect()->route('usulan-diklat')->with('success', 'Kegiatan berhasil diperbarui.');
@@ -238,6 +249,12 @@ class ActivityController extends Controller
     public function destroy($id)
     {
         $activity = Activity::findOrFail($id);
+
+        if (! in_array($activity->currentStatus(), ['draft', 'revision'])) {
+            return redirect()->route('usulan-diklat')
+                ->with('error', 'Kegiatan tidak dapat dihapus karena sudah dikirim atau disetujui.');
+        }
+
         $activity->delete();
 
         return redirect()->route('usulan-diklat')->with('success', 'Kegiatan berhasil dihapus.');

@@ -11,20 +11,30 @@ use Illuminate\Http\Request;
 class ActivityStatusController extends Controller
 {
     /**
-     * Submit an activity (change status from draft to submitted).
+     * Abort with 403 unless the current user owns one of the given stage roles (or is superadmin).
+     */
+    private function authorizeStage(array $roles): void
+    {
+        abort_unless(auth()->user()->hasAnyRole([...$roles, 'superadmin']), 403);
+    }
+
+    /**
+     * Pengusul submits to perencanaan.
+     * Valid from: pengusul/draft or pengusul/revision
      */
     public function submit(Request $request, $kegiatanId)
     {
+        $this->authorizeStage(['pengusul']);
+
         $activity = Activity::findOrFail($kegiatanId);
 
-        // Optional: Ensure it's currently in draft or has no status
-        $latestStatus = $activity->latestStatus ? $activity->latestStatus->status : 'draft';
+        $stage = $activity->currentStage();
+        $status = $activity->currentStatus();
 
-        if ($latestStatus !== 'draft' && $latestStatus !== 'revision') {
-            return redirect()->back()->with('error', 'Status kegiatan saat ini tidak dapat dikirim.');
+        if ($stage !== 'pengusul' || ! in_array($status, ['draft', 'revision'])) {
+            return redirect()->back()->with('error', 'Usulan tidak dapat dikirim dari status saat ini.');
         }
 
-        // Enforce all requirements are met before submitting
         $kegiatanRequiredFields = [
             'activity_name_id', 'activity_type_id', 'activity_category_id', 'activity_scope_id',
             'material_type_id', 'activity_method_id', 'batch_id', 'activity_format_id',
@@ -52,46 +62,185 @@ class ActivityStatusController extends Controller
 
         $waktuComplete = false;
         if ($activity->start_date) {
-            $startDate = Carbon::parse($activity->start_date)->startOfDay();
-            $today = now()->startOfDay();
-            $daysRemaining = $today->diffInDays($startDate, false);
+            $daysRemaining = now()->startOfDay()->diffInDays(Carbon::parse($activity->start_date)->startOfDay(), false);
             $waktuComplete = $daysRemaining < 45;
         }
 
-        if (! $kegiatanComplete || ! $justifikasiComplete || ! $sasaranComplete || ! $kakComplete || ! $materiComplete || ! $narasumberComplete || ! $pesertaComplete || ! $waktuComplete) {
-            return redirect()->back()->with('error', 'Persyaratan pengiriman usulan belum terpenuhi. Silakan periksa kembali kelengkapan data usulan Anda.');
+        if (! $kegiatanComplete || ! $justifikasiComplete || ! $sasaranComplete || ! $kakComplete
+            || ! $materiComplete || ! $narasumberComplete || ! $pesertaComplete || ! $waktuComplete) {
+            return redirect()->back()->with('error', 'Persyaratan pengiriman belum terpenuhi. Silakan periksa kelengkapan data.');
         }
 
         ActivityStatus::create([
             'activity_id' => $activity->id,
-            'status' => 'submitted',
-            'note' => $request->input('note', 'Dikirim untuk persetujuan.'),
+            'stage' => 'perencanaan',
+            'status' => 'pending',
+            'note' => $request->input('note', 'Dikirim untuk review perencanaan.'),
         ]);
 
         return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'pengiriman'])
-            ->with('success', 'Usulan kegiatan berhasil dikirim.');
+            ->with('success', 'Usulan berhasil dikirim ke Tim Perencanaan.');
     }
 
     /**
-     * Cancel submission (revert to draft).
+     * Pengusul cancels submission (while still perencanaan/pending).
      */
-    public function cancel(Request $request, $kegiatanId)
+    public function cancelSubmit($kegiatanId)
     {
+        $this->authorizeStage(['pengusul']);
+
         $activity = Activity::findOrFail($kegiatanId);
 
-        $latestStatus = $activity->latestStatus ? $activity->latestStatus->status : 'draft';
-
-        if ($latestStatus !== 'submitted') {
-            return redirect()->back()->with('error', 'Hanya kegiatan yang baru dikirim yang dapat dibatalkan.');
+        if ($activity->currentStage() !== 'perencanaan' || $activity->currentStatus() !== 'pending') {
+            return redirect()->back()->with('error', 'Usulan hanya bisa ditarik jika masih menunggu review perencanaan.');
         }
 
         ActivityStatus::create([
             'activity_id' => $activity->id,
+            'stage' => 'pengusul',
             'status' => 'draft',
-            'note' => 'Pengiriman dibatalkan oleh pengguna.',
+            'note' => 'Pengiriman ditarik kembali oleh pengusul.',
         ]);
 
         return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'pengiriman'])
-            ->with('success', 'Pengiriman usulan berhasil dibatalkan dan dikembalikan ke status Draft.');
+            ->with('success', 'Usulan berhasil ditarik kembali ke Draft.');
+    }
+
+    /**
+     * Perencanaan approves → penyelenggara/pending.
+     */
+    public function approve(Request $request, $kegiatanId)
+    {
+        $this->authorizeStage(['perencanaan']);
+
+        $activity = Activity::findOrFail($kegiatanId);
+
+        if ($activity->currentStage() !== 'perencanaan' || $activity->currentStatus() !== 'pending') {
+            return redirect()->back()->with('error', 'Tidak dapat menyetujui usulan dari status saat ini.');
+        }
+
+        ActivityStatus::create([
+            'activity_id' => $activity->id,
+            'stage' => 'penyelenggara',
+            'status' => 'pending',
+            'note' => $request->input('note', 'Disetujui oleh perencanaan, diteruskan ke penyelenggara.'),
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'pengiriman'])
+            ->with('success', 'Usulan disetujui dan diteruskan ke Tim Penyelenggara.');
+    }
+
+    /**
+     * Return for revision to the previous stage.
+     * perencanaan/pending → pengusul/revision
+     * penyelenggara/pending → perencanaan/revision
+     */
+    public function returnRevision(Request $request, $kegiatanId)
+    {
+        $request->validate(['note' => 'required|string|max:1000']);
+
+        $activity = Activity::findOrFail($kegiatanId);
+        $stage = $activity->currentStage();
+        $status = $activity->currentStatus();
+
+        $this->authorizeStage(array_filter([
+            $stage === 'perencanaan' ? 'perencanaan' : null,
+            $stage === 'penyelenggara' ? 'penyelenggara' : null,
+        ]));
+
+        $targetStage = match (true) {
+            $stage === 'perencanaan' && $status === 'pending' => 'pengusul',
+            $stage === 'penyelenggara' && $status === 'pending' => 'perencanaan',
+            default => null,
+        };
+
+        if (! $targetStage) {
+            return redirect()->back()->with('error', 'Tidak dapat mengembalikan dari status saat ini.');
+        }
+
+        ActivityStatus::create([
+            'activity_id' => $activity->id,
+            'stage' => $targetStage,
+            'status' => 'revision',
+            'note' => $request->input('note'),
+        ]);
+
+        $targetLabel = $targetStage === 'pengusul' ? 'Pengusul' : 'Perencanaan';
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'pengiriman'])
+            ->with('success', "Usulan dikembalikan ke {$targetLabel} untuk revisi.");
+    }
+
+    /**
+     * Perencanaan forwards after fixing revision from penyelenggara.
+     * perencanaan/revision → penyelenggara/pending
+     */
+    public function perencanaanForward(Request $request, $kegiatanId)
+    {
+        $this->authorizeStage(['perencanaan']);
+
+        $activity = Activity::findOrFail($kegiatanId);
+
+        if ($activity->currentStage() !== 'perencanaan' || $activity->currentStatus() !== 'revision') {
+            return redirect()->back()->with('error', 'Tidak dapat meneruskan dari status saat ini.');
+        }
+
+        ActivityStatus::create([
+            'activity_id' => $activity->id,
+            'stage' => 'penyelenggara',
+            'status' => 'pending',
+            'note' => $request->input('note', 'Revisi selesai, diteruskan kembali ke penyelenggara.'),
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'pengiriman'])
+            ->with('success', 'Usulan diteruskan kembali ke Tim Penyelenggara.');
+    }
+
+    /**
+     * Penyelenggara marks activity complete → evaluasi/pending.
+     */
+    public function penyelenggaraComplete(Request $request, $kegiatanId)
+    {
+        $this->authorizeStage(['penyelenggara']);
+
+        $activity = Activity::findOrFail($kegiatanId);
+
+        if ($activity->currentStage() !== 'penyelenggara' || $activity->currentStatus() !== 'pending') {
+            return redirect()->back()->with('error', 'Tidak dapat menyelesaikan dari status saat ini.');
+        }
+
+        ActivityStatus::create([
+            'activity_id' => $activity->id,
+            'stage' => 'evaluasi',
+            'status' => 'pending',
+            'note' => $request->input('note', 'Kegiatan selesai dilaksanakan, diteruskan ke evaluasi.'),
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'pengiriman'])
+            ->with('success', 'Kegiatan selesai dan diteruskan ke Tim Evaluasi.');
+    }
+
+    /**
+     * Evaluasi submits final evaluation → evaluasi/completed.
+     */
+    public function evaluasiComplete(Request $request, $kegiatanId)
+    {
+        $this->authorizeStage(['evaluasi']);
+
+        $activity = Activity::findOrFail($kegiatanId);
+
+        if ($activity->currentStage() !== 'evaluasi' || $activity->currentStatus() !== 'pending') {
+            return redirect()->back()->with('error', 'Tidak dapat menyelesaikan evaluasi dari status saat ini.');
+        }
+
+        ActivityStatus::create([
+            'activity_id' => $activity->id,
+            'stage' => 'evaluasi',
+            'status' => 'completed',
+            'note' => $request->input('note', 'Evaluasi selesai.'),
+        ]);
+
+        return redirect()->route('kegiatan.show', ['kegiatan' => $activity->id, 'tab' => 'pengiriman'])
+            ->with('success', 'Evaluasi selesai. Kegiatan telah ditutup.');
     }
 }

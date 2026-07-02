@@ -89,4 +89,18 @@ class User extends Authenticatable
     {
         return ! $this->hasAnyRole(['superadmin', 'perencanaan', 'penyelenggara', 'evaluasi', 'pengusul']);
     }
+
+    /**
+     * The single stage role this user acts as in the kegiatan approval flow, if any.
+     */
+    public function stageRole(): ?string
+    {
+        foreach (['superadmin', 'pengusul', 'perencanaan', 'penyelenggara', 'evaluasi'] as $role) {
+            if ($this->hasRole($role)) {
+                return $role;
+            }
+        }
+
+        return null;
+    }
 }

@@ -13,6 +13,7 @@ class ActivityStatus extends Model
 
     protected $fillable = [
         'activity_id',
+        'stage',
         'status',
         'note',
     ];

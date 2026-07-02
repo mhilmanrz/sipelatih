@@ -30,9 +30,9 @@ class EvaluationDashboardController extends Controller
 
         $selectedYear = (int) $request->input('year', $availableYears->first() ?? date('Y'));
 
-        // Base accepted activities for the selected year
+        // Base accepted activities for the selected year (approved past perencanaan, now with penyelenggara/evaluasi)
         $acceptedActivityIds = Activity::whereHas('latestStatus', function ($q) {
-            $q->where('status', 'accepted');
+            $q->whereIn('stage', ['penyelenggara', 'evaluasi']);
         })
             ->where(function ($q) use ($selectedYear) {
                 $q->whereYear('start_date', $selectedYear)

@@ -178,7 +178,12 @@ Route::middleware(['auth'])->group(function () {
 
     // Pengiriman (Status Tracker) Routes
     Route::post('kegiatan/{kegiatan}/submit', [ActivityStatusController::class, 'submit'])->name('kegiatan.submit');
-    Route::post('kegiatan/{kegiatan}/cancel-submit', [ActivityStatusController::class, 'cancel'])->name('kegiatan.cancel_submit');
+    Route::post('kegiatan/{kegiatan}/cancel-submit', [ActivityStatusController::class, 'cancelSubmit'])->name('kegiatan.cancel_submit');
+    Route::post('kegiatan/{kegiatan}/approve', [ActivityStatusController::class, 'approve'])->name('kegiatan.approve');
+    Route::post('kegiatan/{kegiatan}/return-revision', [ActivityStatusController::class, 'returnRevision'])->name('kegiatan.return_revision');
+    Route::post('kegiatan/{kegiatan}/perencanaan-forward', [ActivityStatusController::class, 'perencanaanForward'])->name('kegiatan.perencanaan_forward');
+    Route::post('kegiatan/{kegiatan}/penyelenggara-complete', [ActivityStatusController::class, 'penyelenggaraComplete'])->name('kegiatan.penyelenggara_complete');
+    Route::post('kegiatan/{kegiatan}/evaluasi-complete', [ActivityStatusController::class, 'evaluasiComplete'])->name('kegiatan.evaluasi_complete');
 
     // Excel Import Routes
     Route::get('kegiatan/peserta/template', [ActivityParticipantController::class, 'downloadTemplate'])->name('kegiatan.peserta.template');

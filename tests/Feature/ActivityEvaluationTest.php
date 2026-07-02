@@ -99,7 +99,8 @@ class ActivityEvaluationTest extends TestCase
         // Activity status must be accepted
         ActivityStatus::create([
             'activity_id' => $activity->id,
-            'status' => 'accepted',
+            'stage' => 'evaluasi',
+            'status' => 'completed',
             'note' => 'Disetujui',
         ]);
 
@@ -123,7 +124,8 @@ class ActivityEvaluationTest extends TestCase
 
         ActivityStatus::create([
             'activity_id' => $activity->id,
-            'status' => 'accepted',
+            'stage' => 'evaluasi',
+            'status' => 'completed',
         ]);
 
         $criteria = EvaluationCriteria::create([
@@ -175,7 +177,8 @@ class ActivityEvaluationTest extends TestCase
 
         ActivityStatus::create([
             'activity_id' => $activity->id,
-            'status' => 'accepted',
+            'stage' => 'evaluasi',
+            'status' => 'completed',
         ]);
 
         $criteria = EvaluationCriteria::create([
@@ -222,7 +225,8 @@ class ActivityEvaluationTest extends TestCase
 
         ActivityStatus::create([
             'activity_id' => $activity->id,
-            'status' => 'accepted',
+            'stage' => 'evaluasi',
+            'status' => 'completed',
         ]);
 
         // First pass level 1

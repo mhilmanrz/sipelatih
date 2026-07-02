@@ -39,10 +39,10 @@ class ActivityEvaluationController extends Controller
             $activeTab = 1;
         }
 
-        // 2. Base query for accepted activities
+        // 2. Base query for accepted activities (approved past perencanaan, now with penyelenggara/evaluasi)
         $query = Activity::query()
             ->whereHas('latestStatus', function ($q) {
-                $q->where('status', 'accepted');
+                $q->whereIn('stage', ['penyelenggara', 'evaluasi']);
             });
 
         // Filter by Year

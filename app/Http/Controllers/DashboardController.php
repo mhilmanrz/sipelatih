@@ -21,23 +21,23 @@ class DashboardController extends Controller
                 });
         })->count();
 
-        // 2. Tahap Pengajuan (latest status submitted, and never revised)
+        // 2. Tahap Pengajuan (latest status pending, and never revised)
         $submittedCount = Activity::whereHas('latestStatus', function ($query) {
-            $query->where('status', 'submitted');
+            $query->where('status', 'pending');
         })->whereDoesntHave('statuses', function ($query) {
             $query->where('status', 'revision');
         })->count();
 
-        // 3. Telah Perbaikan (latest status submitted, and has been revised in history)
+        // 3. Telah Perbaikan (latest status pending, and has been revised in history)
         $telahPerbaikanCount = Activity::whereHas('latestStatus', function ($query) {
-            $query->where('status', 'submitted');
+            $query->where('status', 'pending');
         })->whereHas('statuses', function ($query) {
             $query->where('status', 'revision');
         })->count();
 
-        // 4. Proses Penilaian (accepted activities where grading is configured / in progress)
+        // 4. Proses Penilaian (completed activities where grading is configured / in progress)
         $prosesPenilaianCount = Activity::whereHas('latestStatus', function ($query) {
-            $query->where('status', 'accepted');
+            $query->where('status', 'completed');
         })->whereHas('scoreSetting')->count();
 
         // 5. Butuh Perbaikan (latest status revision)
@@ -45,9 +45,9 @@ class DashboardController extends Controller
             $query->where('status', 'revision');
         })->count();
 
-        // 6. Disetujui (latest status accepted)
+        // 6. Disetujui (latest status completed)
         $acceptedCount = Activity::whereHas('latestStatus', function ($query) {
-            $query->where('status', 'accepted');
+            $query->where('status', 'completed');
         })->count();
 
         // 7. Ditolak (always 0, as not supported in the database enum)

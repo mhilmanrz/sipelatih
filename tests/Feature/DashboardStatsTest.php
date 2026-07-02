@@ -44,7 +44,7 @@ class DashboardStatsTest extends TestCase
         $actSubmitted = Activity::create();
         ActivityStatus::create([
             'activity_id' => $actSubmitted->id,
-            'status' => 'submitted',
+            'status' => 'pending',
             'note' => 'Submitted first time',
         ]);
 
@@ -52,7 +52,7 @@ class DashboardStatsTest extends TestCase
         $actResubmitted = Activity::create();
         ActivityStatus::create([
             'activity_id' => $actResubmitted->id,
-            'status' => 'submitted',
+            'status' => 'pending',
             'note' => 'First submission',
         ]);
         ActivityStatus::create([
@@ -62,7 +62,7 @@ class DashboardStatsTest extends TestCase
         ]);
         ActivityStatus::create([
             'activity_id' => $actResubmitted->id,
-            'status' => 'submitted',
+            'status' => 'pending',
             'note' => 'Resubmitted after revision',
         ]);
 
@@ -78,7 +78,7 @@ class DashboardStatsTest extends TestCase
         $actAcceptedWithScore = Activity::create();
         ActivityStatus::create([
             'activity_id' => $actAcceptedWithScore->id,
-            'status' => 'accepted',
+            'status' => 'completed',
             'note' => 'Accepted',
         ]);
         ActivityScoreSetting::create([
@@ -90,7 +90,7 @@ class DashboardStatsTest extends TestCase
         $actAcceptedWithoutScore = Activity::create();
         ActivityStatus::create([
             'activity_id' => $actAcceptedWithoutScore->id,
-            'status' => 'accepted',
+            'status' => 'completed',
             'note' => 'Accepted',
         ]);
 
