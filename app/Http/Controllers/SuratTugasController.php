@@ -242,7 +242,7 @@ class SuratTugasController extends Controller
             $narasumberTable->addCell(500, ['bgColor' => 'F2F2F2'])->addText('No.', ['bold' => true, 'size' => 11]);
             $narasumberTable->addCell(2500, ['bgColor' => 'F2F2F2'])->addText('Nama', ['bold' => true, 'size' => 11]);
             $narasumberTable->addCell(2000, ['bgColor' => 'F2F2F2'])->addText('NIP/NPS', ['bold' => true, 'size' => 11]);
-            $narasumberTable->addCell(2000, ['bgColor' => 'F2F2F2'])->addText('Pangkat/ Golongan', ['bold' => true, 'size' => 11]);
+            $narasumberTable->addCell(2000, ['bgColor' => 'F2F2F2'])->addText('Pangkat/Gol. / Instansi', ['bold' => true, 'size' => 11]);
             $narasumberTable->addCell(3000, ['bgColor' => 'F2F2F2'])->addText('Jabatan', ['bold' => true, 'size' => 11]);
 
             $index = 1;
@@ -251,8 +251,8 @@ class SuratTugasController extends Controller
                 $narasumberTable->addCell(500)->addText($index.'.', ['size' => 11]);
                 $narasumberTable->addCell(2500)->addText($n->user?->name ?? '-', ['size' => 11]);
                 $narasumberTable->addCell(2000)->addText($n->user?->employee_id ?? '-', ['size' => 11]);
-                $narasumberTable->addCell(2000)->addText($n->user?->rank?->name ?? '-', ['size' => 11]);
-                $narasumberTable->addCell(3000)->addText($n->user?->position?->name ?? '-', ['size' => 11]);
+                $narasumberTable->addCell(2000)->addText($n->user?->documentRankOrInstitution() ?? '-', ['size' => 11]);
+                $narasumberTable->addCell(3000)->addText($n->user?->documentPosition() ?? '-', ['size' => 11]);
                 $index++;
             }
         }

@@ -29,7 +29,7 @@
             <th style="width: 5%;">No.</th>
             <th style="width: 25%;">Nama</th>
             <th style="width: 20%;">NIP/NPS</th>
-            <th style="width: 20%;">Pangkat/ Golongan</th>
+            <th style="width: 20%;">Pangkat/Gol. / Instansi</th>
             <th style="width: 30%;">Jabatan</th>
         </tr>
     </thead>
@@ -39,8 +39,8 @@
                 <td class="center">{{ $loop->iteration }}.</td>
                 <td>{{ $n->user->name ?? '-' }}</td>
                 <td>{{ $n->user->employee_id ?? '-' }}</td>
-                <td>{{ $n->user->rank->name ?? '-' }}</td>
-                <td>{{ $n->user->position->name ?? '-' }}</td>
+                <td>{{ $n->user?->documentRankOrInstitution() ?? '-' }}</td>
+                <td>{{ $n->user?->documentPosition() ?? '-' }}</td>
             </tr>
         @empty
             <tr>
