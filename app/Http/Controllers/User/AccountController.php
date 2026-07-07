@@ -18,7 +18,7 @@ class AccountController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'roles'])->has('roles');
+        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'roles'])->has('roles')->where('is_external', false);
 
         if ($request->has('q') && $request->q != '') {
             $search = $request->q;

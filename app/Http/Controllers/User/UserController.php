@@ -22,7 +22,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'rank', 'roles'])->doesntHave('roles')->where('email', '!=', 'admin@mail.com');
+        $query = User::with(['workUnit', 'position', 'employmentType', 'profession', 'rank', 'roles'])->doesntHave('roles')->where('is_external', false)->where('email', '!=', 'admin@mail.com');
 
         if ($request->has('q') && $request->q != '') {
             $search = $request->q;
