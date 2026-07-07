@@ -43,6 +43,7 @@ class RolePermissionSeeder extends Seeder
             // Master Data - Pegawai & Akun
             'view users',
             'view accounts',
+            'view external persons',
             'view professions',
             'view profession categories',
             'view roles',
@@ -94,6 +95,12 @@ class RolePermissionSeeder extends Seeder
         $evaluasi = Role::firstOrCreate(['name' => 'evaluasi', 'guard_name' => 'web']);
         $pengusul = Role::firstOrCreate(['name' => 'pengusul', 'guard_name' => 'web']);
 
+        // Classification-only roles for external narasumber/moderator: no
+        // permissions, never used for login/menu access — they exist purely
+        // to distinguish a person's capacity in the external directory.
+        Role::firstOrCreate(['name' => 'narasumber eksternal', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'moderator eksternal', 'guard_name' => 'web']);
+
         // Superadmin gets all permissions
         $superadmin->syncPermissions(Permission::all());
 
@@ -142,6 +149,7 @@ class RolePermissionSeeder extends Seeder
             'view dashboard',
             'view usulan diklat',
             'view kegiatan laporan',
+            'view external persons',
             'view document formulir',
             'view document nota dinas',
             'view document surat pemanggilan',
