@@ -100,4 +100,23 @@ class ExternalPersonTest extends TestCase
         $response->assertRedirect(route('external-persons.index'));
         $this->assertDatabaseMissing('users', ['id' => $person->id]);
     }
+
+    public function test_update_succeeds_when_email_is_unchanged(): void
+    {
+        $person = User::factory()->create([
+            'name' => 'Dr. Email Sama',
+            'is_external' => true,
+            'email' => 'dr.email.sama@external.local',
+        ]);
+        $person->assignRole('narasumber eksternal');
+
+        $response = $this->actingAs($this->adminUser)->put(route('external-persons.update', $person->id), [
+            'name' => 'Dr. Email Sama',
+            'email' => 'dr.email.sama@external.local',
+            'is_narasumber' => '1',
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect(route('external-persons.index'));
+    }
 }

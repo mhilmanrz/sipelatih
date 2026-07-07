@@ -25,7 +25,7 @@ class UpdateExternalPersonRequest extends FormRequest
             'institution' => 'nullable|string|max:255',
             'external_position' => 'nullable|string|max:255',
             'phone_number' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255|unique:users,email,'.$this->route('id'),
+            'email' => 'nullable|email|max:255|unique:users,email,'.($this->route('external_person') ?? $this->route('id')),
             'is_narasumber' => 'sometimes|boolean',
             'is_moderator' => 'sometimes|boolean',
         ];
