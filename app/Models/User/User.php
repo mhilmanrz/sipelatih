@@ -39,11 +39,22 @@ class User extends Authenticatable
         'npwp',
         'bank_name',
         'account_number',
+        'is_external',
+        'nik',
+        'institution',
+        'external_position',
     ];
 
     protected $hidden = [
         'password',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_external' => 'boolean',
+        ];
+    }
 
     public function workUnit()
     {
@@ -88,6 +99,25 @@ class User extends Authenticatable
     public function isPegawai(): bool
     {
         return ! $this->hasAnyRole(['superadmin', 'perencanaan', 'penyelenggara', 'evaluasi', 'pengusul']);
+    }
+
+    /**
+     * The value shown in the "Pangkat/Gol." column of Surat Tugas narasumber
+     * tables: an internal user's rank, or an external person's institution.
+     */
+    public function documentRankOrInstitution(): string
+    {
+        return $this->is_external ? ($this->institution ?? '-') : ($this->rank?->name ?? '-');
+    }
+
+    /**
+     * The value shown in the "Jabatan" column of Surat Tugas narasumber
+     * tables: an internal user's position, or an external person's
+     * position at their institution.
+     */
+    public function documentPosition(): string
+    {
+        return $this->is_external ? ($this->external_position ?? '-') : ($this->position?->name ?? '-');
     }
 
     /**
