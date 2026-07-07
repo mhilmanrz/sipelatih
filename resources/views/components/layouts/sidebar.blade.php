@@ -126,7 +126,7 @@
 
         <!-- MASTER DATA & CONFIG (GRANULAR ACCESS) -->
         @canany([
-            'view users', 'view accounts', 'view professions', 'view profession categories', 
+            'view users', 'view accounts', 'view external persons', 'view professions', 'view profession categories',
             'view roles', 'view permissions', 'view positions', 'view ranks', 'view work units', 
             'view activity types', 'view activity categories', 'view activity scopes', 
             'view material types', 'view activity formats', 'view activity methods', 
@@ -138,6 +138,7 @@
                 $isMasterDataOpen =
                     request()->is('users*') ||
                     request()->is('accounts*') ||
+                    request()->is('external-persons*') ||
                     request()->is('professions*') ||
                     request()->is('profession-categories*') ||
                     request()->is('roles*') ||
@@ -181,6 +182,14 @@
                             class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('accounts*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
                             <i class="fa-solid fa-user-shield w-6 text-center mr-2 text-sm"></i>
                             <span>Data Akun</span>
+                        </a>
+                    @endcan
+
+                    @can('view external persons')
+                        <a href="{{ route('external-persons.index') }}"
+                            class="flex items-center pl-8 pr-4 py-2.5 text-gray-200 hover:bg-[#1fd1d1] hover:text-black transition-colors {{ request()->is('external-persons*') ? 'bg-[#1fd1d1] text-black border-l-4 border-[#1fd1d1] font-semibold' : '' }}">
+                            <i class="fa-solid fa-user-group w-6 text-center mr-2 text-sm"></i>
+                            <span>Narasumber/Moderator Eksternal</span>
                         </a>
                     @endcan
 
